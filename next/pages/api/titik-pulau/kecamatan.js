@@ -1,0 +1,39 @@
+import { sipulauPool } from "../../../db";
+
+export default async function kecamatanHandler(req, res) {
+  const { method } = req;
+  if (method !== "GET") {
+    return res
+      .setHeader("Allow", ["GET"])
+      .status(405)
+      .json({ message: `Method ${method} Not Allowed` });
+  }
+
+  const { kabkota } = req.query;
+  if (!kabkota) {
+    return res
+      .status(400)
+      .json({ message: "Mohon sertakan querystring kabkota" });
+  }
+
+  let queryResult;
+  try {
+    queryResult = await sipulauPool.query(
+      `
+      SELECT DISTINCT wadmkc
+      FROM titik_pulau
+      WHERE wadmkk = $1
+      `,
+      [kabkota]
+    );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+
+  if (queryResult.rows.length) {
+    return res.json(queryResult.rows.map((el) => el.wadmkc));
+  } else {
+    return [];
+  }
+}

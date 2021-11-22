@@ -1,0 +1,112 @@
+.mapboxgl-ctrl-bottom-left,
+.maplibregl-ctrl-bottom-left {
+  left: 0.8rem;
+  bottom: 0.8rem;
+}
+
+.mapboxgl-ctrl-scale,
+.maplibregl-ctrl-scale {
+  transform: translate(90px, 50px);
+}
+
+.maplibregl-ctrl-bottom-left.mapboxgl-ctrl-bottom-left
+  .maplibregl-ctrl.maplibregl-ctrl-scale.mapboxgl-ctrl.mapboxgl-ctrl-scale {
+  margin: 0;
+  background-color: transparent;
+}
+
+.maplibregl-ctrl-bottom-left.mapboxgl-ctrl-bottom-left
+  .maplibregl-ctrl.maplibregl-ctrl-scale.mapboxgl-ctrl.mapboxgl-ctrl-scale:nth-child(2) {
+  border-top: 2px solid black;
+  border-bottom: 0px;
+  margin-top: -2px;
+}
+
+.maplibregl-ctrl-bottom-left.mapboxgl-ctrl-bottom-left
+  .maplibregl-ctrl.maplibregl-ctrl-group.mapboxgl-ctrl.mapboxgl-ctrl-group {
+  border-radius: 100%;
+  padding: 10px;
+}
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon,
+.maplibregl-ctrl button.maplibregl-ctrl-compass .maplibregl-ctrl-icon {
+  background-image: url("/images/ic-compass.svg");
+}
+
+.mapboxgl-ctrl-bottom-right,
+.maplibregl-ctrl-bottom-right {
+  right: 0.9rem;
+  bottom: 5rem;
+}
+
+.mapboxgl-ctrl-group button,
+.maplibregl-ctrl-group button {
+  width: 40px;
+  height: 40px;
+}
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon,
+.maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon {
+  background-image: url("/images/ic-add.svg");
+  width: 15px;
+  height: 15px;
+  margin: auto;
+}
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon,
+.maplibregl-ctrl button.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+  background-image: url("/images/ic-substract.svg");
+  width: 15px;
+  height: 15px;
+  margin: auto;
+}
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-geolocate .mapboxgl-ctrl-icon,
+.maplibregl-ctrl button.maplibregl-ctrl-geolocate .maplibregl-ctrl-icon {
+  background-image: url("/images/ic-location.svg");
+}
+
+.maplibregl-popup-content.mapboxgl-popup-content {
+  padding: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .maplibregl-ctrl-bottom-left.mapboxgl-ctrl-bottom-left
+    .maplibregl-ctrl.maplibregl-ctrl-group.mapboxgl-ctrl.mapboxgl-ctrl-group {
+    padding: 5px;
+    transform: rotate(45deg);
+  }
+
+  .mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon,
+  .maplibregl-ctrl button.maplibregl-ctrl-compass .maplibregl-ctrl-icon {
+    background-image: url("/images/ic-compass-mb.svg");
+  }
+
+  .mapboxgl-ctrl-scale,
+  .maplibregl-ctrl-scale {
+    transform: translate(60px, 45px);
+  }
+
+  .mapboxgl-ctrl-bottom-right,
+  .maplibregl-ctrl-bottom-right {
+    bottom: 3.5rem;
+    right: 0rem;
+  }
+
+  .mapboxgl-ctrl-group button,
+  .maplibregl-ctrl-group button {
+    width: 32px;
+    height: 32px;
+  }
+  .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon,
+  .maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon,
+  .maplibregl-ctrl button.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+    width: 12px;
+    height: 12px;
+  }
+}

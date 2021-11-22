@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body {
+  background: linear-gradient(
+    359.83deg,
+    rgba(253, 254, 255, 0.142) 2.85%,
+    rgba(39, 99, 185, 0.12) 29.49%,
+    rgba(253, 254, 255, 0.114) 36.03%,
+    rgba(253, 254, 255, 0.2) 65.13%,
+    rgba(39, 99, 185, 0.118) 83.85%,
+    rgba(253, 254, 255, 0.088) 99.99%,
+    rgba(253, 254, 255, 0.2) 100.99%
+  );
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+textarea {
+  resize: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+@layer base {
+  body {
+    font-family: "DM Sans", sans-serif;
+  }
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-7xl;
+  }
+  h2 {
+    @apply text-[1.75rem] md:text-[2.5rem] lg:text-[2.65rem] leading-[2.25rem] md:leading-[3rem] lg:leading-[3.25rem];
+  }
+  h3 {
+    @apply text-xl;
+  }
+}
+
+@layer utilities {
+  .p-ctm-content-80 {
+    @apply text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8;
+  }
+  .p-ctm-16 {
+    @apply text-sm md:text-base;
+  }
+}

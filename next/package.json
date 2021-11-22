@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@hcaptcha/react-hcaptcha": "^0.3.7",
+    "ioredis": "^4.28.0",
+    "keen-slider": "^5.5.1",
+    "maplibre-gl": "^1.15.2",
+    "next": "^11.1.2",
+    "pg": "^8.7.1",
+    "pg-copy-streams": "^6.0.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.3.4",
+    "@tailwindcss/line-clamp": "^0.2.1",
+    "autoprefixer": "^10.2.6",
+    "postcss": "^8.3.5",
+    "tailwindcss": "^2.2.4"
+  }
+}

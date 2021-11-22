@@ -1,0 +1,6 @@
+fastapi~=0.70.0
+gunicorn~=20.1.0
+minio~=7.1.1
+uvicorn[standard]
+psycopg[binary]
+psycopg_pool~=3.0.2

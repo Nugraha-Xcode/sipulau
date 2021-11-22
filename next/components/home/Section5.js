@@ -1,0 +1,105 @@
+import { useRef, useEffect, useContext, useState } from "react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+
+import AppContext from "../../context/AppContext";
+
+const Section5 = () => {
+  const { handleSetSnack } = useContext(AppContext);
+  const captchaRef = useRef(null);
+  const namaRef = useRef(null);
+  const emailRef = useRef(null);
+  const isiRef = useRef(null);
+  const [captchaToken, setCaptchaToken] = useState(null);
+
+  const handleReset = () => {
+    namaRef.current.value = "";
+    emailRef.current.value = "";
+    isiRef.current.value = "";
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const inputArr = [
+        namaRef.current.value,
+        emailRef.current.value,
+        isiRef.current.value,
+      ];
+      if (inputArr.indexOf("") !== -1) {
+        throw new Error("Mohon lengkapi form");
+      }
+      if (captchaToken) {
+        const res = await fetch("/api/feedback", {
+          method: "POST",
+          body: JSON.stringify({
+            nama: namaRef.current.value,
+            email: emailRef.current.value,
+            isi: isiRef.current.value,
+            captchaToken,
+          }),
+        });
+        const resData = await res.json();
+        if (resData.message) {
+          handleSetSnack(resData.message, "success");
+          handleReset();
+        }
+      } else {
+        throw new Error("Mohon verifikasi terlebih dahulu");
+      }
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+    } finally {
+      captchaRef.current.resetCaptcha();
+    }
+  };
+
+  return (
+    <section className='relative flex justify-center py-16 lg:py-24 px-4 md:px-10'>
+      <div className='flex flex-col items-center gap-8 lg:gap-10 max-w-screen-xl w-full'>
+        <form
+          onSubmit={handleSubmit}
+          className='w-full border border-[#A2BCDE] border-opacity-5 max-w-screen-lg bg-[#ffffff] bg-opacity-50 flex flex-col items-center space-y-6 py-8 md:py-12 px-8 md:px-24 rounded-3xl text-main-blue'
+        >
+          <h2 className='text-dark-blue'>Form Feedback</h2>
+          <p className='w-10/12 md:w-3/4 p-ctm-content-80 text-center'>
+            Sampaikan Saran & Masukan Anda untuk Kami, Terimakasih.
+          </p>
+          <div className='flex flex-col md:flex-row gap-5 w-full'>
+            <input
+              ref={namaRef}
+              className='border border-main-blue border-opacity-20 flex-1 rounded-full px-6 py-3 focus:outline-none bg-white bg-opacity-0'
+              placeholder='Nama Anda'
+            />
+            <input
+              ref={emailRef}
+              className='border border-main-blue border-opacity-20 flex-1 rounded-full px-6 py-3 focus:outline-none bg-white bg-opacity-0'
+              placeholder='E-Mail Anda'
+              type='email'
+            />
+          </div>
+          <textarea
+            ref={isiRef}
+            className='w-full border border-main-blue border-opacity-20 rounded-lg px-6 py-3 focus:outline-none bg-white bg-opacity-0'
+            rows='6'
+            placeholder='Pesan saran dan masukan'
+          ></textarea>
+          <HCaptcha
+            sitekey='e45cae2e-2906-45bf-abe7-9424392c31c6'
+            onVerify={setCaptchaToken}
+            onError={(err) => {
+              handleSetSnack(`hCaptcha Error: ${err}`, "error");
+            }}
+            ref={captchaRef}
+          />
+          <input
+            type='submit'
+            value='Send a Message'
+            className={`cursor-pointer flex lg:text-lg space-x-2 bg-main-blue rounded-full text-white text-sm py-3 lg:py-5 px-5 lg:px-8 hover:opacity-80`}
+          ></input>
+        </form>
+      </div>
+    </section>
+  );
+};
+
+export default Section5;

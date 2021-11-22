@@ -1,0 +1,14 @@
+{
+  "name": "directus-extension-upload-shapefile-module",
+  "version": "1.0.0",
+  "directus:extension": {
+    "type": "module",
+    "path": "../../../dist/modules/upload-shapefile/index.js",
+    "source": "index.ts",
+    "host": "^9.0.1",
+    "hidden": false
+  },
+  "scripts": {
+    "build": "directus-extension build && cp uploadShapefile.vue ../../../dist/modules/upload-shapefile/uploadShapefile.vue"
+  }
+}

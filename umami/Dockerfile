@@ -1,0 +1,20 @@
+FROM node:14-alpine as envconfig
+ARG POSTGRES_USER
+ARG POSTGRES_PASSWORD
+ARG POSTGRES_HOST
+ARG POSTGRES_PORT
+ARG POSTGRES_DB
+
+ENV POSTGRES_USER=$POSTGRES_USER
+ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+ENV POSTGRES_HOST=$POSTGRES_HOST
+ENV POSTGRES_PORT=$POSTGRES_PORT
+ENV POSTGRES_DB=$POSTGRES_DB
+
+WORKDIR /appconfig
+COPY gen_postgres_url.sh gen_postgres_url.sh
+RUN ./gen_postgres_url.sh
+
+FROM ghcr.io/mikecao/umami:postgresql-latest
+WORKDIR /app
+COPY --from=envconfig --chown=node /appconfig/.env.local .env.local

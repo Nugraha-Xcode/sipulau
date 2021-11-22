@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "cypress": "cypress open"
+  },
+  "devDependencies": {
+    "cypress": "^8.5.0"
+  }
+}

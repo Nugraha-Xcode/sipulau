@@ -1,0 +1,13 @@
+let domains = ["images.unsplash.com"];
+
+if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
+  domains.push(new URL(process.env.NEXT_PUBLIC_DIRECTUS_URL).hostname);
+}
+
+module.exports = {
+  images: { domains },
+  i18n: {
+    locales: ["en", "id"],
+    defaultLocale: "id",
+  },
+};
