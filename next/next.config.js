@@ -1,3 +1,4 @@
+const { i18n } = require("./next-i18next.config");
 let domains = ["images.unsplash.com"];
 
 if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
@@ -6,8 +7,5 @@ if (process.env.NEXT_PUBLIC_DIRECTUS_URL) {
 
 module.exports = {
   images: { domains },
-  i18n: {
-    locales: ["en", "id"],
-    defaultLocale: "id",
-  },
+  i18n: i18n,
 };

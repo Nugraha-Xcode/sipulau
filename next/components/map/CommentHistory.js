@@ -1,18 +1,17 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import AppContext from "../../context/AppContext";
 import ImageCarousel from "./popup/ImageCarousel";
 
-const token =
-  "Yg4kL4kcxactkH6yYgPZU8ApF2RnhxwhVJaru896tf85YmzZrCGqXsS7vxE5bPwGtQpBxEwQnYwCWjGaNYLFv4rBU8gKc3z94T9TXfDUupffgtDeeDnYPtvvYZqZ8AVB";
-
 const CommentHistory = () => {
+  const { t } = useTranslation("komentar");
   const observerRef = useRef(null);
   const rootObserver = useRef(null);
   const observer = useRef(null);
-  const { handleSetSnack } = useContext(AppContext);
+  const { handleSetSnack, isAuth, authToken } = useContext(AppContext);
+
   const [commentList, setCommentList] = useState([]);
-  console.log(commentList);
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
 
@@ -21,10 +20,7 @@ const CommentHistory = () => {
       setLoad(true);
       const res = await fetch("/api/user/komentar?page=" + page, {
         method: "GET",
-        headers: {
-          //todo get user token
-          Authorization: "Bearer " + token,
-        },
+        headers: { Authorization: "Bearer " + authToken },
       });
       const result = await res.json();
       if (res.status === 200) {
@@ -84,7 +80,9 @@ const CommentHistory = () => {
                     ? "bg-main-orange"
                     : el.status === "diterima"
                     ? "bg-main-green"
-                    : "bg-main-red"
+                    : el.status === "ditolak"
+                    ? "bg-main-red"
+                    : "bg-[#F6ED0B]"
                 } bg-opacity-60 px-2 text-white w-[fit-content] rounded-full`}
               >
                 {el.status.charAt(0).toUpperCase() + el.status.slice(1)}
@@ -104,9 +102,9 @@ const CommentHistory = () => {
             el.gambar3 !== null ? (
               <ImageCarousel
                 imageList={[
-                  el.gambar1 ? el.gambar1 + "&access_token=" + token : null,
-                  el.gambar2 ? el.gambar2 + "&access_token=" + token : null,
-                  el.gambar3 ? el.gambar3 + "&access_token=" + token : null,
+                  el.gambar1 ? el.gambar1 + "&access_token=" + authToken : null,
+                  el.gambar2 ? el.gambar2 + "&access_token=" + authToken : null,
+                  el.gambar3 ? el.gambar3 + "&access_token=" + authToken : null,
                 ]}
               />
             ) : null}
@@ -127,7 +125,7 @@ const CommentHistory = () => {
             alt='icon empty state'
             className='h-20'
           />
-          <p className='text-main-gray'>Tidak ada komentar</p>
+          <p className='text-main-gray'>{t("historyEmptyState")}</p>
         </div>
       )}
       <div

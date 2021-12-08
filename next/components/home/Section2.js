@@ -1,18 +1,21 @@
 import { forwardRef } from "react";
+import { useTranslation } from "react-i18next";
 
 import Image from "next/image";
 
 const Section2 = forwardRef((props, ref) => {
+  const { t } = useTranslation("homepage");
   return (
-    <section className='relative flex justify-center py-16 lg:py-24 px-4 md:px-10'>
+    <section
+      id='tentang'
+      className='relative flex justify-center py-16 lg:py-24 px-4 md:px-10'
+    >
       <div className='flex flex-col items-center gap-10 max-w-screen-xl w-full text-main-blue'>
         <h2 ref={ref} className='text-dark-blue'>
-          Aplikasi SIPULAU
+          {t("judulSeksiTentang")}
         </h2>
-        <p className='w-10/12 md:w-3/4 text-center p-ctm-content-80'>
-          SIPULAU adalah sistem informasi berbasis WebGIS yang menyajikan &
-          menyebarluaskan informasi pulau serta berbagi pakai data pulau dengan
-          Kementerian atau Lembaga & Pemerintah Daerah serta masyarakat luas.
+        <p className='w-10/12 md:w-3/4 text-center text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8'>
+          {t("isiSeksiTentang")}
         </p>
         <div className='flex flex-col md:flex-row w-full items-center gap-10 md:gap-16 lg:gap-20'>
           <div className='relative flex-0 md:flex-1 w-full md:w-auto h-96'>
@@ -27,21 +30,18 @@ const Section2 = forwardRef((props, ref) => {
           <div className='flex flex-col w-full md:w-5/12 justify-center gap-10'>
             <div className='flex flex-col gap-3 items-center md:items-start text-center md:text-left'>
               <p className='text-main-blue text-xl md:text-[1.375rem] leading-5 lg:leading-8'>
-                Penyediaan Data Pulau
+                {t("subJudulSeksiTentang1")}
               </p>
               <p className='text-dark-blue w-10/12 md:w-full'>
-                penyediaan data informasi pulau yang dapat diunduh oleh
-                pemerintah maupun masyarakat
+                {t("isiSubJudul1")}
               </p>
             </div>
             <div className='flex flex-col gap-3 items-center md:items-start text-center md:text-left'>
               <p className='text-main-blue text-xl md:text-[1.375rem] leading-5 lg:leading-8'>
-                Berbagai Informasi
+                {t("subJudulSeksiTentang2")}
               </p>
               <p className='text-dark-blue w-10/12 md:w-full'>
-                Menampilkan berbagai informasi penunjang dari Kementerian atau
-                Lembaga & Pemerintah Daerah terkait yang tergabung dalam simpul
-                jaringan yang akan memperkaya informasi pulau
+                {t("isiSubJudul2")}
               </p>
             </div>
           </div>

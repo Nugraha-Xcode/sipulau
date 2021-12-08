@@ -1,23 +1,32 @@
 import { sipulauPool } from "../../../db";
 import { sqlSafeDirectusURL } from "../../../utils/constant";
+import getCurrentActiveTable from "../../../utils/api/getCurrentActiveTable";
+import getDirectusUserId from "../../../utils/api/getDirectusUserId";
 
 export default async function userCommentHandler(req, res) {
   const { method } = req;
-  const { authorization } = req.headers;
-
-  let token;
-  if (authorization) {
-    token = authorization.replace("Bearer ", "");
-    // TODO validate token
-  } else {
-    return res.status(401).json({ message: "Tidak ada authorization header" });
-  }
 
   if (method !== "GET") {
     return res
       .setHeader("Allow", ["GET"])
       .status(405)
       .json({ message: `Method ${method} Not Allowed` });
+  }
+
+  const { authorization } = req.headers;
+
+  let token;
+  let userId;
+  if (authorization) {
+    token = authorization.replace("Bearer ", "");
+    try {
+      let authCheckRes = await getDirectusUserId(token);
+      userId = authCheckRes.user;
+    } catch (error) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+  } else {
+    return res.status(401).json({ message: "Harap login terlebih dahulu" });
   }
 
   let { page } = req.query;
@@ -47,20 +56,22 @@ export default async function userCommentHandler(req, res) {
     'ST_Y(geom) "lat"',
   ];
   try {
-    // TODO add user filter
+    let tableName = await getCurrentActiveTable("island");
     let { rows } = await sipulauPool.query(
       `
       SELECT ${columns.join(",")}, 'titik' jenis
       FROM komentar_titik komentar
+      WHERE user_created = $3
       UNION ALL
       SELECT ${columns.join(",")}, 'pulau' jenis
       FROM komentar_pulau komentar
-      INNER JOIN titik_pulau
-        ON titik_pulau.id_toponim = komentar.id_toponim
+      INNER JOIN ${tableName} titikpulau
+        ON titikpulau.id_toponim = komentar.id_toponim
+      WHERE user_created = $3
       ORDER BY date_created DESC
       LIMIT $1 OFFSET $2
       `,
-      [limit, offset]
+      [limit, offset, userId]
     );
     return res.json(rows);
   } catch (error) {

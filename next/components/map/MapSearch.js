@@ -5,9 +5,11 @@ import React, {
   useCallback,
   useRef,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { MdSearch } from "react-icons/md";
 import { CgClose } from "react-icons/cg";
 import AppContext from "../../context/AppContext";
+import MapContext from "../../context/MapContext";
 import SearchTag from "./SearchTag";
 import { mapListCategory } from "../../utils/constant";
 import Skeleton from "../core/Skeleton";
@@ -16,7 +18,17 @@ const DEFAULT_BASEMAP_IMAGE =
   "https://tanahair.indonesia.go.id/arcgis_js_api/library/4.15/esri/themes/base/images/basemap-toggle-64.svg";
 
 const MapSearch = ({ category, setCategory }) => {
+  const { t } = useTranslation("simpulJaringan");
   const { handleSetSnack } = useContext(AppContext);
+  const {
+    map,
+    setActiveLegend,
+    setIsOpenFeature,
+    setActiveFeature,
+    activeFeature,
+    setActiveLayer,
+    activeLayer,
+  } = useContext(MapContext);
   const textSearchRef = useRef(null);
   const [isResult, setIsResult] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
@@ -105,7 +117,7 @@ const MapSearch = ({ category, setCategory }) => {
           daftarLayananArr.push(layanan);
         } else if (
           resources[row].format === "WMS" &&
-          resources[row].resource_locator_protocol.substring(0, 7) === "OGC:WMS"
+          resources[row].resource_locator_protocol === "OGC:WMS"
         ) {
           const layanan = {
             judul: simpulList[index].title,
@@ -168,14 +180,10 @@ const MapSearch = ({ category, setCategory }) => {
     let thumbnailUrl = null;
     switch (layanan.format) {
       case "Esri REST":
-        thumbnailUrl =
-          "https://tanahair.indonesia.go.id/proxy/proxy.php?" +
-          layanan.url +
-          "/info/thumbnail";
+        thumbnailUrl = layanan.url + "/info/thumbnail";
         break;
       case "WMS":
         thumbnailUrl =
-          "https://tanahair.indonesia.go.id/proxy/proxy.php?" +
           layanan.url +
           "service=WMS&version=1.1.0&request=GetMap&layers=" +
           layanan.nama +
@@ -189,13 +197,118 @@ const MapSearch = ({ category, setCategory }) => {
     return thumbnailUrl;
   }, []);
 
+  const getLegendList = useCallback(async (item) => {
+    try {
+      const link = new URL(item.url);
+      if (item.format === "WMS") {
+        // link.protocol = "https:";
+        link.search =
+          "?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=" +
+          item.nama;
+        setActiveLegend((prev) => {
+          let arr = [...prev];
+          arr.push({
+            id: item.judul + item.nama,
+            label: item.simpul,
+            judul: item.judul,
+            legendImageUrl: link.href,
+          });
+          return arr;
+        });
+      } else {
+        link.protocol = "https:";
+        link.pathname += "/legend";
+        link.search = "?f=json";
+        const res = await fetch(link);
+        const resData = await res.json();
+        setActiveLegend((prev) => {
+          let arr = [...prev];
+          arr.push({
+            id: item.judul + item.nama,
+            label: item.nama,
+            legendList: resData.layers,
+          });
+          return arr;
+        });
+      }
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+    }
+  }, []);
+
+  const handleTambahLayer = useCallback(
+    (el) => {
+      if (activeFeature !== "layer") {
+        setIsOpenFeature(false);
+
+        setTimeout(() => {
+          setActiveFeature("layer");
+          setIsOpenFeature(true);
+        }, 500);
+      }
+      let a = [...activeLayer];
+      if (activeLayer.findIndex((item) => item.simpul === el.simpul) === -1) {
+        a.push({
+          simpul: el.simpul,
+          layer: [el],
+        });
+        setActiveLayer(a);
+        getLegendList(el);
+      } else {
+        if (
+          activeLayer[
+            activeLayer.findIndex((item) => item.simpul === el.simpul)
+          ].layer.findIndex(
+            (item) => item.judul === el.judul && item.nama === el.nama
+          ) === -1
+        ) {
+          let b = [
+            ...a[a.findIndex((item) => item.simpul === el.simpul)].layer,
+          ];
+          b.push(el);
+          a[a.findIndex((item) => item.simpul === el.simpul)].layer = b;
+          setActiveLayer(a);
+          getLegendList(el);
+        } else {
+          handleSetSnack("Layer sudah ditambahkan", "warning");
+        }
+      }
+
+      // setActiveLayer((prev) => {
+      //   let a = [...prev];
+      //   if (a.findIndex((item) => item.simpul === el.simpul) === -1) {
+      //     a.unshift({
+      //       simpul: el.simpul,
+      //       layer: [el],
+      //     });
+      //   } else {
+      //     if (
+      //       a[a.findIndex((item) => item.simpul === el.simpul)].layer.findIndex(
+      //         (item) => item.judul === el.judul && item.nama === el.nama
+      //       ) === -1
+      //     ) {
+      //       let b = [
+      //         ...a[a.findIndex((item) => item.simpul === el.simpul)].layer,
+      //       ];
+      //       b.unshift(el);
+      //       a[a.findIndex((item) => item.simpul === el.simpul)].layer = b;
+      //     } else {
+      //       handleSetSnack("Layer sudah ditambahkan", "warning");
+      //     }
+      //   }
+      //   return a;
+      // });
+    },
+    [activeFeature, activeLayer]
+  );
+
   return (
     <>
-      <div className='fixed md:absolute top-16 md:top-24 left-0 md:left-6 z-20 '>
-        <div className='relative shadow-map-2 w-screen md:w-[26rem] py-2 md:py-4 bg-white md:rounded-xl'>
+      <div className='fixed md:absolute top-16 md:top-24 left-0 md:left-6 z-20 font-map'>
+        <div className='relative shadow-map-2 w-screen md:w-[27.5rem] py-2 md:py-4 bg-white md:rounded-xl'>
           <div className='px-3'>
             <p className='text-black-2 font-semibold text-xs'>
-              Kategori dan Simpul Jaringan
+              {t("simpulTitle")}
             </p>
             {isLoad ? (
               <div className='mt-3 flex gap-2'>
@@ -209,7 +322,7 @@ const MapSearch = ({ category, setCategory }) => {
                   <SearchTag
                     key={item.value}
                     isLoad={isLoad}
-                    label={item.label}
+                    label={t(item.label)}
                     value={item.value}
                     isActive={category === item.value}
                     onClick={() => {
@@ -254,7 +367,7 @@ const MapSearch = ({ category, setCategory }) => {
                 className='text-xs max-h-20 text-black-2 rounded-lg focus:ring-transparent focus:border-gray-5 border-gray-5 cursor-pointer'
                 onChange={(e) => setOrganization(e.target.value)}
               >
-                <option value=''>Pilih Simpul</option>
+                <option value=''>{t("chooseSimpul")}</option>
                 {organizationList.map((el) => {
                   if (el.category === category) {
                     return (
@@ -265,26 +378,39 @@ const MapSearch = ({ category, setCategory }) => {
                   }
                 })}
               </select>
-              <button
-                onClick={() => {
-                  setPage(1);
-                  getSimpulList(1);
-                }}
-                className='bg-main-blue text-white w-full py-2 rounded-lg text-sm'
-              >
-                Proses
-              </button>
+              {!isFetch ? (
+                <button
+                  disabled={isLoad}
+                  onClick={() => {
+                    setPage(1);
+                    getSimpulList(1);
+                  }}
+                  className={`${
+                    isFetch ? "cursor-disable" : ""
+                  } bg-main-blue text-white w-full py-2 rounded-lg text-sm`}
+                >
+                  {t("buttonProcess")}
+                </button>
+              ) : (
+                <div className='w-full flex justify-center items-center'>
+                  <img
+                    src='images/loader.svg'
+                    alt='loader'
+                    className='w-10 h-10'
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
         <div
-          className={`mt-2 shadow-map-2 w-screen md:w-[26rem] bg-white rounded-xl ${
+          className={`mt-2 shadow-map-2 w-screen md:w-[27.5rem] bg-white rounded-xl ${
             isResult ? "max-h-[75vh] md:max-h-[30rem]" : "max-h-0"
           } overflow-y-hidden transition-all duration-500 ease-in-out fixed md:relative bottom-0`}
         >
           <div className='flex justify-between items-center px-3 py-3 relative '>
             <p className='text-black-2 font-semibold text-xs'>
-              Pilihan Simpul Jaringan
+              {t("simpulTitle2")}
             </p>
             <button onClick={() => setIsResult(false)}>
               <CgClose className='text-main-gray w-5 h-5' />
@@ -299,7 +425,8 @@ const MapSearch = ({ category, setCategory }) => {
                   getSimpulList(1);
                 }
               }}
-              className='rounded-lg border h-full w-full px-3 py-2 focus:outline-none text-black-2 text-sm'
+              className='rounded-lg border h-full w-full px-3 py-2 focus:outline-none text-black-2 text-xs'
+              placeholder={t("chooseSimpul")}
             />
           </div>
           <hr className='text-gray-4 border-t-2 opacity-40' />
@@ -309,14 +436,28 @@ const MapSearch = ({ category, setCategory }) => {
               <input className='focus:outline-none flex-1' />
               <MdSearch className='text-gray-5 w-6 h-6' />
             </div>
-            <button
-              onClick={() => {
-                setIsResult((prev) => !prev);
-              }}
-              className='bg-main-blue text-white w-full py-3 rounded-lg text-sm'
-            >
-              Proses
-            </button>
+            {!isFetch ? (
+              <button
+                disabled={isLoad}
+                onClick={() => {
+                  setPage(1);
+                  getSimpulList(1);
+                }}
+                className={`${
+                  isFetch ? "cursor-disable" : ""
+                } bg-main-blue text-white w-full py-2 rounded-lg text-sm`}
+              >
+                {t("buttonProcess")}
+              </button>
+            ) : (
+              <div className='w-full flex justify-center items-center'>
+                <img
+                  src='images/loader.svg'
+                  alt='loader'
+                  className='w-10 h-10'
+                />
+              </div>
+            )}
           </div>
 
           {daftarLayanan.length > 0 ? (
@@ -343,14 +484,21 @@ const MapSearch = ({ category, setCategory }) => {
                     </div>
 
                     <div className='flex flex-col justify-between'>
-                      <p>{el.judul}</p>
+                      <p className='text-main-gray text-xs'>{el.judul}</p>
                       <div className='flex items-center gap-3'>
-                        <button className='bg-main-blue text-white py-1 px-3 rounded-full'>
-                          Tambah Layer
+                        <button
+                          onClick={() => handleTambahLayer(el)}
+                          className='bg-main-blue text-white py-1 px-3 rounded-full'
+                        >
+                          {t("buttonAddLayer")}
                         </button>
                         <div className='w-1 h-1 rounded-full bg-main-gray' />
-                        <a href={el.url} target='_blank'>
-                          Detail
+                        <a
+                          href={el.url}
+                          target='_blank'
+                          className='text-main-gray'
+                        >
+                          {t("detail")}
                         </a>
                       </div>
                     </div>
@@ -385,7 +533,7 @@ const MapSearch = ({ category, setCategory }) => {
               />
             </button>
 
-            <p className='text-center'>
+            <p className='text-center text-black-2 text-xs'>
               {(page - 1 === 0 ? page : (page - 1) * 10 + 1) +
                 "-" +
                 (page === Math.trunc(totalData / 10) + 1

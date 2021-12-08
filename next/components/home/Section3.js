@@ -2,34 +2,43 @@
 // import ButtonMain from "../ButtonMain";
 // import Modal from "../modal";
 // import Select from "../select/Select";
+import { useTranslation } from "next-i18next";
 
 const lembagaItems = [
+  { label: "Batimetri Nasional", href: "http://batnas.big.go.id/" },
+  { label: "Sistem Informasi Nama Rupabumi", href: "https://sinar.big.go.id/" },
+  { label: "Kementerian Dalam Negeri", href: "https://www.kemendagri.go.id/" },
+  {
+    label: "Kementerian Kelautan dan Perikanan",
+    href: "https://pesisirpulau.id/",
+  },
   {
     label: "Ina Geoportal",
     href: "https://tanahair.indonesia.go.id/portal-web",
   },
-  { label: "SINAR", href: "https://sinar.big.go.id/" },
-  { label: "SI Batnas", href: "http://batnas.big.go.id/" },
-  { label: "Kemenkomarves", href: "https://maritim.go.id/" },
-  { label: "Kemendagri", href: "https://www.kemendagri.go.id/" },
-  { label: "KKP", href: "https://pesisirpulau.id/" },
-  { label: "BIG", href: "https://big.go.id" },
-  { label: "Pushidrosal", href: "http://www.pushidrosal.id/" },
+  {
+    label: "Pusat Hidrografi dan Oseanografi Angkatan Laut",
+    href: "http://www.pushidrosal.id/",
+  },
+  {
+    label: "Kementerian Koordinator Bidang Kemaritiman dan Investasi",
+    href: "https://maritim.go.id/",
+  },
+  { label: "Badan Informasi Geospasial", href: "https://big.go.id" },
 ];
 
 const Section3 = () => {
   // const [isShowing, toggle] = useToggle();
-
+  const { t } = useTranslation("homepage");
   return (
     <section className='relative flex justify-center py-16 lg:py-24 px-4 md:px-10'>
       <div className='flex flex-col items-center gap-8 lg:gap-10 max-w-screen-xl w-full text-main-blue'>
         <div className='flex flex-col items-center gap-5'>
           <h2 className='text-dark-blue text-center'>
-            Website Lembaga Terkait
+            {t("judulSeksiWebsite")}
           </h2>
-          <p className='w-10/12 md:w-3/4 p-ctm-content-80 text-center'>
-            Berikut merupakan Kementrian & Lembaga yang bekerja sama dengan
-            Badan Informasi Geospasial terkait Mendata SIPULAU
+          <p className='w-10/12 md:w-3/4 text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8 text-center'>
+            {t("isiSeksiWebsite")}
           </p>
         </div>
         {/* <div className='flex justify-center items-center space-x-5 w-full'>
@@ -44,7 +53,7 @@ const Section3 = () => {
             <ButtonMain label='Cari' onClick={toggle} />
           </div>
         </div> */}
-        <div className='flex flex-wrap justify-center gap-6 '>
+        <div className='flex flex-wrap justify-center gap-6 w-11/12'>
           {lembagaItems.map((el, index) => (
             <a
               href={el.href}

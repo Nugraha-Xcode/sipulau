@@ -1,0 +1,23 @@
+{
+    "layerSetting": "Layer Setting",
+    "optionLayer1": "Zoom to Layer",
+    "optionLayer2": "Move Layer Up",
+    "optionLayer3": "Move Layer Down",
+    "optionLayer4": "Delete",
+    "basemapOption": "Basemap",
+    "topDownload": "Download Data",
+    "aoi": "Area of Interest",
+    "addSelector": "Add AOI",
+    "cancelSelector": "Start Draw AOI",
+    "listAoi": "List of AOI",
+    "emptyState": "No AOI",
+    "formatFile": "Choose File Format",
+    "buttonDownload": "Download",
+    "button1": "Layer",
+    "button2": "Find Island",
+    "button3": "Basemap",
+    "button4": "Download",
+    "button5": "Comment",
+    "legendTitle": "Legend",
+    "legendListTitle": "Active Layer Legend"
+}

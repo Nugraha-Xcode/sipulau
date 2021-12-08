@@ -1,54 +1,9 @@
 version: "3"
 services:
-  postgis:
-    build:
-      context: postgis
-    # ports:
-    #   - "5432:5432"
-    volumes:
-      - ./postgis/data:/var/lib/postgresql/data
-      - ./postgis/restore:/restore:ro
-    environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB=big_sipulau
-      - DIRECTUS_URL
-      - SIPULAU_URL
-      - UMAMI_URL
-    # networks:
-    #   - sipulaudev
-    #   - default
-
-  minio:
-    build:
-      context: minio
-    # ports:
-    #   - "9000:9000"
-    #   - "9001:9001"
-    volumes:
-      - ./minio/data:/data
-    command: server /data --console-address ":9001"
-    environment:
-      - MINIO_ROOT_USER
-      - MINIO_ROOT_PASSWORD
-    # networks:
-    #   - sipulaudev
-    #   - default
-
-  minioclient:
-    build:
-      context: minioclient
-    volumes:
-      - ./minioclient/initfiles:/initfiles:ro
-    depends_on:
-      - minio
-    environment:
-      - MINIO_ROOT_USER
-      - MINIO_ROOT_PASSWORD
-
   redis:
     build:
       context: redis
+    restart: unless-stopped
 
   directus:
     build:
@@ -57,15 +12,13 @@ services:
     #   - "8055:8055"
     depends_on:
       - redis
-      - postgis
-      - minio
     environment:
       - KEY=${DIRECTUS_KEY}
       - SECRET=${DIRECTUS_SECRET}
       - TELEMETRY=false
       - DB_CLIENT=pg
-      - DB_HOST=postgis
-      - DB_PORT=5432
+      - DB_HOST=${POSTGRES_HOST}
+      - DB_PORT=${POSTGRES_PORT}
       - DB_DATABASE=big_sipulau
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
@@ -77,13 +30,13 @@ services:
       - STORAGE_MINIO_KEY=${MINIO_ROOT_USER}
       - STORAGE_MINIO_SECRET=${MINIO_ROOT_PASSWORD}
       - STORAGE_MINIO_BUCKET=sipulau
-      - STORAGE_MINIO_ENDPOINT=http://minio:9000
+      - STORAGE_MINIO_ENDPOINT=http://${MINIO_ENDPOINT}
       - STORAGE_MINIO_S3_FORCE_PATH_STYLE=true
       - STORAGE_MINIOSHP_DRIVER=s3
       - STORAGE_MINIOSHP_KEY=${MINIO_ROOT_USER}
       - STORAGE_MINIOSHP_SECRET=${MINIO_ROOT_PASSWORD}
       - STORAGE_MINIOSHP_BUCKET=sipulau-shp
-      - STORAGE_MINIOSHP_ENDPOINT=http://minio:9000
+      - STORAGE_MINIOSHP_ENDPOINT=http://${MINIO_ENDPOINT}
       - STORAGE_MINIOSHP_S3_FORCE_PATH_STYLE=true
       - PUBLIC_URL=${DIRECTUS_URL}
       - EMAIL_FROM
@@ -94,12 +47,12 @@ services:
       - EMAIL_SMTP_PASSWORD
       - EMAIL_SMTP_POOL=true
       - EMAIL_SMTP_SECURE
-    command: >
-      /bin/sh -c "
-      sleep 60;
-      npx directus bootstrap;
-      npx directus start;
-      "
+      - REFRESH_TOKEN_COOKIE_SECURE=true
+      - REFRESH_TOKEN_COOKIE_NAME=sipulau_refresh_token
+    restart: unless-stopped
+    # networks:
+    #   - default
+    #   - sipulaudev
 
   nextjs:
     build:
@@ -107,63 +60,66 @@ services:
       args:
         - NEXT_PUBLIC_UMAMI_URL=${UMAMI_URL}
         - NEXT_PUBLIC_DIRECTUS_URL=${DIRECTUS_URL}
-    # ports:
-    #   - "3000:3000"
     depends_on:
-      - postgis
       - directus
       - worker
     environment:
       - NEXT_PUBLIC_DIRECTUS_URL=${DIRECTUS_URL}
-      - PGHOST=postgis
+      - PGHOST=${POSTGRES_HOST}
       - PGUSER=${POSTGRES_USER}
       - PGPASSWORD=${POSTGRES_PASSWORD}
-      - PGPORT=5432
+      - PGPORT=${POSTGRES_PORT}
       - HCAPTCHA_SECRET_KEY
       - REDIS_URL=redis://redis:6379
+    restart: unless-stopped
+    # networks:
+    #   - default
+    #   - sipulaudev
 
   umami:
     build:
       args:
-        - POSTGRES_HOST=postgis
-        - POSTGRES_PORT=5432
+        - POSTGRES_HOST
+        - POSTGRES_PORT
         - POSTGRES_USER
-        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        - POSTGRES_PASSWORD
         - POSTGRES_DB=big_sipulau_umami
       context: umami
-    depends_on:
-      - postgis
+    # ports:
+    #   - "3000:3000"
     environment:
       - HASH_SALT=${UMAMI_HASH_SALT}
-    command: >
-      /bin/sh -c "
-      sleep 60;
-      yarn start;
-      "
+    restart: unless-stopped
+    # networks:
+    #   - default
+    #   - sipulaudev
 
   worker:
     build:
       context: worker
-    ports:
-      - "8000:8000"
-    depends_on:
-      - postgis
-      - minio
     environment:
       - STORAGE_ACCESS_KEY_ID=${MINIO_ROOT_USER}
       - STORAGE_SECRET_ACCESS_KEY=${MINIO_ROOT_PASSWORD}
-      - STORAGE_ENDPOINT=minio:9000
-      - POSTGRES_HOST=postgis
+      - STORAGE_ENDPOINT=${MINIO_ENDPOINT}
+      - STORAGE_BUCKET=sipulau-shp
+      - POSTGRES_HOST
+      - POSTGRES_PORT
       - POSTGRES_DB=big_sipulau
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    restart: unless-stopped
+    # networks:
+    #   - default
+    #   - sipulaudev
 
   nginx:
     build:
       context: nginx
     ports:
       - "80:80"
-      # - "9000:9000"
+      - "443:443"
     depends_on:
       - nextjs
       - directus
@@ -172,6 +128,7 @@ services:
       - DIRECTUS_URL
       - SIPULAU_URL
       - UMAMI_URL
+    restart: unless-stopped
 
 # networks:
 #   sipulaudev:

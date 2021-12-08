@@ -1,16 +1,31 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import FilterItem from "./FilterItem";
 import MapContext from "../../context/MapContext";
 
 const Filter = ({ toggleMapFilter, setDataTable, setPage, setToggledRow }) => {
+  const { t } = useTranslation("attributetable");
   const { activeFilter, setQueryFilter, setFilterArr, filterArr } =
     useContext(MapContext);
+
+  const handleFilter = useCallback(() => {
+    setToggledRow([]);
+    setPage(1);
+    setDataTable([]);
+    if (filterArr.length > 0 && activeFilter.length > 0) {
+      let queryStr = "";
+      activeFilter.forEach((el) => {
+        queryStr += "&" + el.value + "=" + el.content;
+      });
+      setQueryFilter(queryStr);
+      toggleMapFilter();
+    }
+  }, [filterArr, activeFilter]);
+
   return (
-    <div>
+    <div className='font-map'>
       <div className='flex justify-between items-center px-6 py-3 relative'>
-        <p className='flex-1 text-center ml-5 text-black-2'>
-          Filter Pencarian Pulau
-        </p>
+        <p className='flex-1 text-center ml-5 text-black-2'>{t("filter1")}</p>
         <button onClick={toggleMapFilter}>
           <img src='/images/ic-close.svg' alt='close button' className='w-3' />
         </button>
@@ -28,7 +43,7 @@ const Filter = ({ toggleMapFilter, setDataTable, setPage, setToggledRow }) => {
             className='flex gap-2 items-center justify-center'
           >
             <img src='/images/ic-add-circle.svg' alt='add filter' />
-            <p className='text-main-gray'>Tambah Filter</p>
+            <p className='text-main-gray'>{t("filter2")}</p>
           </button>
         </div>
         <div className='border rounded-lg py-3 px-5 flex flex-col gap-2 h-96 overflow-y-scroll hide-scrollbar'>
@@ -46,19 +61,7 @@ const Filter = ({ toggleMapFilter, setDataTable, setPage, setToggledRow }) => {
       <hr className='' />
       <div className='flex items-center justify-center py-5'>
         <button
-          onClick={() => {
-            setToggledRow([]);
-            setPage(1);
-            setDataTable([]);
-            if (filterArr.length > 0 && activeFilter.length > 0) {
-              let queryStr = "";
-              activeFilter.forEach((el) => {
-                queryStr += "&" + el.value + "=" + el.content;
-              });
-              setQueryFilter(queryStr);
-              toggleMapFilter();
-            }
-          }}
+          onClick={handleFilter}
           className={`${
             filterArr.length > 0 && activeFilter.length > 0
               ? "bg-opacity-100"
@@ -68,7 +71,7 @@ const Filter = ({ toggleMapFilter, setDataTable, setPage, setToggledRow }) => {
             filterArr.length > 0 && activeFilter.length > 0 ? false : true
           }
         >
-          Terapkan Filter
+          {t("filter3")}
         </button>
       </div>
     </div>

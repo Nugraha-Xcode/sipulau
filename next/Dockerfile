@@ -36,6 +36,7 @@ COPY --from=builder_deps /app/node_modules ./node_modules
 COPY ./package*.json ./
 RUN npm i sharp --no-package-lock --no-audit --no-fund
 COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/next-i18next.config.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 

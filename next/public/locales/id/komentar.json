@@ -1,0 +1,20 @@
+{
+    "modalTitle": "Komentar",
+    "addComment": "Tambah Komentar",
+    "historyComment": "Riwayat Komentar",
+    "historyCommentPoint": "Komentar Titik",
+    "historyCommentIsland": "Komentar Pulau",
+    "messageCommentEmpty": "Anda dapat memberikan komentar dengan menambah titik atau di titik pulau yang sudah ada.",
+    "pointCommentButton": "Komentar dengan Tambah Titik",
+    "or": "Atau",
+    "commentPointmssg1": "Komentar Tambah Titik",
+    "commentPointmssg2": "Tentukan titik terlebih dahulu, kemudian tambah komentar pada form komentar.",
+    "downButtonCmmnt": "Batal",
+    "commentButtonIsland": "Komentar di Titik Pulau",
+    "commentIslandmssg1": "Komentar di Titik Pulau",
+    "commentIslandmssg2": "Pilih titik pulau yang sudah ada, kemudian tambahkan komnetar pada titik pulau tersebut.",
+    "commentStatus1": "Diterima",
+    "commentStatus2": "Menunggu",
+    "commentStatus3": "Ditolak",
+    "historyEmptyState": "Tidak ada komentar"
+}

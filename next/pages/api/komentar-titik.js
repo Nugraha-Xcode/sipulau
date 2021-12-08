@@ -1,4 +1,5 @@
 import { sipulauPool } from "../../db";
+import getDirectusUserId from "../../utils/api/getDirectusUserId";
 
 export default async function pointCommentHandler(req, res) {
   const { method } = req;
@@ -10,14 +11,30 @@ export default async function pointCommentHandler(req, res) {
       .json({ message: `Method ${method} Not Allowed` });
   }
 
-  // TODO add auth
+  const { authorization } = req.headers;
+
+  let token;
+  let userId;
+  if (authorization) {
+    token = authorization.replace("Bearer ", "");
+    try {
+      let authCheckRes = await getDirectusUserId(token);
+      userId = authCheckRes.user;
+    } catch (error) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+  } else {
+    return res.status(401).json({ message: "Harap login terlebih dahulu" });
+  }
+
   let parsedBody;
   try {
     parsedBody = JSON.parse(req.body);
   } catch (error) {
     return res.status(400).json({ message: "Body bukan JSON yang valid" });
   }
-  const { isi, gambar1, gambar2, gambar3, dokumen } = parsedBody;
+  console.log(parsedBody)
+  const { email, isi, gambar1, gambar2, gambar3, dokumen } = parsedBody;
   let { lon, lat } = parsedBody;
   if (isi && lon !== undefined && lat !== undefined) {
     // parse lon lat
@@ -37,15 +54,14 @@ export default async function pointCommentHandler(req, res) {
     }
 
     try {
-      // TODO add user id
       await sipulauPool.query(
         `
         INSERT INTO komentar_titik(
-          isi, gambar_1, gambar_2, gambar_3, dokumen, geom
+          email, isi, gambar_1, gambar_2, gambar_3, dokumen, geom, user_created
         )
-        VALUES ($1, $2, $3, $4, $5, ST_SetSRID(ST_MakePoint($6, $7), 4326))
+        VALUES ($1, $2, $3, $4, $5, $6, ST_SetSRID(ST_MakePoint($7, $8), 4326), $9)
         `,
-        [isi, gambar1, gambar2, gambar3, dokumen, lon, lat]
+        [email, isi, gambar1, gambar2, gambar3, dokumen, lon, lat, userId]
       );
       return res.status(201).json({ message: "Komentar berhasil dikirim" });
     } catch (error) {

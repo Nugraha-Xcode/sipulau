@@ -1,0 +1,10 @@
+{
+    "modalTitle": "Sign In",
+    "modalCase1": "Login to Your Account",
+    "modalCase2": "Please Login to Your Account to Access More Complete Features",
+    "placeholder1": "username/email",
+    "placeholder2": "password",
+    "buttonLogin": "Login",
+    "or1": "Or",
+    "buttonRegist": "Sign Up"
+}

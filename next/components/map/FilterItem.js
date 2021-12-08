@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import MapContext from "../../context/MapContext";
 import Select from "../core/select";
 import FilterRegion from "./FilterRegion";
 
 const FilterItem = ({ idItem, initType, initValue }) => {
+  const { t } = useTranslation("attributetable");
   const { setActiveFilter, setFilterArr, setColumn, column } =
     useContext(MapContext);
   const [type, setType] = useState(initType || {});
@@ -14,7 +16,7 @@ const FilterItem = ({ idItem, initType, initValue }) => {
       <div className='flex-1'>
         <Select
           value={type}
-          placeholder={"Pilih filter"}
+          placeholder={t("filter4")}
           items={column}
           onChange={(item) => {
             if (type.value) {
@@ -134,9 +136,15 @@ const FilterItem = ({ idItem, initType, initValue }) => {
           setActiveFilter((prev) =>
             prev.filter((el) => el.value !== type.value)
           );
-          setColumn((prev) =>
-            [...prev, type].sort((a, b) => (a.label < b.label ? -1 : 1))
-          );
+          setColumn((prev) => {
+            if (type.value) {
+              return [...prev, type].sort((a, b) =>
+                a.label < b.label ? -1 : 1
+              );
+            } else {
+              return [...prev];
+            }
+          });
         }}
         className='p-4 border rounded-lg h-12 flex items-center'
         // disabled={type.value && inputValue ? false : true}

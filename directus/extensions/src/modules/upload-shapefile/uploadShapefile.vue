@@ -3,13 +3,7 @@
     <div style="padding: 0 var(--content-padding)">
       <div style="margin-bottom: 1rem">
         <label for="table-selector">Select table</label>
-        <v-skeleton-loader v-if="fetchingTables" />
-        <div v-else-if="fetchTableError">
-          <p>Error fetching table list</p>
-          <v-button @click="fetchTables">Retry</v-button>
-        </div>
         <v-select
-          v-else
           id="table-selector"
           v-model="selectedTable"
           :items="tableList"
@@ -17,9 +11,7 @@
         />
       </div>
       <div style="margin-bottom: 1rem">
-        <label for="file-selector"
-          >Select file (.zip file, max size 10MB)</label
-        >
+        <label for="file-selector">Select file (.zip file, max size 5MB)</label>
         <input
           id="file-selector"
           name="file"
@@ -29,10 +21,7 @@
           @change="fileSelectorHandler"
         />
       </div>
-      <v-button
-        :loading="uploadButtonLoading"
-        :disabled="uploadButtonDisable"
-        @click="uploadButtonHandler"
+      <v-button :loading="uploadButtonLoading" @click="uploadButtonHandler"
         >Upload</v-button
       >
     </div>
@@ -48,59 +37,28 @@
 import { defineComponent } from "vue";
 import { v4 as uuidv4 } from "uuid";
 
+const SHP_UPLOAD_FOLDER_ID = "e2879c0d-735a-49e8-b828-df2518fdb645";
+
 export default defineComponent({
   data() {
     return {
-      fetchingTables: true,
-      fetchTableError: false,
-      tableList: [],
+      tableList: [
+        {
+          text: "Titik Pulau",
+          value: "titik_pulau",
+        },
+      ],
       selectedTable: null,
       selectedFile: null,
-      tableSelectorDisable: true,
-      fileSelectorDisable: true,
-      uploadButtonDisable: true,
+      tableSelectorDisable: false,
+      fileSelectorDisable: false,
       uploadButtonLoading: false,
       dialogActive: false,
       dialogContent: "",
     };
   },
-  created() {
-    this.fetchTables();
-  },
   inject: ["api"],
   methods: {
-    async fetchTables() {
-      this.fetchingTables = true;
-      this.fetchTableError = null;
-      // TODO
-      try {
-        await new Promise<void>((resolve, reject) => {
-          setTimeout(() => {
-            this.tableList = [
-              {
-                text: "Item 1",
-                value: "item-1",
-              },
-              {
-                text: "Item 2",
-                value: "item-2",
-              },
-            ];
-            resolve();
-            // reject("test reject");
-          }, 2000);
-        });
-        this.tableSelectorDisable = false;
-        this.fileSelectorDisable = false;
-        this.uploadButtonDisable = false;
-      } catch (error) {
-        this.fetchTableError = true;
-        console.error(error);
-      } finally {
-        this.fetchingTables = false;
-      }
-    },
-
     fileSelectorHandler(e: Event) {
       let file = (e.target as HTMLInputElement).files[0];
       let fileType = file.type;
@@ -108,11 +66,11 @@ export default defineComponent({
       if (
         (fileType === "application/zip" ||
           fileType === "application/x-zip-compressed") &&
-        fileSize <= 10485760
+        fileSize <= 5242880
       ) {
         this.selectedFile = file;
       } else {
-        this.dialogContent = "File must be .zip and less than 10MB";
+        this.dialogContent = "File must be .zip and less than 5MB";
         this.dialogActive = true;
       }
     },
@@ -124,19 +82,21 @@ export default defineComponent({
 
         let formData = new FormData();
         let fileId = uuidv4();
+        let objectKey = fileId + ".zip";
         formData.append("id", fileId);
         formData.append("storage", "minioshp");
-        formData.append("filename_disk", "shp-uploads/" + fileId + ".zip");
+        formData.append("filename_disk", objectKey);
         formData.append("title", "shp-upload-temp_" + new Date().toISOString());
         formData.append("type", "application/zip");
-        formData.append(
-          "metadata",
-          JSON.stringify({ table: this.selectedTable })
-        );
+        formData.append("folder", SHP_UPLOAD_FOLDER_ID);
         formData.append("file", this.selectedFile);
 
         try {
           await this.api.post("/files", formData);
+          await this.api.post("/inform-worker-to-process-shp", {
+            dataType: this.selectedTable,
+            objectKey,
+          });
           this.dialogContent = "Upload success";
         } catch (error) {
           this.dialogContent = "Upload failed";

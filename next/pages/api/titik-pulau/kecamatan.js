@@ -1,4 +1,5 @@
 import { sipulauPool } from "../../../db";
+import getCurrentActiveTable from "../../../utils/api/getCurrentActiveTable";
 
 export default async function kecamatanHandler(req, res) {
   const { method } = req;
@@ -18,10 +19,11 @@ export default async function kecamatanHandler(req, res) {
 
   let queryResult;
   try {
+    let tableName = await getCurrentActiveTable("island");
     queryResult = await sipulauPool.query(
       `
       SELECT DISTINCT wadmkc
-      FROM titik_pulau
+      FROM ${tableName}
       WHERE wadmkk = $1
       `,
       [kabkota]

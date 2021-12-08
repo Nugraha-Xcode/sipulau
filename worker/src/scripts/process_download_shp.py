@@ -1,3 +1,4 @@
+import json
 import os
 import zipfile
 import shutil
@@ -5,15 +6,15 @@ from typing import List, Union
 from uuid import uuid4
 
 from osgeo import ogr, osr
-from fastapi import HTTPException
 
 from db import db
 from minioclient import minio_client
 from models import ObjectId
 from models import DownloadRequestDetail
 from settings import settings
-from sqlquery import insert_directus_files
+from sqlquery import insert_directus_files_q
 from const import USER_DOWNLOADS_FOLDER_ID
+from util import get_current_active_island_table
 
 
 def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
@@ -30,10 +31,13 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
     # prioritize selected filter
     if data.selected is not None and len(data.selected) > 0:
         data_selected_str = ",".join(map(str, data.selected))
-        filters.append(f"id_toponim IN ({data_selected_str}))")
+        filters.append(f"id_toponim IN ({data_selected_str})")
+    # then prioritize aoi
+    elif data.aoi is not None:
+        escaped = data.aoi.replace("'", "''")
+        filters.append(f"geom && ST_GeomFromGeoJSON('{escaped}')")
     else:
-        equal_filters: List[List[Union[int, str, None]]] = [
-            [data.id_toponim, "id_toponim"],
+        equal_filters: List[List[Union[str, None]]] = [
             [data.id_wilayah, "id_wilayah"],
             [data.wadmkd, "wadmkd"],
             [data.wadmkc, "wadmkc"],
@@ -47,33 +51,36 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
             [data.aslbhs, "aslbhs"],
             [data.status, "status"],
         ]
+        # id_toponim filter
+        if data.id_toponim is not None:
+            filters.append(f"id_toponim = {data.id_toponim}")
         # remark filter
         if data.remark is not None:
             if data.remark == "Berpenduduk" or data.remark == "Tidak Berpenduduk":
-                filters.append(f"SPLIT_PART(remark, ' - ', 2) ~* ^{data.remark}")
+                filters.append(f"SPLIT_PART(remark, ' - ', 2) ~* '^{data.remark}'")
             else:
                 filters.append(
                     "SPLIT_PART(remark, ' - ', 2) !~* '^Berpenduduk|^Tidak Berpenduduk'"
                 )
-
         # bbox filter
         if data.bbox is not None:
             filters.append(
                 f"geom && ST_MakeEnvelope({data.bbox.xmin}, {data.bbox.ymin}, {data.bbox.xmax}, {data.bbox.ymax}, 4326)"
             )
-
         # unselected filter
         if data.unselected is not None and len(data.unselected) > 0:
             data_unselected_str = ",".join(map(str, data.unselected))
-            filters.append(f"id_toponim NOT IN ({data_unselected_str}))")
-
+            filters.append(f"id_toponim NOT IN ({data_unselected_str})")
+        # equal str filters
         for fil in equal_filters:
             if fil[0] is not None:
-                filters.append(f"{fil[1]} = {fil[0]}")
-
+                escaped = fil[0].replace("'", "''")
+                filters.append(f"{fil[1]} = '{escaped}'")
+        # like filters
         for fil in like_filters:
             if fil[0] is not None:
-                filters.append(f"{fil[1]} ILIKE %{fil[0]}%")
+                escaped = fil[0].replace("'", "''")
+                filters.append(f"{fil[1]} ILIKE '%{escaped}%'")
 
     shp_driver: ogr.Driver = ogr.GetDriverByName("ESRI Shapefile")
     pg_driver: ogr.Driver = ogr.GetDriverByName("PostgreSQL")
@@ -85,7 +92,8 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
         + f"user='{settings.POSTGRES_USER}' "
         + f"password='{settings.POSTGRES_PASSWORD}'",
     )
-    in_layer: ogr.Layer = in_data_src.GetLayer("titik_pulau")
+    table_name = get_current_active_island_table()
+    in_layer: ogr.Layer = in_data_src.GetLayer(table_name)
 
     if len(filters) > 0:
         in_layer.SetAttributeFilter(" AND ".join(filters))
@@ -104,7 +112,7 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
 
     # fetch FID manually because PK column won't be fetched in fields
     fid_column = in_layer.GetFIDColumn()
-    out_layer.CreateField(ogr.FieldDefn(fid_column))
+    out_layer.CreateField(ogr.FieldDefn(fid_column, ogr.OFTInteger64))
 
     # get the rest of columns
     fields: List[str] = []
@@ -150,11 +158,16 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
     finally:
         shutil.rmtree(tmp_dir)
 
+    # create json filter description for repeat download
+    description = data.dict(exclude_unset=True)
+    description["table_name"] = table_name
+    description = json.dumps(description)
+
     pool = db.get_pool()
     try:
         with pool.connection() as con:
             con.execute(
-                insert_directus_files,
+                insert_directus_files_q,
                 [
                     unq_id,
                     "minioshp",
@@ -163,12 +176,12 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
                     unq_id,
                     "application/zip",
                     USER_DOWNLOADS_FOLDER_ID,
-                    data.user_id,
                     zip_file_size,
+                    description,
                 ],
             )
-    except Exception:
+    except Exception as e:
         minio_client.remove_object(settings.STORAGE_BUCKET, unq_id + ".zip")
-        raise HTTPException(500, "Internal Server Error")
+        raise e
 
     return ObjectId(object_id=unq_id)

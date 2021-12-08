@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import PopupContext from "../../../context/PopupContext";
 import useToggle from "../../../utils/useToggle";
 import Modal from "../../modal";
+import AppContext from "../../../context/AppContext";
 
 const popupItems = [
   {
@@ -31,7 +33,9 @@ const popupItems = [
 const dummy = [1, 2];
 
 const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
+  const { t } = useTranslation("popupPulau");
   const { infoPulau, getPopupDetail } = useContext(PopupContext);
+  const { isAuth } = useContext(AppContext);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [sliderRef, slider] = useKeenSlider({
     spacing: 5,
@@ -106,7 +110,7 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
               setActiveFeature("detail");
             }}
           >
-            <p className='text-xs'>Lihat Detail Informasi</p>
+            <p className='text-xs'>{t("viewDetail")}</p>
           </button>
         </div>
       </div>
@@ -114,7 +118,7 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
       <div className='md:p-4 flex flex-col gap-2'>
         <div className='flex justify-between'>
           <p className='text-black-2 text-xs'>
-            {infoPulau.jumlahKomentar} Komentar
+            {infoPulau.jumlahKomentar} {t("commentCount")}
           </p>
           <button
             className='text-main-blue text-xs'
@@ -124,21 +128,23 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
               setActiveFeature("comment");
             }}
           >
-            Lihat Komentar {">"}
+            {t("viewComment")} {">"}
           </button>
         </div>
-        <button
-          className='w-full bg-main-blue text-white p-2 rounded-lg text-sm'
-          onClick={() => {
-            if (window.innerWidth >= 768) {
-              toggle();
-            } else {
-              toggleModal();
-            }
-          }}
-        >
-          Tambah Komentar
-        </button>
+        {isAuth ? (
+          <button
+            className='w-full bg-main-blue text-white p-2 rounded-lg text-sm'
+            onClick={() => {
+              if (window.innerWidth >= 768) {
+                toggle();
+              } else {
+                toggleModal();
+              }
+            }}
+          >
+            {t("addCommentButton")}
+          </button>
+        ) : null}
       </div>
       <Modal isShowing={isShowing} handleModal={toggleModal} size='md'>
         <div className='p-3 space-y-5'>
@@ -154,12 +160,9 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
               className='w-3/4'
             />
             <p className='text-xs text-black-2 font-semibold'>
-              Akses dengan Desktop
+              {t("desktopAlert1")}
             </p>
-            <p className='text-xs text-main-gray'>
-              Mohon maaf, untuk fitur ini hanya dapat diakses menggunakan
-              desktop
-            </p>
+            <p className='text-xs text-main-gray'>{t("desktopAlert2")}</p>
           </div>
           <div className='px-5'>
             <button

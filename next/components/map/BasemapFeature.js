@@ -48,7 +48,7 @@ const BasemapFeature = () => {
   }, []);
 
   return (
-    <div className='flex flex-col gap-3'>
+    <div className='flex flex-col gap-3  max-h-[400px] overflow-y-scroll hide-scrollbar'>
       {load
         ? [1, 2, 3, 4, 5].map((el) => (
             <div key={el} className='flex gap-3 items-center'>

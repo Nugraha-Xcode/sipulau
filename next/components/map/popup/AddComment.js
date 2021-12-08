@@ -1,18 +1,18 @@
 import React, { useCallback, useState, useContext, useRef } from "react";
-
+import { useTranslation } from "react-i18next";
 import { uploadFolderIds } from "../../../utils/constant";
 import AppContext from "../../../context/AppContext";
 import PopupContext from "../../../context/PopupContext";
 
 const AddComment = ({ onClose, type, coor }) => {
-  const { handleSetSnack } = useContext(AppContext);
+  const { t } = useTranslation("popupPulau");
+  const { handleSetSnack, authToken } = useContext(AppContext);
   const { infoPulau } = useContext(PopupContext);
   const [imgFile, setImgFile] = useState([]);
-  console.log(imgFile);
   const [docFile, setDocFile] = useState(null);
-  console.log(docFile);
   const [isLoad, setIsLoad] = useState(false);
   const isiRef = useRef(null);
+  const emailRef = useRef(null);
 
   const handleSubmit = useCallback(
     async (uploadedImgId, uploadedDocId) => {
@@ -26,6 +26,7 @@ const AddComment = ({ onClose, type, coor }) => {
             body: JSON.stringify(
               type === "pulau"
                 ? {
+                    email: emailRef.current.value,
                     isi: isiRef.current.value,
                     gambar1: uploadedImgId ? uploadedImgId[0] : null,
                     gambar2: uploadedImgId ? uploadedImgId[1] : null,
@@ -33,6 +34,7 @@ const AddComment = ({ onClose, type, coor }) => {
                     dokumen: uploadedDocId ?? null,
                   }
                 : {
+                    email: emailRef.current.value,
                     isi: isiRef.current.value,
                     gambar1: uploadedImgId ? uploadedImgId[0] : null,
                     gambar2: uploadedImgId ? uploadedImgId[1] : null,
@@ -43,8 +45,7 @@ const AddComment = ({ onClose, type, coor }) => {
                   }
             ),
             headers: {
-              Authorization:
-                "Bearer Yg4kL4kcxactkH6yYgPZU8ApF2RnhxwhVJaru896tf85YmzZrCGqXsS7vxE5bPwGtQpBxEwQnYwCWjGaNYLFv4rBU8gKc3z94T9TXfDUupffgtDeeDnYPtvvYZqZ8AVB",
+              Authorization: "Bearer " + authToken,
             },
           }
         );
@@ -68,8 +69,6 @@ const AddComment = ({ onClose, type, coor }) => {
     try {
       setIsLoad(true);
       let link = process.env.NEXT_PUBLIC_DIRECTUS_URL + "/files";
-      let token =
-        "Bearer Yg4kL4kcxactkH6yYgPZU8ApF2RnhxwhVJaru896tf85YmzZrCGqXsS7vxE5bPwGtQpBxEwQnYwCWjGaNYLFv4rBU8gKc3z94T9TXfDUupffgtDeeDnYPtvvYZqZ8AVB";
       let uploadedImgId;
       let uploadedDocId;
       if (imgFile.length > 0) {
@@ -87,9 +86,7 @@ const AddComment = ({ onClose, type, coor }) => {
             const res = await fetch(link, {
               method: "POST",
               body: formData,
-              headers: {
-                Authorization: token,
-              },
+              headers: { Authorization: "Bearer " + authToken },
             });
             const result = await res.json();
             if (res.status === 200) {
@@ -115,9 +112,7 @@ const AddComment = ({ onClose, type, coor }) => {
         const res = await fetch(link, {
           method: "POST",
           body: formData,
-          headers: {
-            Authorization: token,
-          },
+          headers: { Authorization: "Bearer " + authToken },
         });
         const result = await res.json();
         if (res.status === 200) {
@@ -142,7 +137,7 @@ const AddComment = ({ onClose, type, coor }) => {
       ) : null}
       <div className='flex items-center p-4'>
         <p className='flex-1 text-center text-black-2 font-semibold text-sm'>
-          Komentar
+          {t("commentModal1")}
         </p>
         <button
           type='button'
@@ -157,16 +152,25 @@ const AddComment = ({ onClose, type, coor }) => {
       <hr />
       <div className='p-4 flex flex-col gap-3'>
         <div className='space-y-2'>
-          <p className='text-xs text-main-gray'>Komentar Anda :</p>
+          <p className='text-xs text-main-gray'>Email :</p>
+          <input
+            ref={emailRef}
+            type='email'
+            className='text-xs border border-gray-5 rounded-lg p-4 w-full focus:ring-transparent focus:border-gray-5'
+            placeholder={t("commentModal8")}
+          />
+        </div>
+        <div className='space-y-2'>
+          <p className='text-xs text-main-gray'>{t("commentModal2")} :</p>
           <textarea
             ref={isiRef}
             className='text-xs border border-gray-5 rounded-lg p-4 w-full focus:ring-transparent focus:border-gray-5'
             rows='4'
-            placeholder='Komentar Anda...'
+            placeholder={t("commentModal2")}
           />
         </div>
         <div className='space-y-2'>
-          <p className='text-xs text-main-gray'>Tambahkan Gambar :</p>
+          <p className='text-xs text-main-gray'>{t("commentModal3")} :</p>
           <div className='flex gap-4'>
             <div className='flex-1'>
               <input
@@ -205,7 +209,9 @@ const AddComment = ({ onClose, type, coor }) => {
                   <div className='p-2 border border-main-blue rounded-lg'>
                     <img src='/images/ic-picture.svg' alt='select image' />
                   </div>
-                  <p className='text-gray-7 text-xs'>Maks. 10 Mb</p>
+                  <p className='text-gray-7 text-xs'>
+                    {t("commentModal4")}. 1Mb
+                  </p>
                 </label>
               )}
             </div>
@@ -253,7 +259,9 @@ const AddComment = ({ onClose, type, coor }) => {
                   <div className='p-2 border border-main-blue rounded-lg'>
                     <img src='/images/ic-picture.svg' alt='select image' />
                   </div>
-                  <p className='text-gray-7 text-xs'>Maks. 10 Mb</p>
+                  <p className='text-gray-7 text-xs'>
+                    {t("commentModal4")}. 1Mb
+                  </p>
                 </label>
               )}
             </div>
@@ -301,7 +309,9 @@ const AddComment = ({ onClose, type, coor }) => {
                   <div className='p-2 border border-main-blue rounded-lg'>
                     <img src='/images/ic-picture.svg' alt='select image' />
                   </div>
-                  <p className='text-gray-7 text-xs'>Maks. 10 Mb</p>
+                  <p className='text-gray-7 text-xs'>
+                    {t("commentModal4")}. 1Mb
+                  </p>
                 </label>
               )}
             </div>
@@ -309,7 +319,7 @@ const AddComment = ({ onClose, type, coor }) => {
         </div>
 
         <div className='space-y-2'>
-          <p className='text-xs text-main-gray'>Tambahkan Dokumen :</p>
+          <p className='text-xs text-main-gray'>{t("commentModal5")} :</p>
 
           <div className='flex gap-4'>
             <input
@@ -329,7 +339,7 @@ const AddComment = ({ onClose, type, coor }) => {
                 <img src='/images/ic-file.svg' alt='select image' />
               </div>
               <p className='text-gray-7 text-xs'>
-                {docFile ? docFile.name : "Maks. 10 Mb"}
+                {docFile ? docFile.name : "Maks. 1Mb"}
               </p>
             </label>
           </div>
@@ -339,13 +349,13 @@ const AddComment = ({ onClose, type, coor }) => {
             onClick={onClose}
             className='flex-1 text-main-blue border border-main-blue py-2 rounded-md'
           >
-            Batal
+            {t("commentModal6")}
           </button>
           <button
             onClick={handleUploadImage}
             className='flex-1 bg-main-blue text-white py-2 rounded-md'
           >
-            Komentar
+            {t("commentModal7")}
           </button>
         </div>
       </div>

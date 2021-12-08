@@ -1,3 +1,5 @@
+const plugin = require("tailwindcss/plugin");
+
 module.exports = {
   mode: "jit",
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
@@ -9,6 +11,7 @@ module.exports = {
       pointer: "pointer",
       resize: "row-resize",
       disable: "not-allowed",
+      crosshair: "crosshair",
     },
     extend: {
       fontFamily: {
@@ -44,5 +47,20 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [require("@tailwindcss/line-clamp"), require("@tailwindcss/forms")],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("@tailwindcss/forms"),
+    plugin(function ({ addUtilities }) {
+      const newUtilities = {
+        ".smooth-scroll": {
+          "overflow-y": "scroll",
+          "scroll-behavior": "smooth",
+          display: "block",
+          height: "100vh",
+        },
+      };
+
+      addUtilities(newUtilities);
+    }),
+  ],
 };

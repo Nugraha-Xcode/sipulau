@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useState, useEffect } from "react";
+import { useTranslation } from "next-i18next";
 import { CgClose } from "react-icons/cg";
 
 import Table from "../../components/core/table";
@@ -6,7 +7,9 @@ import AppContext from "../../context/AppContext";
 import MapContext from "../../context/MapContext";
 import MemoIcFilter from "../core/icons/IcFilter";
 import MemoIcMapFilter from "../core/icons/IcMapFilter";
+import Modal from "../modal";
 import MapTableDownload from "./MapTableDownload";
+import useToggle from "../../utils/useToggle";
 
 const MapTable = ({
   dataTable,
@@ -18,7 +21,8 @@ const MapTable = ({
   isSelectAll,
   setIsSelectAll,
 }) => {
-  const { handleSetSnack } = useContext(AppContext);
+  const { handleSetSnack, authToken } = useContext(AppContext);
+  const { t } = useTranslation("attributetable");
   const {
     map,
     queryFilter,
@@ -39,24 +43,25 @@ const MapTable = ({
   const [activeTab, setActiveTab] = useState("nama");
   const [isOption, setOption] = useState(false);
   const [isColumnOpt, setColumnOpt] = useState(false);
+  const [isShowing, toggle] = useToggle();
 
   const [order, setOrder] = React.useState({
     orderBy: "id_toponim",
     orderAsc: true,
   });
   const [columns, setColums] = useState([
-    { title: "Kode Pulau", field: "id_toponim", show: true, sort: true },
-    { title: "Kode Wilayah", field: "id_wilayah", show: true, sort: true },
-    { title: "Nama Pulau", field: "nammap", show: true, sort: true },
-    { title: "Arti Nama", field: "artinam", show: true, sort: true },
-    { title: "Asal Bahasa", field: "aslbhs", show: true, sort: true },
-    { title: "Sejarah Nama", field: "sjhnam", show: true, sort: true },
-    { title: "Kecamatan", field: "wadmkc", show: true, sort: true },
-    { title: "Desa/Kelurahan", field: "wadmkd", show: true, sort: true },
-    { title: "Kabupaten/Kota", field: "wadmkk", show: true, sort: true },
-    { title: "Provinsi", field: "wadmpr", show: true, sort: true },
-    { title: "Status", field: "status", show: true, sort: true },
-    { title: "Remark", field: "remark", show: true, sort: true },
+    { title: "column1", field: "id_toponim", show: true, sort: true },
+    { title: "column2", field: "id_wilayah", show: true, sort: true },
+    { title: "column3", field: "nammap", show: true, sort: true },
+    { title: "column4", field: "artinam", show: true, sort: true },
+    { title: "column5", field: "aslbhs", show: true, sort: true },
+    { title: "column6", field: "sjhnam", show: true, sort: true },
+    { title: "column7", field: "wadmkc", show: true, sort: true },
+    { title: "column8", field: "wadmkd", show: true, sort: true },
+    { title: "column9", field: "wadmkk", show: true, sort: true },
+    { title: "column10", field: "wadmpr", show: true, sort: true },
+    { title: "column11", field: "status", show: true, sort: true },
+    { title: "column12", field: "remark", show: true, sort: true },
   ]);
 
   useEffect(async () => {
@@ -76,6 +81,7 @@ const MapTable = ({
         {
           method: "GET",
           headers: {
+            Authorization: "Bearer " + authToken,
             "Content-Type": "application/json",
           },
         }
@@ -132,7 +138,7 @@ const MapTable = ({
 
   return (
     <>
-      <div>
+      <div className='font-map'>
         <div className='border-b-2 flex relative px-5'>
           <div className='flex absolute h-full items-center z-10'>
             <div
@@ -144,7 +150,7 @@ const MapTable = ({
                   activeTab === "nama" ? "text-main-blue" : "text-black-2"
                 } text-xs`}
               >
-                Layer Nama-Nama Pulau
+                {t("activeLayer")}
               </p>
             </div>
             {/* <div
@@ -198,7 +204,7 @@ const MapTable = ({
                 className='flex items-center gap-2 border py-2 px-5 rounded-full'
               >
                 <img src='/images/ic-dots.svg' />
-                <p className='text-xs text-main-gray'>Options</p>
+                <p className='text-xs text-main-gray'>{t("buttonOption")}</p>
               </button>
 
               <div
@@ -219,9 +225,7 @@ const MapTable = ({
                       alt='button'
                       className='h-4'
                     />
-                    <p className='text-xs text-main-gray'>
-                      Tampilkan/ Sembunyikan Kolom
-                    </p>
+                    <p className='text-xs text-main-gray'>{t("option1")}</p>
                   </div>
                   <div className='flex gap-2 items-center cursor-pointer'>
                     <img
@@ -229,9 +233,7 @@ const MapTable = ({
                       alt='button'
                       className='h-4'
                     />
-                    <p className='text-xs text-main-gray'>
-                      Tampilkan Data yang Dipilih
-                    </p>
+                    <p className='text-xs text-main-gray'>{t("option2")}</p>
                   </div>
                 </div>
               </div>
@@ -267,7 +269,7 @@ const MapTable = ({
                   bbox ? "text-main-blue" : "text-main-gray"
                 } text-xs`}
               >
-                Filter by map extent
+                {t("filterMapExtent")}
               </p>
             </button>
             <button
@@ -275,7 +277,7 @@ const MapTable = ({
               className='flex items-center gap-2 border py-2 px-5 rounded-full'
             >
               <img src='/images/ic-zoom-to.svg' alt='button' className='h-4' />
-              <p className='text-xs text-main-gray'>Zoom To</p>
+              <p className='text-xs text-main-gray'>{t("zoom")}</p>
             </button>
             <button
               onClick={toggleMapFilter}
@@ -289,7 +291,7 @@ const MapTable = ({
                   queryFilter ? "text-main-blue" : "text-main-gray"
                 }`}
               >
-                Filter
+                {t("filter")}
               </p>
             </button>
             <button
@@ -306,7 +308,7 @@ const MapTable = ({
               } flex items-center gap-2 border py-2 px-5 rounded-full`}
             >
               <img src='/images/ic-close.svg' alt='button' className='h-4' />
-              <p className='text-xs text-main-gray'>Reset Filter</p>
+              <p className='text-xs text-main-gray'>{t("resetFilter")}</p>
             </button>
             {/* <button
               onClick={() => {
@@ -321,10 +323,43 @@ const MapTable = ({
               <img src='/images/ic-refresh.svg' alt='button' className='h-4' />
               <p className='text-xs text-main-gray'>Refresh</p>
             </button> */}
-            <MapTableDownload
-              toggledRow={toggledRow}
-              isSelectAll={isSelectAll}
-            />
+
+            <button
+              onClick={toggle}
+              className='flex items-center gap-2 border py-2 px-5 rounded-full'
+            >
+              <img src='/images/ic-download.svg' alt='button' className='h-4' />
+              <p className='text-xs text-main-gray'>{t("download")}</p>
+            </button>
+            <Modal isShowing={isShowing} handleModal={toggle} size='sm'>
+              <div className=''>
+                <div className='flex items-center p-2'>
+                  <p className='flex-1 text-center text-xs font-semibold text-black-2'>
+                    Download Data
+                  </p>
+                  <button
+                    type='button'
+                    className='text-2xl'
+                    data-dismiss='modal'
+                    aria-label='Close'
+                    onClick={toggle}
+                  >
+                    <span aria-hidden='true' className='text-black-2'>
+                      &times;
+                    </span>
+                  </button>
+                </div>
+                <hr />
+                <div className='py-2 px-4'>
+                  <MapTableDownload
+                    source='from-table'
+                    toggle={toggle}
+                    toggledRow={toggledRow}
+                    isSelectAll={isSelectAll}
+                  />
+                </div>
+              </div>
+            </Modal>
           </div>
           <div className='relative flex items-center'>
             <button onClick={() => setColumnOpt((prev) => !prev)}>
@@ -333,7 +368,7 @@ const MapTable = ({
             <div
               className={`${
                 isColumnOpt ? "max-h-44" : "max-h-0"
-              } absolute z-50 -bottom-2 right-0 shadow-style-1 rounded-lg transform translate-y-full overflow-scroll transition-all duration-200 ease-in-out bg-white`}
+              } absolute z-50 -bottom-2 right-0 shadow-style-1 rounded-lg transform translate-y-full overflow-scroll transition-all duration-200 ease-in-out bg-white hide-scrollbar`}
             >
               <div className='py-3 px-2 space-y-2 border border-gray-4 rounded-lg'>
                 {columns.map((el, index) => (
@@ -353,7 +388,7 @@ const MapTable = ({
                         });
                       }}
                     />
-                    <p className='text-main-gray text-xs'>{el.title}</p>
+                    <p className='text-main-gray text-xs'>{t(el.title)}</p>
                   </div>
                 ))}
               </div>

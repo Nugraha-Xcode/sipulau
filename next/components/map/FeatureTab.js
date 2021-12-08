@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import BasemapFeature from "./BasemapFeature";
 import CommentFeature from "./CommentFeature";
 import DownloadFeature from "./DownloadFeature";
@@ -13,17 +14,18 @@ const FeatureTab = ({
   drawSelected,
   setDrawSelected,
 }) => {
+  const { t } = useTranslation("sideBarRight");
   let featureObj = {};
   switch (feature) {
     case "layer":
-      featureObj = { label: "Custom Layer", component: <LayerFeature /> };
+      featureObj = { label: "button1", component: <LayerFeature /> };
       break;
     case "basemap":
-      featureObj = { label: "Peta Dasar", component: <BasemapFeature /> };
+      featureObj = { label: "button3", component: <BasemapFeature /> };
       break;
     case "download":
       featureObj = {
-        label: "Download Data",
+        label: "button4",
         component: (
           <DownloadFeature
             setDrawItem={setDrawItem}
@@ -35,7 +37,7 @@ const FeatureTab = ({
       };
       break;
     case "comment":
-      featureObj = { label: "Komentar", component: <CommentFeature /> };
+      featureObj = { label: "button5", component: <CommentFeature /> };
       break;
     default:
       break;
@@ -43,7 +45,7 @@ const FeatureTab = ({
   return (
     <>
       <div className='flex justify-between px-3 py-3'>
-        <p className='text-main-gray font-semibold'>{featureObj.label}</p>
+        <p className='text-main-gray font-semibold'>{t(featureObj.label)}</p>
         <button
           onClick={() => {
             setIsOpenFeature(false);

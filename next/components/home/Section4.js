@@ -1,17 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 import ButtonMain from "../ButtonMain";
 // import { dummyNews } from "../../utils/constant";
 
 const Section4 = ({ data }) => {
+  const { t } = useTranslation("homepage");
   return (
-    <section className='relative flex justify-center py-16 lg:py-24 px-4 md:px-10'>
+    <section
+      id='berita'
+      className='relative flex justify-center py-16 lg:py-24 px-4 md:px-10'
+    >
       <div className='flex flex-col items-center gap-8 lg:gap-10 max-w-screen-xl w-full text-main-blue'>
         <div className='flex flex-col items-center gap-5'>
-          <h2 className='text-dark-blue'>Berita terkait SIPULAU</h2>
-          <p className='w-10/12 md:w-3/4 p-ctm-content-80 text-center'>
-            Berita dan informasi-informasi seputar Sistem Informas SIPULAU
+          <h2 className='text-dark-blue'>{t("judulSeksiBerita")}</h2>
+          <p className='w-10/12 md:w-3/4 text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8 text-center'>
+            {t("isiSeksiBerita")}
           </p>
         </div>
         <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
@@ -34,7 +39,7 @@ const Section4 = ({ data }) => {
                 {el.abstract}
               </p>
               <Link href={"/news/" + el.newsId}>
-                <a>Baca Selengkapnya</a>
+                <a>{t("tombolBerita2")}</a>
               </Link>
             </div>
           ))}
@@ -43,7 +48,7 @@ const Section4 = ({ data }) => {
           <a
             className={`flex lg:text-lg space-x-2 bg-main-blue rounded-full text-white text-sm py-3 lg:py-5 px-5 lg:px-8 hover:opacity-80`}
           >
-            Lihat Semua
+            {t("tombolBerita")}
           </a>
         </Link>
       </div>

@@ -2,7 +2,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
-
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
@@ -12,6 +13,7 @@ import { sqlSafeDirectusURL } from "../../utils/constant";
 
 export default function NewsDetail({ mainNews, recentNews, popularNews }) {
   const router = useRouter();
+  const { t } = useTranslation("news");
   return (
     <>
       <Head>
@@ -59,7 +61,7 @@ export default function NewsDetail({ mainNews, recentNews, popularNews }) {
             <div className='w-full md:w-[40%] space-y-10'>
               <div className='flex flex-col gap-7'>
                 <p className='text-sm text-dark-blue text-opacity-60 font-bold'>
-                  LAST POST
+                  {t("subBeritaJudul1")}
                 </p>
                 {recentNews.map((el) => (
                   <Link href={"/news/" + el.newsId}>
@@ -93,7 +95,7 @@ export default function NewsDetail({ mainNews, recentNews, popularNews }) {
               </div>
               <div className=' flex-col gap-7 hidden md:flex'>
                 <p className='text-sm text-dark-blue text-opacity-60 font-bold'>
-                  MOST POPULAR
+                  {t("subBeritaJudul2")}
                 </p>
                 {popularNews.map((el) => (
                   <Link href={"/news/" + el.newsId}>
@@ -152,7 +154,7 @@ export async function getServerSideProps({ locale, params: { news: newsId } }) {
 
   mainColumns.push(
     'EXTRACT(EPOCH FROM date_created) "dateCreated"',
-    `(first_name || ' ' || last_name) "author"`,
+    `TRIM(CONCAT(first_name, ' ', last_name)) "author"`,
     `'${sqlSafeDirectusURL}/assets/' || gambar_berita "imageSrc"`
   );
 
@@ -246,7 +248,12 @@ export async function getServerSideProps({ locale, params: { news: newsId } }) {
     }
 
     return {
-      props: { mainNews: mainResult.rows[0], recentNews, popularNews },
+      props: {
+        ...(await serverSideTranslations(locale, ["footer", "news"])),
+        mainNews: mainResult.rows[0],
+        recentNews,
+        popularNews,
+      },
     };
   } else {
     return { notFound: true };

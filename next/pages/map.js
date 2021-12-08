@@ -1,7 +1,10 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "react-i18next";
 import Head from "next/head";
 import Script from "next/script";
 import maplibregl from "maplibre-gl";
+import SphericalMercator from "@mapbox/sphericalmercator";
 
 import useToggle from "../utils/useToggle";
 import { MapProvider } from "../context/MapContext";
@@ -14,6 +17,7 @@ import Modal from "../components/modal";
 import MvtLayer from "../components/map/MvtLayer";
 import ResizeableDrawer from "../components/core/ResizeableDrawer";
 import Filter from "../components/map/Filter";
+import SimpulLayer from "../components/map/SimpulLayer";
 
 const columnObj = [
   { label: "Arti Nama", value: "artinam" },
@@ -28,6 +32,7 @@ const columnObj = [
 ];
 
 const map = () => {
+  const { t } = useTranslation("attributetable");
   const mapRef = useRef(null);
   const drawRef = useRef(null);
   const mapElementRef = useRef(null);
@@ -52,18 +57,36 @@ const map = () => {
   const [column, setColumn] = useState(columnObj);
   const [refreshLayer, setRefreshLayer] = useState(false);
   const [bbox, setBbox] = useState(null);
+  const [activeLegend, setActiveLegend] = useState([]);
+  const [activeLayer, setActiveLayer] = useState([]);
+
+  const merc = useMemo(() => {
+    return new SphericalMercator();
+  }, []);
 
   const fetchRBIStyle = useCallback(async () => {
     let vts =
       "https://geoservices.big.go.id/rbi/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer";
-    let res = await fetch(vts + "/resources/styles/root.json");
-    let rbiStyle = await res.json();
+    let [styleRes, esriRestRes] = await Promise.all([
+      fetch(vts + "/resources/styles/root.json"),
+      fetch(vts + "?f=json"),
+    ]);
+    let [rbiStyle, esriRestService] = await Promise.all([
+      styleRes.json(),
+      esriRestRes.json(),
+    ]);
+    let boundsLonLat = merc.convert([
+      esriRestService.fullExtent.xmin,
+      esriRestService.fullExtent.ymin,
+      esriRestService.fullExtent.xmax,
+      esriRestService.fullExtent.ymax,
+    ]);
     rbiStyle.sprite = vts + "/resources/sprites/sprite";
     rbiStyle.glyphs = vts + "/resources/fonts/{fontstack}/{range}.pbf";
     rbiStyle.sources.esri = {
       type: "vector",
-      tiles: [vts + "/tile/{z}/{y}/{x}.pbf"],
-      bounds: [90, -13, 144, 8],
+      tiles: esriRestService.tiles.map((el) => vts + "/" + el),
+      bounds: boundsLonLat,
     };
     rbiStyle.sources.arcgisbasemap = {
       type: "raster",
@@ -87,8 +110,8 @@ const map = () => {
       // style: "/styles-rupabumi.json",
       style: await fetchRBIStyle(),
       // https://api.maptiler.com/maps/topo/style.json?key=D7JUUxLv3oK21JM9jscD
-      center: [107.59563446044922, -6.934776792662195],
-      zoom: 6,
+      center: [116.9213, -0.7893],
+      zoom: 4,
       maxZoom: 20,
       minZoom: 3,
     });
@@ -246,6 +269,10 @@ const map = () => {
                 bbox,
                 setBbox,
                 handleZoomExtend,
+                activeLegend,
+                setActiveLegend,
+                activeLayer,
+                setActiveLayer,
               }}
             >
               <MapSearch
@@ -261,7 +288,7 @@ const map = () => {
                   setIsOpenFeature(false);
                   setActiveFeature("search");
                 }}
-                className=' absolute bottom-6 left-1/2 z-10 shadow-map-1 rounded-md p-1 hidden md:flex flex-col gap-1 bg-main-blue transform -translate-x-1/2 cursor-pointer'
+                className='font-map absolute bottom-6 left-1/2 z-10 shadow-map-1 rounded-md p-1 hidden md:flex flex-col gap-1 bg-main-blue transform -translate-x-1/2 cursor-pointer'
               >
                 <div className='flex gap-2 px-5 py-3 '>
                   <img
@@ -270,9 +297,24 @@ const map = () => {
                     className='w-5'
                   />
                   <p className='text-sm font-semibold text-white'>
-                    Tabel data informasi-informasi dari Pulau
+                    {t("buttonAttribute")}
                   </p>
                 </div>
+              </div>
+              <div
+                onClick={() =>
+                  mapRef.current.flyTo({
+                    center: [116.9213, -0.7893],
+                    zoom: 4,
+                  })
+                }
+                className='absolute bottom-[4.25rem] md:bottom-[5.5rem] mb-[6px] left-[27px] md:left-8 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'
+              >
+                <img
+                  src='/images/ic-reset-zoom.svg'
+                  alt='guide button'
+                  className='w-5'
+                />
               </div>
               <div className='absolute bottom-44 md:bottom-56 mb-[6px] right-[10px] md:right-6 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'>
                 <img
@@ -295,6 +337,7 @@ const map = () => {
                 />
               </ResizeableDrawer>
               {mapload && <MvtLayer isSelectAll={isSelectAll} />}
+              {mapload && <SimpulLayer />}
               <Modal
                 isShowing={isOpenMapFilter}
                 handleModal={toggleMapFilter}
@@ -316,3 +359,18 @@ const map = () => {
 };
 
 export default map;
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        "attributetable",
+        "komentar",
+        "simpulJaringan",
+        "sideBarRight",
+        "popupPulau",
+      ])),
+      // Will be passed to the page component as props
+    },
+  };
+}

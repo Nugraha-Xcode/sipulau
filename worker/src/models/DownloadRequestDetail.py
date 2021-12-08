@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from typing import List, Optional
+
+from pydantic import BaseModel
 
 class BoundingBox(BaseModel):
     xmin: float
@@ -9,7 +10,6 @@ class BoundingBox(BaseModel):
 
 
 class DownloadRequestDetail(BaseModel):
-    user_id: str
     id_toponim: Optional[int] = None
     nammap: Optional[str] = None
     artinam: Optional[str] = None
@@ -25,3 +25,4 @@ class DownloadRequestDetail(BaseModel):
     bbox: Optional[BoundingBox] = None
     selected: Optional[List[int]] = None
     unselected: Optional[List[int]] = None
+    aoi: Optional[str] = None

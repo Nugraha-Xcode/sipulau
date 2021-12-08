@@ -1,4 +1,5 @@
 import { useEffect, useRef, useContext } from "react";
+import { useTranslation } from "next-i18next";
 import SortIcon from "./SortIcon";
 import MapContext from "../../../context/MapContext";
 
@@ -15,6 +16,7 @@ const Table = ({
   isSelectAll,
   setIsSelectAll,
 }) => {
+  const { t } = useTranslation("attributetable");
   const observerRef = useRef(null);
   const rootObserver = useRef(null);
 
@@ -45,7 +47,7 @@ const Table = ({
 
   return (
     <div
-      className='min-w-screen tableStyle overflow-auto overscroll-contain hide-scrollbar'
+      className='min-w-screen tableStyle overflow-auto overscroll-contain'
       ref={rootObserver}
     >
       <table className='w-full text-black-2'>
@@ -89,7 +91,7 @@ const Table = ({
             {columns.map((el, index) =>
               el.show ? (
                 <th
-                  className='py-3 sticky top-0 min-w-[120px] px-3 bg-blue-3'
+                  className='py-3 sticky top-0 min-w-[120px] bg-blue-3'
                   key={index}
                 >
                   <div
@@ -102,9 +104,9 @@ const Table = ({
                             handleOrder(el.field, !order.orderAsc);
                           }
                     }
-                    className='flex items-center justify-between gap-4 cursor-pointer'
+                    className='flex items-center justify-between cursor-pointer gap-4'
                   >
-                    <p className='text-sm'>{el.title}</p>
+                    <p className='text-sm text-left'>{t(el.title)}</p>
                     <SortIcon
                       opacityBottom={
                         el.field === order.orderBy && order.orderAsc === true
@@ -241,6 +243,7 @@ const Table = ({
                         zoom: 12.5,
                       })
                     }
+                    test={dataItem[itemValue.field]}
                     className={`${
                       isSelectAll
                         ? toggledRow.findIndex(
@@ -253,9 +256,16 @@ const Table = ({
                           ) !== -1
                         ? "bg-blue-2"
                         : ""
-                    } text-center py-3 text-xs`}
+                    } text-left py-[3px] text-xs pr-2 ${
+                      dataItem[itemValue.field] &&
+                      dataItem[itemValue.field].length > 40
+                        ? "hover:relative hover:before:content-[attr(test)] hover:before:overflow-visible before:absolute before:bg-black-2 before:rounded-md before:top-10 before:z-[999] before:text-white hover:before:p-2"
+                        : ""
+                    } `}
                   >
-                    {dataItem[itemValue.field] || "-"}
+                    <div className={`line-clamp-2`}>
+                      {dataItem[itemValue.field] || "-"}
+                    </div>
                   </td>
                 ) : null
               )}

@@ -1,5 +1,7 @@
 import { sipulauPool } from "../../../../db";
 import { sqlSafeDirectusURL } from "../../../../utils/constant";
+import getCurrentActiveTable from "../../../../utils/api/getCurrentActiveTable";
+import getDirectusUserId from "../../../../utils/api/getDirectusUserId";
 
 export default async function islandCommentHandler(req, res) {
   const { method } = req;
@@ -11,7 +13,22 @@ export default async function islandCommentHandler(req, res) {
   }
 
   if (method === "POST") {
-    // TODO add auth
+    const { authorization } = req.headers;
+
+    let token;
+    let userId;
+    if (authorization) {
+      token = authorization.replace("Bearer ", "");
+      try {
+        let authCheckRes = await getDirectusUserId(token);
+        userId = authCheckRes.user;
+      } catch (error) {
+        return res.status(error.statusCode).json({ message: error.message });
+      }
+    } else {
+      return res.status(401).json({ message: "Harap login terlebih dahulu" });
+    }
+
     let parsedBody;
     try {
       parsedBody = JSON.parse(req.body);
@@ -19,31 +36,31 @@ export default async function islandCommentHandler(req, res) {
       return res.status(400).json({ message: "Body bukan JSON yang valid" });
     }
 
-    const { isi, gambar1, gambar2, gambar3, dokumen } = parsedBody;
+    const { email, isi, gambar1, gambar2, gambar3, dokumen } = parsedBody;
     if (isi) {
       try {
+        let tableName = await getCurrentActiveTable("island");
         let {
           rows: [{ exists }],
         } = await sipulauPool.query(
           `
           SELECT EXISTS(
             SELECT 1
-            FROM titik_pulau
+            FROM ${tableName}
             WHERE id_toponim = $1
           )
           `,
           [id]
         );
         if (exists) {
-          // TODO add user data
           await sipulauPool.query(
             `
             INSERT INTO komentar_pulau(
-              id_toponim, isi, gambar_1, gambar_2, gambar_3, dokumen
+              id_toponim, email, isi, gambar_1, gambar_2, gambar_3, dokumen, user_created
             )
-            VALUES ($1, $2, $3, $4, $5, $6)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             `,
-            [id, isi, gambar1, gambar2, gambar3, dokumen]
+            [id, email, isi, gambar1, gambar2, gambar3, dokumen, userId]
           );
           return res.status(201).json({ message: "Komentar berhasil dikirim" });
         } else {
@@ -83,7 +100,7 @@ export default async function islandCommentHandler(req, res) {
       `COALESCE('${sqlSafeDirectusURL}/assets/' || gambar_2 || '?key=thumb') "gambar2"`,
       `COALESCE('${sqlSafeDirectusURL}/assets/' || gambar_3 || '?key=thumb') "gambar3"`,
       "date_created",
-      "(first_name || ' ' || last_name) user_created"
+      "TRIM(CONCAT(first_name, ' ', last_name)) user_created",
     ];
     try {
       let { rows } = await sipulauPool.query(

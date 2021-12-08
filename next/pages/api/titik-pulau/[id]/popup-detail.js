@@ -1,4 +1,5 @@
 import { sipulauPool } from "../../../../db";
+import getCurrentActiveTable from "../../../../utils/api/getCurrentActiveTable";
 
 export default async function popupHandler(req, res) {
   const { method } = req;
@@ -17,11 +18,12 @@ export default async function popupHandler(req, res) {
 
   let queryResult;
   try {
+    let tableName = await getCurrentActiveTable("island");
     queryResult = await sipulauPool.query(
       `
       SELECT
         id_wilayah, artinam, sjhnam, aslbhs, wadmkd, wadmkc, status, remark
-      FROM titik_pulau
+      FROM ${tableName}
       WHERE id_toponim = $1
       `,
       [id]

@@ -1,2 +1,4 @@
 from .init_gdal_config import init_gdal_config as init_gdal_config
 from .process_download_shp import process_download_shp as process_download_shp
+from .process_uploaded_data import process_uploaded_data as process_uploaded_data
+from .set_active_island_table import set_active_island_table as set_active_island_table

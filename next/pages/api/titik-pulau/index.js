@@ -1,4 +1,5 @@
 import { sipulauPool } from "../../../db";
+import getCurrentActiveTable from "../../../utils/api/getCurrentActiveTable";
 
 const validColumns = [
   "id_toponim",
@@ -155,12 +156,13 @@ export default async function tableHandler(req, res) {
 
   let queryResult;
   try {
+    let tableName = await getCurrentActiveTable("island");
     queryResult = await sipulauPool.query(
       `
       SELECT
         id_toponim, nammap, artinam, sjhnam, aslbhs, id_wilayah, wadmkd,
         wadmkc, wadmkk, wadmpr, status, remark, ST_X(geom) lon, ST_Y(geom) lat
-      FROM titik_pulau
+      FROM ${tableName}
       ${combinedFilters}
       ORDER BY ${ordBy} ${ordDir}
       LIMIT $1 OFFSET $2

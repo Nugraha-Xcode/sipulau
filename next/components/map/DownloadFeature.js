@@ -1,7 +1,13 @@
-import React, { useContext, useEffect, useRef, useCallback } from "react";
-import maplibregl from "maplibre-gl";
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+  useState,
+} from "react";
+import { useTranslation } from "react-i18next";
 import MapContext from "../../context/MapContext";
-import Checkbox from "../core/Checkbox";
+import MapTableDownload from "./MapTableDownload";
 
 const DownloadFeature = ({
   setDrawItem,
@@ -9,43 +15,43 @@ const DownloadFeature = ({
   drawSelected,
   setDrawSelected,
 }) => {
+  const { t } = useTranslation("sideBarRight");
   const { map, draw } = useContext(MapContext);
+  const [isDraw, setIsDraw] = useState(false);
+  const [isSelection, setSelection] = useState([]);
   const polygonRef = useRef(null);
+
   useEffect(() => {
-    polygonRef.current.addEventListener("click", () => {
-      draw.changeMode("draw_polygon");
-    });
+    // polygonRef.current.addEventListener("click", () => {
+    //   draw.changeMode("draw_polygon");
+    // });
 
     const handleCreate = (e) => {
       setDrawItem((prev) => {
-        return [
-          ...prev,
-          { id: e.features[0].id, geometry: e.features[0].geometry },
-        ];
+        return [...prev, e.features[0]];
       });
+      setDrawSelected((prev) => {
+        return [...prev, e.features[0]];
+      });
+      setIsDraw(false);
     };
 
     map.on("draw.create", handleCreate);
-    // map.on("draw.delete", (e) => {
-    //   console.log(e);
-    // });
+    map.on("draw.selectionchange", (e) => {
+      setSelection(e.features);
+    });
+
     const handleUpdate = (e) => {
       if (drawSelected.findIndex((el) => el.id === e.features[0].id) !== -1) {
         setDrawSelected((prev) => {
           let a = [...prev];
-          a[a.findIndex((el) => el.id === e.features[0].id)] = {
-            id: e.features[0].id,
-            geometry: e.features[0].geometry,
-          };
+          a[a.findIndex((el) => el.id === e.features[0].id)] = e.features[0];
           return a;
         });
       }
       setDrawItem((prev) => {
         let a = [...prev];
-        a[a.findIndex((el) => el.id === e.features[0].id)] = {
-          id: e.features[0].id,
-          geometry: e.features[0].geometry,
-        };
+        a[a.findIndex((el) => el.id === e.features[0].id)] = e.features[0];
         return a;
       });
     };
@@ -63,115 +69,106 @@ const DownloadFeature = ({
       let a = [...prev];
       return [...a.filter((el) => el.id !== id)];
     });
+    setDrawSelected((prev) => {
+      let a = [...prev];
+      return [...a.filter((el) => el.id !== id)];
+    });
   }, []);
+
+  const handleStartDraw = useCallback(() => {
+    if (isDraw) {
+      setIsDraw(false);
+      draw.trash();
+    } else {
+      setIsDraw(true);
+      draw.changeMode("draw_polygon");
+    }
+  }, [isDraw]);
+
+  const handleCheck = useCallback(
+    (el) => {
+      drawSelected.findIndex((item) => item.id === el.id) !== -1
+        ? setDrawSelected((prev) => {
+            let a = [...prev];
+            a.splice([drawSelected.findIndex((item) => item.id === el.id)], 1);
+            return a;
+          })
+        : setDrawSelected((prev) => {
+            return [
+              ...prev,
+              {
+                id: el.id,
+                geometry: el.geometry,
+              },
+            ];
+          });
+    },
+    [drawSelected]
+  );
 
   return (
     <div className='flex flex-col gap-3'>
-      <div className='space-y-2'>
-        <p>Area of Interest:</p>
-        <div className='space-x-2'>
-          <button className='border rounded-sm p-1'>
-            <img
-              src='/images/ic-shape-3.svg'
-              alt='icon shape'
-              className='w-4 h-4'
-            />
-          </button>
-          <button className='border rounded-sm p-1'>
-            <img
-              src='/images/ic-shape-2.svg'
-              alt='icon shape'
-              className='w-4 h-4'
-            />
-          </button>
-          <button className='border rounded-sm p-1' ref={polygonRef}>
-            <img
-              src='/images/ic-shape-1.svg'
-              alt='icon shape'
-              className='w-4 h-4'
-            />
-          </button>
-          <button className='border rounded-sm p-1'>
-            <img
-              src='/images/ic-shape-4.svg'
-              alt='icon shape'
-              className='w-4 h-4'
-            />
-          </button>
-        </div>
-        <div className='flex flex-col gap-3 border rounded-lg p-2'>
-          <p>Daftar Area of Interest :</p>
-          <div className='flex flex-col gap-2'>
-            {drawItem.length > 0
-              ? drawItem.map((el, index) => (
-                  <div className='flex' key={el.id}>
-                    {/* <Checkbox value={el.geometry.type} /> */}
-                    <label className='flex items-center gap-2 container'>
-                      <input
-                        type='checkbox'
-                        checked={
-                          drawSelected.findIndex(
-                            (item) => item.id === el.id
-                          ) !== -1
-                            ? true
-                            : false
-                        }
-                        onChange={() => {
-                          drawSelected.findIndex(
-                            (item) => item.id === el.id
-                          ) !== -1
-                            ? setDrawSelected((prev) => {
-                                let a = [...prev];
-                                a.splice(
-                                  [
-                                    drawSelected.findIndex(
-                                      (item) => item.id === el.id
-                                    ),
-                                  ],
-                                  1
-                                );
-                                return a;
-                              })
-                            : setDrawSelected((prev) => {
-                                return [
-                                  ...prev,
-                                  {
-                                    id: el.id,
-                                    geometry: el.geometry,
-                                  },
-                                ];
-                              });
-                        }}
-                      />
-                      {el.geometry.type}
-                    </label>
-                    <button
-                      onClick={() => {
-                        handleDelete(el.id);
-                      }}
-                    >
-                      <img src='/images/ic-trash.svg' />
-                    </button>
-                  </div>
-                ))
-              : null}
-            {/* <div className='flex'>
-              <Checkbox value='freehand polygon 1' />
-              <button>
-                <img src='/images/ic-trash.svg' />
-              </button>
-            </div>
-            <div className='flex'>
-              <Checkbox value='rectangle 1' />
-              <button>
-                <img src='/images/ic-trash.svg' />
-              </button>
-            </div> */}
+      <div>
+        <div className='space-y-2 mb-3'>
+          <p className='text-xs text-black-2'>{t("aoi")}:</p>
+          <div className='space-x-2'>
+            <button
+              onClick={handleStartDraw}
+              className={`p-1 ${
+                isDraw
+                  ? "bg-white border border-main-blue text-main-blue"
+                  : "bg-main-blue text-white"
+              } w-full  text-sm rounded-lg py-2`}
+              ref={polygonRef}
+            >
+              <p>{isDraw ? t("cancelSelector") : t("addSelector")}</p>
+            </button>
           </div>
         </div>
-        {/* <div className='flex flex-col items-center justify-center gap-3 border border-dashed rounded-lg p-2 h-24'>
-          <p>Belum Terdapat Area of Interest </p>
-        </div> */}
+        <div className='flex flex-col gap-3 border rounded-lg p-2'>
+          <p className='text-xs text-black-2'>{t("listAoi")} :</p>
+          <div className='flex flex-col gap-2'>
+            {drawItem.length > 0 ? (
+              drawItem.map((el, index) => (
+                <div
+                  className={`flex ${
+                    isSelection.findIndex((elem) => elem.id === el.id) !== -1
+                      ? "bg-main-blue/10"
+                      : ""
+                  } p-1 rounded-md`}
+                  key={el.id}
+                >
+                  <label className='flex items-center gap-2 container text-black-2 text-xs'>
+                    <input
+                      type='checkbox'
+                      className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
+                      checked={
+                        drawSelected.findIndex((item) => item.id === el.id) !==
+                        -1
+                          ? true
+                          : false
+                      }
+                      onChange={() => handleCheck(el)}
+                    />
+                    {el.geometry.type}
+                  </label>
+                  <button
+                    onClick={() => {
+                      handleDelete(el.id);
+                    }}
+                  >
+                    <img src='/images/ic-trash.svg' />
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className='flex items-center justify-center h-16 border rounded-lg border-dashed'>
+                <p className='text-xs text-main-gray'>{t("emptyState")}</p>
+              </div>
+            )}
+          </div>
+        </div>
+        <MapTableDownload source='from-aoi' drawItem={drawSelected} />
       </div>
     </div>
   );

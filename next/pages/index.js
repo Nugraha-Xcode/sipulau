@@ -1,5 +1,7 @@
 import Head from "next/head";
 import Script from "next/script";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import BgCircle from "../components/BgCircle";
 
 import Footer from "../components/Footer";
@@ -17,7 +19,7 @@ import { sqlSafeDirectusURL } from "../utils/constant";
 
 export default function Home({ news, carousel, statistic }) {
   return (
-    <>
+    <div className='smooth-scroll'>
       <Head>
         <title>SIPULAU - BIG</title>
         <link rel='icon' href='/favicon.ico' />
@@ -54,7 +56,7 @@ export default function Home({ news, carousel, statistic }) {
           background-size: cover;
         }
       `}</style>
-    </>
+    </div>
   );
 }
 
@@ -188,7 +190,16 @@ export async function getServerSideProps({ locale }) {
   }
 
   return {
-    props: { news, carousel, statistic },
+    props: {
+      ...(await serverSideTranslations(locale, [
+        "homepage",
+        "footer",
+        "header",
+      ])),
+      news,
+      carousel,
+      statistic,
+    },
   };
 
   // return {

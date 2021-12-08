@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram } from "react-icons/fa";
 import { navItems } from "../utils/constant";
@@ -32,7 +33,9 @@ const socmedItems = [
 
 const Footer = () => {
   const router = useRouter();
-  const t = router.locale === "en" ? "en" : "id";
+  const { t } = useTranslation("footer");
+  const translate = router.locale === "en" ? "en" : "id";
+
   return (
     <footer className='relative flex justify-center py-10 px-4 md:px-10 bg-footer-blue'>
       <div className='max-w-screen-xl w-full'>
@@ -61,26 +64,38 @@ const Footer = () => {
               <p>Menu</p>
               <div className='grid grid-cols-2 gap-x-10'>
                 <div>
-                  {navItems[t].map((el, index) => (
+                  {navItems[translate].map((el, index) => (
                     <Link href={el.path} key={index}>
-                      <a className='mt-2 p-ctm-16 block'>{el.title}</a>
+                      <a className='mt-2 text-sm md:text-base block'>
+                        {el.title}
+                      </a>
                     </Link>
                   ))}
                 </div>
-                <div className='hidden md:block'>
-                  <p className='mt-2 p-ctm-16'>Tentang</p>
-                  <p className='mt-2 p-ctm-16'>Berita</p>
-                  <p className='mt-2 p-ctm-16'>Feedback</p>
-                  <p className='mt-2 p-ctm-16'>Statistik</p>
+                <div className='hidden md:flex md:flex-col'>
+                  <a href='#tentang' className='mt-2 text-sm md:text-base'>
+                    {t("footerTentang")}
+                  </a>
+                  <a href='#berita' className='mt-2 text-sm md:text-base'>
+                    {t("footerBerita")}
+                  </a>
+                  <a href='#feedback' className='mt-2 text-sm md:text-base'>
+                    {t("footerFeedback")}
+                  </a>
+                  <a
+                    href='#statistik'
+                    className='mt-2 text-sm md:text-base'
+                  ></a>
+                  {t("footerStatistik")}
                 </div>
               </div>
             </div>
             <div className='flex flex-col items-end justify-between text-white gap-10'>
               <div className='text-right space-y-3'>
-                <p>Hubungi Kami</p>
-                <p className='p-ctm-16'>021-8753155</p>
-                <p className='p-ctm-16'>021-87901255</p>
-                <p className='p-ctm-16'>sipulau@big.go.id</p>
+                <p>{t("footerKontak")}</p>
+                <p className='text-sm md:text-base'>021-8753155</p>
+                <p className='text-sm md:text-base'>021-87901255</p>
+                <p className='text-sm md:text-base'>sipulau@big.go.id</p>
               </div>
               <div className='flex space-x-5'>
                 {socmedItems.map((el, index) => (

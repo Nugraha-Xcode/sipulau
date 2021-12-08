@@ -1,4 +1,5 @@
 import { sipulauPool } from "../../../db";
+import getCurrentActiveTable from "../../../utils/api/getCurrentActiveTable";
 
 export default async function provHandler(req, res) {
   const { method } = req;
@@ -11,10 +12,11 @@ export default async function provHandler(req, res) {
 
   let queryResult;
   try {
+    let tableName = await getCurrentActiveTable("island");
     queryResult = await sipulauPool.query(
       `
       SELECT DISTINCT wadmpr
-      FROM titik_pulau
+      FROM ${tableName}
       `
     );
   } catch (error) {

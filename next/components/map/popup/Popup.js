@@ -1,4 +1,5 @@
 import { useRef, useContext, useEffect, useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import maplibregl from "maplibre-gl";
 
 import { PopupProvider } from "../../../context/PopupContext";
@@ -14,6 +15,7 @@ import SidePopup from "./SidePopup";
 import AddComment from "./AddComment";
 
 const Popup = ({ layername }) => {
+  const { t } = useTranslation("popupPulau");
   const popRef = useRef(null);
   const contentRef = useRef(null);
 
@@ -108,7 +110,7 @@ const Popup = ({ layername }) => {
         >
           <div className='flex py-3 px-4'>
             <p className='flex-1 text-center text-black-2 tracking-wide font-semibold'>
-              Informasi Pulau
+              {t("headerPopup")}
             </p>
             <button
               onClick={() => {
@@ -154,7 +156,7 @@ const Popup = ({ layername }) => {
       <BottomDrawer
         isShowing={isMobileDrawer}
         toggle={openMobileDrawer}
-        title='Informasi Pulau'
+        title={t("headerPopup")}
       >
         <MobilePopup toggle={openAddComment} />
       </BottomDrawer>

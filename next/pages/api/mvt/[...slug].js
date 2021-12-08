@@ -1,5 +1,6 @@
 import { sipulauPool } from "../../../db";
 import redis from "../../../redis";
+import getCurrentActiveTable from "../../../utils/api/getCurrentActiveTable";
 
 async function mvtDbFetch(
   layerName,
@@ -124,7 +125,12 @@ export default async function mvtHandler(req, res) {
   let extraParams;
 
   if (layerName === "titik-pulau") {
-    tableName = "titik_pulau";
+    try {
+      tableName = await getCurrentActiveTable("island");
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Terjadi kesalahan pada server" });
+    }
     featureIdCol = "id_toponim";
 
     // validate filters
@@ -176,7 +182,7 @@ export default async function mvtHandler(req, res) {
   let mvtBuff;
   try {
     mvtBuff = await redis.getBuffer(
-      `mvt-${layerName}-${z}-${x}-${y}-${whereQuery}`
+      `mvt-${tableName}-${z}-${x}-${y}-${whereQuery}`
     );
     if (!mvtBuff) {
       mvtBuff = await mvtDbFetch(
@@ -190,7 +196,7 @@ export default async function mvtHandler(req, res) {
         extraParams
       );
       await redis.set(
-        `mvt-${layerName}-${z}-${x}-${y}-${whereQuery}`,
+        `mvt-${tableName}-${z}-${x}-${y}-${whereQuery}`,
         mvtBuff,
         "EX",
         900

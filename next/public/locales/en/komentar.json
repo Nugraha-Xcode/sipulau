@@ -1,0 +1,20 @@
+{
+    "modalTitle": "Comment",
+    "addComment": "Add Comment",
+    "historyComment": "History Comment",
+    "historyCommentPoint": "Point Comment",
+    "historyCommentIsland": "Island Comment",
+    "messageCommentEmpty": "You can leave a comment by adding a point or on an existing island point.",
+    "pointCommentButton": "Comment With Add Point",
+    "or": "or",
+    "commentPointmssg1": "Point Comment",
+    "commentPointmssg2": "Specify the point first, then add a comment on the comment form.",
+    "downButtonCmmnt": "Cancel",
+    "commentButtonIsland": "Island Comment ",
+    "commentIslandmssg1": "Island Comment",
+    "commentIslandmssg2": "Select an existing island point, then add comments on that island point.",
+    "commentStatus1": "Accepted",
+    "commentStatus2": "Waiting",
+    "commentStatus3": "Rejected",
+    "historyEmptyState": "No comment yet"
+}

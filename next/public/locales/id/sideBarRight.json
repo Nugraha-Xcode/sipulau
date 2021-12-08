@@ -1,0 +1,23 @@
+{
+    "layerSetting": "Pengaturan Layer",
+    "optionLayer1": "Perbesar ke Layer",
+    "optionLayer2": "Pindahkan ke Atas",
+    "optionLayer3": "Pindahkan ke Bawah",
+    "optionLayer4": "Hapus",
+    "basemapOption": "Basemap",
+    "topDownload": "Unduh Data",
+    "aoi": "Area of Interest",
+    "addSelector": "Tambah AOI",
+    "cancelSelector": "Mulai Gambar AOI",
+    "listAoi": "List AOI",
+    "emptyState": "Tidak Ada AOI",
+    "formatFile": "Pilih Format File",
+    "buttonDownload": "Unduh",
+    "button1": "Layer",
+    "button2": "Cari Pulau",
+    "button3": "Peta Dasar",
+    "button4": "Unduh",
+    "button5": "Komentar",
+    "legendTitle": "Legenda",
+    "legendListTitle": "Legenda Layer Aktif"
+}

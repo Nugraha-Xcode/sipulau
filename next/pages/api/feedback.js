@@ -22,8 +22,15 @@ function validateCaptcha(captchaToken) {
             data += chunk;
           });
           res.on("end", () => {
-            let parsedRes = JSON.parse(data);
-            resolve(parsedRes.success);
+            if (res.statusCode !== 200) {
+              reject("HCaptcha error");
+            } else {
+              let parsedRes = JSON.parse(data);
+              resolve(parsedRes.success);
+            }
+          });
+          res.on("error", (error) => {
+            reject(error);
           });
         }
       )

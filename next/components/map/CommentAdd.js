@@ -1,43 +1,55 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import MapContext from "../../context/MapContext";
 import Modal from "../modal";
 import AddComment from "./popup/AddComment";
 import useToggle from "../../utils/useToggle";
+import AppContext from "../../context/AppContext";
 
 const CommentAdd = () => {
+  const { t } = useTranslation("komentar");
+  const { toggleLogin, isAuth } = useContext(AppContext);
   const { map } = useContext(MapContext);
   const [type, setType] = useState(null);
+
   const [coor, setCoor] = useState({});
   const [isAddComment, openAddComment] = useToggle();
 
   const comment = {
     titik: {
-      text1: "Komentar Tambah Titik",
-      text2:
-        "Tentukan titik terlebih dahulu, kemudian tambah komentar pada form komentar",
+      text1: "commentPointmssg1",
+      text2: "commentPointmssg2",
       imgSrc: "images/ph-comment-titik.jpg",
     },
     pulau: {
-      text1: "Komentar di Titik Pulau",
-      text2:
-        "Pilih titik pulau yang sudah ada, kemudian tambahkan komnetar pada titik pulau tersebut.",
+      text1: "commentIslandmssg1",
+      text2: "commentIslandmssg2",
       imgSrc: "images/ph-comment-pulau.jpg",
     },
   };
 
   useEffect(() => {
-    map.on("click", (e) => {
+    const handleTitik = (e) => {
       setCoor(e.lngLat);
       openAddComment();
-    });
-    return () => {
-      map.getCanvas().style.cursor = "";
-      map.on("mouseleave", "titikPulauMvt", function () {
-        map.getCanvas().style.cursor = "";
-      });
-      setType(null);
     };
-  }, []);
+    const handlePulau = (e) => {
+      setCoor(e.lngLat);
+      openAddComment();
+    };
+    if (type === "titik") {
+      map.on("click", handleTitik);
+    } else if (type === "pulau") {
+      map.on("click", "titikPulauMvt", handlePulau);
+    }
+    return () => {
+      if (type === "titik") {
+        map.off("click", handleTitik);
+      } else if (type === "pulau") {
+        map.off("click", "titikPulauMvt", handlePulau);
+      }
+    };
+  }, [type]);
 
   return (
     <div>
@@ -46,36 +58,43 @@ const CommentAdd = () => {
           <div className='p-3 flex flex-col items-center justify-center text-center gap-2'>
             <img src='/images/ic-empty-state.svg' alt='icon empty state' />
             <p className='text-sm font-semibold text-black-2'>
-              Tambah Komentar
+              {t("addComment")}
             </p>
-            <p className='text-xs text-main-gray'>
-              Anda dapat memberikan komentar dengan menabah titik atau di titik
-              pulau yang sudah ada
-            </p>
+            <p className='text-xs text-main-gray'>{t("messageCommentEmpty")}</p>
           </div>
           <div className='space-y-2'>
             <button
               onClick={() => {
-                map.getCanvas().style.cursor = "pointer";
-                map.on("mouseleave", "titikPulauMvt", function () {
-                  map.getCanvas().style.cursor = "pointer";
-                });
-                setType("titik");
+                if (isAuth) {
+                  map.getCanvas().style.cursor = "crosshair";
+                  map.on("mouseleave", "titikPulauMvt", function () {
+                    map.getCanvas().style.cursor = "crosshair";
+                  });
+                  setType("titik");
+                } else {
+                  toggleLogin();
+                }
               }}
               className='bg-main-blue text-white w-full rounded-lg py-2'
             >
-              Komentar dengan Tambah Titik
+              {t("pointCommentButton")}
             </button>
             <div className='flex items-center'>
               <hr className='flex-1' />
-              <p className='mx-3 text-xs'>Atau</p>
+              <p className='mx-3 text-xs'>{t("or")}</p>
               <hr className='flex-1' />
             </div>
             <button
-              onClick={() => setType("pulau")}
+              onClick={() => {
+                if (isAuth) {
+                  setType("pulau");
+                } else {
+                  toggleLogin();
+                }
+              }}
               className='bg-main-blue text-white w-full rounded-lg py-2'
             >
-              Komentar di Titik Pulau
+              {t("commentButtonIsland")}
             </button>
           </div>
         </div>
@@ -88,9 +107,9 @@ const CommentAdd = () => {
               className='w-2/3'
             />
             <p className='text-sm font-semibold text-black-2'>
-              {comment[type].text1}
+              {t(comment[type].text1)}
             </p>
-            <p className='text-xs text-main-gray'>{comment[type].text2}</p>
+            <p className='text-xs text-main-gray'>{t(comment[type].text2)}</p>
           </div>
           <button
             onClick={() => {
@@ -102,12 +121,12 @@ const CommentAdd = () => {
             }}
             className='border border-main-blue text-main-blue w-full rounded-lg py-2'
           >
-            Batal
+            {t("downButtonCmmnt")}
           </button>
         </div>
       )}
       <Modal isShowing={isAddComment} handleModal={openAddComment} size='lg'>
-        <AddComment onClose={openAddComment} type='titik' coor={coor} />
+        <AddComment onClose={openAddComment} type={type} coor={coor} />
       </Modal>
     </div>
   );

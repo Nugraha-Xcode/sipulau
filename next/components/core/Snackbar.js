@@ -22,7 +22,11 @@ const Snackbar = ({ isShowing, toggle, text, type }) => {
                 ? "-translate-y-1/2 opacity-100"
                 : "translate-y-full opacity-0"
             } fixed bottom-5 left-1/2 ${
-              type === "error" ? "bg-[#EB5757]" : "bg-[#6FCF97]"
+              type === "error"
+                ? "bg-[#EB5757]"
+                : type === "success"
+                ? "bg-[#6FCF97]"
+                : "bg-main-orange"
             } w-[fit-content] text-white py-3 px-6 transform -translate-x-1/2 rounded-lg shadow-xl z-[999999]`}
           >
             {text}

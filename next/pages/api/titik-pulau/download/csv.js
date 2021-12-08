@@ -1,6 +1,10 @@
 import { sipulauPool } from "../../../../db";
 import { to as copyTo } from "pg-copy-streams";
 
+import isValidMultiPolygonGeom from "../../../../utils/api/isValidMultiPolygonGeom";
+import getCurrentActiveTable from "../../../../utils/api/getCurrentActiveTable";
+import getDirectusUserId from "../../../../utils/api/getDirectusUserId";
+
 export default async function downloadCsvHandler(req, res) {
   const { method } = req;
   if (method !== "POST") {
@@ -10,7 +14,21 @@ export default async function downloadCsvHandler(req, res) {
       .json({ message: `Method ${method} Not Allowed` });
   }
 
-  // TODO add auth
+  const { authorization } = req.headers;
+
+  let token;
+  let userId;
+  if (authorization) {
+    token = authorization.replace("Bearer ", "");
+    try {
+      let authCheckRes = await getDirectusUserId(token);
+      userId = authCheckRes.user;
+    } catch (error) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+  } else {
+    return res.status(401).json({ message: "Harap login terlebih dahulu" });
+  }
 
   let parsedBody;
   try {
@@ -36,6 +54,7 @@ export default async function downloadCsvHandler(req, res) {
     bbox,
     selected,
     unselected,
+    aoi,
   } = parsedBody;
 
   let filters = [];
@@ -48,6 +67,21 @@ export default async function downloadCsvHandler(req, res) {
     }
     if (validId.length > 0)
       filters.push(`id_toponim IN (${validId.join(",")})`);
+  } else if (typeof aoi === "object") {
+    // then prioritize aoi
+    if (isValidMultiPolygonGeom(aoi)) {
+      filters.push(
+        `geom && ST_GeomFromGeoJSON('${JSON.stringify(aoi).replace(
+          /'/g,
+          "''"
+        )}')`
+      );
+    } else {
+      return res.status(400).json({
+        message:
+          "AOI harus berbentuk geometri GeoJSON bertipe MultiPolygon yang valid",
+      });
+    }
   } else {
     let equalStringFilters = [
       [id_wilayah, "id_wilayah"],
@@ -70,7 +104,7 @@ export default async function downloadCsvHandler(req, res) {
     // remark filter
     if (remark !== undefined) {
       if (remark === "Berpenduduk" || remark === "Tidak Berpenduduk") {
-        filters.push(`SPLIT_PART(remark, ' - ', 2) ~* ^${remark}`);
+        filters.push(`SPLIT_PART(remark, ' - ', 2) ~* '^${remark}'`);
       } else {
         filters.push(
           "SPLIT_PART(remark, ' - ', 2) !~* '^Berpenduduk|^Tidak Berpenduduk'"
@@ -130,6 +164,7 @@ export default async function downloadCsvHandler(req, res) {
 
   let client;
   try {
+    let tableName = await getCurrentActiveTable("island");
     client = await sipulauPool.connect();
 
     let stream = client.query(
@@ -142,7 +177,7 @@ export default async function downloadCsvHandler(req, res) {
             wadmkd "Kelurahan/Desa", wadmkc "Kecamatan", wadmkk "Kabupaten/Kota",
             wadmpr "Provinsi", status "Status", remark "Remark", ST_X(geom) "X",
             ST_Y(geom) "Y"
-          FROM titik_pulau
+          FROM ${tableName}
           ${combinedFilters}
         ) TO STDOUT (FORMAT csv, HEADER true)
         `
@@ -157,6 +192,7 @@ export default async function downloadCsvHandler(req, res) {
     stream.on("error", (error) => {
       console.error(error);
       res.end;
+      return res.status(500).json({ message: "Terjadi kesalahan pada server" });
     });
   } catch (error) {
     console.error(error);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Script from "next/script";
@@ -115,7 +116,13 @@ export async function getServerSideProps({ locale, query: { page } }) {
     news = newsResult.rows;
   }
 
-  return { props: { news, totalNews } };
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["footer", "news"])),
+      news,
+      totalNews,
+    },
+  };
 
   /* return {
     props: {

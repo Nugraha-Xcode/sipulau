@@ -11,7 +11,7 @@ type TInput = {
   status?: string;
 };
 
-const privateStatus = ["menunggu", "ditolak"];
+const privateStatus = ["menunggu", "ditolak", "diproses"];
 const publicStatus = ["diterima"];
 const validStatus = privateStatus.concat(publicStatus);
 const privateCommentImgFolderId = "42280896-55f1-491c-bc14-f2197bc729d1";

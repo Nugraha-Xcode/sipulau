@@ -1,4 +1,5 @@
 import { sipulauPool } from "../../../db";
+import getCurrentActiveTable from "../../../utils/api/getCurrentActiveTable";
 
 export default async function kabkotHandler(req, res) {
   const { method } = req;
@@ -16,10 +17,11 @@ export default async function kabkotHandler(req, res) {
 
   let queryResult;
   try {
+    let tableName = await getCurrentActiveTable("island");
     queryResult = await sipulauPool.query(
       `
       SELECT DISTINCT wadmkk
-      FROM titik_pulau
+      FROM ${tableName}
       WHERE wadmpr = $1
       `,
       [prov]

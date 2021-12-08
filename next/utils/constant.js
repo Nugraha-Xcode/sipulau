@@ -31,22 +31,22 @@ export const navItems = {
 
 export const statisticItems = [
   {
-    label: "Jumlah unduhan 24 jam terakhir",
+    label: "captionUnduh",
     imageSrc: "/images/ic-section6-1.svg",
     value: "download",
   },
   {
-    label: "Jumlah pengunjung 24 jam terakhir",
+    label: "captionPengunjung",
     imageSrc: "/images/ic-section6-3.svg",
     value: "visit",
   },
   {
-    label: "Jumlah asal negara 1 tahun terakhir",
+    label: "captionNegara",
     imageSrc: "/images/ic-section6-4.svg",
     value: "country",
   },
   {
-    label: "Jumlah pengunjung 1 tahun terakhir",
+    label: "captionPengunjungHari",
     imageSrc: "/images/ic-section6-2.svg",
     value: "visitor",
   },
@@ -105,15 +105,15 @@ export const dummyNews = [
 
 export const mapListCategory = [
   {
-    label: "Kementerian / Lembaga",
+    label: "button1",
     value: "Kementerian/Lembaga",
   },
   {
-    label: "Provinsi",
+    label: "button2",
     value: "Provinsi",
   },
   {
-    label: "Kabupaten / Kota",
+    label: "button3",
     value: "Kabupaten/Kota",
   },
 ];

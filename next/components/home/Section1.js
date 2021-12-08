@@ -101,7 +101,9 @@ const Section1 = ({ items }) => {
                   {el.subTitle && el.subTitle}
                 </p>
                 <h1 className='text-dark-blue'>{el.title && el.title}</h1>
-                <p className='text-xl p-ctm-content-80'>{el.text && el.text}</p>
+                <p className='text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8'>
+                  {el.text && el.text}
+                </p>
                 {el.buttonLabel && (
                   <Link href={el.buttonHref}>
                     <button

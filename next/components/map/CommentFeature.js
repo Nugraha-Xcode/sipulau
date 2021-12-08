@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
+import AppContext from "../../context/AppContext";
 import CommentAdd from "./CommentAdd";
 import CommentHistory from "./CommentHistory";
 
 const CommentFeature = () => {
+  const { t } = useTranslation("komentar");
+  const { toggleLogin, isAuth } = useContext(AppContext);
   const [comment, setComment] = useState("add");
   return (
     <div>
@@ -13,15 +17,17 @@ const CommentFeature = () => {
           } text-main-gray font-semibold`}
           onClick={() => setComment("add")}
         >
-          Tambah Komentar
+          {t("addComment")}
         </div>
         <div
           className={`flex-1 cursor-pointer text-center border-b-2 ${
             comment === "history" ? "border-main-blue" : ""
           } text-main-gray font-semibold`}
-          onClick={() => setComment("history")}
+          onClick={() => {
+            isAuth ? setComment("history") : toggleLogin();
+          }}
         >
-          Riwayat Komentar
+          {t("historyComment")}
         </div>
       </div>
       {comment === "add" ? <CommentAdd /> : <CommentHistory />}

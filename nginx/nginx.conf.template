@@ -31,8 +31,6 @@ http {
         gzip_comp_level 4;
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
 
-        proxy_buffering off;
-
         location / {
             proxy_pass  http://nextjs:3000/;
             proxy_http_version    1.1;
@@ -53,8 +51,7 @@ http {
         gzip_comp_level 4;
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
 
-        client_max_body_size 2m;
-        proxy_buffering off;
+        client_max_body_size 5m;
 
         location / {
             proxy_pass  http://directus:8055/;
@@ -76,8 +73,6 @@ http {
         gzip_comp_level 4;
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
 
-        proxy_buffering off;
-
         location / {
             proxy_pass  http://umami:3000/;
             proxy_http_version    1.1;
@@ -95,7 +90,6 @@ http {
     #     listen 9000;
 
     #     client_max_body_size 100m;
-    #     proxy_buffering off;
 
     #     location / {
     #         proxy_pass http://minio:9000/;

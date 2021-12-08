@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import MemoIcLayer from "../core/icons/IcLayer";
 import MemoIcBasemap from "../core/icons/IcBasemap";
 import MemoIcDownload from "../core/icons/IcDownload";
@@ -11,14 +12,15 @@ import useToggle from "../../utils/useToggle";
 import Modal from "../modal";
 
 const featureItems = [
-  { icon: MemoIcLayer, label: "Layer", value: "layer" },
-  { icon: MemoIcSearch, label: "Cari Pulau", value: "search" },
-  { icon: MemoIcBasemap, label: "Peta Dasar", value: "basemap" },
-  { icon: MemoIcDownload, label: "Download", value: "download" },
-  { icon: MemoIcComment, label: "Komentar", value: "comment" },
+  { icon: MemoIcLayer, label: "button1", value: "layer" },
+  { icon: MemoIcSearch, label: "button2", value: "search" },
+  { icon: MemoIcBasemap, label: "button3", value: "basemap" },
+  { icon: MemoIcDownload, label: "button4", value: "download" },
+  { icon: MemoIcComment, label: "button5", value: "comment" },
 ];
 
 const MapFeature = () => {
+  const { t } = useTranslation("sideBarRight");
   const {
     setIsOpenDrawer,
     activeFeature,
@@ -80,7 +82,7 @@ const MapFeature = () => {
   );
 
   return (
-    <div className='absolute top-40 md:top-24 right-2 md:right-6 z-10 shadow-map-1 bg-white rounded-xl p-1 flex flex-col gap-1'>
+    <div className='font-map absolute top-40 md:top-24 right-2 md:right-6 z-10 shadow-map-1 bg-white rounded-xl p-1 flex flex-col gap-1'>
       {featureItems.map((el, index) => (
         <div
           onClick={() => handleOpenTab(el.value)}
@@ -92,7 +94,7 @@ const MapFeature = () => {
           key={index}
         >
           <el.icon active={activeFeature === el.value} />
-          <p className='text-[0.5rem] text-main-gray'>{el.label}</p>
+          <p className='text-[0.5rem] text-main-gray'>{t(el.label)}</p>
         </div>
       ))}
       <AnimationCard isShowing={isOpenFeature} position='left'>
