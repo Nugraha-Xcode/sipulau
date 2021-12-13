@@ -12,6 +12,7 @@ services:
     #   - "8055:8055"
     depends_on:
       - redis
+      - worker
     environment:
       - KEY=${DIRECTUS_KEY}
       - SECRET=${DIRECTUS_SECRET}
