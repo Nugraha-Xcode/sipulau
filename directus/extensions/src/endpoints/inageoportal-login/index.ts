@@ -164,6 +164,8 @@ export default defineEndpoint((router, { exceptions, database }) => {
             expires: refreshTokenExpiration,
             secure:
               process.env.REFRESH_TOKEN_COOKIE_SECURE === "true" ? true : false,
+            httpOnly: true,
+            sameSite: "lax",
           }
         );
 

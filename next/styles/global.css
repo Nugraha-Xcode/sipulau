@@ -7,19 +7,6 @@ html {
   scrollbar-width: none;
 }
 
-body {
-  background: linear-gradient(
-    359.83deg,
-    rgba(253, 254, 255, 0.142) 2.85%,
-    rgba(39, 99, 185, 0.12) 29.49%,
-    rgba(253, 254, 255, 0.114) 36.03%,
-    rgba(253, 254, 255, 0.2) 65.13%,
-    rgba(39, 99, 185, 0.118) 83.85%,
-    rgba(253, 254, 255, 0.088) 99.99%,
-    rgba(253, 254, 255, 0.2) 100.99%
-  );
-}
-
 body::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }

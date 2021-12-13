@@ -59,7 +59,7 @@ const Section5 = () => {
   return (
     <section
       id='feedback'
-      className='relative flex justify-center py-16 lg:py-24 px-4 md:px-10'
+      className='relative flex justify-center py-16 lg:py-24 px-4 md:px-10 custom-bg'
     >
       <div className='flex flex-col items-center gap-8 lg:gap-10 max-w-screen-xl w-full'>
         <form
@@ -104,6 +104,17 @@ const Section5 = () => {
           ></input>
         </form>
       </div>
+      <style jsx>
+        {`
+          .custom-bg {
+            background: linear-gradient(
+              rgba(0, 0, 0, 0),
+              rgba(42, 99, 181, 0.1) 30% 80%,
+              rgba(0, 0, 0, 0)
+            );
+          }
+        `}
+      </style>
     </section>
   );
 };

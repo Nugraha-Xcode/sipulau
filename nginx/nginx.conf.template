@@ -11,7 +11,13 @@ http {
     include	  /etc/nginx/mime.types;
     default_type  application/octet-stream;
 
-    access_log    /var/log/nginx/access.log;
+    # exclude ELB-HealthChecker from access_log
+	map $http_user_agent $loggable {
+		"ELB-HealthChecker/2.0"  0;
+		default 1;
+	}
+
+    access_log	/var/log/nginx/access.log combined if=$loggable;
 
 
     log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
@@ -30,6 +36,8 @@ http {
         gzip on;
         gzip_comp_level 4;
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
+
+        add_header Content-Security-Policy "default-src 'self'; script-src 'self' ${UMAMI_URL} hcaptcha.com *.hcaptcha.com blob:; style-src 'self' 'unsafe-inline' fonts.googleapis.com api.mapbox.com unpkg.com; font-src 'self' fonts.gstatic.com; img-src * data: blob:; connect-src *; frame-src hcaptcha.com *.hcaptcha.com; frame-ancestors 'none';" always;
 
         location / {
             proxy_pass  http://nextjs:3000/;
@@ -53,6 +61,8 @@ http {
 
         client_max_body_size 5m;
 
+        add_header Content-Security-Policy "default-src 'self'; frame-ancestors 'none';" always;
+
         location / {
             proxy_pass  http://directus:8055/;
             proxy_http_version    1.1;
@@ -72,6 +82,8 @@ http {
         gzip on;
         gzip_comp_level 4;
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
+
+        add_header Content-Security-Policy "default-src 'self'; img-src 'self' icons.duckduckgo.com; connect-src 'self' api.github.com; frame-ancestors 'none';" always;
 
         location / {
             proxy_pass  http://umami:3000/;

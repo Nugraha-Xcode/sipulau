@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import Any, List, Tuple, Union, Dict
 from uuid import UUID
 
 from osgeo import ogr, osr
@@ -20,12 +20,66 @@ from sqlquery import (
 )
 
 
+def get_fields_type(data_type: DataTypeEnum) -> Dict[str, Any]:
+    return {
+        "id_toponim": ogr.OFTInteger64,
+        "statpub": ogr.OFTString,
+        "statpem": ogr.OFTString,
+        "status": ogr.OFTString,
+        "zonautm": ogr.OFTString,
+        "nlp": ogr.OFTString,
+        "klstpn": ogr.OFTString,
+        "lcode": ogr.OFTString,
+        "ftype": ogr.OFTString,
+        "namlok": ogr.OFTString,
+        "namspe": ogr.OFTString,
+        "nammap": ogr.OFTString,
+        "namgaz": ogr.OFTString,
+        "alias": ogr.OFTString,
+        "aslbhs": ogr.OFTString,
+        "artinam": ogr.OFTString,
+        "sjhnam": ogr.OFTString,
+        "nambef": ogr.OFTString,
+        "namrec": ogr.OFTString,
+        "ucapan": ogr.OFTString,
+        "ejaan": ogr.OFTString,
+        "koordinat1": ogr.OFTString,
+        "koordx": ogr.OFTReal,
+        "koordy": ogr.OFTReal,
+        "koordinat2": ogr.OFTString,
+        "koordx2": ogr.OFTReal,
+        "koordy2": ogr.OFTReal,
+        "elevasi": ogr.OFTReal,
+        "akurasi": ogr.OFTReal,
+        "negara": ogr.OFTString,
+        "id_wilayah": ogr.OFTString,
+        "wadmpr": ogr.OFTString,
+        "wadmkk": ogr.OFTString,
+        "wadmkc": ogr.OFTString,
+        "wadmkd": ogr.OFTString,
+        "ksurveyor": ogr.OFTInteger64,
+        "nsurveyor": ogr.OFTString,
+        "narsum": ogr.OFTString,
+        "tglsurvei": ogr.OFTDate,
+        "sumber": ogr.OFTString,
+        "remark": ogr.OFTString,
+        "foto1": ogr.OFTString,
+        "foto2": ogr.OFTString,
+        "foto3": ogr.OFTString,
+        "foto4": ogr.OFTString,
+        "sketsa": ogr.OFTString,
+        "rekaman1": ogr.OFTString,
+        "rekaman2": ogr.OFTString,
+        "created_by": ogr.OFTInteger64,
+    }
+
+
 def get_fields(data_type: DataTypeEnum) -> List[str]:
     return [
+        "id_toponim",
         "statpub",
         "statpem",
         "status",
-        "id_toponim",
         "zonautm",
         "nlp",
         "klstpn",
@@ -136,6 +190,7 @@ def add_to_table_list(
     with pool.connection() as con:
         con.execute(add_into_table_list_q(data_type), [new_table_name, user_id])
 
+
 def delete_directus_files_entry(object_key: str) -> None:
     pool = db.get_pool()
     with pool.connection() as con:
@@ -166,9 +221,7 @@ def process_uploaded_data(data: UploadRequestDetail) -> BasicMessage:
         pass
     else:
         raise InvalidUploadedDataException(
-            "Jenis geometri tidak valid. "
-            + "Pastikan data jalan berbentuk LineString/MultiLineString "
-            + "atau data jembatan berbentuk Point",
+            "Jenis geometri tidak valid. Pastikan jenis geometri sesuai",
             data.object_key,
         )
 
@@ -191,17 +244,27 @@ def process_uploaded_data(data: UploadRequestDetail) -> BasicMessage:
     # check fields
     shp_fields: List[str] = []
     db_fields = get_fields(data.data_type)
+    db_fields_type = get_fields_type(data.data_type)
     for i in range(in_layer_defn.GetFieldCount()):
         field_defn: ogr.FieldDefn = in_layer_defn.GetFieldDefn(i)
         field_name: str = field_defn.GetName()
         if field_name in db_fields:
-            shp_fields.append(field_name)
+            field_type = field_defn.GetType()
+            if db_fields_type.get(field_name) == field_type:
+                shp_fields.append(field_name)
+            else:
+                raise InvalidUploadedDataException(
+                    "Atribut tidak valid. "
+                    + "Pastikan kolom atribut memiliki jenis data yang sesuai",
+                    data.object_key,
+                )
     if len(shp_fields) == len(db_fields):
         pass
     else:
         raise InvalidUploadedDataException(
             "Atribut tidak valid. "
-            + "Pastikan nama kolom atribut beserta jumlahnya sudah sesuai",
+            + "Pastikan nama kolom atribut beserta jumlah dan "
+            + "jenis datanya sudah sesuai",
             data.object_key,
         )
 

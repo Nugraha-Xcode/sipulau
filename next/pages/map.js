@@ -1,9 +1,10 @@
-import { useRef, useState, useEffect, useCallback, useMemo } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import Head from "next/head";
 import Script from "next/script";
 import maplibregl from "maplibre-gl";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import SphericalMercator from "@mapbox/sphericalmercator";
 
 import useToggle from "../utils/useToggle";
@@ -60,9 +61,7 @@ const map = () => {
   const [activeLegend, setActiveLegend] = useState([]);
   const [activeLayer, setActiveLayer] = useState([]);
 
-  const merc = useMemo(() => {
-    return new SphericalMercator();
-  }, []);
+  const mercRef = useRef(new SphericalMercator());
 
   const fetchRBIStyle = useCallback(async () => {
     let vts =
@@ -75,7 +74,7 @@ const map = () => {
       styleRes.json(),
       esriRestRes.json(),
     ]);
-    let boundsLonLat = merc.convert([
+    let boundsLonLat = mercRef.current.convert([
       esriRestService.fullExtent.xmin,
       esriRestService.fullExtent.ymin,
       esriRestService.fullExtent.xmax,
@@ -221,8 +220,6 @@ const map = () => {
           href='https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css'
           rel='stylesheet'
         />
-        <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js'></script>
-        <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.1.1/mapbox-gl-draw.js'></script>
         <link
           rel='stylesheet'
           href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.1.1/mapbox-gl-draw.css'
@@ -247,6 +244,7 @@ const map = () => {
               value={{
                 draw: drawRef.current,
                 map: mapRef.current,
+                merc: mercRef.current,
                 isOpenDrawer,
                 setIsOpenDrawer,
                 activeFeature,

@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { appWithTranslation } from "next-i18next";
 
 import { AppProvider } from "../context/AppContext";
-import { changeAuthToken, getAuthToken } from "../utils/authStorage";
 import { expireTime, changeExpireTime } from "../utils/expireTime";
 import Snackbar from "../components/core/Snackbar";
 import useToggle from "../utils/useToggle";
@@ -66,9 +65,13 @@ function MyApp({ Component, pageProps }) {
         }
       );
       const resJson = await res.json();
-      if (res.status === 200 && resJson.access_token) {
-        setAuth(resJson.access_token);
-        changeExpireTime(resJson.expires);
+      if (
+        res.status === 200 &&
+        resJson?.data?.access_token &&
+        resJson.data.expires
+      ) {
+        setAuth(resJson.data.access_token);
+        changeExpireTime(resJson.data.expires);
       }
     } catch (err) {
       setAuth("");
@@ -94,8 +97,15 @@ function MyApp({ Component, pageProps }) {
         }
       );
       const resJson = await res.json();
-      if (res.status === 200 && resJson.access_token) {
-        setAuth(resJson.access_token);
+      if (
+        res.status === 200 &&
+        resJson?.data?.access_token &&
+        resJson.data.expires
+      ) {
+        setAuth(resJson.data.access_token);
+        changeExpireTime(resJson.data.expires);
+      } else {
+        setAuth("")
       }
     } catch (err) {
       setAuth("");
@@ -105,12 +115,9 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     if (auth.length) {
-      setAuth(auth);
       setTimeout(() => {
         silentRefreshToken();
       }, expireTime - 500);
-    } else {
-      setAuth("");
     }
   }, [auth]);
 

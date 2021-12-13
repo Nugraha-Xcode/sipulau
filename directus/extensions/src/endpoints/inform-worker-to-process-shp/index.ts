@@ -28,6 +28,11 @@ interface IRequestBody {
   objectKey: string;
 }
 
+interface IReject {
+  status: number;
+  message: string;
+}
+
 declare global {
   namespace Express {
     interface Request {
@@ -55,11 +60,18 @@ function postProcessRequestToWorker(requestBody: IUploadRequestDetail) {
           data += chunk;
         });
         res.on("end", () => {
-          if (res.statusCode !== 200) {
-            reject("Worker error");
-          } else {
+          if (res.statusCode === 200) {
             let parsedRes = JSON.parse(data);
             resolve(parsedRes);
+          } else if (
+            res.statusCode &&
+            res.statusCode >= 400 &&
+            res.statusCode < 500
+          ) {
+            let parsedRes = JSON.parse(data);
+            reject({ status: res.statusCode, message: parsedRes.message });
+          } else {
+            reject({ status: 500, message: "Worker error" });
           }
         });
         res.on("error", (error) => {
@@ -102,7 +114,12 @@ export default defineEndpoint((router, { exceptions }) => {
           object_key: req.body.objectKey,
         });
       } catch (error) {
-        return next(new ServiceUnavailableException());
+        let rejectError: IReject = error as IReject;
+        if (rejectError.status >= 400 && rejectError.status < 500) {
+          return next(new InvalidPayloadException(rejectError.message));
+        } else {
+          return next(new ServiceUnavailableException("Worker error"));
+        }
       }
       res.json({ message: "Proses selesai" });
     }

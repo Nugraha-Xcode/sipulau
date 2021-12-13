@@ -34,11 +34,12 @@ const login = {
 const Login = ({ toggle }) => {
   const { t, handleSetSnack, setAuth } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
   const userRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
+    // e.preventDefault();
     try {
       if (!passwordRef.current.value.length) {
         throw new Error("Password wajib diisi");
@@ -76,6 +77,20 @@ const Login = ({ toggle }) => {
       setIsLoading(false);
     }
   };
+
+  const keyShortcut = React.useCallback((e) => {
+    if (e.keyCode === 13) {
+      handleLogin();
+    }
+  }, []);
+
+  React.useEffect(() => {
+    document.addEventListener("keydown", keyShortcut);
+    return () => {
+      document.removeEventListener("keydown", keyShortcut);
+    };
+  }, [keyShortcut]);
+
   return (
     <div className='font-map'>
       <div className='flex justify-between items-center px-6 py-3 relative'>
@@ -99,19 +114,28 @@ const Login = ({ toggle }) => {
             <FaRegUser className='text-main-gray w-4 h-4' />
             <input
               ref={userRef}
-              className='flex-1 mx-2 focus:outline-none placeholder-gray-300 text-sm'
+              className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm px-3'
               placeholder={login[t].placeholder1}
             />
           </div>
           <div className='flex items-center border border-gray-4 rounded-lg py-3 px-5'>
-            <BiLock className='text-main-gray w-5 h-5' />
+            <BiLock className='text-main-gray w-4 h-4' />
             <input
               ref={passwordRef}
-              className='flex-1 mx-2 focus:outline-none placeholder-gray-300 text-sm'
+              className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm py-0 border-0 focus:ring-0 px-3'
               placeholder={login[t].placeholder2}
-              type='password'
+              type={passwordVisibility ? "text" : "password"}
             />
-            <AiOutlineEye className='text-main-gray w-5 h-5' />
+            <button onClick={() => setPasswordVisibility((prev) => !prev)}>
+              <img
+                src={`${
+                  passwordVisibility
+                    ? "images/ic-eye.svg"
+                    : "images/ic-eye-crossed.svg"
+                }`}
+                alt='Password Visibility'
+              />
+            </button>
           </div>
         </div>
         <div className='flex flex-col w-full gap-4'>

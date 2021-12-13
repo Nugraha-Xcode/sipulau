@@ -23,6 +23,10 @@ const SimpulLayer = () => {
                         "/export?bbox={bbox-epsg-3857}&bboxSR=3857&size=256,256&format=png&transparent=true&f=image",
                     ],
               tileSize: 256,
+              bounds:
+                item.bbox !== "0,0,0,0"
+                  ? item.bbox.split(",").map((el) => parseFloat(el))
+                  : undefined,
             });
             map.addLayer(
               {

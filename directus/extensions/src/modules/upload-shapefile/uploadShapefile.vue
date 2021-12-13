@@ -93,14 +93,28 @@ export default defineComponent({
 
         try {
           await this.api.post("/files", formData);
+        } catch (error) {
+          this.dialogContent = "Upload failed";
+          console.error(error);
+          this.dialogActive = true;
+          this.uploadButtonLoading = false;
+          this.tableSelectorDisable = false;
+          this.fileSelectorDisable = false;
+          return;
+        }
+
+        try {
           await this.api.post("/inform-worker-to-process-shp", {
             dataType: this.selectedTable,
             objectKey,
           });
-          this.dialogContent = "Upload success";
+          this.dialogContent = "SHP processed successfully"
         } catch (error) {
-          this.dialogContent = "Upload failed";
-          console.error(error);
+          if (error.response) {
+            this.dialogContent = error.response.data.errors[0].message
+          } else {
+            this.dialogContent = error.message
+          }
         } finally {
           this.dialogActive = true;
           this.uploadButtonLoading = false;

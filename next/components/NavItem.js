@@ -39,10 +39,10 @@ const NavItem = () => {
           credentials: "include",
         }
       );
-      const resJson = await res.json();
       if (res.status === 200) {
         setAuth("");
       } else if (res.status >= 400 && res.status <= 499) {
+        const resJson = await res.json();
         throw new Error(resJson.errors[0].message);
       } else {
         throw new Error("Internal server error");

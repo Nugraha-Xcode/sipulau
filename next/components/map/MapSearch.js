@@ -21,7 +21,7 @@ const MapSearch = ({ category, setCategory }) => {
   const { t } = useTranslation("simpulJaringan");
   const { handleSetSnack } = useContext(AppContext);
   const {
-    map,
+    merc,
     setActiveLegend,
     setIsOpenFeature,
     setActiveFeature,
@@ -237,7 +237,33 @@ const MapSearch = ({ category, setCategory }) => {
   }, []);
 
   const handleTambahLayer = useCallback(
-    (el) => {
+    async (el) => {
+      if (el.format === "Esri REST") {
+        try {
+          let res = await fetch(el.url + "?f=json");
+          if (res.status === 200) {
+            let resJson = await res.json();
+            let { fullExtent } = resJson;
+            if (fullExtent?.spatialReference?.wkid === 4326) {
+              el.bbox = `${fullExtent.xmin},${fullExtent.ymin},${fullExtent.xmax},${fullExtent.ymax}`;
+            } else if (
+              [900913, 54004, 41001, 102113, 102100, 3785].includes(
+                fullExtent?.spatialReference?.wkid
+              )
+            ) {
+              let boundsLonLat = merc.convert([
+                fullExtent.xmin,
+                fullExtent.ymin,
+                fullExtent.xmax,
+                fullExtent.ymax,
+              ]);
+              el.bbox = boundsLonLat.join(",");
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
       if (activeFeature !== "layer") {
         setIsOpenFeature(false);
 
