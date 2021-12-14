@@ -7,33 +7,34 @@ import useToggle from "../../../utils/useToggle";
 import Modal from "../../modal";
 import AppContext from "../../../context/AppContext";
 
-const popupItems = [
-  {
-    label: "ID Pulau",
-    value: "id_toponim",
-  },
-  {
-    label: "Kabupaten / Kota",
-    value: "wadmkk",
-  },
-  {
-    label: "Provinsi",
-    value: "wadmpr",
-  },
-  {
-    label: "Longitude",
-    value: "long",
-  },
-  {
-    label: "Latitude",
-    value: "lat",
-  },
-];
-
-const dummy = [1, 2];
-
 const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
   const { t } = useTranslation("popupPulau");
+  const popupItems = [
+    {
+      label: t("attribute1"),
+      value: "id_toponim",
+    },
+    {
+      label: t("attribute14"),
+      value: "alias",
+    },
+    {
+      label: t("attribute2"),
+      value: "wadmkk",
+    },
+    {
+      label: t("attribute3"),
+      value: "wadmpr",
+    },
+    {
+      label: t("attribute4"),
+      value: "long",
+    },
+    {
+      label: t("attribute5"),
+      value: "lat",
+    },
+  ];
   const { infoPulau, getPopupDetail } = useContext(PopupContext);
   const { isAuth } = useContext(AppContext);
   const [currentSlide, setCurrentSlide] = useState(0);

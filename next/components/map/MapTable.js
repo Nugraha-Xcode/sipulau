@@ -53,6 +53,7 @@ const MapTable = ({
     { title: "column1", field: "id_toponim", show: true, sort: true },
     { title: "column2", field: "id_wilayah", show: true, sort: true },
     { title: "column3", field: "nammap", show: true, sort: true },
+    { title: "column13", field: "alias", show: true, sort: true },
     { title: "column4", field: "artinam", show: true, sort: true },
     { title: "column5", field: "aslbhs", show: true, sort: true },
     { title: "column6", field: "sjhnam", show: true, sort: true },

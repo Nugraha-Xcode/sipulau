@@ -75,10 +75,14 @@ export default async function downloadShpHandler(req, res) {
   let downloadDetails = {};
 
   let parsedBody;
-  try {
-    parsedBody = JSON.parse(req.body);
-  } catch (error) {
-    return res.status(400).json({ message: "Body bukan JSON yang valid" });
+  if (typeof req.body === "string") {
+    try {
+      parsedBody = JSON.parse(req.body);
+    } catch (error) {
+      return res.status(400).json({ message: "Body bukan JSON yang valid" });
+    }
+  } else {
+    parsedBody = req.body;
   }
 
   // validate filters

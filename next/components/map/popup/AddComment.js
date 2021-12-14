@@ -46,6 +46,7 @@ const AddComment = ({ onClose, type, coor }) => {
             ),
             headers: {
               Authorization: "Bearer " + authToken,
+              "Content-Type": "application/json",
             },
           }
         );

@@ -1,8 +1,19 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import NavItem from "./NavItem";
+import { useDelayUnmount } from "../utils/useDelayUnmount";
 
 const Header = ({ navStyle, sideNav, setSideNav }) => {
   const router = useRouter();
+
+  const [mount, setMount] = useState(false);
+  useEffect(() => {
+    sideNav && setTimeout(() => setMount(true), 100);
+    return () => {
+      setMount(false);
+    };
+  }, [sideNav]);
+  const shouldRender = useDelayUnmount(sideNav, 500);
 
   return (
     <>
@@ -55,24 +66,26 @@ const Header = ({ navStyle, sideNav, setSideNav }) => {
           </div>
         </div>
       </header>
-      <div
-        className={`fixed h-screen w-[45vw] top-0 right-0 transition duration-500 ease-in-out transform ${
-          sideNav ? "translate-x-0" : "translate-x-full"
-        } py-6 px-3 space-y-3`}
-      >
-        <img
-          src='/images/logo-big-text.svg'
-          alt='Badan Informasi Geospasial Logo'
-          className='h-10 md:h-12 lg:h-14'
-        />
-        <hr />
+      {shouldRender ? (
         <div
-          className='flex flex-col md:hidden items-center gap-10'
-          data-cy='side-nav'
+          className={`fixed h-screen w-[45vw] top-0 right-0 transition duration-500 ease-in-out transform ${
+            mount ? "translate-x-0" : "translate-x-full"
+          } py-6 px-3 space-y-3`}
         >
-          <NavItem />
+          <img
+            src='/images/logo-big-text.svg'
+            alt='Badan Informasi Geospasial Logo'
+            className='h-10 md:h-12 lg:h-14'
+          />
+          <hr />
+          <div
+            className='flex flex-col md:hidden items-center gap-10'
+            data-cy='side-nav'
+          >
+            <NavItem />
+          </div>
         </div>
-      </div>
+      ) : null}
     </>
   );
 };

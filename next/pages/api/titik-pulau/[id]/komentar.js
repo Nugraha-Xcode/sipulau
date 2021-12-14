@@ -30,10 +30,14 @@ export default async function islandCommentHandler(req, res) {
     }
 
     let parsedBody;
-    try {
-      parsedBody = JSON.parse(req.body);
-    } catch (error) {
-      return res.status(400).json({ message: "Body bukan JSON yang valid" });
+    if (typeof req.body === "string") {
+      try {
+        parsedBody = JSON.parse(req.body);
+      } catch (error) {
+        return res.status(400).json({ message: "Body bukan JSON yang valid" });
+      }
+    } else {
+      parsedBody = req.body;
     }
 
     const { email, isi, gambar1, gambar2, gambar3, dokumen } = parsedBody;

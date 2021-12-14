@@ -1,0 +1,36 @@
+{
+  "lembagaItems": [
+    {
+      "label": "Batimetri Nasional",
+      "href": "http://batnas.big.go.id/"
+    },
+    {
+      "label": "Sistem Informasi Nama Rupabumi",
+      "href": "https://sinar.big.go.id/"
+    },
+    {
+      "label": "Kementerian Dalam Negeri",
+      "href": "https://www.kemendagri.go.id/"
+    },
+    {
+      "label": "Kementerian Kelautan dan Perikanan",
+      "href": "https://pesisirpulau.id/"
+    },
+    {
+      "label": "Ina Geoportal",
+      "href": "https://tanahair.indonesia.go.id/portal-web"
+    },
+    {
+      "label": "Pusat Hidrografi dan Oseanografi Angkatan Laut",
+      "href": "http://www.pushidrosal.id/"
+    },
+    {
+      "label": "Kementerian Koordinator Bidang Kemaritiman dan Investasi",
+      "href": "https://maritim.go.id/"
+    },
+    {
+      "label": "Badan Informasi Geospasial",
+      "href": "https://big.go.id"
+    }
+  ]
+}

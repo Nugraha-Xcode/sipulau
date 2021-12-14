@@ -57,7 +57,10 @@ const MapTableDownload = ({
         const response = await fetch("/api/titik-pulau/download/csv", {
           method: "POST",
           body: JSON.stringify(objBody),
-          headers: { Authorization: "Bearer " + authToken },
+          headers: {
+            Authorization: "Bearer " + authToken,
+            "Content-Type": "application/json",
+          },
         });
         if (response.status !== 200) {
           const resJson = await response.json();
@@ -93,7 +96,10 @@ const MapTableDownload = ({
         const response = await fetch("/api/titik-pulau/download/shp", {
           method: "POST",
           body: JSON.stringify(objBody),
-          headers: { Authorization: "Bearer " + authToken },
+          headers: {
+            Authorization: "Bearer " + authToken,
+            "Content-Type": "application/json",
+          },
         });
         const resData = await response.json();
         if (response.status !== 200) {

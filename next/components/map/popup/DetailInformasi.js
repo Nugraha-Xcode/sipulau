@@ -1,43 +1,44 @@
 import { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import PopupContext from "../../../context/PopupContext";
-
-const detailItems = [
-  {
-    label: "Kode Wilayah",
-    value: "id_wilayah",
-  },
-  {
-    label: "Arti Nama",
-    value: "artinam",
-  },
-  {
-    label: "Sejarah Nama",
-    value: "sjhnam",
-  },
-  {
-    label: "Asal Bahasa",
-    value: "aslbhs",
-  },
-  {
-    label: "Kecamatan",
-    value: "wadmkc",
-  },
-  {
-    label: "Desa/Kelurahan",
-    value: "wadmkd",
-  },
-  {
-    label: "Status",
-    value: "status",
-  },
-  {
-    label: "Remark",
-    value: "remark",
-  },
-];
 
 const DetailInformasi = () => {
   const { detailPulau } = useContext(PopupContext);
+  const { t } = useTranslation("popupPulau");
+  const detailItems = [
+    {
+      label: t("attribute6"),
+      value: "id_wilayah",
+    },
+    {
+      label: t("attribute7"),
+      value: "artinam",
+    },
+    {
+      label: t("attribute8"),
+      value: "sjhnam",
+    },
+    {
+      label: t("attribute9"),
+      value: "aslbhs",
+    },
+    {
+      label: t("attribute10"),
+      value: "wadmkc",
+    },
+    {
+      label: t("attribute11"),
+      value: "wadmkd",
+    },
+    {
+      label: t("attribute12"),
+      value: "status",
+    },
+    {
+      label: t("attribute13"),
+      value: "remark",
+    },
+  ];
 
   return (
     <div className='p-4 space-y-2'>

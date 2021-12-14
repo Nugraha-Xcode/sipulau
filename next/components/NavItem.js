@@ -67,6 +67,7 @@ const NavItem = () => {
                   ? "text-hover-blue font-bold"
                   : "text-main-blue"
               }`}
+              data-cy={`navbar-menu-${index}`}
             >
               {el.title}
             </a>
@@ -96,11 +97,13 @@ const NavItem = () => {
           href={router.asPath}
           locale={router.locale === "id" ? "en" : "id"}
         >
-          <a data-cy='btn-toggle-lang'>
+          <a data-cy='btn-change-lang'>
             <img src='/images/nav-icon.svg' alt='Navigation Bar Icon' />
           </a>
         </Link>
-        <p>{router.locale === "id" ? "ID" : "EN"}</p>
+        <p data-cy='btn-change-lang-text'>
+          {router.locale === "id" ? "ID" : "EN"}
+        </p>
       </div>
     </>
   );

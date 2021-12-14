@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useContext } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import Head from "next/head";
@@ -19,6 +19,7 @@ import MvtLayer from "../components/map/MvtLayer";
 import ResizeableDrawer from "../components/core/ResizeableDrawer";
 import Filter from "../components/map/Filter";
 import SimpulLayer from "../components/map/SimpulLayer";
+import AppContext from "../context/AppContext";
 
 const columnObj = [
   { label: "Arti Nama", value: "artinam" },
@@ -37,6 +38,7 @@ const map = () => {
   const mapRef = useRef(null);
   const drawRef = useRef(null);
   const mapElementRef = useRef(null);
+  const { handleSetSnack } = useContext(AppContext);
   const [isOpenMapFilter, toggleMapFilter] = useToggle();
   const [mapload, setMapLoad] = useState(false);
   const [activeFeature, setActiveFeature] = useState("");
@@ -66,27 +68,35 @@ const map = () => {
   const fetchRBIStyle = useCallback(async () => {
     let vts =
       "https://geoservices.big.go.id/rbi/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer";
-    let [styleRes, esriRestRes] = await Promise.all([
-      fetch(vts + "/resources/styles/root.json"),
-      fetch(vts + "?f=json"),
-    ]);
-    let [rbiStyle, esriRestService] = await Promise.all([
-      styleRes.json(),
-      esriRestRes.json(),
-    ]);
-    let boundsLonLat = mercRef.current.convert([
-      esriRestService.fullExtent.xmin,
-      esriRestService.fullExtent.ymin,
-      esriRestService.fullExtent.xmax,
-      esriRestService.fullExtent.ymax,
-    ]);
-    rbiStyle.sprite = vts + "/resources/sprites/sprite";
-    rbiStyle.glyphs = vts + "/resources/fonts/{fontstack}/{range}.pbf";
-    rbiStyle.sources.esri = {
-      type: "vector",
-      tiles: esriRestService.tiles.map((el) => vts + "/" + el),
-      bounds: boundsLonLat,
-    };
+
+    let rbiStyle, esriRestService;
+    try {
+      let [styleRes, esriRestRes] = await Promise.all([
+        fetch(vts + "/resources/styles/root.json"),
+        fetch(vts + "?f=json"),
+      ]);
+      [rbiStyle, esriRestService] = await Promise.all([
+        styleRes.json(),
+        esriRestRes.json(),
+      ]);
+      let boundsLonLat = mercRef.current.convert([
+        esriRestService.fullExtent.xmin,
+        esriRestService.fullExtent.ymin,
+        esriRestService.fullExtent.xmax,
+        esriRestService.fullExtent.ymax,
+      ]);
+      rbiStyle.sprite = vts + "/resources/sprites/sprite";
+      rbiStyle.glyphs = vts + "/resources/fonts/{fontstack}/{range}.pbf";
+      rbiStyle.sources.esri = {
+        type: "vector",
+        tiles: esriRestService.tiles.map((el) => vts + "/" + el),
+        bounds: boundsLonLat,
+      };
+    } catch (error) {
+      rbiStyle = { version: 8, sources: {}, layers: [] };
+      handleSetSnack("Gagal menghubungi RBI server", "error");
+    }
+
     rbiStyle.sources.arcgisbasemap = {
       type: "raster",
       tiles: [

@@ -40,6 +40,9 @@ const Section5 = () => {
             isi: isiRef.current.value,
             captchaToken,
           }),
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
         const resData = await res.json();
         if (resData.message) {

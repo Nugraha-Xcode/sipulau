@@ -22,6 +22,7 @@
     "column10": "Province",
     "column11": "Status",
     "column12": "Remark",
+    "column13": "Alias",
     "option1": "Show/Hide Column",
     "option2": "Show Selected Data",
     "filter1": "Search Island Filter",

@@ -4,6 +4,7 @@ import getCurrentActiveTable from "../../../utils/api/getCurrentActiveTable";
 const validColumns = [
   "id_toponim",
   "nammap",
+  "alias",
   "artinam",
   "sjhnam",
   "aslbhs",
@@ -160,7 +161,7 @@ export default async function tableHandler(req, res) {
     queryResult = await sipulauPool.query(
       `
       SELECT
-        id_toponim, nammap, artinam, sjhnam, aslbhs, id_wilayah, wadmkd,
+        id_toponim, nammap, alias, artinam, sjhnam, aslbhs, id_wilayah, wadmkd,
         wadmkc, wadmkk, wadmpr, status, remark, ST_X(geom) lon, ST_Y(geom) lat
       FROM ${tableName}
       ${combinedFilters}

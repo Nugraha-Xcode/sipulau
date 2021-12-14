@@ -34,10 +34,16 @@ const Section3 = () => {
     <section className='relative flex justify-center py-16 lg:py-24 px-4 md:px-10'>
       <div className='flex flex-col items-center gap-8 lg:gap-10 max-w-screen-xl w-full text-main-blue'>
         <div className='flex flex-col items-center gap-5'>
-          <h2 className='text-dark-blue text-center'>
+          <h2
+            className='text-dark-blue text-center'
+            data-cy='home-section3-header'
+          >
             {t("judulSeksiWebsite")}
           </h2>
-          <p className='w-10/12 md:w-3/4 text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8 text-center'>
+          <p
+            className='w-10/12 md:w-3/4 text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8 text-center'
+            data-cy='home-section3-desc'
+          >
             {t("isiSeksiWebsite")}
           </p>
         </div>
@@ -60,6 +66,7 @@ const Section3 = () => {
               target='_blank'
               className='bg-soft-blue bg-opacity-25 py-3 lg:py-5 px-5 lg:px-8 hover:opacity-80 rounded-full text-main-blue text-sm lg:text-lg text-center'
               key={index}
+              data-cy={`home-section3-button-${index}`}
             >
               {el.label}
             </a>
