@@ -60,7 +60,7 @@ const Footer = () => {
             </div>
           </div>
           <div className='w-full md:w-2/3 flex justify-between'>
-            <div className='flex flex-col justify-between text-white'>
+            <div className='flex flex-col text-white'>
               <p>Menu</p>
               <div className='grid grid-cols-2 gap-x-10'>
                 <div>
@@ -72,22 +72,22 @@ const Footer = () => {
                     </Link>
                   ))}
                 </div>
-                <div className='hidden md:flex md:flex-col'>
-                  <a href='#tentang' className='mt-2 text-sm md:text-base'>
-                    {t("footerTentang")}
-                  </a>
-                  <a href='#berita' className='mt-2 text-sm md:text-base'>
-                    {t("footerBerita")}
-                  </a>
-                  <a href='#feedback' className='mt-2 text-sm md:text-base'>
-                    {t("footerFeedback")}
-                  </a>
-                  <a
-                    href='#statistik'
-                    className='mt-2 text-sm md:text-base'
-                  ></a>
-                  {t("footerStatistik")}
-                </div>
+                {router.asPath.includes("news") ? null : (
+                  <div className='hidden md:flex md:flex-col'>
+                    <a href='#tentang' className='mt-2 text-sm md:text-base'>
+                      {t("footerTentang")}
+                    </a>
+                    <a href='#berita' className='mt-2 text-sm md:text-base'>
+                      {t("footerBerita")}
+                    </a>
+                    <a href='#feedback' className='mt-2 text-sm md:text-base'>
+                      {t("footerFeedback")}
+                    </a>
+                    <a href='#statistik' className='mt-2 text-sm md:text-base'>
+                      {t("footerStatistik")}
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
             <div className='flex flex-col items-end justify-between text-white gap-10'>

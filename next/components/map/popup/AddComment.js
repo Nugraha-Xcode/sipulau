@@ -4,7 +4,7 @@ import { uploadFolderIds } from "../../../utils/constant";
 import AppContext from "../../../context/AppContext";
 import PopupContext from "../../../context/PopupContext";
 
-const AddComment = ({ onClose, type, coor }) => {
+const AddComment = ({ onClose, type, coor, selectedId }) => {
   const { t } = useTranslation("popupPulau");
   const { handleSetSnack, authToken } = useContext(AppContext);
   const { infoPulau } = useContext(PopupContext);
@@ -19,7 +19,9 @@ const AddComment = ({ onClose, type, coor }) => {
       try {
         const res = await fetch(
           type === "pulau"
-            ? "/api/titik-pulau/" + infoPulau.id_toponim + "/komentar"
+            ? "/api/titik-pulau/" +
+                (infoPulau ? infoPulau.id_toponim : selectedId) +
+                "/komentar"
             : "/api/komentar-titik",
           {
             method: "POST",
@@ -63,7 +65,7 @@ const AddComment = ({ onClose, type, coor }) => {
         setIsLoad(false);
       }
     },
-    [infoPulau, type]
+    [infoPulau, type, selectedId]
   );
 
   const handleUploadImage = useCallback(async () => {
@@ -340,7 +342,7 @@ const AddComment = ({ onClose, type, coor }) => {
                 <img src='/images/ic-file.svg' alt='select image' />
               </div>
               <p className='text-gray-7 text-xs'>
-                {docFile ? docFile.name : "Maks. 1Mb"}
+                {docFile ? docFile.name : t("commentModal4") + ". 1Mb"}
               </p>
             </label>
           </div>

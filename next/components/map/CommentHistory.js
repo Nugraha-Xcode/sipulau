@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import Image from "next/image";
 import AppContext from "../../context/AppContext";
 import ImageCarousel from "./popup/ImageCarousel";
 
@@ -10,7 +9,6 @@ const CommentHistory = () => {
   const rootObserver = useRef(null);
   const observer = useRef(null);
   const { handleSetSnack, isAuth, authToken } = useContext(AppContext);
-
   const [commentList, setCommentList] = useState([]);
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
@@ -20,7 +18,9 @@ const CommentHistory = () => {
       setLoad(true);
       const res = await fetch("/api/user/komentar?page=" + page, {
         method: "GET",
-        headers: { Authorization: "Bearer " + authToken },
+        headers: {
+          Authorization: "Bearer " + authToken,
+        },
       });
       const result = await res.json();
       if (res.status === 200) {
@@ -37,7 +37,7 @@ const CommentHistory = () => {
     } finally {
       setLoad(false);
     }
-  }, [page]);
+  }, [page, authToken]);
 
   useEffect(() => {
     if (observerRef.current) {
@@ -71,7 +71,7 @@ const CommentHistory = () => {
           <div className='flex flex-col gap-2 text-main-gray' key={index}>
             <div className='flex items-center gap-2'>
               <p className='font-semibold'>
-                Komentar {el.jenis.charAt(0).toUpperCase() + el.jenis.slice(1)}
+                {t("modalTitle") + " " + t(el.jenis)}
               </p>
               <div className='w-1 h-1 rounded-full bg-main-gray' />
               <p
@@ -82,10 +82,10 @@ const CommentHistory = () => {
                     ? "bg-main-green"
                     : el.status === "ditolak"
                     ? "bg-main-red"
-                    : "bg-[#F6ED0B]"
+                    : "bg-[#ebd037]"
                 } bg-opacity-60 px-2 text-white w-[fit-content] rounded-full`}
               >
-                {el.status.charAt(0).toUpperCase() + el.status.slice(1)}
+                {t(el.status)}
               </p>
             </div>
             {/* <div className='relative h-24 w-full'>
@@ -110,7 +110,7 @@ const CommentHistory = () => {
             ) : null}
             <p>{el.isi || "-"}</p>
             <p>
-              {new Date(el.date_created).toLocaleDateString("id-ID", {
+              {new Date(el.date_created).toLocaleDateString(t("dateLocales"), {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -119,7 +119,7 @@ const CommentHistory = () => {
           </div>
         ))
       ) : (
-        <div className='flex flex-col items-center justify-center mt-5'>
+        <div className='flex flex-col items-center justify-center'>
           <img
             src='/images/ic-empty-state.svg'
             alt='icon empty state'
@@ -130,7 +130,7 @@ const CommentHistory = () => {
       )}
       <div
         ref={observerRef}
-        className='relative w-full flex justify-center h-2'
+        className='relative w-full flex justify-center h-10'
       >
         {load ? (
           <img

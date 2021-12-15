@@ -16,5 +16,12 @@
     "commentStatus1": "Diterima",
     "commentStatus2": "Menunggu",
     "commentStatus3": "Ditolak",
-    "historyEmptyState": "Tidak ada komentar"
+    "historyEmptyState": "Tidak ada komentar",
+    "menunggu": "Menunggu",
+    "diterima": "Diterima",
+    "ditolak": "Ditolak",
+    "diproses": "Diproses",
+    "titik": "Titik",
+    "pulau": "Pulau",
+    "dateLocales": "id-ID"
 }

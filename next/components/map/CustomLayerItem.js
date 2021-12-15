@@ -10,50 +10,22 @@ const CustomLayerItem = ({ simpulIndex, layer, title, item }) => {
   const [openSetting, setOpenSetting] = useState(false);
 
   const handleLayerDown = useCallback(() => {
-    if (simpulIndex === 0) {
-      console.log("already bottom");
-    } else {
-      // map.moveLayer(
-      //   activeLayer[simpulIndex].layer[layerIndex - 1].judul +
-      //     activeLayer[simpulIndex].layer[layerIndex - 1].nama,
-      //   item.judul + item.nama
-      // );
-      setActiveLayer((prev) => {
-        let prevArr = [...prev];
-        prevArr.splice(simpulIndex, 1);
-        prevArr.splice(simpulIndex - 1, 0, item);
-        return prevArr;
-      });
-    }
-  }, [simpulIndex, activeLayer, map]);
+    setActiveLayer((prev) => {
+      let prevArr = [...prev];
+      prevArr.splice(simpulIndex, 1);
+      prevArr.splice(simpulIndex - 1, 0, item);
+      return prevArr;
+    });
+  }, [simpulIndex]);
 
   const handleLayerUp = useCallback(() => {
-    if (simpulIndex === activeLayer.length - 1) {
-      console.log("already top");
-    } else {
-      // layer.forEach((el, index) => {
-      //   console.log(index);
-      //   map.moveLayer(
-      //     activeLayer[simpulIndex + 1].layer[0].judul +
-      //       activeLayer[simpulIndex + 1].layer[0].nama,
-      //     el.judul + el.nama
-      //   );
-      // });
-      setActiveLayer((prev) => {
-        let prevArr = [...prev];
-        prevArr.splice(simpulIndex, 1);
-        prevArr.splice(simpulIndex + 1, 0, item);
-        return prevArr;
-      });
-
-      // setActiveLayer((prev) => {
-      //   let prevArr = [...prev];
-      //   prevArr[simpulIndex].layer.splice(layerIndex, 1);
-      //   prevArr[simpulIndex].layer.splice(layerIndex + 1, 0, item);
-      //   return prevArr;
-      // });
-    }
-  }, [simpulIndex, activeLayer, map]);
+    setActiveLayer((prev) => {
+      let prevArr = [...prev];
+      prevArr.splice(simpulIndex, 1);
+      prevArr.splice(simpulIndex + 1, 0, item);
+      return prevArr;
+    });
+  }, [simpulIndex]);
 
   const handleDeleteGroup = useCallback(() => {
     setActiveLayer((prev) => {
@@ -92,11 +64,19 @@ const CustomLayerItem = ({ simpulIndex, layer, title, item }) => {
         } overflow-hidden transition-all duration-500 rounded-md`}
       >
         <div className='bg-blue-2 p-2 flex flex-col gap-3'>
-          <button onClick={handleLayerUp} className='flex gap-2 items-center'>
+          <button
+            onClick={handleLayerUp}
+            className='flex gap-2 items-center'
+            disabled={simpulIndex === activeLayer.length - 1}
+          >
             <img src='/images/ic-arrow-t.svg' />
             <p className='text-main-gray text-xs'>{t("optionLayer2")}</p>
           </button>
-          <button onClick={handleLayerDown} className='flex gap-2 items-center'>
+          <button
+            onClick={handleLayerDown}
+            className='flex gap-2 items-center'
+            disabled={simpulIndex === 0}
+          >
             <img src='/images/ic-arrow-b.svg' />
             <p className='text-main-gray text-xs'>{t("optionLayer3")}</p>
           </button>

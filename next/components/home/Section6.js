@@ -10,22 +10,39 @@ const Section6 = ({ data }) => {
     >
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 max-w-screen-xl w-full'>
         <div className='text-center lg:text-left space-y-3'>
-          <h2 className='w-full lg:w-1/2 text-dark-blue'>
+          <h2
+            className='w-full lg:w-1/2 text-dark-blue'
+            data-cy='home-section6-header'
+          >
             {t("judulSeksiStatistik")}
           </h2>
-          <p className='text-main-black text-opacity-40'>
+          <p
+            className='text-main-black text-opacity-40'
+            data-cy='home-section6-description'
+          >
             {t("isiSeksiStatistik")}
           </p>
         </div>
         <div className='grid grid-cols-2 gap-5'>
-          {statisticItems.map((el) => (
+          {statisticItems.map((el, index) => (
             <div key={el.label} className='flex items-center gap-5 md:gap-8'>
-              <img src={el.imageSrc} alt={el.label} className='w-5 md:w-8' />
+              <img
+                src={el.imageSrc}
+                alt={el.label}
+                className='w-5 md:w-8'
+                data-cy={`home-section6-icon-${index}`}
+              />
               <div>
-                <p className='text-gray-3 font-bold text-lg md:text-2xl'>
+                <p
+                  className='text-gray-3 font-bold text-lg md:text-2xl'
+                  data-cy={`home-section6-value-${index}`}
+                >
                   {data[el.value]}
                 </p>
-                <p className='text-gray-2 text-sm md:text-base'>
+                <p
+                  className='text-gray-2 text-sm md:text-base'
+                  data-cy={`home-section6-label-${index}`}
+                >
                   {t(el.label)}
                 </p>
               </div>

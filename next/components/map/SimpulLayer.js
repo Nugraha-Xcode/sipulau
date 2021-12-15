@@ -26,7 +26,7 @@ const SimpulLayer = () => {
               bounds:
                 item.bbox !== "0,0,0,0"
                   ? item.bbox.split(",").map((el) => parseFloat(el))
-                  : undefined,
+                  : [94.75, -11.029999999999998, 141.01, 5.870000000000001],
             });
             map.addLayer(
               {

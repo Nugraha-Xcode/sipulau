@@ -228,14 +228,14 @@ const MapTable = ({
                     />
                     <p className='text-xs text-main-gray'>{t("option1")}</p>
                   </div>
-                  <div className='flex gap-2 items-center cursor-pointer'>
+                  {/* <div className='flex gap-2 items-center cursor-pointer'>
                     <img
                       src='/images/ic-checkbox.svg'
                       alt='button'
                       className='h-4'
                     />
                     <p className='text-xs text-main-gray'>{t("option2")}</p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

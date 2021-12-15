@@ -16,5 +16,12 @@
     "commentStatus1": "Accepted",
     "commentStatus2": "Waiting",
     "commentStatus3": "Rejected",
-    "historyEmptyState": "No comment yet"
+    "historyEmptyState": "No comment yet",
+    "menunggu": "Waiting",
+    "diterima": "Accepted",
+    "ditolak": "Rejected",
+    "diproses": "Processed",
+    "titik": "Point",
+    "pulau": "Island",
+    "dateLocales": "en-EN"
 }

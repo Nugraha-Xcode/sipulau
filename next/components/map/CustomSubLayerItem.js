@@ -69,40 +69,27 @@ const CustomSubLayerItem = ({ item, layerIndex, simpulIndex }) => {
   }, [activeLayer, map, item]);
 
   const handleLayerDown = useCallback(() => {
-    if (layerIndex === 0) {
-      console.log("already bottom");
-    } else {
-      map.moveLayer(
-        activeLayer[simpulIndex].layer[layerIndex - 1].judul +
-          activeLayer[simpulIndex].layer[layerIndex - 1].nama,
-        item.judul + item.nama
-      );
-      setActiveLayer((prev) => {
-        let prevArr = [...prev];
-        prevArr[simpulIndex].layer.splice(layerIndex, 1);
-        prevArr[simpulIndex].layer.splice(layerIndex - 1, 0, item);
-        return prevArr;
-      });
-    }
+    map.moveLayer(
+      activeLayer[simpulIndex].layer[layerIndex - 1].judul +
+        activeLayer[simpulIndex].layer[layerIndex - 1].nama,
+      item.judul + item.nama
+    );
+    setActiveLayer((prev) => {
+      let prevArr = [...prev];
+      prevArr[simpulIndex].layer.splice(layerIndex, 1);
+      prevArr[simpulIndex].layer.splice(layerIndex - 1, 0, item);
+      return prevArr;
+    });
   }, [layerIndex, simpulIndex, activeLayer, map]);
 
   const handleLayerUp = useCallback(() => {
-    if (layerIndex === activeLayer[simpulIndex].layer.length - 1) {
-      console.log("already top");
-    } else {
-      // map.moveLayer(
-      //   item.judul + item.nama,
-      //   activeLayer[simpulIndex].layer[layerIndex + 1].judul +
-      //     activeLayer[simpulIndex].layer[layerIndex + 1].nama
-      // );
-      setActiveLayer((prev) => {
-        let prevArr = [...prev];
-        prevArr[simpulIndex].layer.splice(layerIndex, 1);
-        prevArr[simpulIndex].layer.splice(layerIndex + 1, 0, item);
-        return prevArr;
-      });
-    }
-  }, [layerIndex, simpulIndex, activeLayer, map]);
+    setActiveLayer((prev) => {
+      let prevArr = [...prev];
+      prevArr[simpulIndex].layer.splice(layerIndex, 1);
+      prevArr[simpulIndex].layer.splice(layerIndex + 1, 0, item);
+      return prevArr;
+    });
+  }, [layerIndex, simpulIndex]);
 
   return (
     <div className='flex flex-col gap-2'>
@@ -137,26 +124,41 @@ const CustomSubLayerItem = ({ item, layerIndex, simpulIndex }) => {
         <div className='bg-blue-2 p-2 flex flex-col gap-3'>
           <button
             onClick={() => {
-              map.fitBounds(
-                [
-                  [item.bbox.split(",")[0], item.bbox.split(",")[1]],
-                  [item.bbox.split(",")[2], item.bbox.split(",")[3]],
-                ],
-                {
-                  padding: { top: 100, bottom: 100, left: 100, right: 100 },
-                }
-              );
+              item.bbox !== "0,0,0,0"
+                ? map.fitBounds(
+                    [
+                      [item.bbox.split(",")[0], item.bbox.split(",")[1]],
+                      [item.bbox.split(",")[2], item.bbox.split(",")[3]],
+                    ],
+                    {
+                      padding: { top: 100, bottom: 100, left: 100, right: 100 },
+                    }
+                  )
+                : map.fitBounds(
+                    [94.75, -11.029999999999998, 141.01, 5.870000000000001],
+                    {
+                      padding: { top: 100, bottom: 100, left: 100, right: 100 },
+                    }
+                  );
             }}
             className='flex gap-2 items-center'
           >
             <img src='/images/ic-arrow-extent.svg' />
             <p className='text-main-gray text-xs'>{t("optionLayer1")}</p>
           </button>
-          <button onClick={handleLayerUp} className='flex gap-2 items-center'>
+          <button
+            onClick={handleLayerUp}
+            className='flex gap-2 items-center'
+            disabled={layerIndex === activeLayer[simpulIndex].layer.length - 1}
+          >
             <img src='/images/ic-arrow-t.svg' />
             <p className='text-main-gray text-xs'>{t("optionLayer2")}</p>
           </button>
-          <button onClick={handleLayerDown} className='flex gap-2 items-center'>
+          <button
+            onClick={handleLayerDown}
+            className='flex gap-2 items-center'
+            disabled={layerIndex === 0}
+          >
             <img src='/images/ic-arrow-b.svg' />
             <p className='text-main-gray text-xs'>{t("optionLayer3")}</p>
           </button>

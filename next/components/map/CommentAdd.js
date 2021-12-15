@@ -11,6 +11,7 @@ const CommentAdd = () => {
   const { toggleLogin, isAuth } = useContext(AppContext);
   const { map } = useContext(MapContext);
   const [type, setType] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
   const [coor, setCoor] = useState({});
   const [isAddComment, openAddComment] = useToggle();
@@ -34,6 +35,7 @@ const CommentAdd = () => {
       openAddComment();
     };
     const handlePulau = (e) => {
+      setSelectedId(e.features[0].id);
       setCoor(e.lngLat);
       openAddComment();
     };
@@ -126,7 +128,12 @@ const CommentAdd = () => {
         </div>
       )}
       <Modal isShowing={isAddComment} handleModal={openAddComment} size='lg'>
-        <AddComment onClose={openAddComment} type={type} coor={coor} />
+        <AddComment
+          onClose={openAddComment}
+          type={type}
+          coor={coor}
+          selectedId={selectedId}
+        />
       </Modal>
     </div>
   );

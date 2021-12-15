@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
@@ -27,15 +26,10 @@ const Section4 = ({ data }) => {
               className='flex flex-col items-center text-center gap-3'
               key={el.newsId}
             >
-              <div className='relative h-40 w-full'>
-                <Image
-                  src={el.imageSrc}
-                  alt={el.title}
-                  layout='fill'
-                  objectFit='cover'
-                  className='rounded-xl'
-                />
-              </div>
+              <div
+                className='relative h-40 w-full rounded-xl bg-cover'
+                style={{ "background-image": `url(${el.imageSrc})` }}
+              />
               <h3
                 className='truncate text-dark-blue w-[80%]'
                 data-cy={`home-section4-news-title-${index}`}

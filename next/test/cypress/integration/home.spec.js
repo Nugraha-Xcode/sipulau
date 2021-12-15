@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 describe("home desktop - navigation bar - language toggle button", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/");
   });
 
@@ -16,7 +16,7 @@ describe("home desktop - navigation bar - language toggle button", () => {
 });
 
 describe("home desktop - navigation bar - id", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/");
   });
   it("should contain bold style home menu", () => {
@@ -27,7 +27,7 @@ describe("home desktop - navigation bar - id", () => {
 });
 
 describe("home desktop - navigation bar - en", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/en");
   });
   it("should contain bold style home menu", () => {
@@ -38,7 +38,7 @@ describe("home desktop - navigation bar - en", () => {
 });
 
 describe("home desktop - description - id", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/");
   });
 
@@ -110,7 +110,7 @@ describe("home desktop - description - id", () => {
 });
 
 describe("home desktop - description - en", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/en");
   });
 
@@ -158,7 +158,7 @@ describe("home desktop - description - en", () => {
 });
 
 describe("home desktop - news - id", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/");
   });
 
@@ -220,7 +220,7 @@ describe("home desktop - news - id", () => {
 });
 
 describe("home desktop - news - en", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/en");
   });
 
@@ -284,7 +284,7 @@ describe("home desktop - news - en", () => {
 });
 
 describe("home desktop - related website - id", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/");
   });
 
@@ -302,7 +302,7 @@ describe("home desktop - related website - id", () => {
     );
   });
 
-  it.only("should contain related website anchor button", () => {
+  it("should contain related website anchor button", () => {
     cy.fixture("lembagaItems").then((item) => {
       item.lembagaItems.forEach((element, index) => {
         cy.get(`[data-cy='home-section3-button-${index}']`).should(
@@ -320,7 +320,7 @@ describe("home desktop - related website - id", () => {
 });
 
 describe("home desktop - related website - en", () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit("/en");
   });
 
@@ -355,8 +355,124 @@ describe("home desktop - related website - en", () => {
   });
 });
 
+describe("home desktop - visitor - id", () => {
+  before(() => {
+    cy.visit("/");
+  });
+
+  it("should contain header", () => {
+    cy.get("[data-cy='home-section6-header']").should(
+      "have.text",
+      "Statistik Pengunjung"
+    );
+  });
+
+  it("should contain description", () => {
+    cy.get("[data-cy='home-section6-description']").should(
+      "have.text",
+      "Rekap Data Statistik Pengunjung SI Pulau"
+    );
+  });
+
+  it("should contain statistic items icon", () => {
+    cy.fixture("statisticItems").then((item) => {
+      item.statisticItems.forEach((el, index) => {
+        cy.get(`[data-cy='home-section6-icon-${index}']`).should(
+          "have.attr",
+          "src",
+          el.imageSrc
+        );
+      });
+    });
+  });
+
+  it("should contain statistic items label", () => {
+    cy.fixture("statisticItems").then((item) => {
+      item.statisticItems.forEach((el, index) => {
+        cy.get(`[data-cy='home-section6-label-${index}']`).should(
+          "have.text",
+          item.in[el.label]
+        );
+      });
+    });
+  });
+
+  it("show statistic count from the __NEXT_DATA__", () => {
+    cy.fixture("statisticItems").then((item) => {
+      item.statisticItems.forEach((el, index) => {
+        cy.visit("/")
+          .its("__NEXT_DATA__.props.pageProps.statistic")
+          .then(($item) => {
+            cy.get(`[data-cy=home-section6-value-${index}]`).should(
+              "have.text",
+              $item[el.value]
+            );
+          });
+      });
+    });
+  });
+});
+
+describe("home desktop - visitor - en", () => {
+  before(() => {
+    cy.visit("/en");
+  });
+
+  it("should contain header", () => {
+    cy.get("[data-cy='home-section6-header']").should(
+      "have.text",
+      "Visitor Statistics"
+    );
+  });
+
+  it("should contain description", () => {
+    cy.get("[data-cy='home-section6-description']").should(
+      "have.text",
+      "SI Pulau Visitor Statistics Recap"
+    );
+  });
+
+  it("should contain statistic items icon", () => {
+    cy.fixture("statisticItems").then((item) => {
+      item.statisticItems.forEach((el, index) => {
+        cy.get(`[data-cy='home-section6-icon-${index}']`).should(
+          "have.attr",
+          "src",
+          el.imageSrc
+        );
+      });
+    });
+  });
+
+  it("should contain statistic items label", () => {
+    cy.fixture("statisticItems").then((item) => {
+      item.statisticItems.forEach((el, index) => {
+        cy.get(`[data-cy='home-section6-label-${index}']`).should(
+          "have.text",
+          item.en[el.label]
+        );
+      });
+    });
+  });
+
+  it("show statistic count from the __NEXT_DATA__", () => {
+    cy.fixture("statisticItems").then((item) => {
+      item.statisticItems.forEach((el, index) => {
+        cy.visit("/en")
+          .its("__NEXT_DATA__.props.pageProps.statistic")
+          .then(($item) => {
+            cy.get(`[data-cy=home-section6-value-${index}]`).should(
+              "have.text",
+              $item[el.value]
+            );
+          });
+      });
+    });
+  });
+});
+
 // describe("SIPULAU - home page mobile", () => {
-//   beforeEach(() => {
+//   before(() => {
 //     cy.visit("/").viewport("iphone-6");
 //   });
 

@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Link from "next/link";
-import Image from "next/image";
 import Script from "next/script";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
@@ -44,15 +43,10 @@ export default function NewsDetail({ mainNews, recentNews, popularNews }) {
                   {mainNews.author || "Anonim"}
                 </p>
               </div>
-              <div className='relative h-96 w-full mt-5'>
-                <Image
-                  src={mainNews.imageSrc}
-                  alt={mainNews.title}
-                  layout='fill'
-                  objectFit='cover'
-                  className='rounded-xl'
-                />
-              </div>
+              <div
+                className='relative h-96 w-full mt-5 rounded-xl bg-cover'
+                style={{ "background-image": `url(${mainNews.imageSrc})` }}
+              ></div>
               <div
                 className='text-dark-blue text-opacity-80 mt-10'
                 dangerouslySetInnerHTML={{ __html: mainNews.content }}
@@ -66,15 +60,10 @@ export default function NewsDetail({ mainNews, recentNews, popularNews }) {
                 {recentNews.map((el) => (
                   <Link href={"/news/" + el.newsId}>
                     <div className='flex gap-5 cursor-pointer' key={el.newsId}>
-                      <div className='relative h-28 w-28 md:w-1/2'>
-                        <Image
-                          src={el.imageSrc}
-                          alt={el.title}
-                          layout='fill'
-                          objectFit='cover'
-                          className='rounded-xl'
-                        />
-                      </div>
+                      <div
+                        className='relative h-28 w-28 md:w-1/2 rounded-xl bg-cover'
+                        style={{ "background-image": `url(${el.imageSrc})` }}
+                      />
                       <div className='flex flex-col w-full flex-1 md:w-1/2'>
                         <p className='line-clamp-3 text-dark-blue font-bold'>
                           {el.title}
@@ -100,15 +89,10 @@ export default function NewsDetail({ mainNews, recentNews, popularNews }) {
                 {popularNews.map((el) => (
                   <Link href={"/news/" + el.newsId}>
                     <div className='flex gap-5 cursor-pointer' key={el.newsId}>
-                      <div className='relative h-28 w-28 md:w-1/2'>
-                        <Image
-                          src={el.imageSrc}
-                          alt={el.title}
-                          layout='fill'
-                          objectFit='cover'
-                          className='rounded-xl'
-                        />
-                      </div>
+                      <div
+                        className='relative h-28 w-28 md:w-1/2 rounded-xl bg-cover'
+                        style={{ "background-image": `url(${el.imageSrc})` }}
+                      ></div>
                       <div className='flex flex-col w-full flex-1 md:w-1/2'>
                         <p className='line-clamp-3 text-dark-blue font-bold'>
                           {el.title}

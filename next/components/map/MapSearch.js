@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { MdSearch } from "react-icons/md";
+// import { MdSearch } from "react-icons/md";
 import { CgClose } from "react-icons/cg";
 import AppContext from "../../context/AppContext";
 import MapContext from "../../context/MapContext";
@@ -385,7 +385,7 @@ const MapSearch = ({ category, setCategory }) => {
           <div
             className={`${
               category !== "" ? "max-h-32" : "max-h-0"
-            } transition-[max-h] duration-300 overflow-y-hidden ease-in-out hidden md:block`}
+            } transition-[max-h] duration-300 overflow-y-hidden ease-in-out`}
           >
             <hr className='mt-3' />
             <div className='flex flex-col gap-3 px-3 pt-3'>
@@ -457,7 +457,7 @@ const MapSearch = ({ category, setCategory }) => {
           </div>
           <hr className='text-gray-4 border-t-2 opacity-40' />
 
-          <div className='flex flex-col gap-3 px-3 pt-3 md:hidden'>
+          {/* <div className='flex flex-col gap-3 px-3 pt-3 md:hidden'>
             <div className='flex border px-4 py-2 rounded-lg'>
               <input className='focus:outline-none flex-1' />
               <MdSearch className='text-gray-5 w-6 h-6' />
@@ -484,7 +484,7 @@ const MapSearch = ({ category, setCategory }) => {
                 />
               </div>
             )}
-          </div>
+          </div> */}
 
           {daftarLayanan.length > 0 ? (
             <div className='p-3 space-y-2 overflow-y-scroll max-h-[40vh] md:max-h-80 mt-3 hide-scrollbar'>
@@ -539,8 +539,10 @@ const MapSearch = ({ category, setCategory }) => {
                 alt='placeholder'
                 className='w-32'
               />
-              <p>Tidak Ada Layer</p>
-              <p>Maaf, saat ini belum tersedia layer untuk kategori ini.</p>
+              <p className='text-black-2 font-semibold text-sm'>
+                {t("noLayer")}
+              </p>
+              <p className='text-main-gray text-xs'>{t("noLayerText")}</p>
             </div>
           )}
           <div className='p-3 w-full flex justify-center gap-5'>
@@ -565,7 +567,9 @@ const MapSearch = ({ category, setCategory }) => {
                 (page === Math.trunc(totalData / 10) + 1
                   ? totalData
                   : page * 10) +
-                " dari " +
+                " " +
+                t("from") +
+                " " +
                 (totalData || "-")}
             </p>
             <button

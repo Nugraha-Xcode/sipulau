@@ -7,5 +7,8 @@
     "buttonProcess": "Proses",
     "simpulTitle2": "Pilih Simpul Jaringan",
     "buttonAddLayer": "Tambah Layer",
-    "detail": "Detail"
+    "detail": "Detail",
+    "noLayer": "Tidak Ada Layer",
+    "noLayerText": "Maaf, saat ini belum tersedia layer untuk kategori ini.",
+    "from": "dari"
 }
