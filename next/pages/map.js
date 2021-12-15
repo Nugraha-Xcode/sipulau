@@ -320,17 +320,21 @@ const map = () => {
               >
                 <img
                   src='/images/ic-reset-zoom.svg'
-                  alt='guide button'
+                  alt='extend default button'
                   className='w-5'
                 />
               </div>
-              <div className='absolute bottom-44 md:bottom-56 mb-[6px] right-[10px] md:right-6 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'>
+              <a
+                href={`/files/${t("userGuide")}.pdf`}
+                target='_blank'
+                className='absolute bottom-44 md:bottom-56 mb-[6px] right-[10px] md:right-6 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'
+              >
                 <img
                   src='/images/ic-question.svg'
                   alt='guide button'
                   className='w-5'
                 />
-              </div>
+              </a>
               <MapLegend />
               <ResizeableDrawer isOpen={isOpenDrawer}>
                 <MapTable
