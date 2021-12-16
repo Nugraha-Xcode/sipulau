@@ -1,16 +1,17 @@
 import { sipulauPool } from "../../db";
-import https from "https";
+import http from "http";
 
 function validateCaptcha(captchaToken) {
   return new Promise((resolve, reject) => {
     let reqBody = `secret=${encodeURIComponent(
       process.env.HCAPTCHA_SECRET_KEY
     )}&response=${encodeURIComponent(captchaToken)}`;
-    const req = https
+    const req = http
       .request(
         {
-          hostname: "hcaptcha.com",
-          path: "/siteverify",
+          hostname: "192.168.1.28",
+          port: 3128,
+          path: "https://hcaptcha.com/siteverify",
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
