@@ -12,7 +12,7 @@ export default class MyDocument extends Document {
           <meta
             property='og:url'
             itemProp='image'
-            content='https://sipulau.braga.co.id/'
+            content='https://sipulau.big.go.id/'
           />
           <meta name='description' content='Sistem Informasi SIPULAU' />
           <meta property='og:image' content='/images/bg-hero-section1.jpg' />
