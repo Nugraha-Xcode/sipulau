@@ -57,7 +57,7 @@ http {
 
         client_max_body_size 5m;
 
-        add_header Content-Security-Policy "default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval'; frame-ancestors 'none';" always;
+        add_header Content-Security-Policy "default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval'; worker-src 'self' blob:; connect-src 'self' *.tile.openstreetmap.org; frame-ancestors 'none';" always;
 
         location / {
             proxy_pass  http://directus:8055/;
