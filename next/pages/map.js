@@ -418,6 +418,7 @@ export async function getStaticProps({ locale }) {
         "simpulJaringan",
         "sideBarRight",
         "popupPulau",
+        "footer",
       ])),
       // Will be passed to the page component as props
     },
