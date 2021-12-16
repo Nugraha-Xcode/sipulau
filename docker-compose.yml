@@ -121,6 +121,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      # temporarily listen to other ports before using domain
+      # - "8055:8055"
+      # - "3000:3000"
     depends_on:
       - nextjs
       - directus
