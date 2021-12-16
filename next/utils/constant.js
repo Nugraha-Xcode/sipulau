@@ -1,33 +1,17 @@
-export const navItems = {
-  id: [
-    {
-      title: "Beranda",
-      path: "/",
-    },
-    {
-      title: "Peta",
-      path: "/map",
-    },
-    {
-      title: "Berita",
-      path: "/news",
-    },
-  ],
-  en: [
-    {
-      title: "Home",
-      path: "/",
-    },
-    {
-      title: "Map",
-      path: "/map",
-    },
-    {
-      title: "News",
-      path: "/news",
-    },
-  ],
-};
+export const navItems = [
+  {
+    title: "footerBeranda",
+    path: "/",
+  },
+  {
+    title: "footerPeta",
+    path: "/map",
+  },
+  {
+    title: "footerBerita",
+    path: "/news",
+  },
+];
 
 export const statisticItems = [
   {

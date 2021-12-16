@@ -6,5 +6,8 @@
   "footerTentang": "Tentang",
   "footerFeedback": "Umpan Balik",
   "footerStatistik": "Statistik",
-  "footerKontak": "Hubungi Kami"
+  "footerKontak": "Hubungi Kami",
+  "logout": "Keluar",
+  "reg": "Daftar",
+  "modalTitle": "Masuk"
 }

@@ -34,7 +34,6 @@ const socmedItems = [
 const Footer = () => {
   const router = useRouter();
   const { t } = useTranslation("footer");
-  const translate = router.locale === "en" ? "en" : "id";
 
   return (
     <footer className='relative flex justify-center py-10 px-4 md:px-10 bg-footer-blue'>
@@ -64,10 +63,10 @@ const Footer = () => {
               <p>Menu</p>
               <div className='grid grid-cols-2 gap-x-10'>
                 <div>
-                  {navItems[translate].map((el, index) => (
+                  {navItems.map((el, index) => (
                     <Link href={el.path} key={index}>
                       <a className='mt-2 text-sm md:text-base block'>
-                        {el.title}
+                        {t(el.title)}
                       </a>
                     </Link>
                   ))}

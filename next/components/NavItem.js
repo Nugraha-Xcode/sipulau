@@ -1,29 +1,15 @@
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
-import Modal from "./modal";
 import { navItems } from "../utils/constant";
-import useToggle from "../utils/useToggle";
 import { useContext } from "react";
 import AppContext from "../context/AppContext";
-import Login from "./Login";
-
-const login = {
-  en: {
-    reg: "Signup",
-    modalTitle: "Sign In",
-    logout: "Log Out",
-  },
-  id: {
-    reg: "Daftar",
-    modalTitle: "Masuk",
-    logout: "Keluar",
-  },
-};
 
 const NavItem = () => {
-  const { t, toggleLogin, isAuth, handleSetSnack, setAuth } =
+  const { toggleLogin, isAuth, handleSetSnack, setAuth } =
     useContext(AppContext);
+  const { t } = useTranslation("footer");
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -55,7 +41,7 @@ const NavItem = () => {
   return (
     <>
       <nav className='flex flex-col md:flex-row items-center gap-8'>
-        {navItems[t].map((el, index) => (
+        {navItems.map((el, index) => (
           <Link href={el.path} key={index}>
             <a
               className={`hover:text-hover-blue ${
@@ -69,17 +55,17 @@ const NavItem = () => {
               }`}
               data-cy={`navbar-menu-${index}`}
             >
-              {el.title}
+              {t(el.title)}
             </a>
           </Link>
         ))}
         {isAuth ? (
           <button onClick={handleLogout} className='text-main-blue'>
-            {login[t].logout}
+            {t("logout")}
           </button>
         ) : (
           <button onClick={toggleLogin} className='text-main-blue'>
-            {login[t].modalTitle}
+            {t("modalTitle")}
           </button>
         )}
       </nav>
@@ -90,7 +76,7 @@ const NavItem = () => {
         className='flex space-x-2 bg-main-blue rounded-full text-white text-sm py-3 px-4'
         alt='registrasi'
       >
-        {login[t].reg}
+        {t("reg")}
       </a>
       <div className='flex text-main-blue space-x-2'>
         <Link

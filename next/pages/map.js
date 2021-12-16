@@ -283,6 +283,11 @@ const map = () => {
                 setActiveLayer,
               }}
             >
+              {mapRef.current ? null : (
+                <div className='absolute bottom-0 z-50 w-full bg-gray-200 rounded'>
+                  <div className='absolute w-full top-0 h-screen rounded shim-red'></div>
+                </div>
+              )}
               <MapSearch
                 category={category}
                 setCategory={(category) => {
@@ -366,6 +371,38 @@ const map = () => {
           </div>
         </div>
       </Layout>
+      <style jsx>
+        {`
+          .shim-red {
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255);
+          }
+          .shim-red::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(
+              90deg,
+              rgba(116, 123, 133, 0.3) 0,
+              rgba(116, 123, 133, 0.2) 50%,
+              rgba(116, 123, 133, 0.1) 100%
+            );
+            animation: shimmer 1.5s ease-out infinite;
+            content: "";
+          }
+
+          @keyframes shimmer {
+            100% {
+              transform: translateX(0%);
+              opacity: 0;
+            }
+          }
+        `}
+      </style>
     </>
   );
 };

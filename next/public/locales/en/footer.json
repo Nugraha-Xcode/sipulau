@@ -3,8 +3,11 @@
   "footerBeranda": "Home",
   "footerPeta": "Map",
   "footerBerita": "News",
-  "footerTentang" : "About",
-  "footerFeedback" : "Feedback",
-  "footerStatistik" : "Statistics",
-  "footerKontak" : "Contact Us"
+  "footerTentang": "About",
+  "footerFeedback": "Feedback",
+  "footerStatistik": "Statistics",
+  "footerKontak": "Contact Us",
+  "logout": "Log Out",
+  "reg": "Signup",
+  "modalTitle": "Sign In"
 }
