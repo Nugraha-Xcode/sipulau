@@ -26,16 +26,14 @@ http {
 
     server {
 	    listen 80 default_server;
-        server_name ${SIPULAU_URL};
         gzip on;
         gzip_comp_level 4;
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
 
-        add_header Content-Security-Policy "default-src 'self'; script-src 'self' ${UMAMI_URL} hcaptcha.com *.hcaptcha.com blob:; style-src 'self' 'unsafe-inline' fonts.googleapis.com api.mapbox.com unpkg.com; font-src 'self' fonts.gstatic.com; img-src * data: blob:; connect-src *; frame-src hcaptcha.com *.hcaptcha.com; frame-ancestors 'none';" always;
-        # temporarily allow from umami in other port before using proper domain
-        # add_header Content-Security-Policy "default-src 'self'; script-src 'self' 10.10.170.115:3000 hcaptcha.com *.hcaptcha.com blob:; style-src 'self' 'unsafe-inline' fonts.googleapis.com api.mapbox.com unpkg.com; font-src 'self' fonts.gstatic.com; img-src * data: blob:; connect-src *; frame-src hcaptcha.com *.hcaptcha.com; frame-ancestors 'none';" always;
 
         location / {
+            add_header Content-Security-Policy "default-src 'self'; script-src 'self' hcaptcha.com *.hcaptcha.com blob:; style-src 'self' 'unsafe-inline' fonts.googleapis.com api.mapbox.com unpkg.com; font-src 'self' fonts.gstatic.com; img-src * data: blob:; connect-src *; frame-src hcaptcha.com *.hcaptcha.com; frame-ancestors 'none';" always;
+            
             proxy_pass  http://nextjs:3000/;
             proxy_http_version    1.1;
 
@@ -46,20 +44,11 @@ http {
             proxy_set_header    X-Forwarded-For         $proxy_add_x_forwarded_for;
             proxy_set_header    X-Forwarded-Proto       $scheme;
         }
-    }
 
-    server {
-	    listen 80;
-        server_name ${DIRECTUS_URL};
-        gzip on;
-        gzip_comp_level 4;
-        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
-
-        client_max_body_size 5m;
-
-        add_header Content-Security-Policy "default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval'; worker-src 'self' blob:; connect-src 'self' *.tile.openstreetmap.org; frame-ancestors 'none';" always;
-
-        location / {
+        location /panel/ {
+            client_max_body_size 5m;
+            add_header Content-Security-Policy "default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval'; worker-src 'self' blob:; connect-src 'self' *.tile.openstreetmap.org; frame-ancestors 'none';" always;
+            
             proxy_pass  http://directus:8055/;
             proxy_http_version    1.1;
 
@@ -70,18 +59,10 @@ http {
             proxy_set_header    X-Forwarded-For         $proxy_add_x_forwarded_for;
             proxy_set_header    X-Forwarded-Proto       $scheme;
         }
-    }
 
-    server {
-	    listen 80;
-        server_name ${UMAMI_URL};
-        gzip on;
-        gzip_comp_level 4;
-        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
-
-        add_header Content-Security-Policy "default-src 'self'; img-src 'self' icons.duckduckgo.com; connect-src 'self' api.github.com; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';" always;
-
-        location / {
+        location /stats/ {
+            add_header Content-Security-Policy "default-src 'self'; img-src 'self' icons.duckduckgo.com; connect-src 'self' api.github.com; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';" always;
+            
             proxy_pass  http://umami:3000/;
             proxy_http_version    1.1;
 
@@ -93,49 +74,4 @@ http {
             proxy_set_header    X-Forwarded-Proto       $scheme;
         }
     }
-
-    # temporarily listen to other ports before using proper domain
-    # server {
-	#     listen 8055;
-    #     gzip on;
-    #     gzip_comp_level 4;
-    #     gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
-
-    #     client_max_body_size 5m;
-
-    #     add_header Content-Security-Policy "default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval'; worker-src 'self' blob:; connect-src 'self' *.tile.openstreetmap.org; frame-ancestors 'none';" always;
-
-    #     location / {
-    #         proxy_pass  http://directus:8055/;
-    #         proxy_http_version    1.1;
-
-    #         proxy_set_header    Connection              $connection_upgrade;
-    #         proxy_set_header    Upgrade                 $http_upgrade;
-    #         proxy_set_header    Host                    $host;
-    #         proxy_set_header    X-Real-IP               $remote_addr;
-    #         proxy_set_header    X-Forwarded-For         $proxy_add_x_forwarded_for;
-    #         proxy_set_header    X-Forwarded-Proto       $scheme;
-    #     }
-    # }
-
-    # server {
-	#     listen 3000;
-    #     gzip on;
-    #     gzip_comp_level 4;
-    #     gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/x-protobuf;
-
-    #     add_header Content-Security-Policy "default-src 'self'; img-src 'self' icons.duckduckgo.com; connect-src 'self' api.github.com; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';" always;
-
-    #     location / {
-    #         proxy_pass  http://umami:3000/;
-    #         proxy_http_version    1.1;
-
-    #         proxy_set_header    Connection              $connection_upgrade;
-    #         proxy_set_header    Upgrade                 $http_upgrade;
-    #         proxy_set_header    Host                    $host;
-    #         proxy_set_header    X-Real-IP               $remote_addr;
-    #         proxy_set_header    X-Forwarded-For         $proxy_add_x_forwarded_for;
-    #         proxy_set_header    X-Forwarded-Proto       $scheme;
-    #     }
-    # }
 }
