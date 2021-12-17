@@ -85,12 +85,11 @@ services:
         - POSTGRES_USER
         - POSTGRES_PASSWORD
         - POSTGRES_DB=big_sipulau_umami
+        - BASE_PATH=/stats
+        - HASH_SALT=${UMAMI_HASH_SALT}
       context: umami
     # ports:
     #   - "3000:3000"
-    environment:
-      - HASH_SALT=${UMAMI_HASH_SALT}
-      - BASE_PATH=/stats
     restart: unless-stopped
     # networks:
     #   - default
