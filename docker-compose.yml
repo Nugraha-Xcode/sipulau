@@ -90,6 +90,7 @@ services:
     #   - "3000:3000"
     environment:
       - HASH_SALT=${UMAMI_HASH_SALT}
+      - BASE_PATH=/stats
     restart: unless-stopped
     # networks:
     #   - default
