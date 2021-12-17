@@ -1,5 +1,7 @@
 # builder_deps
 FROM node:14-alpine as builder_deps
+ENV HTTP_PROXY="http://192.168.1.28:3128"
+ENV HTTPS_PROXY="http://192.168.1.28:3128"
 WORKDIR /app
 RUN npm update -g
 ENV NODE_ENV development
@@ -20,6 +22,8 @@ RUN npm run build
 
 # runner
 FROM node:14-alpine as runner
+ENV HTTP_PROXY="http://192.168.1.28:3128"
+ENV HTTPS_PROXY="http://192.168.1.28:3128"
 RUN apk add dumb-init
 RUN npm update -g
 ENV NODE_ENV production
