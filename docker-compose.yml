@@ -87,6 +87,7 @@ services:
         - POSTGRES_DB=big_sipulau_umami
         - BASE_PATH=/stats
         - HASH_SALT=${UMAMI_HASH_SALT}
+        - DATABASE_TYPE=postgresql
       context: umami
     # ports:
     #   - "3000:3000"
