@@ -28,9 +28,15 @@ const download = url =>
   });
 
 const open = () =>
-  new Promise(resolve => {
-    fs.readFile(path.resolve(__dirname, 'GeoLite2-Country.tar.gz'), (err, data) => {
-      resolve(data.pipe(zlib.createGunzip({})).pipe(tar.t()));
+  new Promise((resolve, reject) => {
+    let readStream = fs.createReadStream(
+      path.resolve(__dirname, 'GeoLite2-Country.tar.gz')
+    );
+    readStream.on('open', () => {
+      resolve(readStream.pipe(zlib.createGunzip({})).pipe(tar.t()));
+    });
+    readStream.on('error', e => {
+      reject(e);
     });
   });
 
