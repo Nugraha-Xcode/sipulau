@@ -1,0 +1,6 @@
+{
+  "name": "SIPULAU NextJS",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "nextjs",
+  "workspaceFolder": "/app"
+}
