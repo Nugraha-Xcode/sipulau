@@ -1,0 +1,22 @@
+version: "3"
+services:
+  redis:
+    build:
+      context: ../../redis
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ../Dockerfile
+    environment:
+      - STORAGE_ACCESS_KEY_ID=${MINIO_ROOT_USER}
+      - STORAGE_SECRET_ACCESS_KEY=${MINIO_ROOT_PASSWORD}
+      - STORAGE_ENDPOINT=${MINIO_ENDPOINT}
+      - STORAGE_BUCKET=sipulau-shp
+      - POSTGRES_HOST
+      - POSTGRES_PORT
+      - POSTGRES_DB=big_sipulau
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
