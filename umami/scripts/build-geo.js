@@ -27,7 +27,15 @@ const download = url =>
     });
   });
 
-download(url).then(
+const open = () =>
+  new Promise(resolve => {
+    fs.readFile(path.resolve(__dirname, 'GeoLite2-Country.tar.gz'), (err, data) => {
+      resolve(data.pipe(zlib.createGunzip({})).pipe(tar.t()));
+    });
+  });
+
+// download(url).then(
+open().then(
   res =>
     new Promise((resolve, reject) => {
       res.on('entry', entry => {
