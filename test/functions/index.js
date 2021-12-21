@@ -1,12 +1,13 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
 
-const SIPULAU_URL = "http://localhost";
-const DIRECTUS_URL = "http://localhost:8055";
-const USERNAME = "inageoportalacc";
-const PASSWORD = "secretpassword";
+const SIPULAU_URL = "http://sipulau.big.go.id";
+const DIRECTUS_URL = "http://sipulau.big.go.id/panel";
+const USERNAME = "username";
+const PASSWORD = "password";
 
 const POPUP_KEYS = [
+  "fid",
   "id_toponim",
   "nammap",
   "alias",
@@ -25,7 +26,6 @@ const POPUP_DETAIL_KEYS = [
   "aslbhs",
   "wadmkd",
   "wadmkc",
-  "status",
   "remark",
 ];
 
@@ -38,7 +38,25 @@ const POINT_COMMENT = JSON.stringify({
 const ISLAND_COMMENT = JSON.stringify({ email: "test@test.com", isi: "Test" });
 const DOWNLOAD_FILTER = JSON.stringify({ id_toponim: 41789 });
 
-export default () => {
+export const setup = () => {
+  // login
+  const loginRes = http.post(
+    `${DIRECTUS_URL}/inageoportal-login/`,
+    JSON.stringify({
+      username: USERNAME,
+      password: PASSWORD,
+    }),
+    { headers: { "Content-Type": "application/json" } }
+  );
+  check(loginRes, {
+    "logged in successfully": (res) =>
+      typeof res.json("accessToken") === "string",
+  });
+  return loginRes.json();
+};
+
+export default (data) => {
+  const loginRes = data;
   // get island mvt
   check(http.get(`${SIPULAU_URL}/api/mvt/titik-pulau/4/13/8/`), {
     "retrieved island mvt": (res) =>
@@ -84,30 +102,16 @@ export default () => {
     "retrieved island comments": (obj) => Array.isArray(obj),
   });
 
-  // login
-  const loginRes = http.post(
-    `${DIRECTUS_URL}/inageoportal-login/`,
-    JSON.stringify({
-      username: USERNAME,
-      password: PASSWORD,
-    }),
-    { headers: { "Content-Type": "application/json" } }
-  );
-  check(loginRes, {
-    "logged in successfully": (res) =>
-      typeof res.json("accessToken") === "string",
-  });
-
   // set auth header
   const authHeaders = {
     headers: {
-      Authorization: `Bearer ${loginRes.json("accessToken")}`,
+      Authorization: `Bearer ${loginRes.accessToken}`,
     },
   };
   const authHeadersJson = {
     headers: {
-      Authorization: `Bearer ${loginRes.json("accessToken")}`,
-      "Content-Type": "application/json"
+      Authorization: `Bearer ${loginRes.accessToken}`,
+      "Content-Type": "application/json",
     },
   };
 
@@ -157,10 +161,12 @@ export default () => {
   check(downloadShpUrl, {
     "retrieved download shp url": (obj) => typeof obj === "string",
   });
-  check(http.get(downloadShpUrl, authHeaders), {
-    "retrieved shp zip": (res) =>
-      res.headers["Content-Type"] === "application/zip",
-  });
+  if (downloadShpUrl) {
+    check(http.get(downloadShpUrl, authHeaders), {
+      "retrieved shp zip": (res) =>
+        res.headers["Content-Type"] === "application/zip",
+    });
+  }
 
   sleep(5);
 };
