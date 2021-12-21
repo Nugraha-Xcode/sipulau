@@ -92,7 +92,10 @@ const CustomSubLayerItem = ({ item, layerIndex, simpulIndex }) => {
   }, [layerIndex, simpulIndex]);
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div
+      data-cy={`simpul-layer-list-${layerIndex}`}
+      className='flex flex-col gap-2 simpul-layer-list-item'
+    >
       <div className='flex gap-3'>
         <p className='flex-1 truncate text-main-gray text-xs'>{item.judul}</p>
         <div className='flex gap-2'>
@@ -111,12 +114,16 @@ const CustomSubLayerItem = ({ item, layerIndex, simpulIndex }) => {
               className='w-4'
             />
           </button>
-          <button onClick={() => setIsOpen((prev) => !prev)}>
+          <button
+            data-cy={`expand-layer-control-button-${layerIndex}`}
+            onClick={() => setIsOpen((prev) => !prev)}
+          >
             <img src='/images/ic-dots.svg' alt='dots icon' className='w-4' />
           </button>
         </div>
       </div>
       <div
+        data-cy={`simpul-layer-control-${layerIndex}`}
         className={`${
           isOpen ? "max-h-96 mb-2" : "max-h-0"
         } overflow-hidden transition-all duration-500 rounded-md`}

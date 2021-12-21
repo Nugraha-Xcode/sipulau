@@ -62,7 +62,7 @@ const Footer = () => {
             <div className='flex flex-col text-white'>
               <p>Menu</p>
               <div className='grid grid-cols-2 gap-x-10'>
-                <div>
+                <div data-cy='footer-page-menu'>
                   {navItems.map((el, index) => (
                     <Link href={el.path} key={index}>
                       <a className='mt-2 text-sm md:text-base block'>
@@ -72,7 +72,10 @@ const Footer = () => {
                   ))}
                 </div>
                 {router.asPath.includes("news") ? null : (
-                  <div className='hidden md:flex md:flex-col'>
+                  <div
+                    className='hidden md:flex md:flex-col'
+                    data-cy='footer-homepage-menu'
+                  >
                     <a href='#tentang' className='mt-2 text-sm md:text-base'>
                       {t("footerTentang")}
                     </a>
@@ -103,6 +106,7 @@ const Footer = () => {
                     href={el.path}
                     target='_blank'
                     rel='noopener noreferrer'
+                    data-cy={`footer-socmed-${index}`}
                   >
                     {el.icon}
                   </a>

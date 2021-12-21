@@ -9,6 +9,7 @@ const SearchTag = ({ label, value, onClick, isActive, isLoad }) => {
       }  border-2 rounded-full h-8 max-w-max px-4 focus:outline-none text-xs`}
       onClick={onClick}
       disabled={isLoad}
+      data-cy={`network-button-category-${value}`}
     >
       <p className='whitespace-nowrap'>{label}</p>
     </button>

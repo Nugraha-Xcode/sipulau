@@ -159,7 +159,10 @@ const MapSearch = ({ category, setCategory }) => {
             "&start=" +
             (currentPage - 1) * 10 +
             "&q=" +
-            textSearchRef.current.value
+            textSearchRef.current.value,
+          {
+            method: "GET",
+          }
         );
         const resData = await res.json();
         if (res.status === 200) {
@@ -333,17 +336,26 @@ const MapSearch = ({ category, setCategory }) => {
       <div className='fixed md:absolute top-16 md:top-24 left-0 md:left-6 z-20 font-map'>
         <div className='relative shadow-map-2 w-screen md:w-[27.5rem] py-2 md:py-4 bg-white md:rounded-xl'>
           <div className='px-3'>
-            <p className='text-black-2 font-semibold text-xs'>
+            <p
+              className='text-black-2 font-semibold text-xs'
+              data-cy='network-card-title'
+            >
               {t("simpulTitle")}
             </p>
             {isLoad ? (
-              <div className='mt-3 flex gap-2'>
+              <div
+                className='mt-3 flex gap-2'
+                data-cy='network-button-skeleton'
+              >
                 <Skeleton style='w-5/12 h-8 rounded-full' shape='bar' />
                 <Skeleton style='w-3/12 h-8 rounded-full' shape='bar' />
                 <Skeleton style='w-4/12 h-8 rounded-full' shape='bar' />
               </div>
             ) : (
-              <div className='flex space-x-2 mt-3 overflow-x-scroll hide-scrollbar'>
+              <div
+                className='flex space-x-2 mt-3 overflow-x-scroll hide-scrollbar'
+                data-cy='network-button-category'
+              >
                 {mapListCategory.map((item) => (
                   <SearchTag
                     key={item.value}
@@ -386,12 +398,14 @@ const MapSearch = ({ category, setCategory }) => {
             className={`${
               category !== "" ? "max-h-32" : "max-h-0"
             } transition-[max-h] duration-300 overflow-y-hidden ease-in-out`}
+            data-cy='network-card-select-section'
           >
             <hr className='mt-3' />
             <div className='flex flex-col gap-3 px-3 pt-3'>
               <select
                 className='text-xs max-h-20 text-black-2 rounded-lg focus:ring-transparent focus:border-gray-5 border-gray-5 cursor-pointer'
                 onChange={(e) => setOrganization(e.target.value)}
+                data-cy='network-card-selector'
               >
                 <option value=''>{t("chooseSimpul")}</option>
                 {organizationList.map((el) => {
@@ -406,6 +420,7 @@ const MapSearch = ({ category, setCategory }) => {
               </select>
               {!isFetch ? (
                 <button
+                  data-cy='network-card-process-button'
                   disabled={isLoad}
                   onClick={() => {
                     setPage(1);
@@ -430,6 +445,7 @@ const MapSearch = ({ category, setCategory }) => {
           </div>
         </div>
         <div
+          data-cy='choose-network-card'
           className={`mt-2 shadow-map-2 w-screen md:w-[27.5rem] bg-white rounded-xl ${
             isResult ? "max-h-[75vh] md:max-h-[30rem]" : "max-h-0"
           } overflow-y-hidden transition-all duration-500 ease-in-out fixed md:relative bottom-0`}
@@ -457,37 +473,11 @@ const MapSearch = ({ category, setCategory }) => {
           </div>
           <hr className='text-gray-4 border-t-2 opacity-40' />
 
-          {/* <div className='flex flex-col gap-3 px-3 pt-3 md:hidden'>
-            <div className='flex border px-4 py-2 rounded-lg'>
-              <input className='focus:outline-none flex-1' />
-              <MdSearch className='text-gray-5 w-6 h-6' />
-            </div>
-            {!isFetch ? (
-              <button
-                disabled={isLoad}
-                onClick={() => {
-                  setPage(1);
-                  getSimpulList(1);
-                }}
-                className={`${
-                  isFetch ? "cursor-disable" : ""
-                } bg-main-blue text-white w-full py-2 rounded-lg text-sm`}
-              >
-                {t("buttonProcess")}
-              </button>
-            ) : (
-              <div className='w-full flex justify-center items-center'>
-                <img
-                  src='images/loader.svg'
-                  alt='loader'
-                  className='w-10 h-10'
-                />
-              </div>
-            )}
-          </div> */}
-
           {daftarLayanan.length > 0 ? (
-            <div className='p-3 space-y-2 overflow-y-scroll max-h-[40vh] md:max-h-80 mt-3 hide-scrollbar'>
+            <div
+              className='p-3 space-y-2 overflow-y-scroll max-h-[40vh] md:max-h-80 mt-3 hide-scrollbar'
+              data-cy='network-list'
+            >
               {daftarLayanan.map((el, index) => {
                 const thumbnailSource = buatThumbnailUrl(el);
                 return (
@@ -513,6 +503,7 @@ const MapSearch = ({ category, setCategory }) => {
                       <p className='text-main-gray text-xs'>{el.judul}</p>
                       <div className='flex items-center gap-3'>
                         <button
+                          data-cy={`add-layer-button-${index}`}
                           onClick={() => handleTambahLayer(el)}
                           className='bg-main-blue text-white py-1 px-3 rounded-full'
                         >
@@ -520,6 +511,7 @@ const MapSearch = ({ category, setCategory }) => {
                         </button>
                         <div className='w-1 h-1 rounded-full bg-main-gray' />
                         <a
+                          data-cy='detail-link'
                           href={el.url}
                           target='_blank'
                           className='text-main-gray'

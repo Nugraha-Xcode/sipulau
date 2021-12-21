@@ -23,7 +23,7 @@ const Filter = ({ toggleMapFilter, setDataTable, setPage, setToggledRow }) => {
   }, [filterArr, activeFilter]);
 
   return (
-    <div className='font-map'>
+    <div className='font-map' data-cy='find-island-filter-modal'>
       <div className='flex justify-between items-center px-6 py-3 relative'>
         <p className='flex-1 text-center ml-5 text-black-2'>{t("filter1")}</p>
         <button onClick={toggleMapFilter}>

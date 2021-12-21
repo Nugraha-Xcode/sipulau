@@ -43,7 +43,7 @@ const FeatureTab = ({
       break;
   }
   return (
-    <>
+    <div data-cy='feature-tab-card'>
       <div className='flex justify-between px-3 py-3'>
         <p className='text-main-gray font-semibold'>{t(featureObj.label)}</p>
         <button
@@ -57,7 +57,7 @@ const FeatureTab = ({
       </div>
       <hr className='text-gray-4 border-t-2 opacity-40' />
       <div className='p-3'>{featureObj.component}</div>
-    </>
+    </div>
   );
 };
 

@@ -46,6 +46,7 @@ const ResizeableDrawer = ({ children, isOpen }) => {
   return shouldRender
     ? ReactDOM.createPortal(
         <div
+          data-cy='resizeable-bottom-drawer'
           className={`drawer absolute bottom-0 z-50 bg-white w-full rounded-t-2xl transform ${
             mount ? "translate-y-0" : "translate-y-full"
           } ${

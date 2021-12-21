@@ -38,10 +38,13 @@ const CustomLayerItem = ({ simpulIndex, layer, title, item }) => {
     <div
       className={`flex flex-col ${
         isOpen ? "border border-gray-4" : ""
-      } px-2 rounded-md overflow-y-scroll hide-scrollbar`}
+      } px-2 rounded-md overflow-y-scroll hide-scrollbar layer-group-list`}
     >
       <div className='flex gap-3'>
-        <button onClick={() => setIsOpen((prev) => !prev)}>
+        <button
+          data-cy='expand-layer-list-button'
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
           <img
             src='/images/ic-arrow-r.svg'
             alt='arrow icon'
@@ -53,12 +56,16 @@ const CustomLayerItem = ({ simpulIndex, layer, title, item }) => {
           {/* <button>
             <img src='/images/ic-eye.svg' alt='see icon' className='w-4' />
           </button> */}
-          <button onClick={() => setOpenSetting((prev) => !prev)}>
+          <button
+            onClick={() => setOpenSetting((prev) => !prev)}
+            data-cy={`expand-layer-group-control-button-${simpulIndex}`}
+          >
             <img src='/images/ic-dots.svg' alt='dots icon' className='w-4' />
           </button>
         </div>
       </div>
       <div
+        data-cy={`expand-layer-control-${simpulIndex}`}
         className={`${
           openSetting ? "max-h-96 mb-2 mt-2" : "max-h-0"
         } overflow-hidden transition-all duration-500 rounded-md`}

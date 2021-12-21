@@ -22,7 +22,10 @@ const LayerFeature = () => {
   }, [toponimVisibility]);
   return (
     <div className='flex flex-col gap-2 max-h-[600px]'>
-      <div className='flex items-center justify-between'>
+      <div
+        className='flex items-center justify-between'
+        data-cy='toponim-layer-control'
+      >
         <p className='text-xs text-black-2'>Toponim Pulau</p>
         <button
           onClick={() => {

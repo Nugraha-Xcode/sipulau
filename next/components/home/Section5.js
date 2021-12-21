@@ -69,17 +69,24 @@ const Section5 = () => {
           onSubmit={handleSubmit}
           className='w-full border border-[#A2BCDE] border-opacity-5 max-w-screen-lg bg-[#ffffff] bg-opacity-50 flex flex-col items-center space-y-6 py-8 md:py-12 px-8 md:px-24 rounded-3xl text-main-blue'
         >
-          <h2 className='text-dark-blue'>{t("judulSeksiFeedback")}</h2>
-          <p className='w-10/12 md:w-3/4 text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8 text-center'>
+          <h2 data-cy='home-section5-header' className='text-dark-blue'>
+            {t("judulSeksiFeedback")}
+          </h2>
+          <p
+            data-cy='home-section5-subheader'
+            className='w-10/12 md:w-3/4 text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8 text-center'
+          >
             {t("isiSeksiFeedback")}
           </p>
           <div className='flex flex-col md:flex-row gap-5 w-full'>
             <input
+              data-cy='home-section5-name-input'
               ref={namaRef}
               className='border border-main-blue border-opacity-20 flex-1 rounded-full px-6 py-3 focus:outline-none bg-white bg-opacity-0'
               placeholder={t("placeholderNama")}
             />
             <input
+              data-cy='home-section5-email-input'
               ref={emailRef}
               className='border border-main-blue border-opacity-20 flex-1 rounded-full px-6 py-3 focus:outline-none bg-white bg-opacity-0'
               placeholder={t("placeholderEmail")}
@@ -87,6 +94,7 @@ const Section5 = () => {
             />
           </div>
           <textarea
+            data-cy='home-section5-text-input'
             ref={isiRef}
             className='w-full border border-main-blue border-opacity-20 rounded-lg px-6 py-3 focus:outline-none bg-white bg-opacity-0'
             rows='6'

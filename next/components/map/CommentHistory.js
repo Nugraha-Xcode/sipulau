@@ -63,6 +63,7 @@ const CommentHistory = () => {
 
   return (
     <div
+      data-cy='comment-feature-comment-history-tab'
       className='py-5 space-y-3 overflow-y-scroll max-h-96 hide-scrollbar'
       ref={rootObserver}
     >

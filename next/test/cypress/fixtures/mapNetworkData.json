@@ -1,0 +1,16 @@
+{
+    "buttonList": [
+        {
+            "label": "button1",
+            "value": "Kementerian/Lembaga"
+        },
+        {
+            "label": "button2",
+            "value": "Provinsi"
+        },
+        {
+            "label": "button3",
+            "value": "Kabupaten/Kota"
+        }
+    ]
+}

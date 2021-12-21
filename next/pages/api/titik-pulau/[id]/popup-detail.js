@@ -22,7 +22,7 @@ export default async function popupHandler(req, res) {
     queryResult = await sipulauPool.query(
       `
       SELECT
-        id_wilayah, artinam, sjhnam, aslbhs, wadmkd, wadmkc, status, remark
+        id_wilayah, artinam, sjhnam, aslbhs, wadmkd, wadmkc, remark
       FROM ${tableName}
       WHERE id_toponim = $1
       `,

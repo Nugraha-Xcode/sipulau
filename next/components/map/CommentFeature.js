@@ -12,6 +12,7 @@ const CommentFeature = () => {
     <div>
       <div className='flex'>
         <div
+          data-cy='comment-feature-change-tab-1'
           className={`flex-1 cursor-pointer text-center border-b-2 ${
             comment === "add" ? "border-main-blue" : ""
           } text-main-gray font-semibold`}
@@ -20,6 +21,7 @@ const CommentFeature = () => {
           {t("addComment")}
         </div>
         <div
+          data-cy='comment-feature-change-tab-2'
           className={`flex-1 cursor-pointer text-center border-b-2 ${
             comment === "history" ? "border-main-blue" : ""
           } text-main-gray font-semibold`}

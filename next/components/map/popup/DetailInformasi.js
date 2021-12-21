@@ -30,10 +30,10 @@ const DetailInformasi = () => {
       label: t("attribute11"),
       value: "wadmkd",
     },
-    {
-      label: t("attribute12"),
-      value: "status",
-    },
+    // {
+    //   label: t("attribute12"),
+    //   value: "status",
+    // },
     {
       label: t("attribute13"),
       value: "remark",

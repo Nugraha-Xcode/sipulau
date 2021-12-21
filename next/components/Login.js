@@ -113,6 +113,7 @@ const Login = ({ toggle }) => {
           <div className='flex items-center border border-gray-4 rounded-lg py-3 px-5'>
             <FaRegUser className='text-main-gray w-4 h-4' />
             <input
+              data-cy='login-input-username'
               ref={userRef}
               className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm px-3'
               placeholder={login[t].placeholder1}
@@ -121,6 +122,7 @@ const Login = ({ toggle }) => {
           <div className='flex items-center border border-gray-4 rounded-lg py-3 px-5'>
             <BiLock className='text-main-gray w-4 h-4' />
             <input
+              data-cy='login-input-password'
               ref={passwordRef}
               className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm py-0 border-0 focus:ring-0 px-3'
               placeholder={login[t].placeholder2}
@@ -141,6 +143,7 @@ const Login = ({ toggle }) => {
         <div className='flex flex-col w-full gap-4'>
           {!isLoading ? (
             <button
+              data-cy='login-submit-button'
               onClick={handleLogin}
               className='bg-main-blue text-white rounded-lg py-2 text-sm'
             >

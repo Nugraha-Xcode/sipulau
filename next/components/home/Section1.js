@@ -7,7 +7,10 @@ import { useState, useEffect, useRef } from "react";
 const ArrowLeft = (props) => {
   const disabeld = props.disabled ? " arrow--disabled" : "";
   return (
-    <div className='hidden md:block w-5 h-5 absolute z-50 top-1/2 left-10 transform -translate-y-1/2 text-[#3C5373] cursor-pointer'>
+    <div
+      data-cy='carousel-left-button'
+      className='hidden md:block w-5 h-5 absolute z-50 top-1/2 left-10 transform -translate-y-1/2 text-[#3C5373] cursor-pointer'
+    >
       <svg
         onClick={props.onClick}
         className={"fill-current arrow arrow--left" + disabeld}
@@ -23,7 +26,10 @@ const ArrowLeft = (props) => {
 const ArrowRight = (props) => {
   const disabeld = props.disabled ? " arrow--disabled" : "";
   return (
-    <div className='hidden md:block w-5 h-5 absolute z-50 top-1/2 right-10 transform -translate-y-1/2 text-[#3C5373] cursor-pointer'>
+    <div
+      data-cy='carousel-right-button'
+      className='hidden md:block w-5 h-5 absolute z-50 top-1/2 right-10 transform -translate-y-1/2 text-[#3C5373] cursor-pointer'
+    >
       <svg
         onClick={props.onClick}
         className={"fill-current arrow arrow--right" + disabeld}
@@ -87,11 +93,16 @@ const Section1 = ({ items }) => {
           disabled={currentSlide === 0}
         />
       )}
-      <div ref={sliderRef} className='keen-slider'>
+      <div
+        data-cy='home-section-1-carousel'
+        ref={sliderRef}
+        className='keen-slider'
+      >
         {items.map((el, index) => (
           <div className='keen-slider__slide' key={index}>
             <div className='min-h-[80vh] md:min-h-screen relative flex items-center justify-center filter'>
               <Image
+                data-cy={`carousel-image-${index}`}
                 src={el.imgSrc}
                 alt={"carousel" + index}
                 layout='fill'
@@ -101,11 +112,22 @@ const Section1 = ({ items }) => {
               />
               {/* <div className='absolute w-full min-h-screen bg-red-500'></div> */}
               <div className='flex flex-col items-center text-white text-center space-y-6 z-10 p-4 w-full md:w-3/4'>
-                <p className='text-lg md:text-xl lg:text-2xl text-main-blue'>
+                <p
+                  data-cy={`carousel-subtitle-${index}`}
+                  className='font-bold text-lg md:text-xl lg:text-2xl text-[#3C5373] '
+                >
                   {el.subTitle && el.subTitle}
                 </p>
-                <h1 className='text-dark-blue'>{el.title && el.title}</h1>
-                <p className='text-dark-blue text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8'>
+                <h1
+                  data-cy={`carousel-title-${index}`}
+                  className='font-medium text-[#3C5373]'
+                >
+                  {el.title && el.title}
+                </h1>
+                <p
+                  data-cy={`carousel-text-${index}`}
+                  className='font-medium text-[#3C5373] text-opacity-80 text-sm md:text-[1.225rem] lg:text-[1.375rem] leading-5 lg:leading-8 '
+                >
                   {el.text && el.text}
                 </p>
                 {el.buttonLabel && (
@@ -114,7 +136,7 @@ const Section1 = ({ items }) => {
                       onClick={() => {}}
                       className={`flex lg:text-lg space-x-2 bg-main-blue
                    rounded-full text-white
-                    text-sm py-3 lg:py-5 px-5 lg:px-8 hover:opacity-80`}
+                    text-sm py-3 lg:py-5 px-5 lg:px-8 hover:opacity-80 drop-shadow-2xl`}
                     >
                       <p>{el.buttonLabel}</p>
                     </button>

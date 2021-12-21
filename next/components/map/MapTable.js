@@ -46,22 +46,22 @@ const MapTable = ({
   const [isShowing, toggle] = useToggle();
 
   const [order, setOrder] = React.useState({
-    orderBy: "id_toponim",
+    orderBy: "fid",
     orderAsc: true,
   });
   const [columns, setColums] = useState([
-    { title: "column1", field: "id_toponim", show: true, sort: true },
+    { title: "column1", field: "fid", show: true, sort: true },
     { title: "column2", field: "id_wilayah", show: true, sort: true },
     { title: "column3", field: "nammap", show: true, sort: true },
     { title: "column13", field: "alias", show: true, sort: true },
     { title: "column4", field: "artinam", show: true, sort: true },
     { title: "column5", field: "aslbhs", show: true, sort: true },
     { title: "column6", field: "sjhnam", show: true, sort: true },
-    { title: "column7", field: "wadmkc", show: true, sort: true },
     { title: "column8", field: "wadmkd", show: true, sort: true },
+    { title: "column7", field: "wadmkc", show: true, sort: true },
     { title: "column9", field: "wadmkk", show: true, sort: true },
     { title: "column10", field: "wadmpr", show: true, sort: true },
-    { title: "column11", field: "status", show: true, sort: true },
+    { title: "column11", field: "status", show: false, sort: true },
     { title: "column12", field: "remark", show: true, sort: true },
   ]);
 
@@ -201,6 +201,7 @@ const MapTable = ({
           <div className='flex items-center gap-3'>
             <div className='relative'>
               <button
+                data-cy='map-table-option-button'
                 onClick={() => setOption((prev) => !prev)}
                 className='flex items-center gap-2 border py-2 px-5 rounded-full'
               >
@@ -240,6 +241,7 @@ const MapTable = ({
               </div>
             </div>
             <button
+              data-cy='map-table-filter-by-map-extend-button'
               onClick={
                 bbox
                   ? () => {
@@ -274,6 +276,7 @@ const MapTable = ({
               </p>
             </button>
             <button
+              data-cy='map-table-zoom-to-button'
               onClick={handleZoomTo}
               className='flex items-center gap-2 border py-2 px-5 rounded-full'
             >
@@ -281,6 +284,7 @@ const MapTable = ({
               <p className='text-xs text-main-gray'>{t("zoom")}</p>
             </button>
             <button
+              data-cy='map-table-filter-button'
               onClick={toggleMapFilter}
               className={`flex items-center gap-2 border py-2 px-5 rounded-full ${
                 queryFilter ? "bg-blue-2 border-blue-3" : ""
@@ -296,6 +300,7 @@ const MapTable = ({
               </p>
             </button>
             <button
+              data-cy='map-table-reset-filter-button'
               disabled={queryFilter ? false : true}
               onClick={() => {
                 setActiveFilter([]);
@@ -326,6 +331,7 @@ const MapTable = ({
             </button> */}
 
             <button
+              data-cy='map-table-download-button'
               onClick={toggle}
               className='flex items-center gap-2 border py-2 px-5 rounded-full'
             >
@@ -363,10 +369,14 @@ const MapTable = ({
             </Modal>
           </div>
           <div className='relative flex items-center'>
-            <button onClick={() => setColumnOpt((prev) => !prev)}>
+            <button
+              data-cy='map-table-column-setting-button'
+              onClick={() => setColumnOpt((prev) => !prev)}
+            >
               <img src='/images/ic-add-circle.svg' />
             </button>
             <div
+              data-cy='map-table-column-setting-option'
               className={`${
                 isColumnOpt ? "max-h-44" : "max-h-0"
               } absolute z-50 -bottom-2 right-0 shadow-style-1 rounded-lg transform translate-y-full overflow-scroll transition-all duration-200 ease-in-out bg-white hide-scrollbar`}

@@ -51,13 +51,18 @@ const BasemapFeature = () => {
     <div className='flex flex-col gap-3  max-h-[400px] overflow-y-scroll hide-scrollbar'>
       {load
         ? [1, 2, 3, 4, 5].map((el) => (
-            <div key={el} className='flex gap-3 items-center'>
+            <div
+              key={el}
+              className='flex gap-3 items-center'
+              data-cy='basemap-feature-load'
+            >
               <Skeleton style='w-16 h-16' shape='bar' />
               <Skeleton style='w-1/2 h-3' shape='bar' />
             </div>
           ))
         : basemapItems.map((el, index) => (
             <div
+              data-cy='basemap-feature-list'
               key={el.label}
               className='flex items-center gap-3 cursor-pointer hover:bg-blue-2 rounded-md'
               onClick={

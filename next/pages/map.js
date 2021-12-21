@@ -225,7 +225,6 @@ const map = () => {
     <>
       <Head>
         <title>SIPULAU - BIG</title>
-        <link rel='icon' href='/favicon.ico' />
         <link
           href='https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css'
           rel='stylesheet'
@@ -296,6 +295,7 @@ const map = () => {
               />
               <MapFeature />
               <div
+                data-cy='attribute-table-drawer-button'
                 onClick={() => {
                   setIsOpenDrawer(true);
                   setIsOpenFeature(false);

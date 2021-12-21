@@ -21,7 +21,10 @@ const MapLegend = () => {
   const shouldRender = useDelayUnmount(isOpen, 500);
 
   return (
-    <div className='font-map absolute bottom-6 right-[10px] md:right-6 z-10 shadow-map-1 bg-white rounded-md p-1 flex flex-col gap-1'>
+    <div
+      data-cy='map-legend-button'
+      className='font-map absolute bottom-6 right-[10px] md:right-6 z-10 shadow-map-1 bg-white rounded-md p-1 flex flex-col gap-1'
+    >
       <div
         className='flex gap-2 px-1 md:px-5 py-1 md:py-3 z-20 bg-white cursor-pointer'
         onClick={() => setIsOpen((prev) => !prev)}
@@ -37,6 +40,7 @@ const MapLegend = () => {
       </div>
       {shouldRender ? (
         <div
+          data-cy='map-legend-tab'
           className={`fixed md:absolute left-0 md:-left-2 transform ${
             mount
               ? "translate-y-0 md:-translate-x-full opacity-1"

@@ -113,6 +113,7 @@ const DownloadFeature = ({
           <p className='text-xs text-black-2'>{t("aoi")}:</p>
           <div className='space-x-2'>
             <button
+              data-cy='download-feature-add-aoi-button'
               onClick={handleStartDraw}
               className={`p-1 ${
                 isDraw
@@ -125,7 +126,10 @@ const DownloadFeature = ({
             </button>
           </div>
         </div>
-        <div className='flex flex-col gap-3 border rounded-lg p-2'>
+        <div
+          className='flex flex-col gap-3 border rounded-lg p-2'
+          data-cy='download-feature-aoi-list'
+        >
           <p className='text-xs text-black-2'>{t("listAoi")} :</p>
           <div className='flex flex-col gap-2'>
             {drawItem.length > 0 ? (

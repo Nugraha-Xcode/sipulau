@@ -124,7 +124,7 @@ const MapTableDownload = ({
 
   return (
     <div className='py-2 space-y-4'>
-      <div>
+      <div data-cy='download-feature-format-selector'>
         <p className='text-xs mb-1 text-black-2'>{t("formatFile")}</p>
         <Select
           value={type}
@@ -144,6 +144,7 @@ const MapTableDownload = ({
         </div>
       ) : (
         <button
+          data-cy='download-feature-download-button'
           className='text-white bg-main-blue rounded-lg py-2 mx-auto w-full text-sm'
           onClick={() => {
             type.value === "csv" ? handleDownloadCsv() : handleDownloadShp();

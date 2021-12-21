@@ -22,7 +22,7 @@ export default async function popupHandler(req, res) {
     [popupResult, commentResult] = await Promise.all([
       sipulauPool.query(
         `
-        SELECT id_toponim, nammap, alias, wadmkk, wadmpr, foto1, foto2, foto3, foto4
+        SELECT fid, id_toponim, nammap, alias, wadmkk, wadmpr, foto1, foto2, foto3, foto4
         FROM ${tableName}
         WHERE id_toponim = $1
         `,

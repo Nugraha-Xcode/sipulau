@@ -47,6 +47,7 @@ const Table = ({
 
   return (
     <div
+      data-cy='map-main-table'
       className='min-w-screen tableStyle overflow-auto overscroll-contain'
       ref={rootObserver}
     >

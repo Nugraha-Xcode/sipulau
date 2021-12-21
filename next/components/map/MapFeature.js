@@ -85,6 +85,7 @@ const MapFeature = () => {
     <div className='font-map absolute top-40 md:top-24 right-2 md:right-6 z-10 shadow-map-1 bg-white rounded-xl p-1 flex flex-col gap-1'>
       {featureItems.map((el, index) => (
         <div
+          data-cy={`map-feature-item-${el.value}`}
           onClick={() => handleOpenTab(el.value)}
           className={`flex flex-col items-center justify-center ${
             activeFeature === el.value

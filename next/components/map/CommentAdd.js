@@ -54,7 +54,7 @@ const CommentAdd = () => {
   }, [type]);
 
   return (
-    <div>
+    <div data-cy='comment-feature-add-comment-tab'>
       {!type ? (
         <div>
           <div className='p-3 flex flex-col items-center justify-center text-center gap-2'>
@@ -66,6 +66,7 @@ const CommentAdd = () => {
           </div>
           <div className='space-y-2'>
             <button
+              data-cy='comment-feature-point-comment-button'
               onClick={() => {
                 if (isAuth) {
                   map.getCanvas().style.cursor = "crosshair";
@@ -87,6 +88,7 @@ const CommentAdd = () => {
               <hr className='flex-1' />
             </div>
             <button
+              data-cy='comment-feature-island-comment-button'
               onClick={() => {
                 if (isAuth) {
                   setType("pulau");
@@ -101,7 +103,7 @@ const CommentAdd = () => {
           </div>
         </div>
       ) : (
-        <div>
+        <div data-cy='comment-feature-add-comment'>
           <div className='p-3 flex flex-col items-center justify-center text-center gap-2'>
             <img
               src={comment[type].imgSrc}
@@ -114,6 +116,7 @@ const CommentAdd = () => {
             <p className='text-xs text-main-gray'>{t(comment[type].text2)}</p>
           </div>
           <button
+            data-cy='comment-feature-cancel-comment'
             onClick={() => {
               map.getCanvas().style.cursor = "";
               map.on("mouseleave", "titikPulauMvt", function () {

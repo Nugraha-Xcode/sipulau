@@ -22,7 +22,6 @@ export default function Home({ news, carousel, statistic }) {
     <div className='smooth-scroll'>
       <Head>
         <title>SIPULAU - BIG</title>
-        <link rel='icon' href='/favicon.ico' />
       </Head>
       <Script
         data-website-id='ad644dc6-3c28-4089-98b6-036414106943'

@@ -37,6 +37,47 @@ describe("home desktop - navigation bar - en", () => {
   });
 });
 
+describe("home desktop - carousel", () => {
+  beforeEach(() => {
+    cy.visit("/").as("homePage");
+  });
+  it("should display carousel", () => {
+    cy.get("[data-cy='home-section-1-carousel']").should("be.visible");
+  });
+
+  it("should display carousel left arrow button", () => {
+    cy.get("[data-cy='carousel-left-button']").should("be.visible");
+  });
+
+  it("should display carousel right arrow button", () => {
+    cy.get("[data-cy='carousel-right-button']").should("be.visible");
+  });
+
+  it("should display text or image from next data", () => {
+    cy.get("@homePage")
+      .its("__NEXT_DATA__.props.pageProps.carousel")
+      .each((el, index) => {
+        el.subTitle
+          ? cy
+              .get(`[data-cy=carousel-subtitle-${index}]`)
+              .should("have.text", el.subTitle)
+          : cy.log("no subtitle");
+
+        el.title
+          ? cy
+              .get(`[data-cy=carousel-title-${index}]`)
+              .should("have.text", el.title)
+          : cy.log("no title");
+
+        el.text
+          ? cy
+              .get(`[data-cy=carousel-text-${index}]`)
+              .should("have.text", el.text)
+          : cy.log("no text");
+      });
+  });
+});
+
 describe("home desktop - description - id", () => {
   before(() => {
     cy.visit("/");
@@ -158,12 +199,12 @@ describe("home desktop - description - en", () => {
 });
 
 describe("home desktop - news - id", () => {
-  before(() => {
-    cy.visit("/");
+  beforeEach(() => {
+    cy.visit("/").as("homePage");
   });
 
   it("show news title from the __NEXT_DATA__", () => {
-    cy.visit("/")
+    cy.get("@homePage")
       .its("__NEXT_DATA__.props.pageProps.news")
       .each(($el, index) => {
         cy.get(`[data-cy=home-section4-news-title-${index}]`).should(
@@ -174,7 +215,7 @@ describe("home desktop - news - id", () => {
   });
 
   it("show news abstract from the __NEXT_DATA__", () => {
-    cy.visit("/")
+    cy.get("@homePage")
       .its("__NEXT_DATA__.props.pageProps.news")
       .each(($el, index) => {
         cy.get(`[data-cy=home-section4-news-abstract-${index}]`).should(
@@ -185,7 +226,7 @@ describe("home desktop - news - id", () => {
   });
 
   it("show news link from the __NEXT_DATA__", () => {
-    cy.visit("/")
+    cy.get("@homePage")
       .its("__NEXT_DATA__.props.pageProps.news")
       .each(($el, index) => {
         cy.get(`[data-cy=home-section4-see-news-button-${index}]`).should(
@@ -355,6 +396,79 @@ describe("home desktop - related website - en", () => {
   });
 });
 
+describe("home desktop - feedback - id", () => {
+  before(() => {
+    cy.visit("/");
+  });
+
+  it("should contain header", () => {
+    cy.get("[data-cy='home-section5-header']").should(
+      "have.text",
+      "Umpan Balik"
+    );
+  });
+
+  it("should contain subheader", () => {
+    cy.get("[data-cy='home-section5-subheader']").should(
+      "have.text",
+      "Berikan kami masukan dan saran anda, Terimakasih."
+    );
+  });
+
+  it("should display name input", () => {
+    cy.get("[data-cy='home-section5-name-input']")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+
+  it("should display email input", () => {
+    cy.get("[data-cy='home-section5-email-input']")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+
+  it("should display text input", () => {
+    cy.get("[data-cy='home-section5-text-input']")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+});
+
+describe("home desktop - feedback - en", () => {
+  before(() => {
+    cy.visit("/en");
+  });
+
+  it("should contain header", () => {
+    cy.get("[data-cy='home-section5-header']").should("have.text", "Feedback");
+  });
+
+  it("should contain subheader", () => {
+    cy.get("[data-cy='home-section5-subheader']").should(
+      "have.text",
+      "Give us your suggestions and feedback, Thank you."
+    );
+  });
+
+  it("should display name input", () => {
+    cy.get("[data-cy='home-section5-name-input']")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+
+  it("should display email input", () => {
+    cy.get("[data-cy='home-section5-email-input']")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+
+  it("should display text input", () => {
+    cy.get("[data-cy='home-section5-text-input']")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+});
+
 describe("home desktop - visitor - id", () => {
   before(() => {
     cy.visit("/");
@@ -466,6 +580,33 @@ describe("home desktop - visitor - en", () => {
               $item[el.value]
             );
           });
+      });
+    });
+  });
+});
+
+describe("footer", () => {
+  before(() => {
+    cy.visit("/");
+  });
+  it("should show page menu", () => {
+    cy.get("[data-cy='footer-page-menu']")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+  it("should show homepage menu", () => {
+    cy.get("[data-cy='footer-homepage-menu']")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+  it("should contain social media link", () => {
+    cy.fixture("footer").then((item) => {
+      item.socmedItems.forEach((el, index) => {
+        cy.get(`[data-cy='footer-socmed-${index}']`).should(
+          "have.attr",
+          "href",
+          el
+        );
       });
     });
   });

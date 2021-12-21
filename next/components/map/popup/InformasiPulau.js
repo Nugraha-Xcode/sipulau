@@ -6,13 +6,14 @@ import PopupContext from "../../../context/PopupContext";
 import useToggle from "../../../utils/useToggle";
 import Modal from "../../modal";
 import AppContext from "../../../context/AppContext";
+import MapContext from "../../../context/MapContext";
 
 const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
   const { t } = useTranslation("popupPulau");
   const popupItems = [
     {
       label: t("attribute1"),
-      value: "id_toponim",
+      value: "fid",
     },
     {
       label: t("attribute14"),
@@ -37,6 +38,7 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
   ];
   const { infoPulau, getPopupDetail } = useContext(PopupContext);
   const { isAuth } = useContext(AppContext);
+  const { map } = useContext(MapContext);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [sliderRef, slider] = useKeenSlider({
     spacing: 5,
@@ -101,6 +103,23 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
               <p className='w-1/2'>{infoPulau[el.value] || "-"}</p>
             </div>
           ))}
+        </div>
+        <div className='flex justify-end'>
+          <button
+            className='text-main-blue'
+            onClick={() =>
+              map.flyTo({
+                center: [infoPulau.long, infoPulau.lat],
+                zoom: 12.5,
+              })
+            }
+          >
+            <img
+              src='/images/ic-reset-zoom.svg'
+              alt='extend default button'
+              className='w-5'
+            />
+          </button>
         </div>
         <div className='flex justify-center'>
           <button
