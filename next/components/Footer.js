@@ -39,7 +39,7 @@ const Footer = () => {
     <footer className='relative flex justify-center py-10 px-4 md:px-10 bg-footer-blue'>
       <div className='max-w-screen-xl w-full'>
         <div className='flex flex-col md:flex-row gap-10'>
-          <div className='w-2/3 md:w-1/3 text-white space-y-10'>
+          <div className='w-2/3 md:w-1/3 text-white space-y-8'>
             <div className='flex items-center space-x-5'>
               <img src='/images/logo-big.svg' alt='logo big' className='h-12' />
               <div>
@@ -50,10 +50,6 @@ const Footer = () => {
               </div>
             </div>
             <div className='text-sm space-y-3'>
-              <p>
-                Pusat Pengelolaan & Penyebarluasan Informasi Geospasial Badan
-                Informasi Geospasial (BIG)
-              </p>
               <p>Jl. Raya Jakarta - Bogor KM. 46</p>
               <p>Cibinong 16911, INDONESIA</p>
             </div>

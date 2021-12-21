@@ -1,9 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import MapContext from "../../context/MapContext";
 import CustomLayerItem from "./CustomLayerItem";
 
 const LayerFeature = () => {
+  const { t } = useTranslation("sideBarRight");
   const { activeLayer, map } = useContext(MapContext);
   const [toponimVisibility, setToponimVisibility] = useState(
     map.getLayer("titikPulauMvt")
@@ -26,7 +28,7 @@ const LayerFeature = () => {
         className='flex items-center justify-between'
         data-cy='toponim-layer-control'
       >
-        <p className='text-xs text-black-2'>Toponim Pulau</p>
+        <p className='text-xs text-black-2'>{t("islandToponym")}</p>
         <button
           onClick={() => {
             setToponimVisibility((prev) => !prev);
