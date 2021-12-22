@@ -70,7 +70,7 @@ export default defineComponent({
       ) {
         this.selectedFile = file;
       } else {
-        this.dialogContent = "File must be .zip and less than 5MB";
+        this.dialogContent = "File must be .zip and less than 25MB";
         this.dialogActive = true;
       }
     },
