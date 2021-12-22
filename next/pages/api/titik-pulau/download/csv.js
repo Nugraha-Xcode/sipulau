@@ -182,7 +182,8 @@ export default async function downloadCsvHandler(req, res) {
             artinam "Arti Nama", sjhnam "Sejarah Nama", aslbhs "Asal Bahasa",
             id_wilayah "ID Wilayah", wadmkd "Kelurahan/Desa",
             wadmkc "Kecamatan", wadmkk "Kabupaten/Kota", wadmpr "Provinsi",
-            remark "Remark", ST_X(geom) "X", ST_Y(geom) "Y"
+            remark "Remark", ST_X(geom) "X", ST_Y(geom) "Y",
+            pjg_gp "Panjang Garis Pantai (km)", luas "Luas (km²)"
           FROM ${tableName}
           ${combinedFilters}
         ) TO STDOUT (FORMAT csv, HEADER true)
