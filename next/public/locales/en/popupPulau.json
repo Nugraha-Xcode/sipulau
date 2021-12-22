@@ -14,6 +14,8 @@
     "attribute12": "Status",
     "attribute13": "Remark",
     "attribute14": "Alias",
+    "attribute15": "Island Area",
+    "attribute16": "Coastline Length",
     "viewDetail": "View Information Detail",
     "viewDetailInfo": "Island Information Detail",
     "commentCount": "Comments",

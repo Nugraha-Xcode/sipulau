@@ -38,6 +38,16 @@ const DetailInformasi = () => {
       label: t("attribute13"),
       value: "remark",
     },
+    {
+      label: t("attribute15"),
+      value: "luas",
+      unit: "km²",
+    },
+    {
+      label: t("attribute16"),
+      value: "pjg_gp",
+      unit: "km",
+    },
   ];
 
   return (
@@ -48,7 +58,11 @@ const DetailInformasi = () => {
             <p>{el.label || "-"}</p>
             <p>:</p>
           </div>
-          <p className='w-1/2'>{detailPulau[el.value] || "-"}</p>
+          <p className='w-1/2'>
+            {detailPulau[el.value]
+              ? detailPulau[el.value] + " " + (el.unit ? el.unit : "")
+              : "-"}
+          </p>
         </div>
       ))}
     </div>

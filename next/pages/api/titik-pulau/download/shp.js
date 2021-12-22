@@ -87,6 +87,7 @@ export default async function downloadShpHandler(req, res) {
 
   // validate filters
   let {
+    fid,
     id_toponim,
     nammap,
     artinam,
@@ -124,6 +125,7 @@ export default async function downloadShpHandler(req, res) {
     }
   } else {
     let stringFilters = [
+      [fid, "fid"],
       [id_wilayah, "id_wilayah"],
       [wadmkd, "wadmkd"],
       [wadmkc, "wadmkc"],

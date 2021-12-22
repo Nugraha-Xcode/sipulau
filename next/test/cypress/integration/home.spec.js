@@ -339,7 +339,7 @@ describe("home desktop - related website - id", () => {
   it("should contain description", () => {
     cy.get("[data-cy='home-section3-desc']").should(
       "have.text",
-      "Berikut merupakan Kementrian & Lembaga yang bekerja sama dengan Badan Informasi Geospasial terkait Mendata SI Pulau"
+      "Berikut merupakan Kementerian & Lembaga yang bekerja sama dengan Badan Informasi Geospasial terkait metadata SI Pulau"
     );
   });
 

@@ -16,6 +16,8 @@ const validColumns = [
   "wadmpr",
   "status",
   "remark",
+  "pjg_gp",
+  "luas",
 ];
 
 export default async function tableHandler(req, res) {
@@ -45,9 +47,9 @@ export default async function tableHandler(req, res) {
 
   // validate order column
   if (ordBy) {
-    ordBy = validColumns.includes(ordBy) ? ordBy : "id_toponim";
+    ordBy = validColumns.includes(ordBy) ? ordBy : "fid";
   } else {
-    ordBy = "id_toponim";
+    ordBy = "fid";
   }
 
   // validate order direction
@@ -59,6 +61,7 @@ export default async function tableHandler(req, res) {
 
   // validate filters
   let {
+    fid,
     id_toponim,
     nammap,
     artinam,
@@ -78,6 +81,7 @@ export default async function tableHandler(req, res) {
   let param = 3;
 
   let equalFilters = [
+    [fid, "fid"],
     [id_toponim, "id_toponim"],
     [id_wilayah, "id_wilayah"],
     [wadmkd, "wadmkd"],
@@ -163,7 +167,8 @@ export default async function tableHandler(req, res) {
       `
       SELECT
         fid, id_toponim, nammap, alias, artinam, sjhnam, aslbhs, id_wilayah, wadmkd,
-        wadmkc, wadmkk, wadmpr, status, remark, ST_X(geom) lon, ST_Y(geom) lat
+        wadmkc, wadmkk, wadmpr, status, remark, ST_X(geom) lon, ST_Y(geom) lat,
+        pjg_gp, luas
       FROM ${tableName}
       ${combinedFilters}
       ORDER BY ${ordBy} ${ordDir}

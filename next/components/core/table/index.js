@@ -132,146 +132,170 @@ const Table = ({
             )}
           </tr>
         </thead>
-        <tbody className='divide-solid divide-y-2 divide-gray-6'>
-          {data.map((dataItem, dataIdx) => (
-            <tr className='cursor-pointer' key={dataIdx}>
-              <td
-                className={`${
-                  isSelectAll
-                    ? toggledRow.findIndex(
-                        (el) => el.id === dataItem.id_toponim
-                      ) !== -1
-                      ? ""
-                      : "bg-blue-2"
-                    : toggledRow.findIndex(
-                        (el) => el.id === dataItem.id_toponim
-                      ) !== -1
-                    ? "bg-blue-2"
-                    : ""
-                } text-center`}
-              >
-                <input
-                  type='checkbox'
-                  className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
-                  checked={
-                    // toggledRow.indexOf(dataItem.id_toponim) !== -1
+        <tbody
+          className={`${
+            data.length > 0 ? "divide-solid divide-y-2 divide-gray-6" : ""
+          }`}
+        >
+          {data.length > 0 ? (
+            data.map((dataItem, dataIdx) => (
+              <tr className='cursor-pointer' key={dataIdx}>
+                <td
+                  className={`${
                     isSelectAll
                       ? toggledRow.findIndex(
                           (el) => el.id === dataItem.id_toponim
                         ) !== -1
-                        ? false
-                        : true
+                        ? ""
+                        : "bg-blue-2"
                       : toggledRow.findIndex(
                           (el) => el.id === dataItem.id_toponim
                         ) !== -1
-                      ? true
-                      : false
-                  }
-                  id={dataItem.id_toponim}
-                  name={dataItem.id_toponim}
-                  value={
-                    // toggledRow.indexOf(dataItem.id_toponim) !== -1
-                    isSelectAll
-                      ? toggledRow.findIndex(
-                          (el) => el.id === dataItem.id_toponim
-                        ) !== -1
-                        ? false
-                        : true
-                      : toggledRow.findIndex(
-                          (el) => el.id === dataItem.id_toponim
-                        ) !== -1
-                      ? true
-                      : false
-                  }
-                  onChange={(e) => {
-                    if (isSelectAll) {
-                      if (e.target.value === "false") {
-                        setToggledRow((prev) => {
-                          let arr = [...prev];
-                          arr.splice(
-                            toggledRow.findIndex(
-                              (el) => el.id === dataItem.id_toponim
-                            ),
-                            1
-                          );
-                          return arr;
-                        });
-                      } else {
-                        setToggledRow((prev) => {
-                          let arr = [...prev];
-                          arr.push({
-                            id: dataItem.id_toponim,
-                            lon: dataItem.lon,
-                            lat: dataItem.lat,
-                          });
-                          return arr;
-                        });
-                      }
-                    } else {
-                      if (e.target.value === "true") {
-                        setToggledRow((prev) => {
-                          let arr = [...prev];
-                          arr.splice(
-                            toggledRow.findIndex(
-                              (el) => el.id === dataItem.id_toponim
-                            ),
-                            1
-                          );
-                          return arr;
-                        });
-                      } else {
-                        setToggledRow((prev) => {
-                          let arr = [...prev];
-                          arr.push({
-                            id: dataItem.id_toponim,
-                            lon: dataItem.lon,
-                            lat: dataItem.lat,
-                          });
-                          return arr;
-                        });
-                      }
-                    }
-                  }}
-                />
-              </td>
-              {columns.map((itemValue, itemIdx) =>
-                itemValue.show ? (
-                  <td
-                    key={itemIdx}
-                    onClick={() =>
-                      map.flyTo({
-                        center: [dataItem.lon, dataItem.lat],
-                        zoom: 12.5,
-                      })
-                    }
-                    test={dataItem[itemValue.field]}
-                    className={`${
+                      ? "bg-blue-2"
+                      : ""
+                  } text-center`}
+                >
+                  <input
+                    type='checkbox'
+                    className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
+                    checked={
+                      // toggledRow.indexOf(dataItem.id_toponim) !== -1
                       isSelectAll
                         ? toggledRow.findIndex(
                             (el) => el.id === dataItem.id_toponim
                           ) !== -1
-                          ? ""
-                          : "bg-blue-2"
+                          ? false
+                          : true
                         : toggledRow.findIndex(
                             (el) => el.id === dataItem.id_toponim
                           ) !== -1
-                        ? "bg-blue-2"
-                        : ""
-                    } text-left py-[3px] text-xs pr-2 ${
-                      dataItem[itemValue.field] &&
-                      dataItem[itemValue.field].length > 40
-                        ? "hover:relative hover:before:content-[attr(test)] hover:before:overflow-visible before:absolute before:bg-black-2 before:rounded-md before:top-10 before:z-[999] before:text-white hover:before:p-2"
-                        : ""
-                    } `}
-                  >
-                    <div className={`line-clamp-2`}>
-                      {dataItem[itemValue.field] || "-"}
-                    </div>
-                  </td>
-                ) : null
-              )}
+                        ? true
+                        : false
+                    }
+                    id={dataItem.id_toponim}
+                    name={dataItem.id_toponim}
+                    value={
+                      // toggledRow.indexOf(dataItem.id_toponim) !== -1
+                      isSelectAll
+                        ? toggledRow.findIndex(
+                            (el) => el.id === dataItem.id_toponim
+                          ) !== -1
+                          ? false
+                          : true
+                        : toggledRow.findIndex(
+                            (el) => el.id === dataItem.id_toponim
+                          ) !== -1
+                        ? true
+                        : false
+                    }
+                    onChange={(e) => {
+                      if (isSelectAll) {
+                        if (e.target.value === "false") {
+                          setToggledRow((prev) => {
+                            let arr = [...prev];
+                            arr.splice(
+                              toggledRow.findIndex(
+                                (el) => el.id === dataItem.id_toponim
+                              ),
+                              1
+                            );
+                            return arr;
+                          });
+                        } else {
+                          setToggledRow((prev) => {
+                            let arr = [...prev];
+                            arr.push({
+                              id: dataItem.id_toponim,
+                              lon: dataItem.lon,
+                              lat: dataItem.lat,
+                            });
+                            return arr;
+                          });
+                        }
+                      } else {
+                        if (e.target.value === "true") {
+                          setToggledRow((prev) => {
+                            let arr = [...prev];
+                            arr.splice(
+                              toggledRow.findIndex(
+                                (el) => el.id === dataItem.id_toponim
+                              ),
+                              1
+                            );
+                            return arr;
+                          });
+                        } else {
+                          setToggledRow((prev) => {
+                            let arr = [...prev];
+                            arr.push({
+                              id: dataItem.id_toponim,
+                              lon: dataItem.lon,
+                              lat: dataItem.lat,
+                            });
+                            return arr;
+                          });
+                        }
+                      }
+                    }}
+                  />
+                </td>
+                {columns.map((itemValue, itemIdx) =>
+                  itemValue.show ? (
+                    <td
+                      key={itemIdx}
+                      onClick={() =>
+                        map.flyTo({
+                          center: [dataItem.lon, dataItem.lat],
+                          zoom: 12.5,
+                        })
+                      }
+                      test={dataItem[itemValue.field]}
+                      className={`${
+                        isSelectAll
+                          ? toggledRow.findIndex(
+                              (el) => el.id === dataItem.id_toponim
+                            ) !== -1
+                            ? ""
+                            : "bg-blue-2"
+                          : toggledRow.findIndex(
+                              (el) => el.id === dataItem.id_toponim
+                            ) !== -1
+                          ? "bg-blue-2"
+                          : ""
+                      } text-left py-[3px] text-xs pr-2 ${
+                        dataItem[itemValue.field] &&
+                        dataItem[itemValue.field].length > 40
+                          ? "hover:relative hover:before:content-[attr(test)] hover:before:overflow-visible before:absolute before:bg-black-2 before:rounded-md before:top-10 before:z-[999] before:text-white hover:before:p-2"
+                          : ""
+                      } `}
+                    >
+                      <div className={`line-clamp-2`}>
+                        {dataItem[itemValue.field] || "-"}
+                      </div>
+                    </td>
+                  ) : null
+                )}
+              </tr>
+            ))
+          ) : (
+            <tr className=''>
+              <td colSpan={columns.length} className=''>
+                <div className='mx-auto flex flex-col justify-center items-center gap-y-2 py-8'>
+                  <img
+                    src='/images/empty-state-table.svg'
+                    alt='empty state table'
+                    className='w-44'
+                  />
+                  <p className='text-sm text-black-2 font-semibold text-center'>
+                    {t("emptyStateTable1")}
+                  </p>
+                  <p className='text-xs text-main-gray w-44 text-center'>
+                    {t("emptyStateTable2")}
+                  </p>
+                </div>
+              </td>
             </tr>
-          ))}
+          )}
           <tr ref={observerRef}>
             <td className='relative'>
               <div className='absolute w-10 h-10'></div>

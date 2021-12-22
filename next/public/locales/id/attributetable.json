@@ -23,11 +23,17 @@
     "column11": "Status",
     "column12": "Remark",
     "column13": "Nama Lain",
+    "column14": "ID Toponim",
+    "column15": "Luas Pulau (km²)",
+    "column16": "Panjang Garis Pantai (km)",
     "option1": "Tampilkan/Sembunyikan Kolom",
     "option2": "Tampilkan Data yang Dipilih",
     "filter1": "Filter Pencarian Pulau",
     "filter2": "Tambah Filter",
     "filter3": "Terapkan Filter",
     "filter4": "Pilih Filter",
-    "userGuide": "user-guide-sipulau-id"
+    "userGuide": "user-guide-sipulau-id",
+    "emptyStateTable1": "Maaf, Data tidak Ada",
+    "emptyStateTable2": "Data yang anda cari tidak ada, silahkan anda coba lagi.",
+    "location": "Lokasi"
 }

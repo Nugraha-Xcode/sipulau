@@ -44,7 +44,7 @@ export default function NewsDetail({ mainNews, recentNews, popularNews }) {
               </div>
               <div
                 className='relative h-96 w-full mt-5 rounded-xl bg-cover'
-                style={{ "background-image": `url(${mainNews.imageSrc})` }}
+                style={{ backgroundImage: `url(${mainNews.imageSrc})` }}
               ></div>
               <div
                 className='text-dark-blue text-opacity-80 mt-10'
@@ -61,7 +61,7 @@ export default function NewsDetail({ mainNews, recentNews, popularNews }) {
                     <div className='flex gap-5 cursor-pointer' key={el.newsId}>
                       <div
                         className='relative h-28 w-28 md:w-1/2 rounded-xl bg-cover'
-                        style={{ "background-image": `url(${el.imageSrc})` }}
+                        style={{ backgroundImage: `url(${el.imageSrc})` }}
                       />
                       <div className='flex flex-col w-full flex-1 md:w-1/2'>
                         <p className='line-clamp-3 text-dark-blue font-bold'>
@@ -90,7 +90,7 @@ export default function NewsDetail({ mainNews, recentNews, popularNews }) {
                     <div className='flex gap-5 cursor-pointer' key={el.newsId}>
                       <div
                         className='relative h-28 w-28 md:w-1/2 rounded-xl bg-cover'
-                        style={{ "background-image": `url(${el.imageSrc})` }}
+                        style={{ backgroundImage: `url(${el.imageSrc})` }}
                       ></div>
                       <div className='flex flex-col w-full flex-1 md:w-1/2'>
                         <p className='line-clamp-3 text-dark-blue font-bold'>

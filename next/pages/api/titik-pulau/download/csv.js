@@ -43,6 +43,7 @@ export default async function downloadCsvHandler(req, res) {
 
   // validate filters
   let {
+    fid,
     id_toponim,
     nammap,
     artinam,
@@ -88,6 +89,7 @@ export default async function downloadCsvHandler(req, res) {
     }
   } else {
     let equalStringFilters = [
+      [fid, "fid"],
       [id_wilayah, "id_wilayah"],
       [wadmkd, "wadmkd"],
       [wadmkc, "wadmkc"],
@@ -176,11 +178,11 @@ export default async function downloadCsvHandler(req, res) {
         `
         COPY (
           SELECT
-            id_toponim "ID", nammap "Nama Pulau", artinam "Arti Nama",
-            sjhnam "Sejarah Nama", aslbhs "Asal Bahasa", id_wilayah "ID Wilayah",
-            wadmkd "Kelurahan/Desa", wadmkc "Kecamatan", wadmkk "Kabupaten/Kota",
-            wadmpr "Provinsi", status "Status", remark "Remark", ST_X(geom) "X",
-            ST_Y(geom) "Y"
+            fid "ID Pulau", id_toponim "ID Toponim", nammap "Nama Pulau",
+            artinam "Arti Nama", sjhnam "Sejarah Nama", aslbhs "Asal Bahasa",
+            id_wilayah "ID Wilayah", wadmkd "Kelurahan/Desa",
+            wadmkc "Kecamatan", wadmkk "Kabupaten/Kota", wadmpr "Provinsi",
+            remark "Remark", ST_X(geom) "X", ST_Y(geom) "Y"
           FROM ${tableName}
           ${combinedFilters}
         ) TO STDOUT (FORMAT csv, HEADER true)

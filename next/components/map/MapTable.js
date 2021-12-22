@@ -51,6 +51,7 @@ const MapTable = ({
   });
   const [columns, setColums] = useState([
     { title: "column1", field: "fid", show: true, sort: true },
+    { title: "column14", field: "id_toponim", show: true, sort: true },
     { title: "column2", field: "id_wilayah", show: true, sort: true },
     { title: "column3", field: "nammap", show: true, sort: true },
     { title: "column13", field: "alias", show: true, sort: true },
@@ -63,6 +64,8 @@ const MapTable = ({
     { title: "column10", field: "wadmpr", show: true, sort: true },
     { title: "column11", field: "status", show: false, sort: true },
     { title: "column12", field: "remark", show: true, sort: true },
+    { title: "column15", field: "luas", show: true, sort: true },
+    { title: "column16", field: "pjg_gp", show: true, sort: true },
   ]);
 
   useEffect(async () => {
@@ -128,7 +131,7 @@ const MapTable = ({
           [result.xmax, result.ymax], // northeastern corner of the bounds
         ],
         {
-          padding: { top: 100, bottom: 50, left: 10, right: 10 },
+          padding: { top: 50, bottom: 50, left: 50, right: 50 },
           maxZoom: 15.5,
         }
       );

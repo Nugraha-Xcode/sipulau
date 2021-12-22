@@ -56,7 +56,7 @@ const Footer = () => {
           </div>
           <div className='w-full md:w-2/3 flex justify-between'>
             <div className='flex flex-col text-white'>
-              <p>Menu</p>
+              <p className='underline font-semibold'>Menu</p>
               <div className='grid grid-cols-2 gap-x-10'>
                 <div data-cy='footer-page-menu'>
                   {navItems.map((el, index) => (
@@ -90,7 +90,7 @@ const Footer = () => {
             </div>
             <div className='flex flex-col items-end justify-between text-white gap-10'>
               <div className='text-right space-y-3'>
-                <p>{t("footerKontak")}</p>
+                <p className='underline font-semibold'>{t("footerKontak")}</p>
                 <p className='text-sm md:text-base'>021-8753155</p>
                 <p className='text-sm md:text-base'>021-87901255</p>
                 <p className='text-sm md:text-base'>sipulau@big.go.id</p>

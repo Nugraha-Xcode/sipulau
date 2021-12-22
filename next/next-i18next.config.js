@@ -3,5 +3,6 @@ module.exports = {
     defaultLocale: "id",
     locales: ["id", "en"],
     reloadOnPrerender: true,
+    localeDetection: false,
   },
 };

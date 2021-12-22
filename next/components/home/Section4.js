@@ -28,7 +28,7 @@ const Section4 = ({ data }) => {
             >
               <div
                 className='relative h-40 w-full rounded-xl bg-cover'
-                style={{ "background-image": `url(${el.imageSrc})` }}
+                style={{ backgroundImage: `url(${el.imageSrc})` }}
               />
               <h3
                 className='truncate text-dark-blue w-[80%]'

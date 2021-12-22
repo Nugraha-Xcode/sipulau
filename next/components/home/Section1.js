@@ -44,6 +44,7 @@ const ArrowRight = (props) => {
 
 const Section1 = ({ items }) => {
   const timer = useRef();
+  const carouselRef = useRef(null);
   const [pause, setPause] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loadedSlide, setLoadedSlide] = useState(false);
@@ -66,13 +67,14 @@ const Section1 = ({ items }) => {
   });
 
   useEffect(() => {
-    sliderRef.current.addEventListener("mouseover", () => {
+    carouselRef.current.addEventListener("mouseover", () => {
       setPause(true);
     });
-    sliderRef.current.addEventListener("mouseout", () => {
+
+    carouselRef.current.addEventListener("mouseout", () => {
       setPause(false);
     });
-  }, [sliderRef]);
+  }, [carouselRef]);
 
   useEffect(() => {
     timer.current = setInterval(() => {
@@ -86,7 +88,7 @@ const Section1 = ({ items }) => {
   }, [pause, slider]);
 
   return (
-    <div className='relative'>
+    <div className='relative' ref={carouselRef}>
       {slider && (
         <ArrowLeft
           onClick={(e) => e.stopPropagation() || slider.prev()}

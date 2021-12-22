@@ -23,11 +23,17 @@
     "column11": "Status",
     "column12": "Remark",
     "column13": "Alias",
+    "column14": "Toponym ID",
+    "column15": "Island Area (km²)",
+    "column16": "Coastline Length (km)",
     "option1": "Show/Hide Column",
     "option2": "Show Selected Data",
     "filter1": "Search Island Filter",
     "filter2": "Add Filter",
     "filter3": "Set Filter",
     "filter4": "Choose Filter",
-    "userGuide": "user-guide-sipulau-en"
+    "userGuide": "user-guide-sipulau-en",
+    "emptyStateTable1": "Sorry, No data found",
+    "emptyStateTable2": "the data you are looking for does not exist, try again.",
+    "location": "Location"
 }
