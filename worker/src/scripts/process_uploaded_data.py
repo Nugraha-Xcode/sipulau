@@ -71,6 +71,8 @@ def get_fields_type(data_type: DataTypeEnum) -> Dict[str, Any]:
         "rekaman1": ogr.OFTString,
         "rekaman2": ogr.OFTString,
         "created_by": ogr.OFTInteger64,
+        "pjg_gp": ogr.OFTReal,
+        "luas": ogr.OFTReal,
     }
 
 
@@ -125,6 +127,8 @@ def get_fields(data_type: DataTypeEnum) -> List[str]:
         "rekaman1",
         "rekaman2",
         "created_by",
+        "pjg_gp",
+        "luas",
     ]
 
 
