@@ -15,7 +15,7 @@ interface IMySMTPTransportOptions extends SMTPTransport.Options {
   proxy: string | undefined;
 }
 
-export default defineHook(({ filter }, { /* services,  */ exceptions }) => {
+export default defineHook(({ filter }, { services, exceptions }) => {
   // const { MailService } = services;
   const { ServiceUnavailableException, InvalidPayloadException } = exceptions;
 
@@ -50,6 +50,7 @@ export default defineHook(({ filter }, { /* services,  */ exceptions }) => {
           html: input.jawaban,
         });
       } catch (error) {
+        console.error(error)
         throw new ServiceUnavailableException(error);
       }
       input.status = "answered";
