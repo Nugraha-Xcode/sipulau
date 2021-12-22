@@ -28,8 +28,8 @@ export default defineHook(({ filter }, { /* services,  */exceptions }) => {
           user: process.env.EMAIL_SMTP_USER,
           pass: process.env.EMAIL_SMTP_PASSWORD,
         },
+        proxy: "http://192.168.1.28:3128"
       });
-      transport.setupProxy("http://192.168.1.28:3128")
       try {
         let userData = await database<TUserDataEmail>("feedback")
           .select("email")
