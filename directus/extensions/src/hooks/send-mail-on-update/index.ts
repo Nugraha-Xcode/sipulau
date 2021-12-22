@@ -1,5 +1,6 @@
 import { defineHook } from "@directus/extensions-sdk";
 import nodemailer from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 type TUserDataEmail = {
   email: string;
@@ -10,7 +11,11 @@ type TInput = {
   status?: string;
 };
 
-export default defineHook(({ filter }, { /* services,  */exceptions }) => {
+interface IMySMTPTransportOptions extends SMTPTransport.Options {
+  proxy: string | undefined;
+}
+
+export default defineHook(({ filter }, { /* services,  */ exceptions }) => {
   // const { MailService } = services;
   const { ServiceUnavailableException, InvalidPayloadException } = exceptions;
 
@@ -21,15 +26,16 @@ export default defineHook(({ filter }, { /* services,  */exceptions }) => {
         throw new InvalidPayloadException("Jawaban harus memiliki isi");
       }
       // const mailService = new MailService({ schema });
-      const transport = nodemailer.createTransport({
+      const smtpOptions: IMySMTPTransportOptions = {
         host: process.env.EMAIL_SMTP_HOST as string,
         port: parseInt(process.env.EMAIL_SMTP_PORT as string),
         auth: {
           user: process.env.EMAIL_SMTP_USER,
           pass: process.env.EMAIL_SMTP_PASSWORD,
         },
-        proxy: "http://192.168.1.28:3128"
-      });
+        proxy: "http://192.168.1.28:3128",
+      };
+      const transport = nodemailer.createTransport(smtpOptions);
       try {
         let userData = await database<TUserDataEmail>("feedback")
           .select("email")
