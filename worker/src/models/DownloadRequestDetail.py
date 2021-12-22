@@ -10,6 +10,7 @@ class BoundingBox(BaseModel):
 
 
 class DownloadRequestDetail(BaseModel):
+    fid: Optional[str] = None
     id_toponim: Optional[int] = None
     nammap: Optional[str] = None
     artinam: Optional[str] = None

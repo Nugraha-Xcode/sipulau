@@ -38,6 +38,7 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
         filters.append(f"geom && ST_GeomFromGeoJSON('{escaped}')")
     else:
         equal_filters: List[List[Union[str, None]]] = [
+            [data.fid, "fid"],
             [data.id_wilayah, "id_wilayah"],
             [data.wadmkd, "wadmkd"],
             [data.wadmkc, "wadmkc"],
