@@ -11,7 +11,7 @@
         />
       </div>
       <div style="margin-bottom: 1rem">
-        <label for="file-selector">Select file (.zip file, max size 5MB)</label>
+        <label for="file-selector">Select file (.zip file, max size 25MB)</label>
         <input
           id="file-selector"
           name="file"
@@ -66,7 +66,7 @@ export default defineComponent({
       if (
         (fileType === "application/zip" ||
           fileType === "application/x-zip-compressed") &&
-        fileSize <= 5242880
+        fileSize <= 26214400
       ) {
         this.selectedFile = file;
       } else {
