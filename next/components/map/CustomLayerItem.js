@@ -28,11 +28,15 @@ const CustomLayerItem = ({ simpulIndex, layer, title, item }) => {
   }, [simpulIndex]);
 
   const handleDeleteGroup = useCallback(() => {
+    activeLayer[simpulIndex].layer.forEach((item) => {
+      map.removeLayer(item.judul + item.nama);
+      map.removeSource(item.judul + item.nama);
+    });
     setActiveLayer((prev) => {
       let prevArr = [...prev];
       return prevArr.filter((el) => el.simpul !== item.simpul);
     });
-  }, []);
+  }, [activeLayer, simpulIndex, map]);
 
   return (
     <div
