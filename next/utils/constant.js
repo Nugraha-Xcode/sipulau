@@ -21,6 +21,11 @@ export const statisticItems = [
   },
   {
     label: "captionPengunjung",
+    imageSrc: "/images/ic-section6-2.svg",
+    value: "visitor",
+  },
+  {
+    label: "captionPengunjungHari",
     imageSrc: "/images/ic-section6-3.svg",
     value: "visit",
   },
@@ -28,11 +33,6 @@ export const statisticItems = [
     label: "captionNegara",
     imageSrc: "/images/ic-section6-4.svg",
     value: "country",
-  },
-  {
-    label: "captionPengunjungHari",
-    imageSrc: "/images/ic-section6-2.svg",
-    value: "visitor",
   },
 ];
 
