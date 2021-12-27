@@ -48,6 +48,7 @@ services:
       - EMAIL_SMTP_PASSWORD
       - EMAIL_SMTP_POOL=true
       - EMAIL_SMTP_SECURE
+      - EMAIL_SMTP_IGNORE_TLS
       - REFRESH_TOKEN_COOKIE_SECURE=true
       - REFRESH_TOKEN_COOKIE_NAME=sipulau_refresh_token
       - REFRESH_TOKEN_TTL=1d
