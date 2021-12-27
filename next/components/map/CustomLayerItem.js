@@ -5,7 +5,8 @@ import CustomSubLayerItem from "./CustomSubLayerItem";
 
 const CustomLayerItem = ({ simpulIndex, layer, title, item }) => {
   const { t } = useTranslation("sideBarRight");
-  const { activeLayer, setActiveLayer, map } = useContext(MapContext);
+  const { activeLayer, setActiveLayer, map, setActiveLegend, activeLegend } =
+    useContext(MapContext);
   const [isOpen, setIsOpen] = useState(false);
   const [openSetting, setOpenSetting] = useState(false);
 
@@ -36,7 +37,16 @@ const CustomLayerItem = ({ simpulIndex, layer, title, item }) => {
       let prevArr = [...prev];
       return prevArr.filter((el) => el.simpul !== item.simpul);
     });
-  }, [activeLayer, simpulIndex, map]);
+
+    let prevLegend = [...activeLegend];
+    activeLayer[simpulIndex].layer.forEach((elem, index) => {
+      prevLegend.splice(
+        prevLegend.findIndex((test) => test.id === elem.judul + elem.nama),
+        1
+      );
+    });
+    setActiveLegend(prevLegend);
+  }, [activeLayer, simpulIndex, map, activeLegend]);
 
   return (
     <div
