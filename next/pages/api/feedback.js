@@ -14,6 +14,7 @@ function validateCaptcha(captchaToken) {
           path: "https://hcaptcha.com/siteverify",
           method: "POST",
           headers: {
+            Host: "hcaptcha.com",
             "Content-Type": "application/x-www-form-urlencoded",
           },
         },
