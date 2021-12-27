@@ -24,7 +24,7 @@ function validateCaptcha(captchaToken) {
           });
           res.on("end", () => {
             if (res.statusCode !== 200) {
-              reject("HCaptcha error");
+              reject("HCaptcha error: " + data);
             } else {
               let parsedRes = JSON.parse(data);
               resolve(parsedRes.success);
