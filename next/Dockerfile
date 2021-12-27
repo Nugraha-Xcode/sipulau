@@ -22,10 +22,6 @@ RUN npm run build
 
 # runner
 FROM node:14-alpine as runner
-ENV HTTP_PROXY="http://192.168.1.28:3128"
-ENV HTTPS_PROXY="http://192.168.1.28:3128"
-RUN apk add dumb-init
-RUN npm update -g
 ENV NODE_ENV production
 WORKDIR /app
 # if using prebuilt:
@@ -38,7 +34,6 @@ WORKDIR /app
 # if using builder:
 COPY --from=builder_deps /app/node_modules ./node_modules
 COPY ./package*.json ./
-RUN npm i sharp --no-package-lock --no-audit --no-fund
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/next-i18next.config.js ./
 COPY --from=builder /app/public ./public
@@ -48,4 +43,4 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 EXPOSE 3000
 
-CMD ["dumb-init", "npm", "start"]
+CMD ["node_modules/.bin/next", "start"]

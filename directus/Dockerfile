@@ -10,10 +10,7 @@ RUN npm ci
 
 # builder
 FROM node:14-alpine as builder
-ENV HTTP_PROXY="http://192.168.1.28:3128"
-ENV HTTPS_PROXY="http://192.168.1.28:3128"
 WORKDIR /extensions
-RUN npm update -g
 ENV NODE_ENV development
 COPY --from=builder_deps /extensions/node_modules ./node_modules
 COPY extensions .
@@ -21,8 +18,6 @@ RUN npm run build
 
 # runner
 FROM directus/directus:9.0.1 as runner
-ENV HTTP_PROXY="http://192.168.1.28:3128"
-ENV HTTPS_PROXY="http://192.168.1.28:3128"
 WORKDIR /directus
 # if using prebuilt:
 # COPY extensions/dist extensions
