@@ -181,20 +181,28 @@ const MapSearch = ({ category, setCategory }) => {
 
   const buatThumbnailUrl = useCallback((layanan) => {
     let thumbnailUrl = null;
+    const link = new URL(layanan.url);
     switch (layanan.format) {
       case "Esri REST":
-        thumbnailUrl = layanan.url + "/info/thumbnail";
+        link.pathname += "/info/thumbnail";
+        thumbnailUrl =
+          link.protocol === "http:"
+            ? "/api/proxy?proxy=" + encodeURIComponent(link.href)
+            : link.href;
         break;
       case "WMS":
-        thumbnailUrl =
-          layanan.url +
-          "service=WMS&version=1.1.0&request=GetMap&layers=" +
+        link.search =
+          "?service=WMS&version=1.1.0&request=GetMap&layers=" +
           layanan.nama +
           "&styles=&bbox=" +
           layanan.bbox +
           "&width=64&height=64&srs=" +
           layanan.srs +
           "&format=image%2Fpng";
+        thumbnailUrl =
+          link.protocol === "http:"
+            ? "/api/proxy?proxy=" + encodeURIComponent(link.href)
+            : link.href;
         break;
     }
     return thumbnailUrl;
@@ -203,8 +211,8 @@ const MapSearch = ({ category, setCategory }) => {
   const getLegendList = useCallback(async (item) => {
     try {
       const link = new URL(item.url);
+
       if (item.format === "WMS") {
-        // link.protocol = "https:";
         link.search =
           "?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=" +
           item.nama;
@@ -214,15 +222,21 @@ const MapSearch = ({ category, setCategory }) => {
             id: item.judul + item.nama,
             label: item.simpul,
             judul: item.judul,
-            legendImageUrl: link.href,
+            legendImageUrl:
+              link.protocol === "http:"
+                ? "/api/proxy?proxy=" + encodeURIComponent(link.href)
+                : link.href,
           });
           return arr;
         });
       } else {
-        link.protocol = "https:";
         link.pathname += "/legend";
         link.search = "?f=json";
-        const res = await fetch(link);
+        let url =
+          link.protocol === "http:"
+            ? "/api/proxy?proxy=" + encodeURIComponent(link.href)
+            : link.href;
+        const res = await fetch(url);
         const resData = await res.json();
         setActiveLegend((prev) => {
           let arr = [...prev];
@@ -243,7 +257,13 @@ const MapSearch = ({ category, setCategory }) => {
     async (el) => {
       if (el.format === "Esri REST") {
         try {
-          let res = await fetch(el.url + "?f=json");
+          const link = new URL(el.url);
+          link.search = "?f=json"
+          let url =
+            link.protocol === "http:"
+              ? "/api/proxy?proxy=" + encodeURIComponent(link.href)
+              : link.href;
+          let res = await fetch(url);
           if (res.status === 200) {
             let resJson = await res.json();
             let { fullExtent } = resJson;

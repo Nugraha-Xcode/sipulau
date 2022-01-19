@@ -8,20 +8,29 @@ const SimpulLayer = () => {
     if (activeLayer.length > 0) {
       activeLayer.forEach((el) => {
         el.layer.forEach((item) => {
+          const link = new URL(item.url);
+          if (item.format === "WMS") {
+            link.search =
+              "?width=256&height=256&bbox={bbox-epsg-3857}&format=image%2Fpng&request=GetMap&service=WMS&styles=&transparent=true&version=1.3.0&crs=EPSG%3A3857&layers=" +
+              item.nama;
+          } else {
+            link.pathname += "/export";
+            link.search =
+              "?bbox={bbox-epsg-3857}&bboxSR=3857&size=256,256&format=png&transparent=true&f=image";
+          }
+
           if (!map.getSource(item.judul + item.nama)) {
             map.addSource(item.judul + item.nama, {
               type: "raster",
-              tiles:
-                item.format === "WMS"
-                  ? [
-                      item.url +
-                        "width=256&height=256&bbox={bbox-epsg-3857}&format=image%2Fpng&request=GetMap&service=WMS&styles=&transparent=true&version=1.3.0&crs=EPSG%3A3857&layers=" +
-                        item.nama,
-                    ]
-                  : [
-                      item.url +
-                        "/export?bbox={bbox-epsg-3857}&bboxSR=3857&size=256,256&format=png&transparent=true&f=image",
-                    ],
+              tiles: [
+                link.protocol === "http:"
+                  ? "/api/proxy?proxy=" +
+                    encodeURIComponent(link.href).replace(
+                      "%7Bbbox-epsg-3857%7D",
+                      "{bbox-epsg-3857}"
+                    )
+                  : link.href,
+              ],
               tileSize: 256,
               bounds:
                 item.bbox !== "0,0,0,0"
