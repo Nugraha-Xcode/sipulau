@@ -1,27 +1,4 @@
 version: "3"
-x-nextjs-common: &nextjs-common
-  build:
-    context: next
-    args:
-      - NEXT_PUBLIC_UMAMI_URL=${UMAMI_URL}
-      - NEXT_PUBLIC_DIRECTUS_URL=${DIRECTUS_URL}
-  depends_on:
-    - directus
-    - worker
-  environment:
-    - NEXT_PUBLIC_DIRECTUS_URL=${DIRECTUS_URL}
-    - PGHOST=${POSTGRES_HOST}
-    - PGUSER=${POSTGRES_USER}
-    - PGPASSWORD=${POSTGRES_PASSWORD}
-    - PGPORT=${POSTGRES_PORT}
-    - HCAPTCHA_SECRET_KEY
-    - REDIS_URL=redis://redis:6379
-  restart: unless-stopped
-  # networks:
-  #   - default
-  #   - sipulaudev
-
-
 services:
   redis:
     build:
@@ -80,17 +57,27 @@ services:
     #   - default
     #   - sipulaudev
 
-  nextjs1:
-    <<: *nextjs-common
-
-  nextjs2:
-    <<: *nextjs-common
-
-  nextjs3:
-    <<: *nextjs-common
-
-  nextjs4:
-    <<: *nextjs-common
+  nextjs:
+    build:
+      context: next
+      args:
+        - NEXT_PUBLIC_UMAMI_URL=${UMAMI_URL}
+        - NEXT_PUBLIC_DIRECTUS_URL=${DIRECTUS_URL}
+    depends_on:
+      - directus
+      - worker
+    environment:
+      - NEXT_PUBLIC_DIRECTUS_URL=${DIRECTUS_URL}
+      - PGHOST=${POSTGRES_HOST}
+      - PGUSER=${POSTGRES_USER}
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+      - PGPORT=${POSTGRES_PORT}
+      - HCAPTCHA_SECRET_KEY
+      - REDIS_URL=redis://redis:6379
+    restart: unless-stopped
+    # networks:
+    #   - default
+    #   - sipulaudev
 
   umami:
     build:
@@ -136,12 +123,9 @@ services:
       context: nginx
     ports:
       - "80:80"
-      # - "443:443"
+      - "443:443"
     depends_on:
-      - nextjs1
-      - nextjs2
-      - nextjs3
-      - nextjs4
+      - nextjs
       - directus
       - umami
     environment:
