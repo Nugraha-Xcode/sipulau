@@ -22,6 +22,7 @@ export default async function proxyHandler(req, res) {
       target: { hostname: "192.168.1.28", port: 3128, path: proxy },
       ignorePath: true,
       changeOrigin: true,
+      toProxy: true,
     });
   } catch (error) {
     return res.status(500).json({ message: `Proxy error` });
