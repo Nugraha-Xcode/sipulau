@@ -19,7 +19,7 @@ export default async function proxyHandler(req, res) {
   }
   try {
     await proxyMiddleware(req, res, {
-      target: proxy,
+      target: { hostname: "192.168.1.28", port: 3128, path: proxy },
       ignorePath: true,
       changeOrigin: true,
     });
