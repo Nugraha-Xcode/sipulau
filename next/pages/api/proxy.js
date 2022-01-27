@@ -1,14 +1,33 @@
-import httpProxy from "http-proxy";
+import http from "http";
 
-const proxyServer = httpProxy.createProxyServer({});
-
-function proxyMiddleware(req, res, httpProxyOptions) {
+function proxyRequest(url, method, origRes) {
+  const host = new URL(url).host;
   return new Promise((resolve, reject) => {
-    proxyServer
-      .once("proxyRes", resolve)
-      .web(req, res, httpProxyOptions, (error) => {
-        reject();
+    const req = http
+      .request(
+        {
+          hostname: "192.168.1.28",
+          port: 3128,
+          path: url,
+          method,
+          headers: {
+            Host: host,
+          },
+        },
+        (res) => {
+          res.pipe(origRes)
+          res.on("end", () => {
+            resolve();
+          });
+          res.on("error", (error) => {
+            reject(error);
+          });
+        }
+      )
+      .on("error", (error) => {
+        reject(error);
       });
+    req.end();
   });
 }
 
@@ -18,13 +37,9 @@ export default async function proxyHandler(req, res) {
     return res.status(400).json({ message: "Proxy query is required" });
   }
   try {
-    await proxyMiddleware(req, res, {
-      target: { hostname: "192.168.1.28", port: 3128, path: proxy },
-      ignorePath: true,
-      changeOrigin: true,
-      toProxy: true,
-    });
+    await proxyRequest(proxy, req.method, res)
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: `Proxy error` });
   }
 }
