@@ -16,8 +16,7 @@ const DownloadFeature = ({
   setDrawSelected,
 }) => {
   const { t } = useTranslation("sideBarRight");
-  const { map, draw } = useContext(MapContext);
-  const [isDraw, setIsDraw] = useState(false);
+  const { map, draw, drawPoly, setDrawPoly } = useContext(MapContext);
   const [isSelection, setSelection] = useState([]);
   const polygonRef = useRef(null);
 
@@ -33,7 +32,7 @@ const DownloadFeature = ({
       setDrawSelected((prev) => {
         return [...prev, e.features[0]];
       });
-      setIsDraw(false);
+      setDrawPoly(false);
     };
 
     map.on("draw.create", handleCreate);
@@ -76,14 +75,14 @@ const DownloadFeature = ({
   }, []);
 
   const handleStartDraw = useCallback(() => {
-    if (isDraw) {
-      setIsDraw(false);
+    if (drawPoly) {
+      setDrawPoly(false);
       draw.trash();
     } else {
-      setIsDraw(true);
+      setDrawPoly(true);
       draw.changeMode("draw_polygon");
     }
-  }, [isDraw]);
+  }, [drawPoly]);
 
   const handleCheck = useCallback(
     (el) => {
@@ -116,13 +115,13 @@ const DownloadFeature = ({
               data-cy='download-feature-add-aoi-button'
               onClick={handleStartDraw}
               className={`p-1 ${
-                isDraw
+                drawPoly
                   ? "bg-white border border-main-blue text-main-blue"
                   : "bg-main-blue text-white"
               } w-full  text-sm rounded-lg py-2`}
               ref={polygonRef}
             >
-              <p>{isDraw ? t("cancelSelector") : t("addSelector")}</p>
+              <p>{drawPoly ? t("cancelSelector") : t("addSelector")}</p>
             </button>
           </div>
         </div>

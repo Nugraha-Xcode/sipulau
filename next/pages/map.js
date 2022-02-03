@@ -20,6 +20,7 @@ import ResizeableDrawer from "../components/core/ResizeableDrawer";
 import Filter from "../components/map/Filter";
 import SimpulLayer from "../components/map/SimpulLayer";
 import AppContext from "../context/AppContext";
+import SimpulLayers from "../components/map/SimpulLayers";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
@@ -63,6 +64,7 @@ const map = () => {
   const [bbox, setBbox] = useState(null);
   const [activeLegend, setActiveLegend] = useState([]);
   const [activeLayer, setActiveLayer] = useState([]);
+  const [drawPoly, setDrawPoly] = useState(false);
 
   const mercRef = useRef(new SphericalMercator());
 
@@ -281,6 +283,8 @@ const map = () => {
                 setActiveLegend,
                 activeLayer,
                 setActiveLayer,
+                drawPoly,
+                setDrawPoly,
               }}
             >
               {mapRef.current ? null : (
@@ -355,7 +359,7 @@ const map = () => {
                 />
               </ResizeableDrawer>
               {mapload && <MvtLayer isSelectAll={isSelectAll} />}
-              {mapload && <SimpulLayer />}
+              {mapload && activeLayer.length > 0 && <SimpulLayers />}
               <Modal
                 isShowing={isOpenMapFilter}
                 handleModal={toggleMapFilter}
