@@ -258,7 +258,7 @@ const MapSearch = ({ category, setCategory }) => {
       if (el.format === "Esri REST") {
         try {
           const link = new URL(el.url);
-          link.search = "?f=json"
+          link.search = "?f=json";
           let url =
             link.protocol === "http:"
               ? "/api/proxy?proxy=" + encodeURIComponent(link.href)
