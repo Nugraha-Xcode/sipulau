@@ -146,7 +146,6 @@ export default defineEndpoint((router, { exceptions, database }) => {
           expires: refreshTokenExpiration,
           ip: req.accountability?.ip,
           user_agent: req.accountability?.userAgent,
-          data: null,
         });
 
         await database("directus_sessions")
