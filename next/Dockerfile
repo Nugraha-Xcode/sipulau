@@ -25,13 +25,13 @@ FROM node:14-alpine as runner
 ENV NODE_ENV production
 WORKDIR /app
 # if using prebuilt:
+COPY package*.json ./
+RUN npm ci
+RUN npm i sharp
 COPY next.config.js ./
 COPY next-i18next.config.js ./
 COPY public ./public
 COPY .next ./.next
-COPY package*.json ./
-RUN npm ci
-RUN npm i sharp
 # if using builder:
 # COPY --from=builder_deps /app/node_modules ./node_modules
 # COPY ./package*.json ./
