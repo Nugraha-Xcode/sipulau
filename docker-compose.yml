@@ -30,13 +30,15 @@ services:
       - STORAGE_MINIO_DRIVER=s3
       - STORAGE_MINIO_KEY=${MINIO_ROOT_USER}
       - STORAGE_MINIO_SECRET=${MINIO_ROOT_PASSWORD}
-      - STORAGE_MINIO_BUCKET=sipulau
+      - STORAGE_MINIO_BUCKET=webgeocreate
+      - STORAGE_MINIO_ROOT=big-sipulau
       - STORAGE_MINIO_ENDPOINT=http://${MINIO_ENDPOINT}
       - STORAGE_MINIO_S3_FORCE_PATH_STYLE=true
       - STORAGE_MINIOSHP_DRIVER=s3
       - STORAGE_MINIOSHP_KEY=${MINIO_ROOT_USER}
       - STORAGE_MINIOSHP_SECRET=${MINIO_ROOT_PASSWORD}
-      - STORAGE_MINIOSHP_BUCKET=sipulau-shp
+      - STORAGE_MINIOSHP_BUCKET=webgeocreate
+      - STORAGE_MINIOSHP_ROOT=big-sipulau-shp
       - STORAGE_MINIOSHP_ENDPOINT=http://${MINIO_ENDPOINT}
       - STORAGE_MINIOSHP_S3_FORCE_PATH_STYLE=true
       - PUBLIC_URL=${DIRECTUS_URL}
@@ -87,12 +89,11 @@ services:
         - POSTGRES_USER
         - POSTGRES_PASSWORD
         - POSTGRES_DB=big_sipulau_umami
-        - BASE_PATH=/stats
-        - HASH_SALT=${UMAMI_HASH_SALT}
-        - DATABASE_TYPE=postgresql
       context: umami
     # ports:
     #   - "3000:3000"
+    environment:
+      - HASH_SALT=${UMAMI_HASH_SALT}
     restart: unless-stopped
     # networks:
     #   - default

@@ -1,0 +1,36 @@
+.git*
+.env*
+
+node_modules/
+test/
+
+.devcontainer/
+
+# directus
+directus/extensions/
+!directus/extensions/dist/
+
+# next
+next/
+!next/.next/
+!next/public/
+!next/.dockerignore
+!next/Dockerfile
+!next/next.config.js
+!next/next-i18next.config.js
+!next/package*.json
+
+# umami
+umami/
+!umami/.next/
+!umami/public/
+!umami/.dockerignore
+!umami/Dockerfile
+!umami/gen_postgres_url.sh
+!umami/node_modules/.prisma/
+!umami/package*.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

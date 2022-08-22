@@ -1,4 +1,4 @@
-import http from "http";
+import https from "https";
 import crypto from "crypto";
 
 import { defineEndpoint } from "@directus/extensions-sdk";
@@ -42,9 +42,9 @@ function postToInageoportal(
 ): Promise<IGeoportalResponse> {
   return new Promise((resolve, reject) => {
     let reqBody = JSON.stringify(requestBody);
-    const req = http.request(
+    const req = https.request(
       {
-        hostname: "10.10.160.40",
+        hostname: "tanahair.indonesia.go.id",
         path: "/api-otentifikasi/akun/login",
         method: "POST",
         headers: {
