@@ -17,7 +17,7 @@ COPY extensions .
 RUN npm run build
 
 # runner
-FROM directus/directus:9.0.1 as runner
+FROM directus/directus:9.16 as runner
 WORKDIR /directus
 # if using prebuilt:
 # COPY extensions/dist extensions
