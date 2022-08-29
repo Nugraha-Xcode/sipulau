@@ -1,0 +1,31 @@
+.container_upload {
+  @apply flex flex-col justify-center w-full items-center h-[120px] border-dotted border-2 rounded-[8px]  gap-3;
+}
+
+.upload_image {
+  @apply w-[fit-content] h-[fit-content] cursor-pointer;
+}
+
+.title_upload {
+  @apply text-[#4F4C4A] text-sm;
+}
+
+.input {
+  @apply hidden;
+}
+
+/* dragging active */
+
+.container_active {
+  @apply bg-[#E7F5FE] border-[#4086EF] flex flex-col justify-center w-full items-center h-[120px] border-dotted border-2 rounded-[8px]  gap-3;
+}
+
+/* if dragged  */
+
+.item_upload {
+  @apply w-full h-[fit-content] p-2 border-[1px] rounded-[8px] border-[#B4B2AF] text-sm flex justify-between bg-[#E7F5FE] text-[#3675BC] font-semibold;
+}
+
+.button_close {
+  @apply cursor-pointer;
+}

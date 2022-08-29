@@ -1,0 +1,11 @@
+.container {
+  @apply flex flex-col gap-2 bg-white w-full h-full p-3 rounded-[8px];
+}
+
+.container p {
+  @apply text-[#4F4C4A];
+}
+
+.content {
+  @apply flex gap-2 items-center text-[#4F4C4A] text-sm;
+}

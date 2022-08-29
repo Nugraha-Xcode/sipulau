@@ -1,7 +1,6 @@
 import { useEffect, useRef, useContext } from "react";
 import { useTranslation } from "next-i18next";
 import SortIcon from "./SortIcon";
-import MapContext from "../../../context/MapContext";
 
 const Table = ({
   columns,
@@ -15,6 +14,8 @@ const Table = ({
   setDataTable,
   isSelectAll,
   setIsSelectAll,
+  activeFilter,
+  fetchTable,
 }) => {
   const { t } = useTranslation("attributetable");
   const observerRef = useRef(null);
@@ -22,7 +23,7 @@ const Table = ({
 
   useEffect(() => {
     let observer = null;
-    if (observerRef.current && data.length >= 20) {
+    if (observerRef.current && data.length >= 20 && fetchTable) {
       observer = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
@@ -41,9 +42,9 @@ const Table = ({
         observer.unobserve(observerRef.current);
       }
     };
-  }, [observerRef.current, data]);
+  }, [observerRef.current, data, fetchTable]);
 
-  let tableHeight = window.innerHeight / 2;
+  let tableHeight = 600;
 
   return (
     <div
@@ -54,7 +55,7 @@ const Table = ({
       <table className='w-full text-black-2'>
         <thead>
           <tr className=''>
-            <th className='sticky top-0 text-center px-4 bg-blue-3'>
+            <th className='sticky top-0 text-center px-4 bg-gray-50'>
               <input
                 type='checkbox'
                 className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
@@ -66,33 +67,60 @@ const Table = ({
                 name={"select-all"}
                 onChange={(e) => {
                   setIsSelectAll((prev) => !prev);
-                  setToggledRow([]);
-                  if (!isSelectAll) {
+                  if (!isSelectAll && activeFilter.length > 0) {
+                    setToggledRow(
+                      data.map((el) => {
+                        return {
+                          id: el.id_toponim,
+                          lon: el.lon,
+                          lat: el.lat,
+                        };
+                      })
+                    );
                     setTimeout(() => {
                       map.setLayoutProperty("titikPulauMvt", "icon-image", [
                         "case",
-                        ["in", ["id"], ""],
-                        "marker-pulau",
+                        [
+                          "in",
+                          ["id"],
+                          [
+                            "literal",
+                            data.map((el) => parseInt(el.id_toponim)),
+                          ],
+                        ],
                         "marker-pulau-highlight",
+                        "marker-pulau",
                       ]);
                     }, 1000);
                   } else {
-                    setTimeout(() => {
-                      map.setLayoutProperty("titikPulauMvt", "icon-image", [
-                        "case",
-                        ["in", ["id"], ""],
-                        "marker-pulau-highlight",
-                        "marker-pulau",
-                      ]);
-                    }, 1000);
+                    setToggledRow([]);
                   }
+                  // if (!isSelectAll) {
+                  //   setTimeout(() => {
+                  //     map.setLayoutProperty("titikPulauMvt", "icon-image", [
+                  //       "case",
+                  //       ["in", ["id"], ""],
+                  //       "marker-pulau",
+                  //       "marker-pulau-highlight",
+                  //     ]);
+                  //   }, 1000);
+                  // } else {
+                  //   setTimeout(() => {
+                  //     map.setLayoutProperty("titikPulauMvt", "icon-image", [
+                  //       "case",
+                  //       ["in", ["id"], ""],
+                  //       "marker-pulau-highlight",
+                  //       "marker-pulau",
+                  //     ]);
+                  //   }, 1000);
+                  // }
                 }}
               />
             </th>
             {columns.map((el, index) =>
               el.show ? (
                 <th
-                  className='py-3 sticky top-0 min-w-[120px] bg-blue-3'
+                  className='py-3 sticky top-0 min-w-[120px] bg-gray-50'
                   key={index}
                 >
                   <div
@@ -161,9 +189,15 @@ const Table = ({
                     checked={
                       // toggledRow.indexOf(dataItem.id_toponim) !== -1
                       isSelectAll
-                        ? toggledRow.findIndex(
-                            (el) => el.id === dataItem.id_toponim
-                          ) !== -1
+                        ? activeFilter.length > 0
+                          ? toggledRow.findIndex(
+                              (el) => el.id === dataItem.id_toponim
+                            ) !== -1
+                            ? true
+                            : false
+                          : toggledRow.findIndex(
+                              (el) => el.id === dataItem.id_toponim
+                            ) !== -1
                           ? false
                           : true
                         : toggledRow.findIndex(

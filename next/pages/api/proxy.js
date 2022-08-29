@@ -1,4 +1,10 @@
 import http from "http";
+import httpProxy from "http-proxy";
+
+const proxyServer =
+  process.env.NODE_ENV === "production"
+    ? null
+    : httpProxy.createProxyServer({});
 
 function proxyRequest(url, method, origRes) {
   const host = new URL(url).host;
@@ -15,7 +21,7 @@ function proxyRequest(url, method, origRes) {
           },
         },
         (res) => {
-          res.pipe(origRes)
+          res.pipe(origRes);
           res.on("end", () => {
             resolve();
           });
@@ -31,13 +37,31 @@ function proxyRequest(url, method, origRes) {
   });
 }
 
+function proxyMiddleware(req, res, httpProxyOptions) {
+  return new Promise((resolve, reject) => {
+    proxyServer
+      .once("proxyRes", resolve)
+      .web(req, res, httpProxyOptions, (error) => {
+        reject();
+      });
+  });
+}
+
 export default async function proxyHandler(req, res) {
   const { proxy } = req.query;
   if (!proxy) {
     return res.status(400).json({ message: "Proxy query is required" });
   }
   try {
-    await proxyRequest(proxy, req.method, res)
+    if (process.env.NODE_ENV === "production") {
+      await proxyRequest(proxy, req.method, res);
+    } else {
+      await proxyMiddleware(req, res, {
+        target: proxy,
+        ignorePath: true,
+        changeOrigin: true,
+      });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: `Proxy error` });

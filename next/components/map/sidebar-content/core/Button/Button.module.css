@@ -1,0 +1,25 @@
+.base {
+  @apply w-full h-[fit-content] p-2 border-[1px] transition-all;
+}
+
+.outline {
+  @apply rounded-[8px] border-[#3675BC]  text-[#3675BC] hover:bg-[#BCDFFB] hover:font-semibold;
+}
+
+.normal {
+  @apply bg-[#E2E1DF] text-white rounded-[8px] font-semibold;
+}
+
+/* active state */
+
+.outline_active {
+  @apply bg-[#BCDFFB] font-semibold;
+}
+
+.normal_active {
+  @apply bg-[#3675BC];
+}
+
+.outline_active_layer {
+  @apply bg-transparent font-semibold border-[#B4B2AF] text-[#B4B2AF] text-sm hover:bg-transparent;
+}

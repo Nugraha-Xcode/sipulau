@@ -1,15 +1,13 @@
 import * as React from "react";
 
-function IcLayer({ active }) {
+function IcLayer() {
   return (
     <svg
       width='1em'
       height='1em'
       viewBox='0 0 24 24'
       fill='none'
-      className={`fill-current text-xl ${
-        active === true ? "text-main-blue" : "text-[#747B85]"
-      }`}
+      className='fill-current'
     >
       <g clipPath='url(#prefix__clip0)'>
         <path
@@ -20,7 +18,7 @@ function IcLayer({ active }) {
       </g>
       <defs>
         <clipPath id='prefix__clip0'>
-          <path fill='#fff' d='M0 0h24v24H0z' />
+          <path d='M0 0h24v24H0z' />
         </clipPath>
       </defs>
     </svg>
