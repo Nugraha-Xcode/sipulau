@@ -6,11 +6,11 @@ import { PopupProvider } from "../../../context/PopupContext";
 import AppContext from "../../../context/AppContext";
 import MapContext from "../../../context/MapContext";
 import AnimationCard from "../../core/AnimationCard";
-import BottomDrawer from "../../core/BottomDrawer";
+// import BottomDrawer from "../../core/BottomDrawer";
 import useToggle from "../../../utils/useToggle";
 import Modal from "../../modal";
 import InformasiPulau from "./InformasiPulau";
-import MobilePopup from "./MobilePopup";
+// import MobilePopup from "./MobilePopup";
 import SidePopup from "./SidePopup";
 import AddComment from "./AddComment";
 
@@ -153,13 +153,13 @@ const Popup = ({ layername }) => {
           </Modal>
         </div>
       </div>
-      <BottomDrawer
+      {/* <BottomDrawer
         isShowing={isMobileDrawer}
         toggle={openMobileDrawer}
         title={t("headerPopup")}
       >
         <MobilePopup toggle={openAddComment} />
-      </BottomDrawer>
+      </BottomDrawer> */}
     </PopupProvider>
   );
 };

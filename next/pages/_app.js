@@ -1,6 +1,7 @@
 import { useReducer, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { appWithTranslation } from "next-i18next";
+import "tippy.js/dist/tippy.css";
 
 import { AppProvider } from "../context/AppContext";
 import { expireTime, changeExpireTime } from "../utils/expireTime";
@@ -105,7 +106,7 @@ function MyApp({ Component, pageProps }) {
         setAuth(resJson.data.access_token);
         changeExpireTime(resJson.data.expires);
       } else {
-        setAuth("")
+        setAuth("");
       }
     } catch (err) {
       setAuth("");

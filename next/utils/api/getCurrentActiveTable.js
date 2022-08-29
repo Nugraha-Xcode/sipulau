@@ -16,15 +16,26 @@ export default async function getCurrentActiveTable(dataType) {
     default:
       throw new Error("Invalid dataType in getCurrentActiveTable");
   }
-  let cached = await redis.get(key);
-  if (cached) {
-    return cached;
+  if (process.env.NODE_ENV === "production") {
+    let cached = await redis.get(key);
+    if (cached) {
+      return cached;
+    } else {
+      let { rows } = await sipulauPool.query(
+        `SELECT table_name FROM ${islandCurrentActiveTable}`
+      );
+      if (rows.length > 0) {
+        await redis.set(key, rows[0].table_name);
+        return rows[0].table_name;
+      } else {
+        throw new Error("No active table");
+      }
+    }
   } else {
     let { rows } = await sipulauPool.query(
       `SELECT table_name FROM ${islandCurrentActiveTable}`
     );
     if (rows.length > 0) {
-      await redis.set(key, rows[0].table_name);
       return rows[0].table_name;
     } else {
       throw new Error("No active table");

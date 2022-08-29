@@ -181,10 +181,29 @@ export default async function mvtHandler(req, res) {
 
   let mvtBuff;
   try {
-    mvtBuff = await redis.getBuffer(
-      `mvt-${tableName}-${z}-${x}-${y}-${whereQuery}`
-    );
-    if (!mvtBuff) {
+    if (process.env.NODE_ENV === "production") {
+      mvtBuff = await redis.getBuffer(
+        `mvt-${tableName}-${z}-${x}-${y}-${whereQuery}`
+      );
+      if (!mvtBuff) {
+        mvtBuff = await mvtDbFetch(
+          layerName,
+          z,
+          x,
+          y,
+          tableName,
+          featureIdCol,
+          whereQuery,
+          extraParams
+        );
+        await redis.set(
+          `mvt-${tableName}-${z}-${x}-${y}-${whereQuery}`,
+          mvtBuff,
+          "EX",
+          900
+        );
+      }
+    } else {
       mvtBuff = await mvtDbFetch(
         layerName,
         z,
@@ -194,12 +213,6 @@ export default async function mvtHandler(req, res) {
         featureIdCol,
         whereQuery,
         extraParams
-      );
-      await redis.set(
-        `mvt-${tableName}-${z}-${x}-${y}-${whereQuery}`,
-        mvtBuff,
-        "EX",
-        900
       );
     }
   } catch (error) {

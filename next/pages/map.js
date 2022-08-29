@@ -1,6 +1,9 @@
 import { useRef, useState, useEffect, useCallback, useContext } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
+import shallow from "zustand/shallow";
+import clsx from "clsx";
+import Tippy from "@tippyjs/react";
 import Head from "next/head";
 import Script from "next/script";
 import maplibregl from "maplibre-gl";
@@ -21,6 +24,11 @@ import Filter from "../components/map/Filter";
 import SimpulLayer from "../components/map/SimpulLayer";
 import AppContext from "../context/AppContext";
 import SimpulLayers from "../components/map/SimpulLayers";
+import SideNav from "../components/sideNav/SideNav";
+import { useNav } from "../hooks";
+import MapToolbox from "../components/map/MapToolbox";
+import MapToolboxCard from "../components/map/MapToolboxCard";
+import BottomDrawer from "../components/core/BottomDrawer";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
@@ -46,7 +54,6 @@ const map = () => {
   const [activeFeature, setActiveFeature] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isOpenFeature, setIsOpenFeature] = useState(false);
-  const [category, setCategory] = useState("");
   const [filterArr, setFilterArr] = useState([
     // {
     //   id: (Math.random() * 10000).toFixed(0),
@@ -58,6 +65,11 @@ const map = () => {
   const [dataTable, setDataTable] = useState([]);
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [toggledRow, setToggledRow] = useState([]);
+  const [isOpenBottomDrawer, setOpenBottomDrawer] = useState(false);
+  const [isExpandBottomDrawer, setExpandBottomDrawer] = useState(false);
+  const [isOpenMapToolbox, setOpenMapToolbox] = useState(false);
+  const [isOpenLegend, setOpenLegend] = useState(false);
+
   const [page, setPage] = useState(1);
   const [column, setColumn] = useState(columnObj);
   const [refreshLayer, setRefreshLayer] = useState(false);
@@ -115,6 +127,27 @@ const map = () => {
     return rbiStyle;
   }, []);
 
+  const [
+    activeMenu,
+    activeCardFeature,
+    activeSideFeature,
+    expandSideNav,
+    isOpenSideNav,
+    setOpenSideNav,
+    setActiveCardFeature,
+  ] = useNav(
+    (state) => [
+      state.activeMenu,
+      state.activeCardFeature,
+      state.activeSideFeature,
+      state.expandSideNav,
+      state.isOpenSideNav,
+      state.setOpenSideNav,
+      state.setActiveCardFeature,
+    ],
+    shallow
+  );
+
   useEffect(async () => {
     // setLoading(true);
     mapRef.current = new maplibregl.Map({
@@ -128,42 +161,42 @@ const map = () => {
       minZoom: 3,
     });
 
-    mapRef.current.addControl(
-      new maplibregl.NavigationControl({ showCompass: false }),
-      "bottom-right"
-    );
+    // mapRef.current.addControl(
+    //   new maplibregl.NavigationControl({ showCompass: false }),
+    //   "bottom-right"
+    // );
 
-    mapRef.current.addControl(
-      new maplibregl.NavigationControl({ showZoom: false }),
-      "bottom-left"
-    );
+    // mapRef.current.addControl(
+    //   new maplibregl.NavigationControl({ showZoom: false }),
+    //   "bottom-left"
+    // );
 
-    mapRef.current.addControl(
-      new maplibregl.ScaleControl({
-        maxWidth: 80,
-        unit: "metric",
-      }),
-      "bottom-left"
-    );
+    // mapRef.current.addControl(
+    //   new maplibregl.ScaleControl({
+    //     maxWidth: 80,
+    //     unit: "metric",
+    //   }),
+    //   "bottom-left"
+    // );
 
-    mapRef.current.addControl(
-      new maplibregl.ScaleControl({
-        maxWidth: 80,
-        unit: "imperial",
-      }),
-      "bottom-left"
-    );
+    // mapRef.current.addControl(
+    //   new maplibregl.ScaleControl({
+    //     maxWidth: 80,
+    //     unit: "imperial",
+    //   }),
+    //   "bottom-left"
+    // );
 
-    let geoLocate = new maplibregl.GeolocateControl({
-      // positionOptions: {
-      //   enableHighAccuracy: true,
-      // },
-      // trackUserLocation: true,
-      // fitBoundsOptions: { linear: true, maxZoom: 12 },
-      showAccuracyCircle: false,
-    });
+    // let geoLocate = new maplibregl.GeolocateControl({
+    //   // positionOptions: {
+    //   //   enableHighAccuracy: true,
+    //   // },
+    //   // trackUserLocation: true,
+    //   // fitBoundsOptions: { linear: true, maxZoom: 12 },
+    //   showAccuracyCircle: false,
+    // });
 
-    mapRef.current.addControl(geoLocate, "bottom-right");
+    // mapRef.current.addControl(geoLocate, "bottom-right");
 
     mapRef.current.on("load", () => {
       setMapLoad(true);
@@ -187,16 +220,24 @@ const map = () => {
   useEffect(() => {
     let selectedArr = toggledRow.map((el) => parseInt(el.id));
     mapRef.current &&
+      mapRef.current.getLayer("titikPulauMvt") &&
       mapRef.current.setLayoutProperty(
         "titikPulauMvt",
         "icon-image",
         isSelectAll
-          ? [
-              "case",
-              ["in", ["id"], ["literal", selectedArr]],
-              "marker-pulau",
-              "marker-pulau-highlight",
-            ]
+          ? activeFilter.length > 0
+            ? [
+                "case",
+                ["in", ["id"], ["literal", selectedArr]],
+                "marker-pulau-highlight",
+                "marker-pulau",
+              ]
+            : [
+                "case",
+                ["in", ["id"], ["literal", selectedArr]],
+                "marker-pulau",
+                "marker-pulau-highlight",
+              ]
           : [
               "case",
               ["in", ["id"], ["literal", selectedArr]],
@@ -204,7 +245,7 @@ const map = () => {
               "marker-pulau",
             ]
       );
-  }, [toggledRow, isSelectAll]);
+  }, [toggledRow, isSelectAll, activeFilter]);
 
   const handleZoomExtend = useCallback(() => {
     setDataTable([]);
@@ -223,6 +264,12 @@ const map = () => {
       mapRef.current.off("moveend", handleZoomExtend);
     };
   }, [bbox, mapRef.current]);
+
+  const handleViewTable = () => {
+    setOpenBottomDrawer((prev) => !prev);
+    isOpenMapToolbox && setOpenMapToolbox(false);
+    isExpandBottomDrawer && setOpenLegend(false);
+  };
 
   return (
     <>
@@ -243,139 +290,240 @@ const map = () => {
         data-do-not-track='true'
         src={process.env.NEXT_PUBLIC_UMAMI_URL + "/umami.js"}
       />
-      <Layout>
-        <div className='min-h-screen flex items-center justify-center'>
+      {/* <Layout> */}
+      <div className='min-h-screen flex items-center justify-center'>
+        <div
+          ref={mapElementRef}
+          // style={{
+          //   visibility: mapload ? "inherit" : "hidden",
+          // }}
+          className='w-full h-screen relative'
+        ></div>
+        <MapProvider
+          value={{
+            draw: drawRef.current,
+            map: mapRef.current,
+            merc: mercRef.current,
+            isOpenDrawer,
+            setIsOpenDrawer,
+            activeFeature,
+            setActiveFeature,
+            isOpenFeature,
+            setIsOpenFeature,
+            toggleMapFilter,
+            fetchRBIStyle,
+            activeFilter,
+            setActiveFilter,
+            queryFilter,
+            setQueryFilter,
+            setFilterArr,
+            filterArr,
+            setColumn,
+            column,
+            columnObj,
+            refreshLayer,
+            setRefreshLayer,
+            bbox,
+            setBbox,
+            handleZoomExtend,
+            activeLegend,
+            setActiveLegend,
+            activeLayer,
+            setActiveLayer,
+            drawPoly,
+            setDrawPoly,
+          }}
+        >
+          {mapRef.current ? null : (
+            <div className='absolute bottom-0 z-50 w-full bg-gray-200 rounded'>
+              <div className='absolute w-full top-0 h-screen rounded shim-red'></div>
+            </div>
+          )}
+
+          {mapload && <MvtLayer isSelectAll={isSelectAll} />}
+          <SideNav handleViewTable={handleViewTable} />
+
+          {/* bottom left map controller */}
           <div
-            ref={mapElementRef}
-            // style={{
-            //   visibility: mapload ? "inherit" : "hidden",
-            // }}
-            className='w-full h-screen relative'
+            className={clsx([
+              "absolute bottom-6 z-10 flex transition-all duration-100 ease-in-out",
+              {
+                "left-[31.8rem]": Boolean(activeSideFeature) && isOpenSideNav,
+                "left-[25.6rem]": Boolean(activeSideFeature) && !isOpenSideNav,
+                "left-[17.25rem]":
+                  expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
+                "left-[7.25rem]":
+                  !expandSideNav &&
+                  isOpenSideNav &&
+                  !Boolean(activeSideFeature),
+                "left-4": !isOpenSideNav && !Boolean(activeSideFeature),
+                "bottom-[27.5rem]": isOpenBottomDrawer,
+              },
+            ])}
           >
-            <MapProvider
-              value={{
-                draw: drawRef.current,
-                map: mapRef.current,
-                merc: mercRef.current,
-                isOpenDrawer,
-                setIsOpenDrawer,
-                activeFeature,
-                setActiveFeature,
-                isOpenFeature,
-                setIsOpenFeature,
-                toggleMapFilter,
-                fetchRBIStyle,
-                activeFilter,
-                setActiveFilter,
-                queryFilter,
-                setQueryFilter,
-                setFilterArr,
-                filterArr,
-                setColumn,
-                column,
-                columnObj,
-                refreshLayer,
-                setRefreshLayer,
-                bbox,
-                setBbox,
-                handleZoomExtend,
-                activeLegend,
-                setActiveLegend,
-                activeLayer,
-                setActiveLayer,
-                drawPoly,
-                setDrawPoly,
-              }}
-            >
-              {mapRef.current ? null : (
-                <div className='absolute bottom-0 z-50 w-full bg-gray-200 rounded'>
-                  <div className='absolute w-full top-0 h-screen rounded shim-red'></div>
-                </div>
-              )}
-              <MapSearch
-                category={category}
-                setCategory={(category) => {
-                  setCategory(category);
+            {Boolean(activeMenu) ? (
+              <MapToolbox
+                isOpen={isOpenMapToolbox}
+                isOpenBottomDrawer={isOpenBottomDrawer}
+                setOpenMapToolbox={() => {
+                  setOpenMapToolbox((prev) => !prev);
                 }}
               />
-              <MapFeature />
-              <div
-                data-cy='attribute-table-drawer-button'
-                onClick={() => {
-                  setIsOpenDrawer(true);
-                  setIsOpenFeature(false);
-                  setActiveFeature("search");
-                }}
-                className='font-map absolute bottom-6 left-1/2 z-10 shadow-map-1 rounded-md p-1 hidden md:flex flex-col gap-1 bg-main-blue transform -translate-x-1/2 cursor-pointer'
-              >
-                <div className='flex gap-2 px-5 py-3 '>
-                  <img
-                    src='/images/ic-table.svg'
-                    alt='legend icon'
-                    className='w-5'
-                  />
-                  <p className='text-sm font-semibold text-white'>
-                    {t("buttonAttribute")}
-                  </p>
-                </div>
-              </div>
-              <div
-                onClick={() =>
-                  mapRef.current.flyTo({
-                    center: [116.9213, -0.7893],
-                    zoom: 4,
-                  })
-                }
-                className='absolute bottom-[4.25rem] md:bottom-[5.5rem] mb-[6px] left-[27px] md:left-8 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'
-              >
-                <img
-                  src='/images/ic-reset-zoom.svg'
-                  alt='extend default button'
-                  className='w-5'
-                />
-              </div>
-              <a
-                href={`/files/${t("userGuide")}.pdf`}
-                target='_blank'
-                className='absolute bottom-44 md:bottom-56 mb-[6px] right-[10px] md:right-6 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'
-              >
-                <img
-                  src='/images/ic-question.svg'
-                  alt='guide button'
-                  className='w-5'
-                />
-              </a>
-              <MapLegend />
-              <ResizeableDrawer isOpen={isOpenDrawer}>
-                <MapTable
-                  dataTable={dataTable}
-                  setDataTable={setDataTable}
-                  toggledRow={toggledRow}
-                  setToggledRow={setToggledRow}
-                  page={page}
-                  setPage={setPage}
-                  isSelectAll={isSelectAll}
-                  setIsSelectAll={setIsSelectAll}
-                />
-              </ResizeableDrawer>
-              {mapload && <MvtLayer isSelectAll={isSelectAll} />}
-              {mapload && activeLayer.length > 0 && <SimpulLayers />}
-              <Modal
-                isShowing={isOpenMapFilter}
-                handleModal={toggleMapFilter}
-                size='lg'
-              >
-                <Filter
-                  setToggledRow={setToggledRow}
-                  toggleMapFilter={toggleMapFilter}
-                  setDataTable={setDataTable}
-                  setPage={setPage}
-                />
-              </Modal>
-            </MapProvider>
+            ) : null}
+            <MapToolboxCard
+              isOpen={Boolean(activeCardFeature)}
+              onClose={() => {
+                setActiveCardFeature(null);
+              }}
+            />
           </div>
-        </div>
-      </Layout>
+          {/* bottom left map controller */}
+
+          {/* top left map controller */}
+          <div
+            className={clsx([
+              "absolute top-6 z-10 transition-all duration-100 ease-in-out",
+              {
+                "left-[31.8rem]": Boolean(activeSideFeature) && isOpenSideNav,
+                "left-[25.6rem]": Boolean(activeSideFeature) && !isOpenSideNav,
+                "left-[17.25rem]":
+                  expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
+                "left-[7.25rem]":
+                  !expandSideNav &&
+                  isOpenSideNav &&
+                  !Boolean(activeSideFeature),
+                "left-4": !isOpenSideNav && !Boolean(activeSideFeature),
+              },
+            ])}
+          >
+            <Tippy
+              content={isOpenSideNav ? "Hide Sidebar" : "Open Sidebar"}
+              placement='right'
+              delay={300}
+            >
+              <button
+                onClick={() => {
+                  setOpenSideNav(!isOpenSideNav);
+                }}
+                className='z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-white hover:text-brand-400'
+              >
+                <img src='/images/ic-tab.svg' alt='Menu Toggle' />
+              </button>
+            </Tippy>
+          </div>
+          {/* top left map controller */}
+
+          {/* bottom drawer table */}
+          <div className='absolute bottom-0 z-20 w-screen'>
+            <BottomDrawer
+              isOpen={isOpenBottomDrawer}
+              isOpenNav={isOpenSideNav}
+              isExpandNav={expandSideNav}
+              isExpandBottomDrawer={isExpandBottomDrawer}
+              isActiveSideFeature={Boolean(activeSideFeature)}
+            >
+              <MapTable
+                dataTable={dataTable}
+                setDataTable={setDataTable}
+                toggledRow={toggledRow}
+                setToggledRow={setToggledRow}
+                page={page}
+                setPage={setPage}
+                isSelectAll={isSelectAll}
+                setIsSelectAll={setIsSelectAll}
+                setOpenBottomDrawer={setOpenBottomDrawer}
+                setExpandBottomDrawer={() => {
+                  setExpandBottomDrawer((prev) => !prev);
+                  !isExpandBottomDrawer && isOpenLegend && setOpenLegend(false);
+                }}
+              />
+            </BottomDrawer>
+          </div>
+          {/* bottom drawer table */}
+
+          {/* <MapSearch
+              category={category}
+              setCategory={(category) => {
+                setCategory(category);
+              }}
+            /> */}
+          {/* <MapFeature /> */}
+          {/* <div
+              data-cy="attribute-table-drawer-button"
+              onClick={() => {
+                setIsOpenDrawer(true);
+                setIsOpenFeature(false);
+                setActiveFeature("search");
+              }}
+              className="font-map absolute bottom-6 left-1/2 z-10 shadow-map-1 rounded-md p-1 hidden md:flex flex-col gap-1 bg-main-blue transform -translate-x-1/2 cursor-pointer"
+            >
+              <div className="flex gap-2 px-5 py-3 ">
+                <img
+                  src="/images/ic-table.svg"
+                  alt="legend icon"
+                  className="w-5"
+                />
+                <p className="text-sm font-semibold text-white">
+                  {t("buttonAttribute")}
+                </p>
+              </div>
+            </div> */}
+          {/* <div
+              onClick={() =>
+                mapRef.current.flyTo({
+                  center: [116.9213, -0.7893],
+                  zoom: 4,
+                })
+              }
+              className='absolute bottom-[4.25rem] md:bottom-[5.5rem] mb-[6px] left-[27px] md:left-8 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'
+            >
+              <img
+                src='/images/ic-reset-zoom.svg'
+                alt='extend default button'
+                className='w-5'
+              />
+            </div> */}
+          {/* <a
+              href={`/files/${t("userGuide")}.pdf`}
+              target='_blank'
+              className='absolute bottom-44 md:bottom-56 mb-[6px] right-[10px] md:right-6 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'
+            >
+              <img
+                src='/images/ic-question.svg'
+                alt='guide button'
+                className='w-5'
+              />
+            </a> */}
+          {/* <MapLegend /> */}
+          {/* <ResizeableDrawer isOpen={isOpenDrawer}>
+              <MapTable
+                dataTable={dataTable}
+                setDataTable={setDataTable}
+                toggledRow={toggledRow}
+                setToggledRow={setToggledRow}
+                page={page}
+                setPage={setPage}
+                isSelectAll={isSelectAll}
+                setIsSelectAll={setIsSelectAll}
+              />
+            </ResizeableDrawer> */}
+
+          {/* {mapload && activeLayer.length > 0 && <SimpulLayers />} */}
+          <Modal
+            isShowing={isOpenMapFilter}
+            handleModal={toggleMapFilter}
+            size='lg'
+          >
+            <Filter
+              setToggledRow={setToggledRow}
+              toggleMapFilter={toggleMapFilter}
+              setDataTable={setDataTable}
+              setPage={setPage}
+            />
+          </Modal>
+        </MapProvider>
+      </div>
+      {/* </Layout> */}
       <style jsx>
         {`
           .shim-red {

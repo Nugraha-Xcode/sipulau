@@ -1,0 +1,27 @@
+.container {
+  @apply flex flex-col gap-2 w-full;
+}
+
+.label {
+  @apply text-[#4F4C4A];
+}
+
+.button_select {
+  @apply flex w-full h-[40px] rounded-[8px]  border-[1px] items-center px-4 py-2 justify-between border-[#777574] bg-white text-left text-sm;
+}
+
+.options {
+  @apply border-[#777574] w-full   border-[1px] overflow-auto   mb-[-8px] bg-white flex flex-col z-30;
+}
+
+.option {
+  @apply cursor-pointer text-sm hover:bg-[#F2F2F2] py-3 px-4 transition-all;
+}
+
+.button_up_active {
+  @apply rounded-t-none;
+}
+
+.button_down_active {
+  @apply rounded-b-none;
+}

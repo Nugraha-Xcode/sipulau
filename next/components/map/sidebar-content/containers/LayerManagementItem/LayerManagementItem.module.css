@@ -1,0 +1,65 @@
+.wrapper {
+  @apply flex flex-col border-[1px] w-full h-[fit-content]  relative px-5 py-3 rounded-[4px] shadow-style-1 gap-3;
+}
+
+.container {
+  @apply flex justify-between w-full  h-full relative cursor-pointer;
+}
+
+.line {
+  @apply absolute w-[5px] rounded-xl  h-[50px] top-0 -left-3   bottom-0 m-auto    bg-[#FFCE1E];
+}
+
+.text_container {
+  @apply flex flex-col;
+}
+
+.name {
+  @apply font-semibold text-base;
+}
+
+.sub_name {
+  @apply text-gray-3;
+}
+
+.icon_container {
+  @apply flex gap-3 h-full items-center;
+}
+
+/* on opacity show */
+
+.opacity_container {
+  @apply relative w-full h-[fit-content]  flex flex-col justify-center bg-[#E7F5FE]  px-5 py-3 rounded-[8px];
+}
+
+.header_opacity {
+  @apply flex justify-between w-full h-[fit-content] font-semibold text-base text-[#232221];
+}
+
+.button_control_container {
+  @apply flex gap-6 h-full items-center;
+}
+
+.content_opacity {
+  @apply flex flex-col w-full h-[fit-content] py-4;
+}
+
+.icon_container_opacity {
+  @apply flex gap-3 h-full items-center;
+}
+
+.icon_container_opacity p {
+  @apply text-sm text-[#777574];
+}
+
+.slider_opacity {
+  @apply w-full h-[fit-content] flex gap-2  justify-center items-center;
+}
+
+.slider_opacity p {
+  @apply text-sm text-[#777574];
+}
+
+.slider_opacity input {
+  @apply w-full h-[fit-content];
+}

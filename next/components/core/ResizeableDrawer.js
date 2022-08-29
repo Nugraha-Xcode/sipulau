@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import ReactDOM from "react-dom";
-import { useDelayUnmount } from "../../utils/useDelayUnmount";
 
 const ResizeableDrawer = ({ children, isOpen }) => {
   const [isResizing, setIsResizing] = useState(false);
@@ -13,8 +11,6 @@ const ResizeableDrawer = ({ children, isOpen }) => {
       setMount(false);
     };
   }, [isOpen]);
-
-  const shouldRender = useDelayUnmount(isOpen, 500);
 
   const handleMousedown = useCallback((e) => {
     setIsResizing(true);
@@ -43,36 +39,33 @@ const ResizeableDrawer = ({ children, isOpen }) => {
     }
   }, [isResizing, handleMousedown, handleMousemove, handleMouseup]);
 
-  return shouldRender
-    ? ReactDOM.createPortal(
-        <div
-          data-cy='resizeable-bottom-drawer'
-          className={`drawer absolute bottom-0 z-50 bg-white w-full rounded-t-2xl transform ${
-            mount ? "translate-y-0" : "translate-y-full"
-          } ${
-            isResizing
-              ? ""
-              : "transition-all duration-200 ease-in-out overscroll-contain overflow-hidden"
-          }`}
-        >
-          <div
-            onMouseDown={handleMousedown}
-            className='w-full cursor-resize flex justify-center items-center'
-          >
-            <div className='w-44 h-1 bg-gray-4 rounded-md my-2'></div>
-          </div>
-          {children}
-          <style jsx>
-            {`
-              .drawer {
-                height: ${currentHeight + "px"};
-              }
-            `}
-          </style>
-        </div>,
-        document.body
-      )
-    : null;
+  return (
+    <div
+      data-cy='resizeable-bottom-drawer'
+      className={`drawer absolute bottom-0 z-50 bg-white w-full rounded-t-2xl transform ${
+        mount ? "translate-y-0" : "translate-y-full"
+      } ${
+        isResizing
+          ? ""
+          : "transition-all duration-200 ease-in-out overscroll-contain overflow-hidden"
+      }`}
+    >
+      <div
+        onMouseDown={handleMousedown}
+        className='w-full cursor-resize flex justify-center items-center'
+      >
+        <div className='w-44 h-1 bg-gray-4 rounded-md my-2'></div>
+      </div>
+      {children}
+      <style jsx>
+        {`
+          .drawer {
+            height: ${currentHeight + "px"};
+          }
+        `}
+      </style>
+    </div>
+  );
 };
 
 export default ResizeableDrawer;
