@@ -27,14 +27,6 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
       label: t("attribute3"),
       value: "wadmpr",
     },
-    {
-      label: t("attribute4"),
-      value: "long",
-    },
-    {
-      label: t("attribute5"),
-      value: "lat",
-    },
   ];
   const { infoPulau, getPopupDetail } = useContext(PopupContext);
   const { isAuth } = useContext(AppContext);
@@ -51,10 +43,10 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
 
   return (
     <>
-      <div className='md:p-4'>
+      <div className='md:pt-2'>
         <div className='relative w-full'>
           <div className='navigation-wrapper'>
-            <div ref={sliderRef} className='keen-slider h-36 w-[296px]'>
+            <div ref={sliderRef} className='keen-slider h-36 w-[250px]'>
               {[
                 infoPulau.foto1,
                 infoPulau.foto2,
@@ -90,8 +82,11 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
             </div>
           )}
         </div>
-        <div className='flex flex-col gap-3 py-4'>
-          <p className='text-center text-sm text-black-2 tracking-wide font-semibold'>
+        <div className='flex flex-col gap-2 py-2'>
+          <p className='text-black-2 text-xs'>
+            {infoPulau.lat}, {infoPulau.long}
+          </p>
+          <p className='text-sm text-black-2 tracking-wide font-semibold'>
             {infoPulau.nammap || "-"}
           </p>
           {popupItems.map((el, index) => (
@@ -104,7 +99,17 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
             </div>
           ))}
         </div>
-        <div className='flex justify-end'>
+        <div className='flex items-center justify-between'>
+          <button
+            className='text-main-blue'
+            onClick={() => {
+              getPopupDetail(infoPulau.id_toponim);
+              if (window.innerWidth >= 768) setIsOpen(true);
+              setActiveFeature("detail");
+            }}
+          >
+            <p className='text-xs'>{t("viewDetail")}</p>
+          </button>
           <button
             className='text-main-blue'
             onClick={() =>
@@ -121,21 +126,9 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
             />
           </button>
         </div>
-        <div className='flex justify-center'>
-          <button
-            className='text-main-blue'
-            onClick={() => {
-              getPopupDetail(infoPulau.id_toponim);
-              if (window.innerWidth >= 768) setIsOpen(true);
-              setActiveFeature("detail");
-            }}
-          >
-            <p className='text-xs'>{t("viewDetail")}</p>
-          </button>
-        </div>
       </div>
-      <hr className='my-4 md:my-0' />
-      <div className='md:p-4 flex flex-col gap-2'>
+      <hr className='my-4 md:my-4' />
+      <div className='pb-2 flex flex-col gap-2'>
         <div className='flex justify-between'>
           <p className='text-black-2 text-xs'>
             {infoPulau.jumlahKomentar} {t("commentCount")}

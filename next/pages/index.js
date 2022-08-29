@@ -71,7 +71,7 @@ export async function getServerSideProps({ locale }) {
       'COALESCE(subjudul_eng,subjudul_idn) "subTitle"',
       'COALESCE(deskripsi_eng,deskripsi_idn) "text"',
       'COALESCE(teks_tombol_eng,teks_tombol_idn) "buttonLabel"',
-      `'${process.env.NODE_ENV === "production" ? "http://directus:8055" : sqlSafeDirectusURL}/assets/' || COALESCE(gambar_eng,gambar_idn) "imgSrc"`,
+      `'${sqlSafeDirectusURL}/assets/' || COALESCE(gambar_eng,gambar_idn) "imgSrc"`,
     ];
   } else {
     newsColumns = ['judul_idn "title"', 'pratinjau_isi_idn "abstract"'];
@@ -80,7 +80,7 @@ export async function getServerSideProps({ locale }) {
       'subjudul_idn "subTitle"',
       'deskripsi_idn "text"',
       'teks_tombol_idn "buttonLabel"',
-      `'${process.env.NODE_ENV === "production" ? "http://directus:8055" : sqlSafeDirectusURL}/assets/' || gambar_idn "imgSrc"`,
+      `'${sqlSafeDirectusURL}/assets/' || gambar_idn "imgSrc"`,
     ];
   }
 

@@ -78,13 +78,13 @@ const CommentAdd = () => {
                   toggleLogin();
                 }
               }}
-              className='bg-main-blue text-white w-full rounded-lg py-2'
+              className='bg-white text-main-blue border border-main-blue text-sm w-full rounded-lg py-2'
             >
               {t("pointCommentButton")}
             </button>
             <div className='flex items-center'>
               <hr className='flex-1' />
-              <p className='mx-3 text-xs'>{t("or")}</p>
+              <p className='mx-3 text-xs text-gray-400'>{t("or")}</p>
               <hr className='flex-1' />
             </div>
             <button
@@ -96,7 +96,7 @@ const CommentAdd = () => {
                   toggleLogin();
                 }
               }}
-              className='bg-main-blue text-white w-full rounded-lg py-2'
+              className='bg-white text-main-blue border border-main-blue text-sm w-full rounded-lg py-2'
             >
               {t("commentButtonIsland")}
             </button>

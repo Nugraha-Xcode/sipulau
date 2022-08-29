@@ -25,13 +25,17 @@ import SimpulLayer from "../components/map/SimpulLayer";
 import AppContext from "../context/AppContext";
 import SimpulLayers from "../components/map/SimpulLayers";
 import SideNav from "../components/sideNav/SideNav";
-import { useNav } from "../hooks";
+import { useNav, useNetwork } from "../hooks";
 import MapToolbox from "../components/map/MapToolbox";
 import MapToolboxCard from "../components/map/MapToolboxCard";
 import BottomDrawer from "../components/core/BottomDrawer";
+import GeolocateController from "../components/map/GeolocateController";
+import ZoomInController from "../components/map/ZoomInController";
+import ZoomOutController from "../components/map/ZoomOutController";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
+  const activeLayer = useNetwork((state) => state.activeLayer);
   const columnObj = [
     { label: t("column1"), value: "fid" },
     { label: t("column2"), value: "id_wilayah" },
@@ -75,7 +79,6 @@ const map = () => {
   const [refreshLayer, setRefreshLayer] = useState(false);
   const [bbox, setBbox] = useState(null);
   const [activeLegend, setActiveLegend] = useState([]);
-  const [activeLayer, setActiveLayer] = useState([]);
   const [drawPoly, setDrawPoly] = useState(false);
 
   const mercRef = useRef(new SphericalMercator());
@@ -271,6 +274,16 @@ const map = () => {
     isExpandBottomDrawer && setOpenLegend(false);
   };
 
+  const sideNavPadding = {
+    "left-[25rem]": Boolean(activeSideFeature) && isOpenSideNav,
+    "left-[20rem]": Boolean(activeSideFeature) && !isOpenSideNav,
+    "left-[17.25rem]":
+      expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
+    "left-[6rem]":
+      !expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
+    "left-4": !isOpenSideNav && !Boolean(activeSideFeature),
+  };
+
   return (
     <>
       <Head>
@@ -328,8 +341,6 @@ const map = () => {
             handleZoomExtend,
             activeLegend,
             setActiveLegend,
-            activeLayer,
-            setActiveLayer,
             drawPoly,
             setDrawPoly,
           }}
@@ -346,21 +357,13 @@ const map = () => {
           {/* bottom left map controller */}
           <div
             className={clsx([
-              "absolute bottom-6 z-10 flex transition-all duration-100 ease-in-out",
-              {
-                "left-[31.8rem]": Boolean(activeSideFeature) && isOpenSideNav,
-                "left-[25.6rem]": Boolean(activeSideFeature) && !isOpenSideNav,
-                "left-[17.25rem]":
-                  expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
-                "left-[7.25rem]":
-                  !expandSideNav &&
-                  isOpenSideNav &&
-                  !Boolean(activeSideFeature),
-                "left-4": !isOpenSideNav && !Boolean(activeSideFeature),
-                "bottom-[27.5rem]": isOpenBottomDrawer,
-              },
+              "absolute bottom-6 z-10 flex flex-col gap-2 transition-all duration-100 ease-in-out",
+              { ...sideNavPadding, "bottom-[27.5rem]": isOpenBottomDrawer },
             ])}
           >
+            <GeolocateController map={mapRef.current} />
+            <ZoomInController map={mapRef.current} />
+            <ZoomOutController map={mapRef.current} />
             {Boolean(activeMenu) ? (
               <MapToolbox
                 isOpen={isOpenMapToolbox}
@@ -383,17 +386,7 @@ const map = () => {
           <div
             className={clsx([
               "absolute top-6 z-10 transition-all duration-100 ease-in-out",
-              {
-                "left-[31.8rem]": Boolean(activeSideFeature) && isOpenSideNav,
-                "left-[25.6rem]": Boolean(activeSideFeature) && !isOpenSideNav,
-                "left-[17.25rem]":
-                  expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
-                "left-[7.25rem]":
-                  !expandSideNav &&
-                  isOpenSideNav &&
-                  !Boolean(activeSideFeature),
-                "left-4": !isOpenSideNav && !Boolean(activeSideFeature),
-              },
+              sideNavPadding,
             ])}
           >
             <Tippy
@@ -508,7 +501,7 @@ const map = () => {
               />
             </ResizeableDrawer> */}
 
-          {/* {mapload && activeLayer.length > 0 && <SimpulLayers />} */}
+          {mapload && activeLayer.length > 0 && <SimpulLayers />}
           <Modal
             isShowing={isOpenMapFilter}
             handleModal={toggleMapFilter}

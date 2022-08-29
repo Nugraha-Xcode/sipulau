@@ -11,7 +11,7 @@
 }
 
 .input_search {
-  @apply w-full h-full focus:outline-none;
+  @apply w-full h-full focus:outline-none text-xs;
 }
 
 /* search suggestion */

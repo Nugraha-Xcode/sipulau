@@ -1,27 +1,23 @@
 import { useTranslation } from "next-i18next";
-import React, { useContext, useState, useCallback } from "react";
+import React, { useContext } from "react";
 import shallow from "zustand/shallow";
-import AppContext from "../../../../../context/AppContext";
-import { useNetwork } from "../../../../../hooks";
-import { mapListCategory } from "../../../../../utils/constant";
+import AppContext from "../../../context/AppContext";
+import { useNetwork } from "../../../hooks";
+import Loader from "../../core/Loader";
 
-import { Button, Dropdown } from "../../core";
-import style from "./CategoryNetworkSection.module.css";
-// drop down data value
-import { value } from "./dropdownData";
+import { Button, Dropdown } from "../sidebar-content/core";
 
-const CategoryNetworkSection = ({
+const NetworkNodeCategorySelection = ({
   onSubmit,
   getOrganizationList,
   getSimpulList,
+  isLoad,
 }) => {
   const { t } = useTranslation("simpulJaringan");
-  const { handleSetSnack } = useContext(AppContext);
   const [
     organizationList,
     category,
     setCategory,
-    setTotalData,
     selectOrganization,
     selectedOrganization,
   ] = useNetwork(
@@ -29,24 +25,18 @@ const CategoryNetworkSection = ({
       state.organizationList,
       state.category,
       state.setCategory,
-      state.setTotalData,
       state.selectOrganization,
       state.selectedOrganization,
     ],
     shallow
   );
-  // value for condition the button category state
   const [isActive, setIsActive] = React.useState({
     ministries: false,
     province: false,
     city: false,
   });
 
-  // value selected
   const [valueSelected, setValueSelected] = React.useState("");
-  console.log(valueSelected);
-
-  // state for button proceed
   const [proceedActive, setProceedActive] = React.useState(false);
 
   // this useEffect for button proceed
@@ -75,9 +65,13 @@ const CategoryNetworkSection = ({
   };
 
   return (
-    <div className={style.container}>
-      <div className={style.header}>Select Category</div>
+    <div className='flex flex-col w-full h-[fit-content] gap-3 relative'>
+      <Loader show={isLoad} />
+      <div className='font-semibold text-[#4F4C4A] py-2 text-base'>
+        Select Category
+      </div>
       <Button
+        className='text-sm'
         variant='outline'
         isActive={"Kementerian/Lembaga" === category}
         onClick={() => {
@@ -93,8 +87,9 @@ const CategoryNetworkSection = ({
       >
         {t("button1")}
       </Button>
-      <div className={style.container_button}>
+      <div className='flex gap-2'>
         <Button
+          className='text-sm'
           variant='outline'
           isActive={"Provinsi" === category}
           onClick={() => {
@@ -111,6 +106,7 @@ const CategoryNetworkSection = ({
           {t("button2")}
         </Button>
         <Button
+          className='text-sm'
           variant='outline'
           isActive={"Kabupaten/Kota" === category}
           onClick={() => {
@@ -134,9 +130,9 @@ const CategoryNetworkSection = ({
           direction='down'
           styleOptions={{
             height: "450px",
-            gap: "20px",
+            gap: "0px",
             position: "absolute",
-            top: "201px",
+            top: "190px",
           }}
           label='Select Network Category'
           valueSelected={selectedOrganization}
@@ -145,9 +141,11 @@ const CategoryNetworkSection = ({
       ) : null}
 
       <Button
+        className='text-sm'
         variant='normal'
         isActive={selectedOrganization}
         onClick={() => getSimpulList(1)}
+        disabled={!selectedOrganization}
       >
         Proceed
       </Button>
@@ -155,4 +153,4 @@ const CategoryNetworkSection = ({
   );
 };
 
-export default CategoryNetworkSection;
+export default NetworkNodeCategorySelection;

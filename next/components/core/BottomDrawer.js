@@ -17,10 +17,10 @@ const BottomDrawer = ({
           "h-[425px]": isOpen && !isExpandBottomDrawer,
           "h-[700px]": isOpen && isExpandBottomDrawer,
           "h-0": !isOpen,
-          "pl-[31rem]": isActiveSideFeature && isOpenNav,
+          "pl-96": isActiveSideFeature && isOpenNav,
           "pl-[25rem]": isActiveSideFeature && !isOpenNav,
           "pl-64": !isActiveSideFeature && isOpenNav && isExpandNav,
-          "pl-24": !isActiveSideFeature && isOpenNav && !isExpandNav,
+          "pl-20": !isActiveSideFeature && isOpenNav && !isExpandNav,
           "pl-1": !isActiveSideFeature && !isOpenNav,
         },
       ])}

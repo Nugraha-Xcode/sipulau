@@ -13,18 +13,18 @@ const CommentFeature = () => {
       <div className='flex'>
         <div
           data-cy='comment-feature-change-tab-1'
-          className={`flex-1 cursor-pointer text-center border-b-2 ${
+          className={`flex-1 cursor-pointer text-center border-b-2 pb-2 ${
             comment === "add" ? "border-main-blue" : ""
-          } text-main-gray font-semibold`}
+          } text-gray-600 font-semibold text-sm`}
           onClick={() => setComment("add")}
         >
           {t("addComment")}
         </div>
         <div
           data-cy='comment-feature-change-tab-2'
-          className={`flex-1 cursor-pointer text-center border-b-2 ${
+          className={`flex-1 cursor-pointer text-center border-b-2 pb-2 text-sm ${
             comment === "history" ? "border-main-blue" : ""
-          } text-main-gray font-semibold`}
+          } text-gray-600 font-semibold`}
           onClick={() => {
             isAuth ? setComment("history") : toggleLogin();
           }}

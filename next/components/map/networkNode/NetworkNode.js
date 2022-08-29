@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import shallow from "zustand/shallow";
-import AppContext from "../../context/AppContext";
-import { useNetwork } from "../../hooks";
-import { useNav } from "../../hooks/useNav";
-import {
-  AboutContent,
-  CategoryNetworkSection,
-  NetworkData,
-} from "./sidebar-content";
+import AppContext from "../../../context/AppContext";
+import { useNetwork } from "../../../hooks";
+import { useNav } from "../../../hooks/useNav";
+import Loader from "../../core/Loader";
+import NetworkNodeCategorySelection from "./NetworkNodeCategorySelection";
+import NetWorkNodeResult from "./NetworkNodeResult";
 
-const SideNetworkNode = () => {
+const NetworkNode = () => {
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
     shallow
@@ -68,8 +66,6 @@ const SideNetworkNode = () => {
     }
   }, []);
 
-  console.log(selectedOrganization);
-
   const getSimpulList = useCallback(
     async (currentPage) => {
       setIsFetch(true);
@@ -104,7 +100,6 @@ const SideNetworkNode = () => {
 
   useEffect(() => {
     const daftarLayananArr = [];
-
     for (let index in simpulList) {
       const extras = simpulList[index].extras;
       let minX = 0;
@@ -183,7 +178,7 @@ const SideNetworkNode = () => {
     <div className='flex h-full flex-col px-4 pt-9 pb-6 dark:bg-gray-800'>
       <div>
         <div className='flex items-center justify-between '>
-          <p className='text-gray-800 dark:text-gray-100'>
+          <p className='text-xl text-gray-800 dark:text-gray-100'>
             {activeSideFeature?.label || ""}
           </p>
           <button onClick={() => setActiveSideFeature(null)}>
@@ -192,16 +187,20 @@ const SideNetworkNode = () => {
         </div>
         <hr className='my-3 text-gray-200' />
       </div>
-      <div className='flex flex-1 flex-col gap-2 overflow-y-auto'>
-        {/* pass onSubmit props to handle proceed button */}
-        <CategoryNetworkSection
+      <div className='flex flex-1 flex-col gap-2 overflow-y-auto hide-scrollbar'>
+        <NetworkNodeCategorySelection
           getSimpulList={(currentPage) => getSimpulList(currentPage)}
           getOrganizationList={getOrganizationList}
+          isLoad={isLoad}
         />
-        {/* if resource array length is 0 it will render data not found */}
-        <NetworkData
-          getSimpulList={(currentPage) => getSimpulList(currentPage)}
-        />
+        {!simpulList ? (
+          <Loader show={isFetch} />
+        ) : (
+          <NetWorkNodeResult
+            getSimpulList={(currentPage) => getSimpulList(currentPage)}
+            isFetch={isFetch}
+          />
+        )}
       </div>
 
       {/* <div className='mt-2 rounded-[4px] bg-gray-50 p-2 dark:bg-gray-700'>
@@ -211,4 +210,4 @@ const SideNetworkNode = () => {
   );
 };
 
-export default SideNetworkNode;
+export default NetworkNode;

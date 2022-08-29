@@ -1,24 +1,36 @@
 import React from "react";
 import style from "./Button.module.css";
 
-const Button = ({ variant, children, onClick, isActive, isLayer }) => {
-  const className = [style.base];
+const Button = ({
+  variant,
+  children,
+  onClick,
+  isActive,
+  isLayer,
+  className,
+  disabled = false,
+}) => {
+  const customClassName = [style.base];
 
   switch (variant) {
     case "outline":
-      className.push(style.outline);
-      if (isActive) className.push(style.outline_active);
-      if (isActive && isLayer) className.push(style.outline_active_layer);
+      customClassName.push(style.outline);
+      if (isActive) customClassName.push(style.outline_active);
+      if (isActive && isLayer) customClassName.push(style.outline_active_layer);
       break;
 
     case "normal":
-      className.push(style.normal);
-      if (isActive) className.push(style.normal_active);
+      customClassName.push(style.normal);
+      if (isActive) customClassName.push(style.normal_active);
       break;
   }
 
   return (
-    <button className={className.join(" ")} onClick={onClick}>
+    <button
+      className={`${customClassName.join(" ")} ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

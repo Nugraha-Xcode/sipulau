@@ -24,7 +24,7 @@ const Accordion = ({ children, name }) => {
           </button>
         </div>
       </div>
-      <CustomTransition show={isActive} variant="fade-down">
+      <CustomTransition show={isActive} variant='fade-down'>
         <div className={style.content}>{children}</div>
       </CustomTransition>
     </div>
