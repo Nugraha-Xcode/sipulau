@@ -124,6 +124,9 @@ export default defineEndpoint((router, { exceptions, database }) => {
 
         const tokenPayload = {
           id: user.id,
+          role: REGISTERED_USER_ROLE_ID,
+          app_access: false,
+          admin_access: false,
         };
 
         const accessToken = jwt.sign(
