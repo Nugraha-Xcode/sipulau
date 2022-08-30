@@ -22,7 +22,7 @@ if (!fs.existsSync(dest)) {
 
 const download = url =>
   new Promise(resolve => {
-    http.get(url, res => {
+    http.get({hostname: "192.168.1.28", port: 3128, path: url}, res => {
       resolve(res.pipe(zlib.createGunzip({})).pipe(tar.t()));
     });
   });

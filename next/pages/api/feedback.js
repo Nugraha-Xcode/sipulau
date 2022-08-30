@@ -16,7 +16,7 @@ function validateCaptcha(captchaToken) {
       process.env.HCAPTCHA_SECRET_KEY
     )}&response=${encodeURIComponent(captchaToken)}`;
     const req =
-      process.env.NODE_ENV !== "production"
+      process.env.NODE_ENV === "production"
         ? http
             .request(
               {

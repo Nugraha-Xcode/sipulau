@@ -1,9 +1,9 @@
 FROM osgeo/gdal:ubuntu-small-3.4.0
 
-# ENV HTTP_PROXY="http://192.168.1.28:3128"
-# ENV HTTPS_PROXY="http://192.168.1.28:3128"
+ENV HTTP_PROXY="http://192.168.1.28:3128"
+ENV HTTPS_PROXY="http://192.168.1.28:3128"
 
-# RUN echo "Acquire::http::Proxy \"http://192.168.1.28:3128\";" >> /etc/apt/apt.conf
+RUN echo "Acquire::http::Proxy \"http://192.168.1.28:3128\";" >> /etc/apt/apt.conf
 
 RUN apt update && apt install python3-pip -y && pip3 install --upgrade pip
 

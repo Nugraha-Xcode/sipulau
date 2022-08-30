@@ -2,7 +2,7 @@ import http from "http";
 import httpProxy from "http-proxy";
 
 const proxyServer =
-  process.env.NODE_ENV !== "production"
+  process.env.NODE_ENV === "production"
     ? null
     : httpProxy.createProxyServer({});
 
@@ -53,7 +53,7 @@ export default async function proxyHandler(req, res) {
     return res.status(400).json({ message: "Proxy query is required" });
   }
   try {
-    if (process.env.NODE_ENV !== "production") {
+    if (process.env.NODE_ENV === "production") {
       await proxyRequest(proxy, req.method, res);
     } else {
       await proxyMiddleware(req, res, {
@@ -63,6 +63,7 @@ export default async function proxyHandler(req, res) {
       });
     }
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: `Proxy error` });
   }
 }
