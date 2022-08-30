@@ -14,7 +14,7 @@ const NavItem = ({
     <Tippy
       content={label}
       disabled={expand ? true : false}
-      placement='right'
+      placement="right"
       delay={300}
     >
       <button
@@ -41,7 +41,7 @@ const NavItem = ({
         </div>
         <p
           className={clsx([
-            "ml-1 select-none text-sm",
+            "ml-1 select-none",
             {
               "hidden opacity-0": !expand,
             },

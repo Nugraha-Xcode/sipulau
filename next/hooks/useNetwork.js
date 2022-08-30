@@ -4,11 +4,10 @@ export const useNetwork = create((set) => ({
   organizationList: [],
   selectedOrganization: null,
   category: "",
-  simpulList: null,
+  simpulList: [],
   totalData: 0,
   page: 1,
   daftarLayanan: [],
-  activeLayer: [],
   setOrganizationList: (item) => set({ organizationList: item }),
   selectOrganization: (item) => set({ selectedOrganization: item }),
   setCategory: (value) => set({ category: value }),
@@ -16,5 +15,4 @@ export const useNetwork = create((set) => ({
   setTotalData: (value) => set({ totalData: value }),
   setPage: (value) => set({ page: value }),
   setDaftarLayanan: (value) => set({ daftarLayanan: value }),
-  setActiveLayer: (value) => set({ activeLayer: value }),
 }));

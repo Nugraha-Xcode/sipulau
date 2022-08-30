@@ -1,42 +1,79 @@
 import { sipulauPool } from "../../db";
+import http from "http";
 import https from "https";
+
+const reqOptions = {
+  method: "POST",
+  headers: {
+    Host: "hcaptcha.com",
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
+};
 
 function validateCaptcha(captchaToken) {
   return new Promise((resolve, reject) => {
     let reqBody = `secret=${encodeURIComponent(
       process.env.HCAPTCHA_SECRET_KEY
     )}&response=${encodeURIComponent(captchaToken)}`;
-    const req = https
-      .request(
-        {
-          hostname: "hcaptcha.com",
-          path: "/siteverify",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        },
-        (res) => {
-          let data = "";
-          res.on("data", (chunk) => {
-            data += chunk;
-          });
-          res.on("end", () => {
-            if (res.statusCode !== 200) {
-              reject("HCaptcha error");
-            } else {
-              let parsedRes = JSON.parse(data);
-              resolve(parsedRes.success);
-            }
-          });
-          res.on("error", (error) => {
-            reject(error);
-          });
-        }
-      )
-      .on("error", (error) => {
-        reject(error);
-      });
+    const req =
+      process.env.NODE_ENV !== "production"
+        ? http
+            .request(
+              {
+                hostname: "192.168.1.28",
+                port: 3128,
+                path: "https://hcaptcha.com/siteverify",
+                ...reqOptions,
+              },
+              (res) => {
+                let data = "";
+                res.on("data", (chunk) => {
+                  data += chunk;
+                });
+                res.on("end", () => {
+                  if (res.statusCode !== 200) {
+                    reject("HCaptcha error: " + data);
+                  } else {
+                    let parsedRes = JSON.parse(data);
+                    resolve(parsedRes.success);
+                  }
+                });
+                res.on("error", (error) => {
+                  reject(error);
+                });
+              }
+            )
+            .on("error", (error) => {
+              reject(error);
+            })
+        : https
+            .request(
+              {
+                hostname: "hcaptcha.com",
+                path: "/siteverify",
+                ...reqOptions,
+              },
+              (res) => {
+                let data = "";
+                res.on("data", (chunk) => {
+                  data += chunk;
+                });
+                res.on("end", () => {
+                  if (res.statusCode !== 200) {
+                    reject("HCaptcha error: " + data);
+                  } else {
+                    let parsedRes = JSON.parse(data);
+                    resolve(parsedRes.success);
+                  }
+                });
+                res.on("error", (error) => {
+                  reject(error);
+                });
+              }
+            )
+            .on("error", (error) => {
+              reject(error);
+            });
     req.write(reqBody);
     req.end();
   });

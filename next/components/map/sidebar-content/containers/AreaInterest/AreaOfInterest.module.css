@@ -1,0 +1,11 @@
+.container {
+  @apply flex flex-col bg-white rounded-[8px] p-5 text-[#4F4C4A] gap-2;
+}
+
+.container p {
+  @apply text-sm;
+}
+
+.content {
+  @apply flex justify-center w-full h-full p-5 border-dotted border-[1px] items-center text-center text-sm text-[#B4B2AF];
+}

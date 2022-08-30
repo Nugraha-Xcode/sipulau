@@ -1,10 +1,13 @@
 // container
 import {
+  LayerManagementItem,
   SearchResult,
   AreaInterest,
+  CategoryNetworkSection,
   CommentSection,
   FileFormatDownload,
   LayerListDownload,
+  NetworkData,
   UploadSection,
 } from "./containers";
 
@@ -20,6 +23,7 @@ import {
 } from "./core";
 
 export {
+  LayerManagementItem,
   AboutContent,
   Searchbar,
   SearchResult,
@@ -29,6 +33,8 @@ export {
   AreaInterest,
   LayerListDownload,
   Button,
+  NetworkData,
+  CategoryNetworkSection,
   CommentSection,
   UploadSection,
   InputDropFiles,

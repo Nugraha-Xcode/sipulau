@@ -105,7 +105,7 @@ const Popup = ({ layername }) => {
       <div style={{ display: popRef.current ? "block" : "none" }}>
         <div
           ref={contentRef}
-          className='p-2 rounded-xl'
+          className='p-2 rounded-lg'
           //   style={{ width: "fit-content", maxWidth: 300, minWidth: 300 }}
         >
           <div className='flex py-3 px-4'>
