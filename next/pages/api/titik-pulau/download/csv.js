@@ -201,6 +201,9 @@ export default async function downloadCsvHandler(req, res) {
       res.end;
       return res.status(500).json({ message: "Terjadi kesalahan pada server" });
     });
+    req.on("close", () => {
+      stream.end()
+    })
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Terjadi kesalahan pada server" });
