@@ -2,24 +2,36 @@ import React from "react";
 import { Button, Dropdown } from "../../core";
 import style from "./FileFormatDownload.module.css";
 
-const FileFormatDownload = () => {
+const FileFormatDownload = ({
+  type,
+  setType,
+  handleDownloadCsv,
+  handleDownloadShp,
+}) => {
   // dropdown value
-  const value = [{ name: "CSV" }, { name: "SHP" }];
-
-  // selected value from dropdown
-  const [selectedValue, setSelectedValue] = React.useState(value[0]);
+  const value = [
+    { label: "CSV", value: "csv" },
+    { label: "SHP", value: "shp" },
+  ];
 
   return (
     <div className={style.container}>
       <Dropdown
         value={value}
-        onValueSelected={(item) => setSelectedValue(item)}
-        valueSelected={selectedValue}
-        gapOptions="25px"
-        direction="up"
+        onValueSelected={(item) => setType(item)}
+        valueSelected={type}
+        gapOptions='25px'
+        direction='up'
       />
-      {/* there is isActive props available for passing the button proceed logic */}
-      <Button variant="normal">Proceed</Button>
+      <button
+        data-cy='download-feature-add-aoi-button'
+        onClick={() => {
+          type.value === "csv" ? handleDownloadCsv() : handleDownloadShp();
+        }}
+        className={`p-1 bg-main-blue text-white w-full text-sm rounded-lg py-2`}
+      >
+        <p>Proceed</p>
+      </button>
     </div>
   );
 };

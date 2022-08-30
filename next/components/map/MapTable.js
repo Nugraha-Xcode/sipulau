@@ -156,7 +156,7 @@ const MapTable = ({
        
         </div> */}
         <div className='py-2 px-5 flex justify-between'>
-          <div className='flex items-center gap-3'>
+          <div className='flex items-center gap-2'>
             {/* <button
               data-cy='map-table-zoom-to-button'
               onClick={handleZoomTo}
@@ -165,14 +165,14 @@ const MapTable = ({
               <img src='/images/ic-zoom-to.svg' alt='button' className='h-4' />
               <p className='text-xs text-main-gray'>{t("zoom")}</p>
             </button> */}
-            <button
+            {/* <button
               onClick={() => {}}
               className={`flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg`}
             >
               <img src='/images/ic-table.svg' alt='button' className='h-4' />
               <p className='text-xs text-gray-600'>Toponim Pulau</p>
             </button>
-            <div className='border-l-2 border-l-gray-200 h-10' />
+            <div className='border-l-2 border-l-gray-200 h-10' /> */}
             <button
               data-cy='map-table-filter-by-map-extend-button'
               onClick={
@@ -319,7 +319,7 @@ const MapTable = ({
               </div>
             </Modal>
           </div>
-          <div className='relative flex items-center gap-3'>
+          <div className='relative flex items-center gap-2'>
             {/* <button
               data-cy='map-table-column-setting-button'
               onClick={() => setColumnOpt((prev) => !prev)}

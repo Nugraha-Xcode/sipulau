@@ -13,9 +13,9 @@ import MemoIcSearch from "../core/icons/IcSearch";
 import MemoIcUpload from "../core/icons/IcUpload";
 import SideComment from "../map/SideComment";
 import SideDownload from "../map/SideDownload";
-import SideLayerManagement from "../map/SideLayerManagement";
+import LayerManagement from "../map/layerManagement/LayerManagement";
 // import SideLayerTable from "../map/SideLayerTable";
-import SideNetworkNode from "../map/SideNetworkNode";
+import NetworkNode from "../map/networkNode/NetworkNode";
 import SideSearchIsland from "../map/SideSearchIsland";
 import SideUpload from "../map/SideUpload";
 
@@ -55,7 +55,7 @@ const NavMenu = ({
         handleOpenSideFeature({
           featureId: "layer-management",
           label: "Layer Management",
-          content: <SideLayerManagement />,
+          content: <LayerManagement />,
         }),
     },
     {
@@ -105,7 +105,7 @@ const NavMenu = ({
         handleOpenSideFeature({
           featureId: "network-node",
           label: "Network Node",
-          content: <SideNetworkNode />,
+          content: <NetworkNode />,
         }),
     },
     {
@@ -135,7 +135,7 @@ const NavMenu = ({
         </div>
         <div
           className={clsx([
-            "ml-6 flex flex-col gap-3",
+            "ml-4 flex flex-col gap-3",
             { "w-[13.250rem]": expand, "w-[2.75rem]": !expand },
           ])}
         >
@@ -152,7 +152,9 @@ const NavMenu = ({
           ))}
           <div className='flex h-[1.375rem] items-center px-3'>
             {expand ? (
-              <p className='whitespace-nowrap'>Geo-Map Management</p>
+              <p className='whitespace-nowrap text-sm text-gray-400'>
+                Geo-Map Management
+              </p>
             ) : (
               <hr className='text-black-500 w-full' />
             )}
@@ -174,7 +176,7 @@ const NavMenu = ({
 
       <div
         className={clsx([
-          "ml-6 mb-6 mt-10 flex flex-col gap-1",
+          "ml-4 mb-6 mt-10 flex flex-col gap-1",
           { "w-[13.250rem]": expand, "w-[2.75rem]": !expand },
         ])}
       >

@@ -3,6 +3,7 @@ import IcAccordion from "../../../../core/icons/icAccordion";
 import style from "./dropdown.module.css";
 import { Transition } from "@headlessui/react";
 import CustomTransition from "../CustomTransition";
+import clsx from "clsx";
 
 const Dropdown = ({
   value,
@@ -24,29 +25,15 @@ const Dropdown = ({
     setLabelValue("");
   };
 
-  // handle style dropdown
-
-  const buttonStyle = [style.button_select];
-
-  switch (direction) {
-    case "up":
-      if (isActive) buttonStyle.push(style.button_up_active);
-      break;
-
-    case "down":
-      if (isActive) buttonStyle.push(style.button_down_active);
-      break;
-  }
-
   return (
-    <div className={style.container}>
+    <div className='flex flex-col gap-2 w-full'>
       <CustomTransition
         show={direction === "up" && isActive}
         variant='fade-up'
         as={Fragment}
       >
         <div
-          className={style.options}
+          className='border-[#777574] w-full border-[1px] overflow-auto mb-[-8px] bg-white flex flex-col z-30'
           style={{
             borderRadius: "8px 8px 0px 0px",
             ...styleOptions,
@@ -56,7 +43,7 @@ const Dropdown = ({
             return (
               <div
                 key={index}
-                className={style.option}
+                className='cursor-pointer text-sm hover:bg-[#F2F2F2] py-3 px-4 transition-all'
                 onClick={() => handleOption(item)}
               >
                 {item.label}
@@ -67,7 +54,13 @@ const Dropdown = ({
       </CustomTransition>
 
       <button
-        className={buttonStyle.join(" ")}
+        className={clsx([
+          "flex w-full h-[40px] rounded-[8px] text-gray-600 border-[1px] border-gray-600 items-center px-4 py-2 justify-between bg-white text-left text-xs",
+          {
+            "rounded-b-none": isActive && direction === "down",
+            "rounded-t-none": isActive && direction === "up",
+          },
+        ])}
         onClick={() => setIsActive((prevState) => !prevState)}
       >
         {labelValue ? labelValue : valueSelected?.label}
@@ -85,7 +78,7 @@ const Dropdown = ({
         as={Fragment}
       >
         <div
-          className={style.options}
+          className='border-[#777574] w-full border-[1px] overflow-auto mb-[-8px] bg-white flex flex-col z-30'
           style={{
             borderRadius: "0px 0px 8px 8px",
             ...styleOptions,
@@ -94,7 +87,7 @@ const Dropdown = ({
           {value.map((item, index) => {
             return (
               <div
-                className={style.option}
+                className='cursor-pointer text-sm hover:bg-[#F2F2F2] py-3 px-4 transition-all text-gray-600'
                 onClick={() => handleOption(item)}
                 key={index}
               >

@@ -1,5 +1,5 @@
 .wrapper {
-  @apply relative h-[fit-content] w-full   border-[1px] px-2 py-[15px] gap-3  rounded-lg flex flex-col cursor-pointer hover:bg-gray-100  transition  my-3;
+  @apply relative h-[fit-content] w-full   border-[1px] px-2 py-[15px] gap-3  rounded-lg flex flex-col cursor-pointer hover:bg-gray-100  transition;
 }
 
 .container {

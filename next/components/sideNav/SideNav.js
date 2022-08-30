@@ -43,7 +43,7 @@ const SideNav = ({ handleViewTable }) => {
           variant='mini'
           //   expand={true}
           expand={expandSideNav}
-          drawerWidth='w-[6.250rem] min-w-[6.250rem]'
+          drawerWidth='w-[5rem] min-w-[5rem]'
           zindex='z-50'
         >
           <NavMenu
@@ -59,7 +59,7 @@ const SideNav = ({ handleViewTable }) => {
         </Drawer>
         <Drawer
           isOpen={Boolean(activeSideFeature)}
-          drawerWidth='w-[24.5rem] min-w-[24.5rem]'
+          drawerWidth='w-[19rem] min-w-[19rem]'
           zindex='z-40'
         >
           <MapSideDrawer />
