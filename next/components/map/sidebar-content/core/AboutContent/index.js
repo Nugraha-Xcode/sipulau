@@ -1,17 +1,16 @@
 import React from "react";
-import style from "./AboutContent.module.css";
 
 const AboutContent = ({ children, header, onClose }) => {
   return (
-    <div className={style.container}>
-      <div className={style.header_container}>
-        <div className={style.header}>{header}</div>
+    <div className='flex flex-col gap-2 bg-gray-50 rounded-[15px] p-2'>
+      <div className='flex justify-between  items-center'>
+        <div className='font-semibold text-xs text-gray-500'>{header}</div>
         {/* <button onCLick={onClose}>
           <img src="/images/ic-close.svg" alt="close button" className="" />
         </button> */}
       </div>
 
-      <div className={style.content}>{children}</div>
+      <div className='text-gray-500 text-xs'>{children}</div>
     </div>
   );
 };
