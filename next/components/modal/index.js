@@ -33,7 +33,7 @@ const Modal = ({ children, isShowing, handleModal, size }) => {
   return shouldRender
     ? ReactDOM.createPortal(
         <React.Fragment>
-          <div className='fixed top-0 left-0 z-[1010] w-screen h-screen overflow-x-hidden overflow-y-hidden overscroll-none p-5'>
+          <div className='fixed bg-gray-900 bg-opacity-60 top-0 left-0 z-[1010] w-screen h-screen overflow-x-hidden overflow-y-hidden overscroll-none p-5'>
             <div
               className={`fixed top-0 left-0  w-screen h-screen bg-black transition ease-in-out duration-300 ${
                 mount ? "bg-opacity-60" : "bg-opacity-0"
