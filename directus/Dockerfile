@@ -19,7 +19,10 @@
 # runner
 FROM directus/directus:9.16 as runner
 WORKDIR /directus
+RUN npx directus database install
+COPY schema.yml ./schema.yml
 # if using prebuilt:
 COPY extensions/dist extensions
 # if using builder:
 # COPY --from=builder /extensions/dist extensions
+CMD npx directus schema apply --yes ./schema.yml && npx directus database migrate:latest && npx directus start
