@@ -14,7 +14,6 @@ const LayerManagement = () => {
   );
 
   const [activeLayer] = useNetwork((state) => [state.activeLayer], shallow);
-  console.log(activeLayer);
 
   const [toponimVisibility, setToponimVisibility] = useState(
     map.getLayer("titikPulauMvt")
