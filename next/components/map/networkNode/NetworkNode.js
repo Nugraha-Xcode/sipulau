@@ -36,7 +36,7 @@ const NetworkNode = () => {
     try {
       setIsLoad(true);
       const res = await fetch(
-        "https://tanahair.indonesia.go.id/api/3/action/organization_list?all_fields=true&include_extras=true",
+        "https://tanahair.indonesia.go.id/sdi/api/3/action/organization_list?all_fields=true&include_extras=true",
         {
           method: "GET",
         }
@@ -45,7 +45,7 @@ const NetworkNode = () => {
 
       if (resData.result.length > 0) {
         let a = resData.result.filter((el) => {
-          if (el.extras[1]) {
+          if (el.extras[0]) {
             return el;
           }
         });
@@ -54,7 +54,7 @@ const NetworkNode = () => {
             return {
               label: el.title,
               value: el.name,
-              category: el.extras[1].value,
+              category: el.extras[0].value,
             };
           })
         );
@@ -71,7 +71,7 @@ const NetworkNode = () => {
       setIsFetch(true);
       try {
         const res = await fetch(
-          "https://tanahair.indonesia.go.id/api/3/action/package_search?fq=organization:" +
+          "https://tanahair.indonesia.go.id/sdi/api/3/action/package_search?fq=organization:" +
             selectedOrganization.value +
             "&start=" +
             (currentPage - 1) * 10,
@@ -140,8 +140,22 @@ const NetworkNode = () => {
           };
           daftarLayananArr.push(layanan);
         } else if (
+          resources[row].format === "" &&
+          resources[row].resource_locator_protocol === "ESRI:ArcGIS:MapServer"
+        ) {
+          const layanan = {
+            judul: simpulList[index].title,
+            nama: resources[row].name,
+            url: resources[row].url,
+            format: "Esri REST",
+            simpul: simpulList[index].organization.title,
+            bbox: minX + "," + minY + "," + maxX + "," + maxY,
+            srs: srs,
+          };
+          daftarLayananArr.push(layanan);
+        } else if (
           resources[row].format === "WMS" &&
-          resources[row].resource_locator_protocol === "OGC:WMS"
+          resources[row].resource_locator_protocol.substring(0, 7) === "OGC:WMS"
         ) {
           const layanan = {
             judul: simpulList[index].title,
@@ -152,21 +166,35 @@ const NetworkNode = () => {
             bbox: minX + "," + minY + "," + maxX + "," + maxY,
             srs: srs,
           };
+
           daftarLayananArr.push(layanan);
         } else if (
           resources[row].format === "" &&
-          resources[row].resource_locator_protocol === "OGC:WMS"
+          resources[row].resource_locator_protocol.substring(0, 7) === "OGC:WMS"
         ) {
-          const layanan = {
+          const layanan = new Layanan({
             judul: simpulList[index].title,
             nama: resources[row].name,
-            url: resources[row].url,
+            url: resources[row].url + "?",
             format: "WMS",
             simpul: simpulList[index].organization.title,
             bbox: minX + "," + minY + "," + maxX + "," + maxY,
+            srs: "EPSG:" + srs,
+          });
+          daftarLayananArr.push(layanan);
+        } else if (
+          resources[row].format === "" &&
+          resources[row].resource_locator_protocol.substring(0, 7) === "GeoJSON"
+        ) {
+          const layanan = new Layanan({
+            judul: simpulList[index].title,
+            nama: resources[row].name,
+            url: resources[row].url,
+            format: "GeoJSON",
+            simpul: simpulList[index].organization.title,
+            bbox: minX + "," + minY + "," + maxX + "," + maxY,
             srs: srs,
-          };
-
+          });
           daftarLayananArr.push(layanan);
         }
       }
