@@ -22,10 +22,16 @@ const LayerManagementItem = ({ item, index }) => {
       : true
   );
 
-  const [activeLayer, setActiveLayer] = useNetwork(
-    (state) => [state.activeLayer, state.setActiveLayer],
-    shallow
-  );
+  const [activeLayer, setActiveLayer, activeLegend, setActiveLegend] =
+    useNetwork(
+      (state) => [
+        state.activeLayer,
+        state.setActiveLayer,
+        state.activeLegend,
+        state.setActiveLegend,
+      ],
+      shallow
+    );
 
   useEffect(() => {
     map.getLayer(item.judul + item.nama) &&
@@ -88,11 +94,12 @@ const LayerManagementItem = ({ item, index }) => {
     //     return newArr;
     //   });
     // }
-    // setActiveLegend((prev) => {
-    //   let prevArr = [...prev];
-    //   return prevArr.filter((el) => el.id !== item.judul + item.nama);
-    // });
-  }, [activeLayer, map, item]);
+
+    let prevArrLegend = [...activeLegend];
+    setActiveLegend(
+      prevArrLegend.filter((el) => el.id !== item.judul + item.nama)
+    );
+  }, [activeLayer, map, item, activeLegend]);
 
   return (
     <div className='flex flex-col border-[1px] w-full h-[fit-content] relative pl-5 pr-3 py-3 rounded-[4px] shadow-style-1 gap-3'>
@@ -100,7 +107,7 @@ const LayerManagementItem = ({ item, index }) => {
         <div className='absolute w-[5px] rounded-xl h-full top-0 -left-3 bottom-0 m-auto bg-[#FFCE1E]' />
 
         <div
-          className='flex flex-col'
+          className='flex flex-col flex-1'
           onClick={() => setIsShowOpacity((prevState) => !prevState)}
         >
           <div className='font-semibold text-xs'>{item.judul}</div>
@@ -116,7 +123,7 @@ const LayerManagementItem = ({ item, index }) => {
                   : "/images/ic-eye-crossed.svg"
               }`}
               alt='icon'
-              className='w-5 h-5'
+              className='w-4 h-4'
             />
           </button>
 
@@ -124,7 +131,7 @@ const LayerManagementItem = ({ item, index }) => {
             <img
               src='/images/ic-arrow-reg.svg'
               alt='icon'
-              className='w-4 h-4'
+              className='w-3 h-3'
             />
           </button>
 
@@ -132,14 +139,14 @@ const LayerManagementItem = ({ item, index }) => {
             <img
               src='/images/ic-arrow-reg.svg'
               alt='icon'
-              className='w-4 h-4 rotate-180'
+              className='w-3 h-3 rotate-180'
             />
           </button>
         </div>
       </div>
       {/* open OpacityController component for manage the logic and API implementation */}
       <CustomTransition show={isShowOpacity} variant='fade-down'>
-        <OpacityController handleDelete={handleRemoveLayer} />
+        <OpacityController handleDelete={handleRemoveLayer} item={item} />
       </CustomTransition>
     </div>
   );

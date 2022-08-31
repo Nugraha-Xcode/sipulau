@@ -32,6 +32,7 @@ import BottomDrawer from "../components/core/BottomDrawer";
 import GeolocateController from "../components/map/GeolocateController";
 import ZoomInController from "../components/map/ZoomInController";
 import ZoomOutController from "../components/map/ZoomOutController";
+import Legend from "../components/map/legend/Legend";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
@@ -405,6 +406,16 @@ const map = () => {
             </Tippy>
           </div>
           {/* top left map controller */}
+
+          {/* top right map controller */}
+          <Legend
+            isOpen={isOpenLegend}
+            setOpen={() => {
+              setOpenLegend((prev) => !prev);
+              isExpandBottomDrawer && setExpandBottomDrawer(false);
+            }}
+          />
+          {/* top right map controller */}
 
           {/* bottom drawer table */}
           <div className='absolute bottom-0 z-20 w-screen'>

@@ -1,4 +1,5 @@
 import { useTranslation } from "next-i18next";
+import shallow from "zustand/shallow";
 import React, { useCallback, useContext } from "react";
 import AppContext from "../../../context/AppContext";
 import { useNetwork } from "../../../hooks";
@@ -9,15 +10,29 @@ import NetworkNodeResultItem from "./NetworkNodeResultItem";
 const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
   const { t } = useTranslation("simpulJaringan");
   const { handleSetSnack } = useContext(AppContext);
-  const [page, setPage, totalData, daftarLayanan, activeLayer, setActiveLayer] =
-    useNetwork((state) => [
+  const [
+    page,
+    setPage,
+    totalData,
+    daftarLayanan,
+    activeLayer,
+    setActiveLayer,
+    setActiveLegend,
+    activeLegend,
+  ] = useNetwork(
+    (state) => [
       state.page,
       state.setPage,
       state.totalData,
       state.daftarLayanan,
       state.activeLayer,
       state.setActiveLayer,
-    ]);
+      state.setActiveLegend,
+      state.activeLegend,
+    ],
+    shallow
+  );
+
   const [value, setValue] = React.useState("");
 
   //   this should be an array contains the boolean value of each item
@@ -51,6 +66,51 @@ const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
     }
     return thumbnailUrl;
   }, []);
+
+  const getLegendList = useCallback(
+    async (item) => {
+      try {
+        const link = new URL(item.url);
+
+        if (item.format === "WMS") {
+          link.search =
+            "?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=" +
+            item.nama;
+
+          let arr = [...activeLegend];
+          arr.push({
+            id: item.judul + item.nama,
+            label: item.simpul,
+            judul: item.judul,
+            legendImageUrl:
+              link.protocol === "http:"
+                ? "/api/proxy?proxy=" + encodeURIComponent(link.href)
+                : link.href,
+          });
+          setActiveLegend(arr);
+        } else {
+          link.pathname += "/legend";
+          link.search = "?f=json";
+          let url =
+            link.protocol === "http:"
+              ? "/api/proxy?proxy=" + encodeURIComponent(link.href)
+              : link.href;
+          const res = await fetch(url);
+          const resData = await res.json();
+          let arr = [...activeLegend];
+          arr.push({
+            id: item.judul + item.nama,
+            label: item.nama,
+            legendList: resData.layers,
+          });
+          setActiveLegend(arr);
+        }
+      } catch (error) {
+        handleSetSnack(error.message, "error");
+      }
+    },
+    [activeLegend]
+  );
 
   const handleTambahLayer = useCallback(
     async (el) => {
@@ -95,6 +155,7 @@ const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
       ) {
         currentActiveLayer.push(el);
         setActiveLayer(currentActiveLayer);
+        getLegendList(el);
       } else {
         handleSetSnack("Layer sudah ditambahkan", "warning");
       }
@@ -149,7 +210,7 @@ const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
       //   return a;
       // });
     },
-    [activeLayer]
+    [activeLayer, getLegendList]
   );
 
   return (
