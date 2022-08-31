@@ -36,7 +36,10 @@ import Legend from "../components/map/legend/Legend";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
-  const activeLayer = useNetwork((state) => state.activeLayer);
+  const [activeLayer, activeLegend] = useNetwork(
+    (state) => [state.activeLayer, state.activeLegend],
+    shallow
+  );
   const columnObj = [
     { label: t("column1"), value: "fid" },
     { label: t("column2"), value: "id_wilayah" },
@@ -79,7 +82,7 @@ const map = () => {
   const [column, setColumn] = useState(columnObj);
   const [refreshLayer, setRefreshLayer] = useState(false);
   const [bbox, setBbox] = useState(null);
-  const [activeLegend, setActiveLegend] = useState([]);
+  // const [activeLegend, setActiveLegend] = useState([]);
   const [drawPoly, setDrawPoly] = useState(false);
 
   const mercRef = useRef(new SphericalMercator());
@@ -340,8 +343,8 @@ const map = () => {
             bbox,
             setBbox,
             handleZoomExtend,
-            activeLegend,
-            setActiveLegend,
+            // activeLegend,
+            // setActiveLegend,
             drawPoly,
             setDrawPoly,
           }}
@@ -408,13 +411,15 @@ const map = () => {
           {/* top left map controller */}
 
           {/* top right map controller */}
-          <Legend
-            isOpen={isOpenLegend}
-            setOpen={() => {
-              setOpenLegend((prev) => !prev);
-              isExpandBottomDrawer && setExpandBottomDrawer(false);
-            }}
-          />
+          {activeLegend.length > 0 && (
+            <Legend
+              isOpen={isOpenLegend}
+              setOpen={() => {
+                setOpenLegend((prev) => !prev);
+                isExpandBottomDrawer && setExpandBottomDrawer(false);
+              }}
+            />
+          )}
           {/* top right map controller */}
 
           {/* bottom drawer table */}
