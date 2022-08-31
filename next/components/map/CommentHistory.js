@@ -64,27 +64,31 @@ const CommentHistory = () => {
   return (
     <div
       data-cy='comment-feature-comment-history-tab'
-      className='py-5 space-y-3 overflow-y-scroll max-h-96 hide-scrollbar'
+      className={`py-5 flex flex-col gap-2 w-full ${
+        commentList.length > 0
+          ? "divide-y divide-gray-400 divide-opacity-60"
+          : ""
+      }`}
       ref={rootObserver}
     >
       {commentList.length > 0 ? (
         commentList.map((el, index) => (
-          <div className='flex flex-col gap-2 text-main-gray' key={index}>
+          <div className='flex flex-col gap-2 text-main-gray pt-3' key={index}>
             <div className='flex items-center gap-2'>
-              <p className='font-semibold'>
+              <p className='font-semibold text-xs'>
                 {t("modalTitle") + " " + t(el.jenis)}
               </p>
               <div className='w-1 h-1 rounded-full bg-main-gray' />
               <p
                 className={`${
                   el.status === "menunggu"
-                    ? "bg-main-orange"
+                    ? "bg-[#FFCE1E]"
                     : el.status === "diterima"
-                    ? "bg-main-green"
+                    ? "bg-[#A4D21C]"
                     : el.status === "ditolak"
-                    ? "bg-main-red"
+                    ? "bg-[#B33A2A]"
                     : "bg-[#ebd037]"
-                } bg-opacity-60 px-2 text-white w-[fit-content] rounded-full`}
+                } text-xs px-3 py-1 text-white w-[fit-content] rounded-lg`}
               >
                 {t(el.status)}
               </p>
@@ -109,8 +113,8 @@ const CommentHistory = () => {
                 ]}
               />
             ) : null}
-            <p>{el.isi || "-"}</p>
-            <p>
+            <p className='text-xs'>{el.isi || "-"}</p>
+            <p className='text-xs text-gray-400'>
               {new Date(el.date_created).toLocaleDateString(t("dateLocales"), {
                 year: "numeric",
                 month: "long",
@@ -120,7 +124,7 @@ const CommentHistory = () => {
           </div>
         ))
       ) : (
-        <div className='flex flex-col items-center justify-center'>
+        <div className='flex flex-col items-center justify-center w-full'>
           <img
             src='/images/ic-empty-state.svg'
             alt='icon empty state'

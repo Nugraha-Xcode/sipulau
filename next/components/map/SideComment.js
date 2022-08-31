@@ -23,11 +23,11 @@ const SideComment = () => {
         </div>
         <hr className='my-3 text-gray-200' />
       </div>
-      <div className='flex flex-1 flex-col gap-2 overflow-y-auto'>
-        {/* open this comment for more detail */}
-        {/* <CommentSection /> */}
-        <CommentFeature />
-      </div>
+      {/* <div className='flex flex-1 flex-col gap-2'> */}
+      {/* open this comment for more detail */}
+      {/* <CommentSection /> */}
+      <CommentFeature />
+      {/* </div> */}
 
       <div className='mt-2 rounded-[4px] bg-gray-50 p-2 dark:bg-gray-700'></div>
     </div>
