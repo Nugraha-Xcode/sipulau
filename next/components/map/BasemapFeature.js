@@ -56,7 +56,7 @@ const BasemapFeature = () => {
               className='flex gap-3 items-center'
               data-cy='basemap-feature-load'
             >
-              <Skeleton style='w-16 h-16' shape='bar' />
+              <Skeleton style='w-16 h-8' shape='bar' />
               <Skeleton style='w-1/2 h-3' shape='bar' />
             </div>
           ))
@@ -109,9 +109,9 @@ const BasemapFeature = () => {
               <img
                 src={el.imgSrc}
                 alt={el.label}
-                className='w-16 h-16 rounded-lg'
+                className='w-16 h-8 rounded-[4px] text-gray-800'
               />
-              <p>{el.label}</p>
+              <p className='text-xs text-gray-800'>{el.label}</p>
             </div>
           ))}
     </div>

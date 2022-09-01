@@ -3,7 +3,7 @@ import Tippy from "@tippyjs/react";
 const GeolocateController = ({ map }) => {
   return (
     <div
-      className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg bg-white text-gray-600 hover:bg-gray-50 hover:text-brand-400'
+      className='flex h-10 w-10 mt-2 cursor-pointer items-center justify-center rounded-[4px] bg-white text-gray-600 hover:bg-gray-50 hover:text-brand-400'
       onClick={() => {
         navigator.geolocation.getCurrentPosition((position) => {
           if (!map.getSource("geolocate-points"))

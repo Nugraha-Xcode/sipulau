@@ -124,7 +124,7 @@ const NavMenu = ({
   return (
     <div className='flex h-full flex-col'>
       <div className='flex-1'>
-        <div className='p-6'>
+        <div className='p-4'>
           <div className='flex h-12 items-center justify-center px-2'>
             <img
               src={"/images/logo-big-text.svg"}
@@ -135,7 +135,7 @@ const NavMenu = ({
         </div>
         <div
           className={clsx([
-            "ml-4 flex flex-col gap-3",
+            "ml-2 flex flex-col gap-3",
             { "w-[13.250rem]": expand, "w-[2.75rem]": !expand },
           ])}
         >
@@ -176,7 +176,7 @@ const NavMenu = ({
 
       <div
         className={clsx([
-          "ml-4 mb-6 mt-10 flex flex-col gap-1",
+          "ml-2 mb-6 mt-10 flex flex-col gap-1",
           { "w-[13.250rem]": expand, "w-[2.75rem]": !expand },
         ])}
       >

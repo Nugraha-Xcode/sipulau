@@ -33,6 +33,7 @@ import GeolocateController from "../components/map/GeolocateController";
 import ZoomInController from "../components/map/ZoomInController";
 import ZoomOutController from "../components/map/ZoomOutController";
 import Legend from "../components/map/legend/Legend";
+import MapTrackPointer from "../components/map/MapTrackPointer";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
@@ -279,11 +280,11 @@ const map = () => {
   };
 
   const sideNavPadding = {
-    "left-[25rem]": Boolean(activeSideFeature) && isOpenSideNav,
-    "left-[20rem]": Boolean(activeSideFeature) && !isOpenSideNav,
-    "left-[17.25rem]":
+    "left-[22.75rem]": Boolean(activeSideFeature) && isOpenSideNav,
+    "left-[18.75rem]": Boolean(activeSideFeature) && !isOpenSideNav,
+    "left-[15rem]":
       expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
-    "left-[6rem]":
+    "left-[4.75rem]":
       !expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
     "left-4": !isOpenSideNav && !Boolean(activeSideFeature),
   };
@@ -361,7 +362,7 @@ const map = () => {
           {/* bottom left map controller */}
           <div
             className={clsx([
-              "absolute bottom-6 z-10 flex flex-col gap-2 transition-all duration-100 ease-in-out",
+              "absolute bottom-6 z-10 flex flex-col gap-0 transition-all duration-100 ease-in-out",
               { ...sideNavPadding, "bottom-[27.5rem]": isOpenBottomDrawer },
             ])}
           >
@@ -402,7 +403,7 @@ const map = () => {
                 onClick={() => {
                   setOpenSideNav(!isOpenSideNav);
                 }}
-                className='z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-white hover:text-brand-400'
+                className='z-50 flex h-10 w-10 items-center justify-center rounded-[4px] bg-white hover:text-brand-400'
               >
                 <img src='/images/ic-tab.svg' alt='Menu Toggle' />
               </button>
@@ -421,6 +422,10 @@ const map = () => {
             />
           )}
           {/* top right map controller */}
+
+          {/* bottom left map feature */}
+          {mapload && <MapTrackPointer map={mapRef.current} />}
+          {/* bottom left map feature */}
 
           {/* bottom drawer table */}
           <div className='absolute bottom-0 z-20 w-screen'>

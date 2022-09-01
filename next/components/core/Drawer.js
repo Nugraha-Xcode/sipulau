@@ -15,7 +15,7 @@ const Drawer = ({
           ? "w-0"
           : variant === "mini"
           ? expand
-            ? "w-[16.25rem]"
+            ? "w-[14.25rem]"
             : drawerWidth
           : drawerWidth
       } h-screen transition-all duration-100 ${zindex}`}

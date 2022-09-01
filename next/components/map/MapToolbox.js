@@ -31,7 +31,7 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
   };
 
   return (
-    <div className='flex w-10 flex-col rounded-lg bg-white p-2 transition-all duration-300 ease-in-out'>
+    <div className='flex w-10 mt-2 flex-col rounded-[4px] bg-white p-2 transition-all duration-300 ease-in-out'>
       <div
         className={`${
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
