@@ -111,7 +111,7 @@ const BasemapFeature = () => {
                 alt={el.label}
                 className='w-16 h-8 rounded-[4px] text-gray-800'
               />
-              <p className='text-xs text-gray-800'>{el.label}</p>
+              <p className='text-[10px] text-gray-800'>{el.label}</p>
             </div>
           ))}
     </div>
