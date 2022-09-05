@@ -1,18 +1,10 @@
 import React from "react";
-import style from "./Searchbar.module.css";
 import { SearchSuggestion } from "./SearchSuggestion";
 import { Transition } from "@headlessui/react";
 
-const Searcbar = ({ value, setValue, hasSuggestion = true, onChange }) => {
-  const contentClassname = [style.content];
-
-  if (value && hasSuggestion) contentClassname.push(style.content_active);
-
+const Searcbar = ({ value, setValue, hasSuggestion = true, onSearch }) => {
   // this is for get value from searchbar
   const handleChangesValue = (e) => {
-    // initialize api in onchanges function
-    onChange;
-
     setValue(e.target.value);
   };
 
@@ -22,48 +14,46 @@ const Searcbar = ({ value, setValue, hasSuggestion = true, onChange }) => {
   };
 
   return (
-    <div className={style.container}>
-      <div className={contentClassname.join(" ")}>
+    <div className='w-full h-auto relative'>
+      <div className='w-full  flex border-[1px] h-10 rounded-[10px] items-center px-2 border-gray-400'>
         <input
-          className={style.input_search}
-          placeholder="Enter keyword or Coordinate"
+          className='w-full h-full focus:outline-none text-xs'
+          placeholder='Enter keyword or Coordinate'
           onChange={(e) => handleChangesValue(e)}
           value={value}
         />
 
         {value && (
-          <div className={style.close_container}>
-            <button className={style.button_close} onClick={handleClearValue}>
+          <div className='w-[fit-content] flex items-center  h-full px-2 gap-1'>
+            <button className='w-5 h-4' onClick={handleClearValue}>
               <img
-                src="/images/ic-close.svg"
-                alt="close button"
-                className={style.close_icon}
+                src='/images/ic-close.svg'
+                alt='close button'
+                className='w-4 h-4'
               />
             </button>
 
-            <div className={style.divider} />
+            <div className='w-[1px] h-5 bg-gray-300' />
           </div>
         )}
 
-        <button className={style.button_search}>
+        <button onClick={onSearch}>
           <img
-            src="/images/ic-search.svg"
-            alt="search Button"
-            className={style.search_icon}
+            src='/images/ic-search.svg'
+            alt='search Button'
+            className='w-5 h-5'
           />
         </button>
       </div>
 
       {/* if there is a value on input searchbar */}
-      {hasSuggestion && value && (
-        <div className={style.suggestion_container}>
-          {/* loop this component for search functionality and pass onClick props to give click functionality */}
+      {/* {hasSuggestion && value && (
+        <div className='flex flex-col absolute w-full h-[fit-content] bg-white  border-gray-400 border-[1px] rounded-b-[10px] z-40 transition-all'>
           <SearchSuggestion>Pulau Seribu</SearchSuggestion>
           <SearchSuggestion>kecamatan pulau seribu</SearchSuggestion>
           <SearchSuggestion>kepulauan seribu</SearchSuggestion>
-          {/* ============================================ */}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
