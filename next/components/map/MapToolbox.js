@@ -8,6 +8,7 @@ import MemoIcExtent from "../core/icons/IcExtent";
 import MemoIcMinimize from "../core/icons/IcMinimize";
 import MemoIcRuler from "../core/icons/IcRuler";
 import BasemapFeature from "./BasemapFeature";
+import MeasurementFeature from "./toolbox/MeasurementFeature";
 
 const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
   const [activeSideFeature, activeCardFeature, setActiveCardFeature] = useNav(
@@ -65,7 +66,14 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
           </Tippy>
           <Tippy content='Measurement' placement='right' delay={300}>
             <button
-              onClick={() => {}}
+              onClick={() =>
+                handleOpenCardFeature({
+                  featureId: "ruler",
+                  iconId: "map-ruler",
+                  label: "Measurement",
+                  content: <MeasurementFeature />,
+                })
+              }
               className='flex h-7 w-7 items-center justify-center rounded text-gray-600 hover:bg-gray-50 hover:text-brand-400'
             >
               <MemoIcRuler />

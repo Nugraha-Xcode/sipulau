@@ -23,9 +23,15 @@ const MapToolboxCard = ({ isOpen, onClose }) => {
         ])}
       >
         <div className='flex items-center justify-between'>
-          <p className='text-xs text-gray-600'>Base map</p>
+          <p className='text-[10px] text-gray-600'>
+            {activeCardFeature && activeCardFeature.label}
+          </p>
           <button onClick={onClose}>
-            <img src='/images/ic-close.svg' alt='close button' />
+            <img
+              src='/images/ic-close.svg'
+              alt='close button'
+              className='w-2 h-2'
+            />
           </button>
         </div>
         <hr />
