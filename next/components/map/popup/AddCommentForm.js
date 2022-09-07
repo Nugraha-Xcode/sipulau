@@ -3,9 +3,15 @@ import { useTranslation } from "react-i18next";
 import { uploadFolderIds } from "../../../utils/constant";
 import AppContext from "../../../context/AppContext";
 import PopupContext from "../../../context/PopupContext";
+import { useComment } from "../../../hooks";
+import shallow from "zustand/shallow";
 
-const AddComment = ({ onClose, type, coor, selectedId }) => {
+const AddCommentForm = ({ onClose }) => {
   const { t } = useTranslation("popupPulau");
+  const [type, coor, selectedId] = useComment(
+    (state) => [state.type, state.coor, state.selectedId],
+    shallow
+  );
   const { handleSetSnack, authToken } = useContext(AppContext);
   const { infoPulau } = useContext(PopupContext);
   const [imgFile, setImgFile] = useState([]);
@@ -373,4 +379,4 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
   );
 };
 
-export default AddComment;
+export default AddCommentForm;

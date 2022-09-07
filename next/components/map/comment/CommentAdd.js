@@ -1,20 +1,25 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import MapContext from "../../../context/MapContext";
-import Modal from "../../modal";
-import AddComment from "../popup/AddComment";
-import useToggle from "../../../utils/useToggle";
+import AddCommentForm from "../popup/AddCommentForm";
 import AppContext from "../../../context/AppContext";
+import { useComment } from "../../../hooks";
+import shallow from "zustand/shallow";
 
 const CommentAdd = () => {
   const { t } = useTranslation("komentar");
+  const [type, setType, coor, setCoor, setSelectedId] = useComment(
+    (state) => [
+      state.type,
+      state.setType,
+      state.coor,
+      state.setCoor,
+      state.setSelectedId,
+    ],
+    shallow
+  );
   const { toggleLogin, isAuth } = useContext(AppContext);
   const { map } = useContext(MapContext);
-  const [type, setType] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
-
-  const [coor, setCoor] = useState({});
-  const [commentForm, setCommentForm] = useToggle();
 
   const comment = {
     titik: {
@@ -75,7 +80,6 @@ const CommentAdd = () => {
         },
       });
       setCoor(e.lngLat);
-      setCommentForm();
     };
     const handlePulau = (e) => {
       setSelectedId(e.features[0].id);
@@ -83,7 +87,6 @@ const CommentAdd = () => {
         lng: e.features[0].geometry.coordinates[0],
         lat: e.features[0].geometry.coordinates[1],
       });
-      setCommentForm();
     };
     if (type === "titik") {
       map.on("click", handleTitik);
@@ -103,6 +106,15 @@ const CommentAdd = () => {
     };
   }, [type]);
 
+  useEffect(() => {
+    //cleanup
+    return () => {
+      setType(null);
+      setCoor({});
+      setSelectedId(null);
+    };
+  }, []);
+
   const handleCancelAddComment = () => {
     map.getSource("comment-point").setData({
       type: "Feature",
@@ -116,6 +128,7 @@ const CommentAdd = () => {
       map.getCanvas().style.cursor = "";
     });
     setType(null);
+    setCoor({});
   };
 
   return (
@@ -167,7 +180,7 @@ const CommentAdd = () => {
             </button>
           </div>
         </div>
-      ) : !commentForm ? (
+      ) : Object.keys(coor).length === 0 ? (
         <div data-cy='comment-feature-add-comment'>
           <div className='p-3 flex flex-col items-center justify-center text-center gap-2'>
             <img
@@ -189,16 +202,8 @@ const CommentAdd = () => {
           </button>
         </div>
       ) : null}
-      {commentForm && (
-        <AddComment
-          onClose={() => {
-            setCommentForm();
-            handleCancelAddComment();
-          }}
-          type={type}
-          coor={coor}
-          selectedId={selectedId}
-        />
+      {Object.keys(coor).length !== 0 && (
+        <AddCommentForm onClose={handleCancelAddComment} />
       )}
     </div>
   );

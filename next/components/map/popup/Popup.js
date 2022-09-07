@@ -8,11 +8,9 @@ import MapContext from "../../../context/MapContext";
 import AnimationCard from "../../core/AnimationCard";
 // import BottomDrawer from "../../core/BottomDrawer";
 import useToggle from "../../../utils/useToggle";
-import Modal from "../../modal";
 import InformasiPulau from "./InformasiPulau";
 // import MobilePopup from "./MobilePopup";
 import SidePopup from "./SidePopup";
-import AddComment from "./AddComment";
 
 const Popup = ({ layername }) => {
   const { t } = useTranslation("popupPulau");
@@ -144,13 +142,13 @@ const Popup = ({ layername }) => {
           >
             <SidePopup setIsOpen={setIsOpen} feature={activeFeature} />
           </AnimationCard>
-          <Modal
+          {/* <Modal
             isShowing={isAddComment}
             handleModal={openAddComment}
             size='lg'
           >
             <AddComment onClose={openAddComment} type='pulau' />
-          </Modal>
+          </Modal> */}
         </div>
       </div>
       {/* <BottomDrawer

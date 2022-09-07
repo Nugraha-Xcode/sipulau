@@ -7,9 +7,20 @@ import useToggle from "../../../utils/useToggle";
 import Modal from "../../modal";
 import AppContext from "../../../context/AppContext";
 import MapContext from "../../../context/MapContext";
+import { useComment, useNav } from "../../../hooks";
+import shallow from "zustand/shallow";
+import SideComment from "../comment/SideComment";
 
 const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
   const { t } = useTranslation("popupPulau");
+  const [setExpandSideNav, setActiveSideFeature] = useNav(
+    (state) => [state.setExpandSideNav, state.setActiveSideFeature],
+    shallow
+  );
+  const [setSelectedId, setCoor, setType] = useComment(
+    (state) => [state.setSelectedId, state.setCoor, state.setType],
+    shallow
+  );
   const popupItems = [
     {
       label: t("attribute1"),
@@ -149,7 +160,18 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
             className='w-full bg-main-blue text-white p-2 rounded-lg text-sm'
             onClick={() => {
               if (window.innerWidth >= 768) {
-                toggle();
+                setExpandSideNav(false);
+                setActiveSideFeature({
+                  featureId: "comments",
+                  label: "Comments",
+                  content: <SideComment />,
+                });
+                setType("pulau");
+                setSelectedId(infoPulau.id_toponim);
+                setCoor({
+                  lng: infoPulau.long,
+                  lat: infoPulau.lat,
+                });
               } else {
                 toggleModal();
               }
