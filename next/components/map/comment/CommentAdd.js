@@ -51,7 +51,7 @@ const CommentAdd = () => {
         source: "comment-point",
         layout: {
           "icon-image": "marker-comment",
-          "icon-size": 0.3,
+          "icon-size": 0.2,
         },
       });
     }
