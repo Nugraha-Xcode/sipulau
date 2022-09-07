@@ -2,7 +2,6 @@
 import {
   SearchResult,
   AreaInterest,
-  CommentSection,
   FileFormatDownload,
   LayerListDownload,
   UploadSection,
@@ -29,7 +28,6 @@ export {
   AreaInterest,
   LayerListDownload,
   Button,
-  CommentSection,
   UploadSection,
   InputDropFiles,
   CustomTransition,
