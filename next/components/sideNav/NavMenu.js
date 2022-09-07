@@ -11,7 +11,7 @@ import MemoIcMinimize from "../core/icons/IcMinimize";
 import MemoIcNetwork from "../core/icons/IcNetwork";
 import MemoIcSearch from "../core/icons/IcSearch";
 import MemoIcUpload from "../core/icons/IcUpload";
-import SideComment from "../map/SideComment";
+import SideComment from "../map/comment/SideComment";
 import SideDownload from "../map/SideDownload";
 import LayerManagement from "../map/layerManagement/LayerManagement";
 // import SideLayerTable from "../map/SideLayerTable";

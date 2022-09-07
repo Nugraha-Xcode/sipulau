@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import MapContext from "../../context/MapContext";
-import Modal from "../modal";
-import AddComment from "./popup/AddComment";
-import useToggle from "../../utils/useToggle";
-import AppContext from "../../context/AppContext";
+import MapContext from "../../../context/MapContext";
+import Modal from "../../modal";
+import AddComment from "../popup/AddComment";
+import useToggle from "../../../utils/useToggle";
+import AppContext from "../../../context/AppContext";
 
 const CommentAdd = () => {
   const { t } = useTranslation("komentar");
@@ -14,7 +14,7 @@ const CommentAdd = () => {
   const [selectedId, setSelectedId] = useState(null);
 
   const [coor, setCoor] = useState({});
-  const [isAddComment, openAddComment] = useToggle();
+  const [commentForm, setCommentForm] = useToggle();
 
   const comment = {
     titik: {
@@ -30,14 +30,60 @@ const CommentAdd = () => {
   };
 
   useEffect(() => {
+    if (!map.getSource("comment-point")) {
+      map.addSource("comment-point", {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [],
+          },
+        },
+      });
+      map.loadImage("/images/marker-point.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("marker-comment", image);
+      });
+      map.addLayer({
+        id: "comment-point",
+        type: "symbol",
+        source: "comment-point",
+        layout: {
+          "icon-image": "marker-comment",
+          "icon-size": 0.3,
+        },
+      });
+    }
+
+    return () => {
+      if (window.location.pathname === "/map") {
+        map.hasImage("marker-comment") && map.removeImage("marker-comment");
+        map.getLayer("comment-point") && map.removeLayer("comment-point");
+        map.getSource("comment-point") && map.removeSource("comment-point");
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     const handleTitik = (e) => {
+      map.getSource("comment-point").setData({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [e.lngLat.lng, e.lngLat.lat],
+        },
+      });
       setCoor(e.lngLat);
-      openAddComment();
+      setCommentForm();
     };
     const handlePulau = (e) => {
       setSelectedId(e.features[0].id);
-      setCoor(e.lngLat);
-      openAddComment();
+      setCoor({
+        lng: e.features[0].geometry.coordinates[0],
+        lat: e.features[0].geometry.coordinates[1],
+      });
+      setCommentForm();
     };
     if (type === "titik") {
       map.on("click", handleTitik);
@@ -46,6 +92,10 @@ const CommentAdd = () => {
     }
     return () => {
       if (type === "titik") {
+        map.getCanvas().style.cursor = "";
+        map.on("mouseleave", "titikPulauMvt", function () {
+          map.getCanvas().style.cursor = "";
+        });
         map.off("click", handleTitik);
       } else if (type === "pulau") {
         map.off("click", "titikPulauMvt", handlePulau);
@@ -53,8 +103,23 @@ const CommentAdd = () => {
     };
   }, [type]);
 
+  const handleCancelAddComment = () => {
+    map.getSource("comment-point").setData({
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [],
+      },
+    });
+    map.getCanvas().style.cursor = "";
+    map.on("mouseleave", "titikPulauMvt", function () {
+      map.getCanvas().style.cursor = "";
+    });
+    setType(null);
+  };
+
   return (
-    <div data-cy='comment-feature-add-comment-tab'>
+    <div data-cy='comment-feature-add-comment-tab' className='w-full'>
       {!type ? (
         <div>
           <div className='p-3 flex flex-col items-center justify-center text-center gap-2'>
@@ -102,7 +167,7 @@ const CommentAdd = () => {
             </button>
           </div>
         </div>
-      ) : (
+      ) : !commentForm ? (
         <div data-cy='comment-feature-add-comment'>
           <div className='p-3 flex flex-col items-center justify-center text-center gap-2'>
             <img
@@ -117,27 +182,24 @@ const CommentAdd = () => {
           </div>
           <button
             data-cy='comment-feature-cancel-comment'
-            onClick={() => {
-              map.getCanvas().style.cursor = "";
-              map.on("mouseleave", "titikPulauMvt", function () {
-                map.getCanvas().style.cursor = "";
-              });
-              setType(null);
-            }}
+            onClick={handleCancelAddComment}
             className='border border-main-blue text-main-blue w-full rounded-lg py-2'
           >
             {t("downButtonCmmnt")}
           </button>
         </div>
-      )}
-      <Modal isShowing={isAddComment} handleModal={openAddComment} size='lg'>
+      ) : null}
+      {commentForm && (
         <AddComment
-          onClose={openAddComment}
+          onClose={() => {
+            setCommentForm();
+            handleCancelAddComment();
+          }}
           type={type}
           coor={coor}
           selectedId={selectedId}
         />
-      </Modal>
+      )}
     </div>
   );
 };

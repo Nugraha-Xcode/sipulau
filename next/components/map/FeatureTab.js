@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import BasemapFeature from "./BasemapFeature";
-import CommentFeature from "./CommentFeature";
+import CommentFeature from "./comment/CommentFeature";
 import DownloadFeature from "./DownloadFeature";
 import LayerFeature from "./LayerFeature";
 

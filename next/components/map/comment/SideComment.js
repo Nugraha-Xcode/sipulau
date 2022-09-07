@@ -1,8 +1,7 @@
 import React from "react";
 import shallow from "zustand/shallow";
-import { useNav } from "../../hooks/useNav";
+import { useNav } from "../../../hooks/useNav";
 import CommentFeature from "./CommentFeature";
-import { AboutContent, CommentSection } from "./sidebar-content";
 
 const SideComment = () => {
   const [setActiveSideFeature, activeSideFeature] = useNav(

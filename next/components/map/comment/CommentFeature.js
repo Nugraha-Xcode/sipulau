@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import AppContext from "../../context/AppContext";
+import AppContext from "../../../context/AppContext";
 import CommentAdd from "./CommentAdd";
 import CommentHistory from "./CommentHistory";
 

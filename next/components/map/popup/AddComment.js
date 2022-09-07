@@ -138,24 +138,15 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
           <img src='/images/loader.svg' alt='loader' className='h-20' />
         </div>
       ) : null}
-      <div className='flex items-center p-4'>
-        <p className='flex-1 text-center text-black-2 font-semibold text-sm'>
-          {t("commentModal1")}
-        </p>
-        <button
-          type='button'
-          className='text-2xl'
-          data-dismiss='modal'
-          aria-label='Close'
-          onClick={onClose}
-        >
-          <span aria-hidden='true'>&times;</span>
-        </button>
-      </div>
-      <hr />
-      <div className='p-4 flex flex-col gap-3'>
+      <div className='py-4 flex flex-col gap-3'>
+        <div>
+          <p className='text-xs text-gray-500'>Point of Interest:</p>
+          <p className='text-xs text-gray-900'>{`${coor.lat.toFixed(
+            7
+          )}, ${coor.lng.toFixed(7)}`}</p>
+        </div>
         <div className='space-y-2'>
-          <p className='text-xs text-main-gray'>Email :</p>
+          <p className='text-xs text-gray-500'>Email :</p>
           <input
             ref={emailRef}
             type='email'
@@ -164,7 +155,7 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
           />
         </div>
         <div className='space-y-2'>
-          <p className='text-xs text-main-gray'>{t("commentModal2")} :</p>
+          <p className='text-xs text-gray-500'>{t("commentModal2")} :</p>
           <textarea
             ref={isiRef}
             className='text-xs border border-gray-5 rounded-lg p-4 w-full focus:ring-transparent focus:border-gray-5'
@@ -173,8 +164,8 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
           />
         </div>
         <div className='space-y-2'>
-          <p className='text-xs text-main-gray'>{t("commentModal3")} :</p>
-          <div className='flex gap-4'>
+          <p className='text-xs text-gray-500'>{t("commentModal3")} :</p>
+          <div className='flex flex-col gap-4'>
             <div className='flex-1'>
               <input
                 className='hidden'
@@ -207,10 +198,14 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
               ) : (
                 <label
                   htmlFor='foto1'
-                  className='cursor-pointer flex flex-col items-center justify-center gap-3 border border-dashed border-gray-7 h-32 rounded-lg'
+                  className='cursor-pointer flex flex-col items-center justify-center gap-3 border border-dashed border-gray-7 h-20 rounded-lg'
                 >
                   <div className='p-2 border border-main-blue rounded-lg'>
-                    <img src='/images/ic-picture.svg' alt='select image' />
+                    <img
+                      src='/images/ic-picture.svg'
+                      alt='select image'
+                      className='w-4 h-4'
+                    />
                   </div>
                   <p className='text-gray-7 text-xs'>
                     {t("commentModal4")}. 1Mb
@@ -257,10 +252,14 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
                   htmlFor='foto2'
                   className={`${
                     imgFile[0] ? "cursor-pointer" : "cursor-disable"
-                  } flex flex-col items-center justify-center gap-3 border border-dashed border-gray-7 h-32 rounded-lg`}
+                  } flex flex-col items-center justify-center gap-3 border border-dashed border-gray-7 h-20 rounded-lg`}
                 >
                   <div className='p-2 border border-main-blue rounded-lg'>
-                    <img src='/images/ic-picture.svg' alt='select image' />
+                    <img
+                      src='/images/ic-picture.svg'
+                      alt='select image'
+                      className='w-4 h-4'
+                    />
                   </div>
                   <p className='text-gray-7 text-xs'>
                     {t("commentModal4")}. 1Mb
@@ -307,10 +306,14 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
                   htmlFor='foto3'
                   className={`${
                     imgFile[1] ? "cursor-pointer" : "cursor-disable"
-                  } flex flex-col items-center justify-center gap-3 border border-dashed border-gray-7 h-32 rounded-lg`}
+                  } flex flex-col items-center justify-center gap-3 border border-dashed border-gray-7 h-20 rounded-lg`}
                 >
                   <div className='p-2 border border-main-blue rounded-lg'>
-                    <img src='/images/ic-picture.svg' alt='select image' />
+                    <img
+                      src='/images/ic-picture.svg'
+                      alt='select image'
+                      className='w-4 h-4'
+                    />
                   </div>
                   <p className='text-gray-7 text-xs'>
                     {t("commentModal4")}. 1Mb
@@ -322,7 +325,7 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
         </div>
 
         <div className='space-y-2'>
-          <p className='text-xs text-main-gray'>{t("commentModal5")} :</p>
+          <p className='text-xs text-gray-500'>{t("commentModal5")} :</p>
 
           <div className='flex gap-4'>
             <input
@@ -336,10 +339,14 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
             />
             <label
               htmlFor='doc'
-              className='cursor-pointer flex-1 flex flex-col items-center justify-center gap-3 border border-dashed border-gray-7 h-32 rounded-lg'
+              className='cursor-pointer flex-1 flex flex-col items-center justify-center gap-3 border border-dashed border-gray-7 h-20 rounded-lg'
             >
               <div className='p-2 border border-main-blue rounded-lg'>
-                <img src='/images/ic-file.svg' alt='select image' />
+                <img
+                  src='/images/ic-file.svg'
+                  alt='select image'
+                  className='h-4'
+                />
               </div>
               <p className='text-gray-7 text-xs'>
                 {docFile ? docFile.name : t("commentModal4") + ". 1Mb"}
@@ -350,13 +357,13 @@ const AddComment = ({ onClose, type, coor, selectedId }) => {
         <div className='flex gap-3 mt-5'>
           <button
             onClick={onClose}
-            className='flex-1 text-main-blue border border-main-blue py-2 rounded-md'
+            className='flex-1 text-main-blue border border-main-blue py-2 rounded-md text-sm'
           >
             {t("commentModal6")}
           </button>
           <button
             onClick={handleUploadImage}
-            className='flex-1 bg-main-blue text-white py-2 rounded-md'
+            className='flex-1 bg-main-blue text-white py-2 rounded-md text-sm'
           >
             {t("commentModal7")}
           </button>
