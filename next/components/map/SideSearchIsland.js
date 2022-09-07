@@ -1,30 +1,54 @@
-import React, { useContext, useCallback, useState } from "react";
+import React, { useContext, useCallback, useState, useEffect } from "react";
 import shallow from "zustand/shallow";
 import AppContext from "../../context/AppContext";
+import MapContext from "../../context/MapContext";
+import { useComment } from "../../hooks";
 import { useNav } from "../../hooks/useNav";
-import { AboutContent, Searchbar, SearchResult } from "./sidebar-content";
+import AddCommentForm from "./popup/AddCommentForm";
+import {
+  AboutContent,
+  Button,
+  Searchbar,
+  SearchResult,
+} from "./sidebar-content";
 
 const SideSearchIsland = () => {
+  const { map } = useContext(MapContext);
   const { handleSetSnack, authToken } = useContext(AppContext);
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
     shallow
   );
+  const [coor, setCoor, setType] = useComment(
+    (state) => [state.coor, state.setCoor, state.setType],
+    shallow
+  );
   const [searchResult, setSearchResult] = useState([]);
+  const [isCommentButton, setCommentButton] = useState(false);
 
   // this is for input value state
   const [value, setValue] = React.useState("");
 
   //   this is for dummy image
-  const dummy = [
-    { image: "/images/dummy-slider.png" },
-    { image: "/images/thumbnail-rupabumi.jpg" },
-    { image: "/images/dummy-slider.png" },
-    { image: "/images/dummy-slider.png" },
-  ];
+  // const dummy = [
+  //   { image: "/images/dummy-slider.png" },
+  //   { image: "/images/thumbnail-rupabumi.jpg" },
+  //   { image: "/images/dummy-slider.png" },
+  //   { image: "/images/dummy-slider.png" },
+  // ];
 
   const getPulau = useCallback(async () => {
     try {
+      setCoor({});
+      setType(null);
+      map.getSource("comment-point").setData({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [],
+        },
+      });
+      setCommentButton(false);
       const response = await fetch(
         "/api/titik-pulau?page=1&ordby=nammap&orddir=ASC&nammap=" + value,
         {
@@ -47,6 +71,70 @@ const SideSearchIsland = () => {
     }
   }, [value]);
 
+  const handleAddPoint = () => {
+    setSearchResult([]);
+    setCommentButton(true);
+    let latLong = value.replace(/\s/g, "").split(",");
+    map.flyTo({
+      center: [latLong[1], latLong[0]],
+      zoom: 12.5,
+      padding: {
+        left: 400,
+      },
+    });
+    map.getSource("comment-point").setData({
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [latLong[1], latLong[0]],
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (!map.getSource("comment-point")) {
+      map.addSource("comment-point", {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [],
+          },
+        },
+      });
+      map.loadImage("/images/marker-point.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("marker-comment", image);
+      });
+      map.addLayer({
+        id: "comment-point",
+        type: "symbol",
+        source: "comment-point",
+        layout: {
+          "icon-image": "marker-comment",
+          "icon-size": 0.2,
+        },
+      });
+    }
+
+    return () => {
+      if (window.location.pathname === "/map") {
+        map.hasImage("marker-comment") && map.removeImage("marker-comment");
+        map.getLayer("comment-point") && map.removeLayer("comment-point");
+        map.getSource("comment-point") && map.removeSource("comment-point");
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    //cleanup
+    return () => {
+      setType(null);
+      setCoor({});
+    };
+  }, []);
+
   return (
     <div className='flex h-full flex-col px-4 pt-9 pb-6 dark:bg-gray-800'>
       <div>
@@ -62,8 +150,56 @@ const SideSearchIsland = () => {
       </div>
       <div className='flex flex-1 flex-col gap-2 overflow-y-auto'>
         {/* open the searchbar component for initialize the api and loop the suggestion component  */}
-        <Searchbar value={value} setValue={setValue} onSearch={getPulau} />
-
+        <Searchbar
+          value={value}
+          setValue={setValue}
+          handleChangesValue={(e) => {
+            setValue(e.target.value);
+          }}
+          handleClearValue={() => {
+            map.getSource("comment-point").setData({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [],
+              },
+            });
+            setValue("");
+            setCommentButton(false);
+            setCoor({});
+            setType(null);
+          }}
+          onSearch={() => {
+            if (value.includes("-") && value.includes(",")) {
+              handleAddPoint();
+            } else {
+              getPulau();
+            }
+          }}
+        />
+        {isCommentButton && Object.keys(coor).length === 0 && (
+          <Button
+            className='text-sm'
+            variant='outline'
+            onClick={() => {
+              let latLong = value.replace(/\s/g, "").split(",");
+              setCoor({
+                lng: parseFloat(latLong[1]),
+                lat: parseFloat(latLong[0]),
+              });
+            }}
+          >
+            Add Comment
+          </Button>
+        )}
+        {Object.keys(coor).length !== 0 && (
+          <AddCommentForm
+            onClose={() => {
+              setCoor({});
+              setType(null);
+            }}
+          />
+        )}
         {/* loop this component  */}
         {searchResult.length > 0
           ? searchResult.map((el) => <SearchResult item={el} />)

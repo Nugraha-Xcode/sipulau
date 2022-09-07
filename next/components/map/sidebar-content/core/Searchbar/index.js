@@ -2,17 +2,14 @@ import React from "react";
 import { SearchSuggestion } from "./SearchSuggestion";
 import { Transition } from "@headlessui/react";
 
-const Searcbar = ({ value, setValue, hasSuggestion = true, onSearch }) => {
-  // this is for get value from searchbar
-  const handleChangesValue = (e) => {
-    setValue(e.target.value);
-  };
-
-  // this is for button close
-  const handleClearValue = () => {
-    setValue("");
-  };
-
+const Searcbar = ({
+  value,
+  setValue,
+  hasSuggestion = true,
+  onSearch,
+  handleClearValue,
+  handleChangesValue,
+}) => {
   return (
     <div className='w-full h-auto relative'>
       <div className='w-full  flex border-[1px] h-10 rounded-[10px] items-center px-2 border-gray-400'>
