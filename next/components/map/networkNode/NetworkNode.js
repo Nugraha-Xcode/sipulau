@@ -70,14 +70,13 @@ const NetworkNode = () => {
     async (currentPage) => {
       setIsFetch(true);
       try {
+        const params = new URLSearchParams({
+          fq: "organization:" + selectedOrganization.value,
+          start: (currentPage - 1) * 10,
+        });
         const res = await fetch(
-          "https://tanahair.indonesia.go.id/sdi/api/3/action/package_search?fq=organization:" +
-            selectedOrganization.value +
-            "&start=" +
-            (currentPage - 1) * 10,
-          //  +
-          // "&q=" +
-          // textSearchRef.current.value
+          "https://tanahair.indonesia.go.id/sdi/api/3/action/package_search?" +
+            params,
 
           {
             method: "GET",

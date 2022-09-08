@@ -49,16 +49,19 @@ const SideSearchIsland = () => {
         },
       });
       setCommentButton(false);
-      const response = await fetch(
-        "/api/titik-pulau?page=1&ordby=nammap&orddir=ASC&nammap=" + value,
-        {
-          method: "GET",
-          headers: {
-            Authorization: "Bearer " + authToken,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const params = new URLSearchParams({
+        page: 1,
+        ordby: "nammap",
+        orddir: "ASC",
+        nammap: value,
+      });
+      const response = await fetch("/api/titik-pulau?" + params, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + authToken,
+          "Content-Type": "application/json",
+        },
+      });
 
       const result = await response.json();
       if (response.status === 200) {

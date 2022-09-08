@@ -16,7 +16,10 @@ const CommentHistory = () => {
   useEffect(async () => {
     try {
       setLoad(true);
-      const res = await fetch("/api/user/komentar?page=" + page, {
+      const params = new URLSearchParams({
+        page: page,
+      });
+      const res = await fetch("/api/user/komentar?" + params, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + authToken,
