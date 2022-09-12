@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useState, useEffect } from "react";
 import shallow from "zustand/shallow";
 import AppContext from "../../context/AppContext";
 import MapContext from "../../context/MapContext";
-import { useComment } from "../../hooks";
+import { useAuth, useComment } from "../../hooks";
 import { useNav } from "../../hooks/useNav";
 import AddCommentForm from "./popup/AddCommentForm";
 import {
@@ -14,7 +14,8 @@ import {
 
 const SideSearchIsland = () => {
   const { map } = useContext(MapContext);
-  const { handleSetSnack, authToken } = useContext(AppContext);
+  const { handleSetSnack } = useContext(AppContext);
+  const authToken = useAuth((state) => state.authToken);
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
     shallow
@@ -139,7 +140,10 @@ const SideSearchIsland = () => {
   }, []);
 
   return (
-    <div className='flex h-full flex-col px-4 pt-9 pb-6 dark:bg-gray-800'>
+    <div
+      id='side-feature-content'
+      className='flex h-full flex-col px-4 pt-20 pb-6 dark:bg-gray-800'
+    >
       <div>
         <div className='flex items-center justify-between '>
           <p className='text-gray-800 dark:text-gray-100'>
@@ -173,6 +177,7 @@ const SideSearchIsland = () => {
             setType(null);
           }}
           onSearch={() => {
+            console.log(value.split(","));
             if (value.includes("-") && value.includes(",")) {
               handleAddPoint();
             } else {

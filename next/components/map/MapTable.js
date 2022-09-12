@@ -10,6 +10,7 @@ import MemoIcMapFilter from "../core/icons/IcMapFilter";
 import Modal from "../modal";
 import MapTableDownload from "./MapTableDownload";
 import useToggle from "../../utils/useToggle";
+import { useAuth } from "../../hooks/useAuth";
 
 const MapTable = ({
   dataTable,
@@ -23,7 +24,8 @@ const MapTable = ({
   setOpenBottomDrawer,
   setExpandBottomDrawer,
 }) => {
-  const { handleSetSnack, authToken } = useContext(AppContext);
+  const { handleSetSnack } = useContext(AppContext);
+  const authToken = useAuth((state) => state.authToken);
   const { t } = useTranslation("attributetable");
   const {
     map,

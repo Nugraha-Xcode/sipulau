@@ -6,6 +6,7 @@ import { AiOutlineEye } from "react-icons/ai";
 
 import { changeExpireTime } from "../utils/expireTime";
 import AppContext from "../context/AppContext";
+import { useAuth } from "../hooks/useAuth";
 
 const login = {
   en: {
@@ -32,7 +33,8 @@ const login = {
 };
 
 const Login = ({ toggle }) => {
-  const { t, handleSetSnack, setAuth } = useContext(AppContext);
+  const { t, handleSetSnack } = useContext(AppContext);
+  const setAuth = useAuth((state) => state.setAuth);
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const userRef = useRef(null);

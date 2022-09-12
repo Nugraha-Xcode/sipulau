@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import AppContext from "../../../context/AppContext";
+import { useAuth } from "../../../hooks";
 import ImageCarousel from "../popup/ImageCarousel";
 
 const CommentHistory = () => {
@@ -8,7 +9,8 @@ const CommentHistory = () => {
   const observerRef = useRef(null);
   const rootObserver = useRef(null);
   const observer = useRef(null);
-  const { handleSetSnack, isAuth, authToken } = useContext(AppContext);
+  const { handleSetSnack } = useContext(AppContext);
+  const authToken = useAuth((state) => state.authToken);
   const [commentList, setCommentList] = useState([]);
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);

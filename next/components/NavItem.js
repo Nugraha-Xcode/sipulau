@@ -5,38 +5,13 @@ import { useRouter } from "next/router";
 import { navItems } from "../utils/constant";
 import { useContext } from "react";
 import AppContext from "../context/AppContext";
+import { useAuthHandler } from "../hooks";
 
 const NavItem = () => {
-  const { toggleLogin, isAuth, handleSetSnack, setAuth } =
-    useContext(AppContext);
+  const { toggleLogin, isAuth } = useContext(AppContext);
+  const { handleLogout } = useAuthHandler();
   const { t } = useTranslation("footer");
   const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_DIRECTUS_URL + "/auth/logout",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          method: "POST",
-          credentials: "include",
-        }
-      );
-      if (res.status === 200) {
-        setAuth("");
-      } else if (res.status >= 400 && res.status <= 499) {
-        const resJson = await res.json();
-        throw new Error(resJson.errors[0].message);
-      } else {
-        throw new Error("Internal server error");
-      }
-    } catch (err) {
-      handleSetSnack(err.message, "error");
-    }
-  };
 
   return (
     <>

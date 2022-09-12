@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { uploadFolderIds } from "../../../utils/constant";
 import AppContext from "../../../context/AppContext";
 import PopupContext from "../../../context/PopupContext";
-import { useComment } from "../../../hooks";
+import { useAuth, useComment } from "../../../hooks";
 import shallow from "zustand/shallow";
 
 const AddCommentForm = ({ onClose }) => {
@@ -12,7 +12,8 @@ const AddCommentForm = ({ onClose }) => {
     (state) => [state.type, state.coor, state.selectedId],
     shallow
   );
-  const { handleSetSnack, authToken } = useContext(AppContext);
+  const { handleSetSnack } = useContext(AppContext);
+  const authToken = useAuth((state) => state.authToken);
   const { infoPulau } = useContext(PopupContext);
   const [imgFile, setImgFile] = useState([]);
   const [docFile, setDocFile] = useState(null);

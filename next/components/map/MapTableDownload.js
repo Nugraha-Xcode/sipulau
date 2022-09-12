@@ -5,6 +5,7 @@ import Select from "../core/select";
 import Modal from "../modal";
 import AppContext from "../../context/AppContext";
 import MapContext from "../../context/MapContext";
+import { useAuth } from "../../hooks/useAuth";
 
 const MapTableDownload = ({
   toggledRow,
@@ -14,7 +15,8 @@ const MapTableDownload = ({
   source,
 }) => {
   const { t } = useTranslation("sideBarRight");
-  const { handleSetSnack, authToken } = useContext(AppContext);
+  const { handleSetSnack } = useContext(AppContext);
+  const authToken = useAuth((state) => state.authToken);
   const { bbox, activeFilter } = useContext(MapContext);
 
   const [isLoad, setIsLoad] = useState(false);

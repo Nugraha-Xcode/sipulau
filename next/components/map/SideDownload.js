@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useContext } from "react";
 import shallow from "zustand/shallow";
 import AppContext from "../../context/AppContext";
-import { useDownloadAoi } from "../../hooks";
+import { useAuth, useDownloadAoi } from "../../hooks";
 import { useNav } from "../../hooks/useNav";
 import {
   AboutContent,
@@ -31,7 +31,8 @@ const SideDownload = () => {
   ];
 
   // selected value from dropdown
-  const { handleSetSnack, authToken } = useContext(AppContext);
+  const { handleSetSnack } = useContext(AppContext);
+  const authToken = useAuth((state) => state.authToken);
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [type, setType] = useState({ label: "CSV", value: "csv" });
   const [drawItem] = useDownloadAoi((state) => [state.drawItem], shallow);
@@ -122,7 +123,10 @@ const SideDownload = () => {
   );
 
   return (
-    <div className='flex h-full flex-col px-4 pt-9 pb-6 dark:bg-gray-800'>
+    <div
+      id='side-feature-content'
+      className='flex h-full flex-col px-4 pt-20 pb-6 dark:bg-gray-800'
+    >
       <div>
         <div className='flex items-center justify-between '>
           <p className='text-gray-800 dark:text-gray-100'>

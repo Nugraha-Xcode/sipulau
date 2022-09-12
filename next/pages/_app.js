@@ -13,6 +13,8 @@ import "../styles/global.css";
 import "../styles/map.css";
 import Modal from "../components/modal";
 import Login from "../components/Login";
+import { useAuth } from "../hooks/useAuth";
+import shallow from "zustand/shallow";
 
 const initialValue = {
   snack: false,
@@ -40,8 +42,11 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const t = router.locale === "en" ? "en" : "id";
   const [isLoginModal, toggleLogin] = useToggle();
-  const [auth, setAuth] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [authToken, setAuth] = useAuth(
+    (state) => [state.authToken, state.setAuth],
+    shallow
+  );
 
   const handleSetSnack = (message, messageType) => {
     dispatch({ type: "setSnack", message: message, messageType: messageType });
@@ -115,12 +120,12 @@ function MyApp({ Component, pageProps }) {
   };
 
   useEffect(() => {
-    if (auth.length) {
+    if (authToken.length) {
       setTimeout(() => {
         silentRefreshToken();
       }, expireTime - 500);
     }
-  }, [auth]);
+  }, [authToken]);
 
   useEffect(() => {
     getTokenOnReload();
@@ -131,9 +136,7 @@ function MyApp({ Component, pageProps }) {
       value={{
         handleSetSnack,
         t,
-        isAuth: auth.length,
-        authToken: auth,
-        setAuth,
+        isAuth: authToken.length,
         isLoginModal,
         toggleLogin,
       }}
