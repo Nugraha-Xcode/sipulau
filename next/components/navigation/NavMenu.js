@@ -123,16 +123,7 @@ const NavMenu = ({
 
   return (
     <div className='flex h-full flex-col'>
-      <div className='flex-1'>
-        <div className='p-4'>
-          <div className='flex h-12 items-center justify-center px-2'>
-            <img
-              src={"/images/logo-big-text.svg"}
-              alt='BIG Logo'
-              className='max-h-12'
-            />
-          </div>
-        </div>
+      <div className='flex-1 mt-20'>
         <div
           className={clsx([
             "ml-2 flex flex-col gap-3",

@@ -24,7 +24,7 @@ import Filter from "../components/map/Filter";
 import SimpulLayer from "../components/map/SimpulLayer";
 import AppContext from "../context/AppContext";
 import SimpulLayers from "../components/map/SimpulLayers";
-import SideNav from "../components/sideNav/SideNav";
+import SideNav from "../components/navigation/SideNav";
 import { useNav, useNetwork } from "../hooks";
 import MapToolbox from "../components/map/MapToolbox";
 import MapToolboxCard from "../components/map/MapToolboxCard";
@@ -34,6 +34,7 @@ import ZoomInController from "../components/map/ZoomInController";
 import ZoomOutController from "../components/map/ZoomOutController";
 import Legend from "../components/map/legend/Legend";
 import MapTrackPointer from "../components/map/MapTrackPointer";
+import TopNav from "../components/navigation/TopNav";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
@@ -357,6 +358,7 @@ const map = () => {
           )}
 
           {mapload && <MvtLayer isSelectAll={isSelectAll} />}
+          <TopNav />
           <SideNav handleViewTable={handleViewTable} />
 
           {/* bottom left map controller */}
@@ -388,7 +390,7 @@ const map = () => {
           {/* bottom left map controller */}
 
           {/* top left map controller */}
-          <div
+          {/* <div
             className={clsx([
               "absolute top-6 z-10 transition-all duration-100 ease-in-out",
               sideNavPadding,
@@ -408,7 +410,7 @@ const map = () => {
                 <img src='/images/ic-tab.svg' alt='Menu Toggle' />
               </button>
             </Tippy>
-          </div>
+          </div> */}
           {/* top left map controller */}
 
           {/* top right map controller */}

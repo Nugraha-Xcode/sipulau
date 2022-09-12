@@ -202,7 +202,10 @@ const NetworkNode = () => {
   }, [simpulList]);
 
   return (
-    <div className='flex h-full flex-col px-4 pt-9 pb-6 dark:bg-gray-800'>
+    <div
+      id='side-feature-content'
+      className='flex h-full flex-col px-4 pt-20 pb-6 dark:bg-gray-800'
+    >
       <div>
         <div className='flex items-center justify-between '>
           <p className='text-xl text-gray-800 dark:text-gray-100'>

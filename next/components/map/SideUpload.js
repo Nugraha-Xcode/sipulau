@@ -10,24 +10,27 @@ const SideUpload = () => {
   );
 
   return (
-    <div className="flex h-full flex-col px-4 pt-9 pb-6 dark:bg-gray-800">
+    <div
+      id='side-feature-content'
+      className='flex h-full flex-col px-4 pt-20 pb-6 dark:bg-gray-800'
+    >
       <div>
-        <div className="flex items-center justify-between ">
-          <p className="text-gray-800 dark:text-gray-100">
+        <div className='flex items-center justify-between '>
+          <p className='text-gray-800 dark:text-gray-100'>
             {activeSideFeature?.label || ""}
           </p>
           <button onClick={() => setActiveSideFeature(null)}>
-            <img src="/images/ic-close.svg" alt="close button" className="" />
+            <img src='/images/ic-close.svg' alt='close button' className='' />
           </button>
         </div>
-        <hr className="my-3 text-gray-200" />
+        <hr className='my-3 text-gray-200' />
       </div>
-      <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
+      <div className='flex flex-1 flex-col gap-2 overflow-y-auto'>
         <UploadSection />
       </div>
 
-      <div className="mt-2 rounded-[4px] bg-gray-50 p-2 dark:bg-gray-700">
-        <AboutContent header="About Upload">
+      <div className='mt-2 rounded-[4px] bg-gray-50 p-2 dark:bg-gray-700'>
+        <AboutContent header='About Upload'>
           You may upload datasets in the Shapefile format.
         </AboutContent>
       </div>
