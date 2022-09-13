@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import React from "react";
+import { useTranslation } from "next-i18next";
 import MemoIcBasemap from "../core/icons/IcBasemap";
 import MemoIcComment from "../core/icons/IcComment";
 import MemoIcDownload from "../core/icons/IcDownload";
@@ -20,6 +21,10 @@ import SideSearchIsland from "../map/SideSearchIsland";
 import SideUpload from "../map/SideUpload";
 
 import NavItem from "./NavItem";
+import Tippy from "@tippyjs/react";
+import MemoIcQuestion from "../core/icons/IcQuestion";
+import Link from "next/link";
+import MemoIcGlobe from "../core/icons/IcGlobe";
 
 const NavMenu = ({
   expand,
@@ -30,6 +35,7 @@ const NavMenu = ({
   handleViewTable,
 }) => {
   const router = useRouter();
+  const { t } = useTranslation("attributetable");
   const pageMenuItems = [
     {
       id: "home-page",
@@ -171,6 +177,57 @@ const NavMenu = ({
           { "w-[13.250rem]": expand, "w-[2.75rem]": !expand },
         ])}
       >
+        <Tippy
+          content='Lang'
+          disabled={expand ? true : false}
+          placement='right'
+          delay={300}
+        >
+          <div
+            className={clsx([
+              "group hover:text-main-blue text-gray-500 flex h-10 w-full items-center rounded-xl hover:cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-50",
+              {
+                "mr-6": expand,
+              },
+            ])}
+          >
+            <Link
+              href={router.asPath}
+              locale={router.locale === "id" ? "en" : "id"}
+            >
+              <a
+                data-cy='btn-change-lang'
+                className='flex items-center hover:text-main-blue'
+              >
+                <div
+                  className={clsx([
+                    "flex w-[2.75rem] items-center justify-center",
+                  ])}
+                >
+                  <MemoIcGlobe />
+                </div>
+                <p
+                  className={clsx([
+                    "ml-1 select-none text-sm",
+                    {
+                      "hidden opacity-0": !expand,
+                    },
+                  ])}
+                >
+                  {router.locale === "id" ? "EN" : "ID"}
+                </p>
+              </a>
+            </Link>
+          </div>
+        </Tippy>
+        <NavItem
+          expand={expand}
+          label='Help Center'
+          onClick={() => {
+            window.open(`/files/${t("userGuide")}.pdf`);
+          }}
+          icon={<MemoIcQuestion />}
+        />
         <NavItem
           expand={expand}
           disabled={disableExpand}

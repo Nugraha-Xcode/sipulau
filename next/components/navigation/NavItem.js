@@ -23,7 +23,7 @@ const NavItem = ({
           "group hover:text-main-blue  flex h-10 w-full items-center rounded-xl hover:cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-50",
           {
             "mr-6": expand,
-            "text-gray-400": disabled,
+            "text-gray-300": disabled,
             // conditioning isActive state
             "bg-blue-50 text-main-blue": isActive,
             "text-gray-500": !isActive,
