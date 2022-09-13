@@ -18,10 +18,14 @@ export default async function suggestionHandler(req, res) {
     queryResult = await sipulauPool.query(
       `
       SELECT nammap
-      FROM ${tableName}
-      WHERE nammap ILIKE $1
-      ORDER BY strict_word_similarity($1, nammap) DESC
-      LIMIT 10
+      FROM (
+        SELECT nammap, max(strict_word_similarity($1, nammap)) similarity
+        FROM ${tableName}
+        WHERE nammap ILIKE $1
+        GROUP BY nammap
+        ORDER BY similarity DESC, nammap
+        LIMIT 10
+      ) max_similarity_query
       `,
       [`%${keyword}%`]
     );
