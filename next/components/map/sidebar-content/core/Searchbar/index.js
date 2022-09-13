@@ -5,14 +5,20 @@ import { Transition } from "@headlessui/react";
 const Searcbar = ({
   value,
   setValue,
-  hasSuggestion = true,
-  onSearch,
-  handleClearValue,
-  handleChangesValue,
+  getPulau = () => {},
+  setSuggestList = () => {},
+  suggestList = [],
+  onSearch = () => {},
+  handleClearValue = () => {},
+  handleChangesValue = () => {},
 }) => {
   return (
     <div className='w-full h-auto relative'>
-      <div className='w-full  flex border-[1px] h-10 rounded-[10px] items-center px-2 border-gray-400'>
+      <div
+        className={`${
+          suggestList.length ? "rounded-b-none" : "rounded-b-[10px]"
+        } w-full flex border-[1px] h-10 items-center px-2 border-gray-400 rounded-t-[10px] transition-all duration-300`}
+      >
         <input
           className='w-full h-full focus:outline-none text-xs'
           placeholder='Enter keyword or Coordinate'
@@ -43,14 +49,30 @@ const Searcbar = ({
         </button>
       </div>
 
-      {/* if there is a value on input searchbar */}
-      {/* {hasSuggestion && value && (
-        <div className='flex flex-col absolute w-full h-[fit-content] bg-white  border-gray-400 border-[1px] rounded-b-[10px] z-40 transition-all'>
-          <SearchSuggestion>Pulau Seribu</SearchSuggestion>
-          <SearchSuggestion>kecamatan pulau seribu</SearchSuggestion>
-          <SearchSuggestion>kepulauan seribu</SearchSuggestion>
+      <Transition
+        appear={true}
+        show={suggestList.length > 0}
+        enter='transition-all duration-300 ease-in-out transform'
+        enterFrom='opacity-0 -translate-y-3'
+        enterTo='opacity-100 translate-y-0'
+        leave='transition-all duration-300 ease-in-out transform'
+        leaveFrom='opacity-50 translate-y-0'
+        leaveTo='opacity-0 -translate-y-3'
+      >
+        <div className='hide-scrollbar py-2 flex flex-col absolute w-full h-52 max-h-52 overflow-y-scroll overflow-x-hidden bg-white  border-gray-400 border-[1px] rounded-b-[10px] z-40 transition-all'>
+          {suggestList.map((el) => (
+            <button
+              onClick={() => {
+                getPulau(el.nammap);
+                setSuggestList([]);
+              }}
+              className='p-2 text-xs hover:bg-[#F2F2F2] text-left'
+            >
+              {el.nammap}
+            </button>
+          ))}
         </div>
-      )} */}
+      </Transition>
     </div>
   );
 };

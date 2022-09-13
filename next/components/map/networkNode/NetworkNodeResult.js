@@ -216,7 +216,7 @@ const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
   return (
     <div className='flex flex-col gap-3 border-t-[1px] my-2 py-2'>
       <div className='font-semibold text-[#4F4C4A]'>Select Network Data</div>
-      <Searchbar value={value} setValue={setValue} hasSuggestion={false} />
+      <Searchbar value={value} setValue={setValue} />
 
       <div className='flex flex-col gap-2 relative'>
         <Loader show={isFetch} />

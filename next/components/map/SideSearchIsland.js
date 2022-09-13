@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useState, useEffect } from "react";
+import React, {
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import shallow from "zustand/shallow";
 import AppContext from "../../context/AppContext";
 import MapContext from "../../context/MapContext";
@@ -15,6 +21,7 @@ import {
 const SideSearchIsland = () => {
   const { map } = useContext(MapContext);
   const { handleSetSnack } = useContext(AppContext);
+  const timeoutRef = useRef(null);
   const authToken = useAuth((state) => state.authToken);
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
@@ -25,10 +32,12 @@ const SideSearchIsland = () => {
     shallow
   );
   const [searchResult, setSearchResult] = useState([]);
+  const [suggestList, setSuggestList] = useState([]);
   const [isCommentButton, setCommentButton] = useState(false);
 
   // this is for input value state
   const [value, setValue] = React.useState("");
+  const [isSearchLocation, setIsSearchLocation] = React.useState(false);
 
   //   this is for dummy image
   // const dummy = [
@@ -38,7 +47,31 @@ const SideSearchIsland = () => {
   //   { image: "/images/dummy-slider.png" },
   // ];
 
-  const getPulau = useCallback(async () => {
+  const getSuggestList = useCallback(async () => {
+    try {
+      const params = new URLSearchParams({
+        keyword: value,
+      });
+      const response = await fetch("/api/titik-pulau/suggestion?" + params, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + authToken,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+      if (response.status === 200) {
+        setSuggestList(result);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+    }
+  }, [value]);
+
+  const getPulau = useCallback(async (searchValue) => {
     try {
       setCoor({});
       setType(null);
@@ -54,7 +87,7 @@ const SideSearchIsland = () => {
         page: 1,
         ordby: "nammap",
         orddir: "ASC",
-        nammap: value,
+        nammap: searchValue,
       });
       const response = await fetch("/api/titik-pulau?" + params, {
         method: "GET",
@@ -73,7 +106,7 @@ const SideSearchIsland = () => {
     } catch (error) {
       handleSetSnack(error.message, "error");
     }
-  }, [value]);
+  }, []);
 
   const handleAddPoint = () => {
     setSearchResult([]);
@@ -139,6 +172,29 @@ const SideSearchIsland = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = null;
+      if (value !== "") {
+        let inputArray = value.replace(/\s/g, "").split(",");
+        if (
+          inputArray.length === 2 &&
+          Boolean(parseFloat(inputArray[0])) &&
+          Boolean(parseFloat(inputArray[1]))
+        ) {
+          setIsSearchLocation(true);
+        } else {
+          getSuggestList();
+          setIsSearchLocation(false);
+        }
+      }
+    }, 500);
+  }, [value]);
+
   return (
     <div
       id='side-feature-content'
@@ -160,6 +216,8 @@ const SideSearchIsland = () => {
         <Searchbar
           value={value}
           setValue={setValue}
+          getPulau={getPulau}
+          setSuggestList={setSuggestList}
           handleChangesValue={(e) => {
             setValue(e.target.value);
           }}
@@ -175,15 +233,16 @@ const SideSearchIsland = () => {
             setCommentButton(false);
             setCoor({});
             setType(null);
+            setSuggestList([]);
           }}
           onSearch={() => {
-            console.log(value.split(","));
-            if (value.includes("-") && value.includes(",")) {
+            if (isSearchLocation) {
               handleAddPoint();
             } else {
-              getPulau();
+              getPulau(value);
             }
           }}
+          suggestList={suggestList}
         />
         {isCommentButton && Object.keys(coor).length === 0 && (
           <Button
