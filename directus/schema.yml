@@ -1,6 +1,54 @@
 version: 1
 directus: 9.16.1
 collections:
+  - collection: additional_layer_def
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: additional_layer_def
+      color: null
+      display_template: null
+      group: additional_layers
+      hidden: true
+      icon: null
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: 1
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      comment: null
+      name: additional_layer_def
+      schema: public
+  - collection: additional_layers
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: additional_layers
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: 10
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      comment: null
+      name: additional_layers
+      schema: public
   - collection: basemaps
     meta:
       accountability: all
@@ -24,6 +72,32 @@ collections:
     schema:
       comment: null
       name: basemaps
+      schema: public
+  - collection: batas_wilayah
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: batas_wilayah
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: >-
+        Konfigurasi sumber pencarian batas wilayah dan sumber untuk fitur
+        pengambilan data pulau berdasarkan batas wilayah
+      singleton: true
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      comment: null
+      name: batas_wilayah
       schema: public
   - collection: berita
     meta:
@@ -248,6 +322,371 @@ collections:
       name: titik_pulau_template
       schema: public
 fields:
+  - collection: additional_layer_def
+    field: layer_def_id
+    meta:
+      collection: additional_layer_def
+      conditions: null
+      display: null
+      display_options: null
+      field: layer_def_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: uuid
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: true
+      is_unique: true
+      max_length: null
+      name: layer_def_id
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: additional_layer_def
+    type: uuid
+  - collection: additional_layer_def
+    field: layer_id
+    meta:
+      collection: additional_layer_def
+      conditions: null
+      display: null
+      display_options: null
+      field: layer_id
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: uuid
+      default_value: null
+      foreign_key_column: layer_id
+      foreign_key_schema: public
+      foreign_key_table: additional_layers
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: layer_id
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: additional_layer_def
+    type: uuid
+  - collection: additional_layer_def
+    field: layer_type
+    meta:
+      collection: additional_layer_def
+      conditions: null
+      display: null
+      display_options: null
+      field: layer_type
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: WMS
+            value: wms
+          - text: ESRI MapServer
+            value: esri_mapserver
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: false
+      is_unique: false
+      max_length: 255
+      name: layer_type
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: additional_layer_def
+    type: string
+  - collection: additional_layer_def
+    field: max_zoom
+    meta:
+      collection: additional_layer_def
+      conditions: null
+      display: null
+      display_options: null
+      field: max_zoom
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        max: 20
+        min: 1
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: 20
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: max_zoom
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: additional_layer_def
+    type: integer
+  - collection: additional_layer_def
+    field: min_zoom
+    meta:
+      collection: additional_layer_def
+      conditions: null
+      display: null
+      display_options: null
+      field: min_zoom
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        max: 20
+        min: 0
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: 0
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: min_zoom
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: additional_layer_def
+    type: integer
+  - collection: additional_layer_def
+    field: url
+    meta:
+      collection: additional_layer_def
+      conditions: null
+      display: null
+      display_options: null
+      field: url
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: false
+      is_unique: false
+      max_length: 65535
+      name: url
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: additional_layer_def
+    type: string
+  - collection: additional_layers
+    field: layer_def
+    meta:
+      collection: additional_layers
+      conditions: null
+      display: null
+      display_options: null
+      field: layer_def
+      group: null
+      hidden: false
+      interface: list-o2m
+      note: null
+      options:
+        enableSelect: false
+        template: '{{url}}'
+      readonly: false
+      required: true
+      sort: null
+      special:
+        - o2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema: null
+    type: alias
+  - collection: additional_layers
+    field: layer_id
+    meta:
+      collection: additional_layers
+      conditions: null
+      display: null
+      display_options: null
+      field: layer_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: uuid
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: true
+      is_unique: true
+      max_length: null
+      name: layer_id
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: additional_layers
+    type: uuid
+  - collection: additional_layers
+    field: layer_name
+    meta:
+      collection: additional_layers
+      conditions: null
+      display: null
+      display_options: null
+      field: layer_name
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: false
+      is_unique: false
+      max_length: 255
+      name: layer_name
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: additional_layers
+    type: string
   - collection: basemaps
     field: basemap_id
     meta:
@@ -508,6 +947,212 @@ fields:
       numeric_scale: null
       schema: public
       table: basemaps
+    type: string
+  - collection: batas_wilayah
+    field: batas_wilayah_id
+    meta:
+      collection: batas_wilayah
+      conditions: null
+      display: null
+      display_options: null
+      field: batas_wilayah_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: uuid
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: true
+      is_unique: true
+      max_length: null
+      name: batas_wilayah_id
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: batas_wilayah
+    type: uuid
+  - collection: batas_wilayah
+    field: mapserver_url_deskel
+    meta:
+      collection: batas_wilayah
+      conditions: null
+      display: null
+      display_options: null
+      field: mapserver_url_deskel
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: 65535
+      name: mapserver_url_deskel
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: batas_wilayah
+    type: string
+  - collection: batas_wilayah
+    field: mapserver_url_kabkot
+    meta:
+      collection: batas_wilayah
+      conditions: null
+      display: null
+      display_options: null
+      field: mapserver_url_kabkot
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: 65535
+      name: mapserver_url_kabkot
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: batas_wilayah
+    type: string
+  - collection: batas_wilayah
+    field: mapserver_url_kec
+    meta:
+      collection: batas_wilayah
+      conditions: null
+      display: null
+      display_options: null
+      field: mapserver_url_kec
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: 65535
+      name: mapserver_url_kec
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: batas_wilayah
+    type: string
+  - collection: batas_wilayah
+    field: mapserver_url_prov
+    meta:
+      collection: batas_wilayah
+      conditions: null
+      display: null
+      display_options: null
+      field: mapserver_url_prov
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: 65535
+      name: mapserver_url_prov
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: batas_wilayah
     type: string
   - collection: berita
     field: berita_id
@@ -7547,6 +8192,28 @@ fields:
       table: titik_pulau_template
     type: string
 relations:
+  - collection: additional_layer_def
+    field: layer_id
+    meta:
+      junction_field: null
+      many_collection: additional_layer_def
+      many_field: layer_id
+      one_allowed_collections: null
+      one_collection: additional_layers
+      one_collection_field: null
+      one_deselect_action: delete
+      one_field: layer_def
+      sort_field: null
+    related_collection: additional_layers
+    schema:
+      column: layer_id
+      constraint_name: additional_layer_def_layer_id_foreign
+      foreign_key_column: layer_id
+      foreign_key_schema: public
+      foreign_key_table: additional_layers
+      on_delete: CASCADE
+      on_update: NO ACTION
+      table: additional_layer_def
   - collection: berita
     field: gambar_berita
     meta:
