@@ -364,8 +364,8 @@ const map = () => {
           {/* bottom left map controller */}
           <div
             className={clsx([
-              "absolute bottom-6 z-10 flex flex-col gap-0 transition-all duration-100 ease-in-out",
-              { ...sideNavPadding, "bottom-[27.5rem]": isOpenBottomDrawer },
+              "absolute bottom-10 right-3 z-10 flex flex-col gap-0 transition-all duration-100 ease-in-out",
+              { "bottom-[27.5rem]": isOpenBottomDrawer },
             ])}
           >
             <GeolocateController map={mapRef.current} />

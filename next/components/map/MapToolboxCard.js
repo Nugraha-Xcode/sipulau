@@ -11,15 +11,15 @@ const MapToolboxCard = ({ isOpen, onClose }) => {
       appear={true}
       show={isOpen}
       enter='transition-all duration-300 ease-in-out transform'
-      enterFrom='opacity-0 -translate-x-3'
+      enterFrom='opacity-0 translate-x-3'
       enterTo='opacity-100 translate-x-0'
       leave='transition-all duration-300 ease-in-out transform'
       leaveFrom='opacity-50 translate-x-0'
-      leaveTo='opacity-0 -translate-x-3'
+      leaveTo='opacity-0 translate-x-3'
     >
       <div
         className={clsx([
-          "absolute bottom-0 z-50 ml-12 flex w-[13.5rem] flex-col gap-2 rounded-lg bg-white p-3",
+          "absolute bottom-0 right-12 z-50 ml-12 flex w-[13.5rem] flex-col gap-2 rounded-lg bg-white p-3",
         ])}
       >
         <div className='flex items-center justify-between'>
