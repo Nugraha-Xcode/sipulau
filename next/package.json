@@ -25,6 +25,7 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "sharp": "^0.29.3",
+    "shpjs": "^4.0.4",
     "zustand": "^4.0.0"
   },
   "devDependencies": {
