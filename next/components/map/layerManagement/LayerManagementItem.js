@@ -1,8 +1,9 @@
 import { Transition } from "@headlessui/react";
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import shallow from "zustand/shallow";
+import { UploadLayerStore } from "../../../constant";
 import MapContext from "../../../context/MapContext";
-import { useNetwork } from "../../../hooks";
+import { useIndexedDB, useNetwork } from "../../../hooks";
 import IcAccordion from "../../core/icons/icAccordion";
 
 import IcEye from "../../core/icons/IcEye";
@@ -21,6 +22,8 @@ const LayerManagementItem = ({ item, index }) => {
         : false
       : true
   );
+
+  const [setDb, db] = useIndexedDB((state) => [state.setDb, state.db], shallow);
 
   const [activeLayer, setActiveLayer, activeLegend, setActiveLegend] =
     useNetwork(
@@ -69,13 +72,31 @@ const LayerManagementItem = ({ item, index }) => {
   }, [index, activeLayer]);
 
   const handleRemoveLayer = useCallback(() => {
-    map.removeLayer(item.judul + item.nama);
-    map.removeSource(item.judul + item.nama);
-    setActiveLayer(
-      activeLayer.filter(
-        (el) => el.nama !== item.nama && el.judul !== item.judul
-      )
-    );
+    if (item.source === "simpul") {
+      map.removeLayer(item.judul + item.nama);
+      map.removeSource(item.judul + item.nama);
+      setActiveLayer(
+        activeLayer.filter(
+          (el) => el.nama !== item.nama && el.judul !== item.judul
+        )
+      );
+    } else if (item.source === "upload") {
+      const txn = db.transaction(UploadLayerStore, "readwrite");
+
+      const store = txn.objectStore(UploadLayerStore);
+      //
+      let query = store.delete(item.judul);
+
+      query.onsuccess = function (event) {
+        map.removeLayer(item.judul);
+        map.removeSource(item.judul);
+        setActiveLayer(activeLayer.filter((el) => el.judul !== item.judul));
+      };
+
+      query.onerror = function (event) {
+        console.log(event.target.errorCode);
+      };
+    }
     // if (
     //   activeLayer[activeLayer.findIndex((el) => el.simpul === item.simpul)]
     //     .layer.length === 1
@@ -107,14 +128,17 @@ const LayerManagementItem = ({ item, index }) => {
         <div className='absolute w-[5px] rounded-xl h-full top-0 -left-3 bottom-0 m-auto bg-[#FFCE1E]' />
 
         <div
-          className='flex flex-col flex-1'
-          onClick={() => setIsShowOpacity((prevState) => !prevState)}
+          className='flex flex-col overflow-hidden'
+          onClick={() => {
+            item.source !== "toponim" &&
+              setIsShowOpacity((prevState) => !prevState);
+          }}
         >
-          <div className='font-semibold text-xs'>{item.judul}</div>
+          <div className='font-semibold text-xs truncate'>{item.judul}</div>
           <div className='text-gray-3 text-[10px]'>{item.simpul}</div>
         </div>
 
-        <div className='flex gap-2 h-full items-center'>
+        <div className='flex gap-2 h-full items-center w-10 min-w-10'>
           <button onClick={() => setLayerVisibility((prev) => !prev)}>
             <img
               src={`${

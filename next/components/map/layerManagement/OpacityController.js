@@ -6,17 +6,26 @@ const OpacityController = ({ handleDelete, item }) => {
   const sliderRef = useRef(null);
   const [layerOpacity, setLayerOpacity] = useState(
     map.getLayer(item.judul + item.nama)
-      ? map.getPaintProperty(item.judul + item.nama, "raster-opacity") * 100
+      ? item.source === "simpul"
+        ? map.getPaintProperty(item.judul + item.nama, "raster-opacity") * 100
+        : map.getPaintProperty(item.judul, "line-opacity") * 100
       : 100
   );
 
   useEffect(() => {
     sliderRef.current.addEventListener("input", (e) => {
-      map.setPaintProperty(
-        item.judul + item.nama,
-        "raster-opacity",
-        parseInt(e.target.value, 10) / 100
-      );
+      if (item.source === "simpul") {
+        map.setPaintProperty(
+          item.judul + item.nama,
+          "raster-opacity",
+          parseInt(e.target.value, 10) / 100
+        );
+      } else
+        map.setPaintProperty(
+          item.judul + item.nama,
+          "line-opacity",
+          parseInt(e.target.value, 10) / 100
+        );
     });
   }, [map, sliderRef.current, item]);
 

@@ -93,16 +93,13 @@ const SimpulLayer = ({ item }) => {
             ? item.bbox.split(",").map((el) => parseFloat(el))
             : [94.75, -11.029999999999998, 141.01, 5.870000000000001],
       });
-      map.addLayer(
-        {
-          id: item.judul + item.nama,
-          type: "raster",
-          source: item.judul + item.nama,
-          paint: { "raster-opacity": 1 },
-          layout: { visibility: "visible" },
-        },
-        "titikPulauMvt"
-      );
+      map.addLayer({
+        id: item.judul + item.nama,
+        type: "raster",
+        source: item.judul + item.nama,
+        paint: { "raster-opacity": 1 },
+        layout: { visibility: "visible" },
+      });
     }
 
     return () => {

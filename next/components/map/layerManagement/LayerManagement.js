@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import shallow from "zustand/shallow";
+import { titikPulauMvt } from "../../../constant";
 import MapContext from "../../../context/MapContext";
 import { useNav } from "../../../hooks/useNav";
 import { useNetwork } from "../../../hooks/useNetwork";
@@ -16,17 +17,17 @@ const LayerManagement = () => {
   const [activeLayer] = useNetwork((state) => [state.activeLayer], shallow);
 
   const [toponimVisibility, setToponimVisibility] = useState(
-    map.getLayer("titikPulauMvt")
-      ? map.getLayoutProperty("titikPulauMvt", "visibility") === "visible"
+    map.getLayer(titikPulauMvt)
+      ? map.getLayoutProperty(titikPulauMvt, "visibility") === "visible"
         ? true
         : false
       : true
   );
 
   useEffect(() => {
-    map.getLayer("titikPulauMvt") &&
+    map.getLayer(titikPulauMvt) &&
       map.setLayoutProperty(
-        "titikPulauMvt",
+        titikPulauMvt,
         "visibility",
         toponimVisibility ? "visible" : "none"
       );
@@ -50,14 +51,8 @@ const LayerManagement = () => {
       </div>
       <div className='flex flex-1 flex-col gap-2 overflow-y-auto'>
         {/* default IcEyeVariant  =  Base */}
-        {/* <LayerManagementItem
-          name='Toponim Pulau'
-          subName='POI'
-          isVisible={toponimVisibility}
-          setVisibility={() => setToponimVisibility((prev) => !prev)}
-        /> */}
 
-        <div className='flex flex-col border-[1px] w-full h-[fit-content] relative pl-5 pr-3 py-3 rounded-[4px] shadow-style-1 gap-3'>
+        {/* <div className='flex flex-col border-[1px] w-full h-[fit-content] relative pl-5 pr-3 py-3 rounded-[4px] shadow-style-1 gap-3'>
           <div className='flex justify-between w-full h-full relative cursor-pointer gap-2'>
             <div className='absolute w-[5px] rounded-xl h-full top-0 -left-3 bottom-0 m-auto bg-[#FFCE1E]' />
 
@@ -80,7 +75,7 @@ const LayerManagement = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {activeLayer.length > 0 &&
           activeLayer

@@ -146,7 +146,7 @@ const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
           console.error(error);
         }
       }
-
+      el.source = "simpul";
       let currentActiveLayer = [...activeLayer];
       if (
         currentActiveLayer.findIndex(

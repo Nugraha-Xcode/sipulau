@@ -1,6 +1,7 @@
 import { useEffect, useRef, useContext } from "react";
 import { useTranslation } from "next-i18next";
 import SortIcon from "./SortIcon";
+import { titikPulauMvt } from "../../../constant";
 
 const Table = ({
   columns,
@@ -78,7 +79,7 @@ const Table = ({
                       })
                     );
                     setTimeout(() => {
-                      map.setLayoutProperty("titikPulauMvt", "icon-image", [
+                      map.setLayoutProperty(titikPulauMvt, "icon-image", [
                         "case",
                         [
                           "in",
@@ -97,7 +98,7 @@ const Table = ({
                   }
                   // if (!isSelectAll) {
                   //   setTimeout(() => {
-                  //     map.setLayoutProperty("titikPulauMvt", "icon-image", [
+                  //     map.setLayoutProperty(titikPulauMvt, "icon-image", [
                   //       "case",
                   //       ["in", ["id"], ""],
                   //       "marker-pulau",
@@ -106,7 +107,7 @@ const Table = ({
                   //   }, 1000);
                   // } else {
                   //   setTimeout(() => {
-                  //     map.setLayoutProperty("titikPulauMvt", "icon-image", [
+                  //     map.setLayoutProperty(titikPulauMvt, "icon-image", [
                   //       "case",
                   //       ["in", ["id"], ""],
                   //       "marker-pulau-highlight",

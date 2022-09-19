@@ -1,10 +1,10 @@
 import React from "react";
-import IcCloseUpload from "../../../../core/icons/icCloseUpload";
+// import IcCloseUpload from "../../../../core/icons/icCloseUpload";
 import style from "./InputDropFiles.module.css";
+import shp from "shpjs";
 
-const InputDropFiles = ({ files, setFiles }) => {
+const InputDropFiles = ({ files, setFiles, setShpData }) => {
   const inputRef = React.useRef(null);
-
   // state for dragging files
   const [dragging, setDragging] = React.useState(false);
 
@@ -20,7 +20,7 @@ const InputDropFiles = ({ files, setFiles }) => {
   };
 
   // triggers when file is dropped
-  const handleDrop = function (e) {
+  const handleDrop = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragging(false);
@@ -28,15 +28,31 @@ const InputDropFiles = ({ files, setFiles }) => {
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       //  set files credential to the state of files
       setFiles(e.dataTransfer.files);
+      let buffer = await e.dataTransfer.files[0].arrayBuffer();
+      shp(buffer).then(function (geojson) {
+        if (Array.isArray(geojson)) {
+          setShpData(geojson);
+        } else {
+          setShpData([geojson]);
+        }
+      });
     }
   };
 
   // triggers when file is selected with click
-  const handleChange = function (e) {
+  const handleChange = async (e) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
       //  set files credential to the state of files
       setFiles(e.target.files);
+      let buffer = await e.target.files[0].arrayBuffer();
+      shp(buffer).then(function (geojson) {
+        if (Array.isArray(geojson)) {
+          setShpData(geojson);
+        } else {
+          setShpData([geojson]);
+        }
+      });
     }
   };
 
@@ -51,7 +67,7 @@ const InputDropFiles = ({ files, setFiles }) => {
         <div className={style.item_upload}>
           {files[0]?.name}
           <img
-            src="images/ic-action.svg"
+            src='images/ic-action.svg'
             className={style.button_close}
             onClick={() => setFiles("")}
           />
@@ -67,15 +83,16 @@ const InputDropFiles = ({ files, setFiles }) => {
         >
           <input
             ref={inputRef}
+            accept='.zip'
             className={style.input}
-            type="file"
+            type='file'
             multiple={true}
             onChange={handleChange}
           />
 
           <img
             onClick={onButtonClick}
-            src="images/addFile.png"
+            src='images/addFile.png'
             className={style.upload_image}
           />
           <p className={style.title_upload}>Click or drag file here</p>

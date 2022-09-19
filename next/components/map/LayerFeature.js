@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { titikPulauMvt } from "../../constant";
 
 import MapContext from "../../context/MapContext";
 import CustomLayerItem from "./CustomLayerItem";
@@ -8,16 +9,16 @@ const LayerFeature = () => {
   const { t } = useTranslation("sideBarRight");
   const { activeLayer, map } = useContext(MapContext);
   const [toponimVisibility, setToponimVisibility] = useState(
-    map.getLayer("titikPulauMvt")
-      ? map.getLayoutProperty("titikPulauMvt", "visibility") === "visible"
+    map.getLayer(titikPulauMvt)
+      ? map.getLayoutProperty(titikPulauMvt, "visibility") === "visible"
         ? true
         : false
       : true
   );
   useEffect(() => {
-    map.getLayer("titikPulauMvt") &&
+    map.getLayer(titikPulauMvt) &&
       map.setLayoutProperty(
-        "titikPulauMvt",
+        titikPulauMvt,
         "visibility",
         toponimVisibility ? "visible" : "none"
       );

@@ -25,7 +25,7 @@ import SimpulLayer from "../components/map/SimpulLayer";
 import AppContext from "../context/AppContext";
 import SimpulLayers from "../components/map/SimpulLayers";
 import SideNav from "../components/navigation/SideNav";
-import { useNav, useNetwork } from "../hooks";
+import { useIndexedDB, useNav, useNetwork } from "../hooks";
 import MapToolbox from "../components/map/MapToolbox";
 import MapToolboxCard from "../components/map/MapToolboxCard";
 import BottomDrawer from "../components/core/BottomDrawer";
@@ -35,11 +35,16 @@ import ZoomOutController from "../components/map/ZoomOutController";
 import Legend from "../components/map/legend/Legend";
 import MapTrackPointer from "../components/map/MapTrackPointer";
 import TopNav from "../components/navigation/TopNav";
+import {
+  UploadLayerDatabase,
+  UploadLayerStore,
+  titikPulauMvt,
+} from "../constant";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
-  const [activeLayer, activeLegend] = useNetwork(
-    (state) => [state.activeLayer, state.activeLegend],
+  const [activeLayer, activeLegend, setActiveLayer] = useNetwork(
+    (state) => [state.activeLayer, state.activeLegend, state.setActiveLayer],
     shallow
   );
   const columnObj = [
@@ -88,6 +93,7 @@ const map = () => {
   const [drawPoly, setDrawPoly] = useState(false);
 
   const mercRef = useRef(new SphericalMercator());
+  const [setDb, db] = useIndexedDB((state) => [state.setDb, state.db], shallow);
 
   const fetchRBIStyle = useCallback(async () => {
     let vts =
@@ -229,9 +235,9 @@ const map = () => {
   useEffect(() => {
     let selectedArr = toggledRow.map((el) => parseInt(el.id));
     mapRef.current &&
-      mapRef.current.getLayer("titikPulauMvt") &&
+      mapRef.current.getLayer(titikPulauMvt) &&
       mapRef.current.setLayoutProperty(
-        "titikPulauMvt",
+        titikPulauMvt,
         "icon-image",
         isSelectAll
           ? activeFilter.length > 0
@@ -280,15 +286,53 @@ const map = () => {
     isExpandBottomDrawer && setOpenLegend(false);
   };
 
-  const sideNavPadding = {
-    "left-[22.75rem]": Boolean(activeSideFeature) && isOpenSideNav,
-    "left-[18.75rem]": Boolean(activeSideFeature) && !isOpenSideNav,
-    "left-[15rem]":
-      expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
-    "left-[4.75rem]":
-      !expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
-    "left-4": !isOpenSideNav && !Boolean(activeSideFeature),
-  };
+  // const sideNavPadding = {
+  //   "left-[22.75rem]": Boolean(activeSideFeature) && isOpenSideNav,
+  //   "left-[18.75rem]": Boolean(activeSideFeature) && !isOpenSideNav,
+  //   "left-[15rem]":
+  //     expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
+  //   "left-[4.75rem]":
+  //     !expandSideNav && isOpenSideNav && !Boolean(activeSideFeature),
+  //   "left-4": !isOpenSideNav && !Boolean(activeSideFeature),
+  // };
+
+  useEffect(async () => {
+    const indexedDB =
+      window.indexedDB ||
+      window.mozIndexedDB ||
+      window.webkitIndexedDB ||
+      window.msIndexedDB ||
+      window.shimIndexedDB;
+    const request = await indexedDB.open(UploadLayerDatabase, 1);
+    request.onerror = (event) => {
+      console.log("IndexedDb error");
+    };
+
+    request.onupgradeneeded = (event) => {
+      let db = event.target.result;
+      setDb(db);
+      db.createObjectStore(UploadLayerStore);
+    };
+
+    request.onsuccess = (event) => {
+      const db = event.target.result;
+      setDb(db);
+
+      const txn = db.transaction(UploadLayerStore, "readonly");
+      const store = txn.objectStore(UploadLayerStore);
+
+      let query = store.getAll();
+      query.onsuccess = (event) => {
+        if (!event.target.result) {
+          console.log(`data not found`);
+        } else {
+          if (event.target.result) {
+            setActiveLayer([...event.target.result, ...activeLayer]);
+          }
+        }
+      };
+    };
+  }, []);
 
   return (
     <>

@@ -5,6 +5,7 @@ import AddCommentForm from "../popup/AddCommentForm";
 import AppContext from "../../../context/AppContext";
 import { useComment } from "../../../hooks";
 import shallow from "zustand/shallow";
+import { titikPulauMvt } from "../../../constant";
 
 const CommentAdd = () => {
   const { t } = useTranslation("komentar");
@@ -91,17 +92,17 @@ const CommentAdd = () => {
     if (type === "titik") {
       map.on("click", handleTitik);
     } else if (type === "pulau") {
-      map.on("click", "titikPulauMvt", handlePulau);
+      map.on("click", titikPulauMvt, handlePulau);
     }
     return () => {
       if (type === "titik") {
         map.getCanvas().style.cursor = "";
-        map.on("mouseleave", "titikPulauMvt", function () {
+        map.on("mouseleave", titikPulauMvt, function () {
           map.getCanvas().style.cursor = "";
         });
         map.off("click", handleTitik);
       } else if (type === "pulau") {
-        map.off("click", "titikPulauMvt", handlePulau);
+        map.off("click", titikPulauMvt, handlePulau);
       }
     };
   }, [type]);
@@ -124,7 +125,7 @@ const CommentAdd = () => {
       },
     });
     map.getCanvas().style.cursor = "";
-    map.on("mouseleave", "titikPulauMvt", function () {
+    map.on("mouseleave", titikPulauMvt, function () {
       map.getCanvas().style.cursor = "";
     });
     setType(null);
@@ -148,7 +149,7 @@ const CommentAdd = () => {
               onClick={() => {
                 if (isAuth) {
                   map.getCanvas().style.cursor = "crosshair";
-                  map.on("mouseleave", "titikPulauMvt", function () {
+                  map.on("mouseleave", titikPulauMvt, function () {
                     map.getCanvas().style.cursor = "crosshair";
                   });
                   setType("titik");

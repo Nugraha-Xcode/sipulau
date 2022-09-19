@@ -1,4 +1,5 @@
 import { useContext, useEffect } from "react";
+import { titikPulauMvt } from "../../constant";
 import MapContext from "../../context/MapContext";
 import Popup from "./popup/Popup";
 
@@ -6,8 +7,8 @@ const MvtLayer = ({ isSelectAll }) => {
   const { map, refreshLayer } = useContext(MapContext);
   useEffect(() => {
     let origin = window.location.origin;
-    if (!map.getSource("titikPulauMvt")) {
-      map.addSource("titikPulauMvt", {
+    if (!map.getSource(titikPulauMvt)) {
+      map.addSource(titikPulauMvt, {
         type: "vector",
         tiles: [origin + "/api/mvt/titik-pulau/{z}/{x}/{y}"],
       });
@@ -23,9 +24,9 @@ const MvtLayer = ({ isSelectAll }) => {
       });
 
       map.addLayer({
-        id: "titikPulauMvt",
+        id: titikPulauMvt,
         type: "symbol",
-        source: "titikPulauMvt",
+        source: titikPulauMvt,
         "source-layer": "titik-pulau",
         layout: {
           visibility: "visible",
@@ -52,13 +53,13 @@ const MvtLayer = ({ isSelectAll }) => {
         map.hasImage("marker-pulau") && map.removeImage("marker-pulau");
         map.hasImage("marker-pulau-highlight") &&
           map.removeImage("marker-pulau-highlight");
-        map.getLayer("titikPulauMvt") && map.removeLayer("titikPulauMvt");
-        map.getSource("titikPulauMvt") && map.removeSource("titikPulauMvt");
+        map.getLayer(titikPulauMvt) && map.removeLayer(titikPulauMvt);
+        map.getSource(titikPulauMvt) && map.removeSource(titikPulauMvt);
       }
     };
   }, [refreshLayer, isSelectAll]);
 
-  return <Popup layername='titikPulauMvt' />;
+  return <Popup layername={titikPulauMvt} />;
 };
 
 export default MvtLayer;
