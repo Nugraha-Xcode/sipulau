@@ -25,7 +25,7 @@ const UploadSection = () => {
 
     const store = txn.objectStore(UploadLayerStore);
     //
-    let query = store.put(item, item.data.fileName);
+    let query = store.put(item, valueInput + item.data.fileName);
 
     query.onsuccess = function (event) {
       console.log(event);
@@ -60,22 +60,22 @@ const UploadSection = () => {
         variant='normal'
         isActive={valueInput && files}
         onClick={() => {
-          let additionalLayer = [];
+          let uploadLayer = [];
           for (const element of shpData) {
             let item = {};
             item.source = "upload";
-            item.judul = element.fileName;
-            item.nama = "";
+            item.judul = valueInput;
+            item.nama = element.fileName;
             item.url = "";
             item.format = "geojson";
-            item.simpul = "";
+            item.simpul = "Uploaded Layer";
             item.bbox = "";
             item.srs = "";
             item.data = element;
             addToIndexedDb(item);
-            additionalLayer.push(item);
+            uploadLayer.push(item);
           }
-          setActiveLayer([...additionalLayer, ...activeLayer]);
+          setActiveLayer([...activeLayer, ...uploadLayer]);
           setValueInput("");
           setFiles("");
           setShpData([]);

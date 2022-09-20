@@ -1,37 +1,17 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 import shallow from "zustand/shallow";
-import { titikPulauMvt } from "../../../constant";
-import MapContext from "../../../context/MapContext";
 import { useNav } from "../../../hooks/useNav";
 import { useNetwork } from "../../../hooks/useNetwork";
 import { AboutContent } from "../sidebar-content";
 import LayerManagementItem from "./LayerManagementItem";
 
 const LayerManagement = () => {
-  const { map } = useContext(MapContext);
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
     shallow
   );
 
   const [activeLayer] = useNetwork((state) => [state.activeLayer], shallow);
-
-  const [toponimVisibility, setToponimVisibility] = useState(
-    map.getLayer(titikPulauMvt)
-      ? map.getLayoutProperty(titikPulauMvt, "visibility") === "visible"
-        ? true
-        : false
-      : true
-  );
-
-  useEffect(() => {
-    map.getLayer(titikPulauMvt) &&
-      map.setLayoutProperty(
-        titikPulauMvt,
-        "visibility",
-        toponimVisibility ? "visible" : "none"
-      );
-  }, [toponimVisibility]);
 
   return (
     <div

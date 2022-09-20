@@ -1,27 +1,30 @@
-import { Transition } from "@headlessui/react";
+// import { Transition } from "@headlessui/react";
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import shallow from "zustand/shallow";
 import { UploadLayerStore } from "../../../constant";
 import MapContext from "../../../context/MapContext";
 import { useIndexedDB, useNetwork } from "../../../hooks";
-import IcAccordion from "../../core/icons/icAccordion";
+// import IcAccordion from "../../core/icons/icAccordion";
 
-import IcEye from "../../core/icons/IcEye";
+// import IcEye from "../../core/icons/IcEye";
 import CustomTransition from "../sidebar-content/core/CustomTransition";
 import OpacityController from "./OpacityController";
 
 const LayerManagementItem = ({ item, index }) => {
   const { map } = useContext(MapContext);
-  const [isShowOpacity, setIsShowOpacity] = React.useState(false);
 
-  const [layerVisibility, setLayerVisibility] = useState(
-    map.getLayer(item.judul + item.nama)
-      ? map.getLayoutProperty(item.judul + item.nama, "visibility") ===
-        "visible"
-        ? true
-        : false
-      : true
-  );
+  const [isShowOpacity, setIsShowOpacity] = React.useState(false);
+  const [layerVisibility, setLayerVisibility] = useState(true);
+
+  useEffect(() => {
+    if (
+      map.getLayoutProperty(item.judul + item.nama, "visibility") === "none"
+    ) {
+      setLayerVisibility(false);
+    } else {
+      setLayerVisibility(true);
+    }
+  }, [item]);
 
   const [setDb, db] = useIndexedDB((state) => [state.setDb, state.db], shallow);
 
@@ -85,12 +88,16 @@ const LayerManagementItem = ({ item, index }) => {
 
       const store = txn.objectStore(UploadLayerStore);
       //
-      let query = store.delete(item.judul);
+      let query = store.delete(item.judul + item.nama);
 
       query.onsuccess = function (event) {
-        map.removeLayer(item.judul);
-        map.removeSource(item.judul);
-        setActiveLayer(activeLayer.filter((el) => el.judul !== item.judul));
+        map.removeLayer(item.judul + item.nama);
+        map.removeSource(item.judul + item.nama);
+        setActiveLayer(
+          activeLayer.filter(
+            (el) => el.nama !== item.nama && el.judul !== item.judul
+          )
+        );
       };
 
       query.onerror = function (event) {
