@@ -6,26 +6,39 @@ const OpacityController = ({ handleDelete, item }) => {
   const sliderRef = useRef(null);
   const [layerOpacity, setLayerOpacity] = useState(
     map.getLayer(item.judul + item.nama)
-      ? item.source === "simpul"
+      ? item.source === "simpul" || item.source === "additional"
         ? map.getPaintProperty(item.judul + item.nama, "raster-opacity") * 100
-        : map.getPaintProperty(item.judul, "line-opacity") * 100
+        : item.data.features[0].geometry.type === "Point" ||
+          item.data.features[0].geometry.type === "MultiPoint"
+        ? map.getPaintProperty(item.judul + item.nama, "circle-opacity") * 100
+        : map.getPaintProperty(item.judul + item.nama, "line-opacity") * 100
       : 100
   );
 
   useEffect(() => {
     sliderRef.current.addEventListener("input", (e) => {
-      if (item.source === "simpul") {
+      if (item.source === "simpul" || item.source === "additional") {
         map.setPaintProperty(
           item.judul + item.nama,
           "raster-opacity",
           parseInt(e.target.value, 10) / 100
         );
-      } else
+      } else if (
+        item.data.features[0].geometry.type === "Point" ||
+        item.data.features[0].geometry.type === "MultiPoint"
+      ) {
+        map.setPaintProperty(
+          item.judul + item.nama,
+          "circle-opacity",
+          parseInt(e.target.value, 10) / 100
+        );
+      } else {
         map.setPaintProperty(
           item.judul + item.nama,
           "line-opacity",
           parseInt(e.target.value, 10) / 100
         );
+      }
     });
   }, [map, sliderRef.current, item]);
 

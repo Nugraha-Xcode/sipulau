@@ -296,7 +296,13 @@ const map = () => {
   //   "left-4": !isOpenSideNav && !Boolean(activeSideFeature),
   // };
 
-  useEffect(async () => {
+  const activeLayerRef = useRef(null);
+
+  useEffect(() => {
+    activeLayerRef.current = activeLayer;
+  }, [activeLayer]);
+
+  const addUploadedLayer = async () => {
     const indexedDB =
       window.indexedDB ||
       window.mozIndexedDB ||
@@ -327,11 +333,45 @@ const map = () => {
           console.log(`data not found`);
         } else {
           if (event.target.result) {
-            setActiveLayer([...event.target.result, ...activeLayer]);
+            setActiveLayer([...event.target.result, ...activeLayerRef.current]);
           }
         }
       };
     };
+  };
+
+  const addDefaultLayer = useCallback(async () => {
+    try {
+      const response = await fetch("/api/additional-layers", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      if (response.status === 200) {
+        let additionalLayer = [];
+        for (const element of result) {
+          let obj = {};
+          obj.source = "additional";
+          obj.judul = element.layer_name;
+          obj.nama = element.layer_id;
+          obj.simpul = "Default Layer";
+          obj.data = element.layer_defs;
+          additionalLayer.push(obj);
+        }
+        setActiveLayer([...additionalLayer, ...activeLayerRef.current]);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+    }
+  }, []);
+
+  useEffect(() => {
+    addDefaultLayer();
+    addUploadedLayer();
   }, []);
 
   return (
@@ -401,7 +441,6 @@ const map = () => {
             </div>
           )}
 
-          {mapload && <MvtLayer isSelectAll={isSelectAll} />}
           <TopNav />
           <SideNav handleViewTable={handleViewTable} />
 
@@ -569,6 +608,7 @@ const map = () => {
             </ResizeableDrawer> */}
 
           {mapload && activeLayer.length > 0 && <SimpulLayers />}
+          {mapload && <MvtLayer isSelectAll={isSelectAll} />}
           <Modal
             isShowing={isOpenMapFilter}
             handleModal={toggleMapFilter}
