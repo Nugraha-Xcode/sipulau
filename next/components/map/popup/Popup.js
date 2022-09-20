@@ -138,7 +138,7 @@ const Popup = ({ layername }) => {
           <AnimationCard
             isShowing={isOpen}
             position={"right"}
-            addStyle='w-[25rem] top-0'
+            addStyle='w-[13.5rem] top-0'
           >
             <SidePopup setIsOpen={setIsOpen} feature={activeFeature} />
           </AnimationCard>

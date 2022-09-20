@@ -67,7 +67,7 @@ const CommentList = () => {
 
   return (
     <div
-      className='p-4 space-y-2 divide-y-2 overflow-y-scroll max-h-[30rem]'
+      className='p-4 space-y-2 divide-y-2 overflow-y-scroll max-h-[25rem]'
       ref={rootObserver}
     >
       {commentPulau.length > 0 ? (
