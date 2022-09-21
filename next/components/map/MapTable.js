@@ -153,7 +153,7 @@ const MapTable = ({
 
   return (
     <>
-      <div className='font-map mt-5'>
+      <div className='font-map mt-0'>
         {/* <div className='border-b-2 flex relative px-5'>
        
         </div> */}

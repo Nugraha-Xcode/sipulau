@@ -121,7 +121,7 @@ const Table = ({
             {columns.map((el, index) =>
               el.show ? (
                 <th
-                  className='py-3 sticky top-0 min-w-[120px] bg-gray-50'
+                  className='py-1 sticky top-0 min-w-[120px] bg-gray-50'
                   key={index}
                 >
                   <div
@@ -136,7 +136,9 @@ const Table = ({
                     }
                     className='flex items-center justify-between cursor-pointer gap-4'
                   >
-                    <p className='text-sm text-left'>{t(el.title)}</p>
+                    <p className='text-xs font-semibold text-left'>
+                      {t(el.title)}
+                    </p>
                     <SortIcon
                       opacityBottom={
                         el.field === order.orderBy && order.orderAsc === true
@@ -297,7 +299,7 @@ const Table = ({
                             ) !== -1
                           ? "bg-blue-2"
                           : ""
-                      } text-left py-[3px] text-xs pr-2 ${
+                      } text-left py-[2px] text-[10px] pr-2 ${
                         dataItem[itemValue.field] &&
                         dataItem[itemValue.field].length > 40
                           ? "hover:relative hover:before:content-[attr(test)] hover:before:overflow-visible before:absolute before:bg-black-2 before:rounded-md before:top-10 before:z-[999] before:text-white hover:before:p-2"
