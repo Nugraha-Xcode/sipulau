@@ -1,7 +1,8 @@
 import Tippy from "@tippyjs/react";
 import clsx from "clsx";
-import React from "react";
+import React, { useContext } from "react";
 import shallow from "zustand/shallow";
+import MapContext from "../../context/MapContext";
 import { useNav } from "../../hooks";
 import MemoIcBasemap from "../core/icons/IcBasemap";
 import MemoIcExtent from "../core/icons/IcExtent";
@@ -11,11 +12,18 @@ import BasemapFeature from "./BasemapFeature";
 import MeasurementFeature from "./toolbox/MeasurementFeature";
 
 const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
-  const [activeSideFeature, activeCardFeature, setActiveCardFeature] = useNav(
+  const { map } = useContext(MapContext);
+  const [
+    activeSideFeature,
+    activeCardFeature,
+    setActiveCardFeature,
+    expandSideNav,
+  ] = useNav(
     (state) => [
       state.activeSideFeature,
       state.activeCardFeature,
       state.setActiveCardFeature,
+      state.expandSideNav,
     ],
     shallow
   );
@@ -39,22 +47,18 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
         } flex flex-col items-center justify-end gap-2 overflow-hidden transition-all duration-100 ease-in-out`}
       >
         <div className='flex flex-col gap-2'>
-          <Tippy content='Extend' placement='right' delay={300}>
+          <Tippy content='Extent' placement='right' delay={300}>
             <button
               onClick={() =>
                 map.fitBounds(
                   [
-                    bragaConfig
-                      ? bragaConfig.sw_bound_point.coordinates
-                      : [89.7191515625002, -19.661688141592478],
-                    bragaConfig
-                      ? bragaConfig.ne_bound_point.coordinates
-                      : [144.1234484375007, 18.16833678790286],
+                    [89.7191515625002, -19.661688141592478],
+                    [144.1234484375007, 18.16833678790286],
                   ],
                   {
                     padding: {
                       bottom: isOpenBottomDrawer ? 400 : 0,
-                      left: activeSideFeature ? 400 : 0,
+                      left: activeSideFeature ? 350 : expandSideNav ? 200 : 0,
                     },
                   }
                 )
