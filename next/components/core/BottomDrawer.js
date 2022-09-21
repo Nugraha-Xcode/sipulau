@@ -17,11 +17,11 @@ const BottomDrawer = ({
           "h-[425px]": isOpen && !isExpandBottomDrawer,
           "h-[700px]": isOpen && isExpandBottomDrawer,
           "h-0": !isOpen,
-          "pl-96": isActiveSideFeature && isOpenNav,
+          "pl-[345px]": isActiveSideFeature && isOpenNav,
           "pl-[25rem]": isActiveSideFeature && !isOpenNav,
-          "pl-64": !isActiveSideFeature && isOpenNav && isExpandNav,
-          "pl-20": !isActiveSideFeature && isOpenNav && !isExpandNav,
-          "pl-1": !isActiveSideFeature && !isOpenNav,
+          "pl-56": !isActiveSideFeature && isOpenNav && isExpandNav,
+          "pl-14": !isActiveSideFeature && isOpenNav && !isExpandNav,
+          "pl-0": !isActiveSideFeature && !isOpenNav,
         },
       ])}
     >
