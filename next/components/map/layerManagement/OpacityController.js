@@ -4,16 +4,31 @@ import MapContext from "../../../context/MapContext";
 const OpacityController = ({ handleDelete, item }) => {
   const { map } = useContext(MapContext);
   const sliderRef = useRef(null);
-  const [layerOpacity, setLayerOpacity] = useState(
-    map.getLayer(item.judul + item.nama)
-      ? item.source === "simpul" || item.source === "additional"
-        ? map.getPaintProperty(item.judul + item.nama, "raster-opacity") * 100
-        : item.data.features[0].geometry.type === "Point" ||
-          item.data.features[0].geometry.type === "MultiPoint"
-        ? map.getPaintProperty(item.judul + item.nama, "circle-opacity") * 100
-        : map.getPaintProperty(item.judul + item.nama, "line-opacity") * 100
-      : 100
-  );
+  const [layerOpacity, setLayerOpacity] = useState(100);
+
+  useEffect(() => {
+    if (item.source === "simpul" || item.source === "additional") {
+      setLayerOpacity(
+        map.getPaintProperty(item.judul + item.nama, "raster-opacity") * 100
+      );
+    } else if (
+      item.source === "upload" &&
+      (item.data.features[0].geometry.type === "Point" ||
+        item.data.features[0].geometry.type === "MultiPoint")
+    ) {
+      setLayerOpacity(
+        map.getPaintProperty(item.judul + item.nama, "circle-opacity") * 100
+      );
+    } else if (item.source === "upload") {
+      setLayerOpacity(
+        map.getPaintProperty(item.judul + item.nama, "line-opacity") * 100
+      );
+    } else if (item.source === "toponim") {
+      setLayerOpacity(
+        map.getPaintProperty(item.judul + item.nama, "icon-opacity") * 100
+      );
+    }
+  }, [item]);
 
   useEffect(() => {
     sliderRef.current.addEventListener("input", (e) => {
@@ -24,18 +39,25 @@ const OpacityController = ({ handleDelete, item }) => {
           parseInt(e.target.value, 10) / 100
         );
       } else if (
-        item.data.features[0].geometry.type === "Point" ||
-        item.data.features[0].geometry.type === "MultiPoint"
+        item.source === "upload" &&
+        (item.data.features[0].geometry.type === "Point" ||
+          item.data.features[0].geometry.type === "MultiPoint")
       ) {
         map.setPaintProperty(
           item.judul + item.nama,
           "circle-opacity",
           parseInt(e.target.value, 10) / 100
         );
-      } else {
+      } else if (item.source === "upload") {
         map.setPaintProperty(
           item.judul + item.nama,
           "line-opacity",
+          parseInt(e.target.value, 10) / 100
+        );
+      } else if (item.source === "toponim") {
+        map.setPaintProperty(
+          item.judul + item.nama,
+          "icon-opacity",
           parseInt(e.target.value, 10) / 100
         );
       }
@@ -57,12 +79,13 @@ const OpacityController = ({ handleDelete, item }) => {
         </div>
       </div> */}
 
-      <div className='flex flex-col w-full h-[fit-content] gap-2'>
-        <div className='flex gap-3 h-full items-center'>
+      {item.source === "upload" || item.source === "simpul" ? (
+        <div className='flex flex-col w-full h-[fit-content] gap-2'>
+          {/* <div className='flex gap-3 h-full items-center'>
           <img src='/images/ic-zoom.svg' alt='icon' className='w-4 h-4' />
           <p className='text-gray-500 text-xs'>Zoom to Layer</p>
-        </div>
-        {/* <div className='flex gap-3 h-full items-center'>
+        </div> */}
+          {/* <div className='flex gap-3 h-full items-center'>
           <IcAccordion variant='up' />
           <p>Move Layer Up</p>
         </div>
@@ -70,14 +93,15 @@ const OpacityController = ({ handleDelete, item }) => {
           <IcAccordion variant='down' />
           <p>Move Layer Down</p>
         </div> */}
-        <button
-          onClick={handleDelete}
-          className='flex gap-3 h-full items-center'
-        >
-          <img src='/images/ic-trash.svg' alt='icon' className='w-4 h-4' />
-          <p className='text-gray-500 text-xs'>Delete</p>
-        </button>
-      </div>
+          <button
+            onClick={handleDelete}
+            className='flex gap-3 h-full items-center'
+          >
+            <img src='/images/ic-trash.svg' alt='icon' className='w-4 h-4' />
+            <p className='text-gray-500 text-xs'>Delete</p>
+          </button>
+        </div>
+      ) : null}
 
       <div className='w-full flex gap-2 justify-between items-center'>
         <img src='/images/ic-transparency.svg' alt='icon' />

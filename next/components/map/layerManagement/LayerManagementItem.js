@@ -49,6 +49,7 @@ const LayerManagementItem = ({ item, index }) => {
   }, [layerVisibility, item]);
 
   const handleLayerDown = useCallback(() => {
+    setIsShowOpacity(false);
     if (index !== 0) {
       map.moveLayer(
         activeLayer[index].judul + activeLayer[index].nama,
@@ -62,6 +63,7 @@ const LayerManagementItem = ({ item, index }) => {
   }, [index, activeLayer]);
 
   const handleLayerUp = useCallback(() => {
+    setIsShowOpacity(false);
     if (index !== activeLayer.length - 1) {
       map.moveLayer(
         activeLayer[index + 1].judul + activeLayer[index + 1].nama,
@@ -75,6 +77,7 @@ const LayerManagementItem = ({ item, index }) => {
   }, [index, activeLayer]);
 
   const handleRemoveLayer = useCallback(() => {
+    setIsShowOpacity(false);
     if (item.source === "simpul") {
       map.removeLayer(item.judul + item.nama);
       map.removeSource(item.judul + item.nama);
@@ -137,8 +140,7 @@ const LayerManagementItem = ({ item, index }) => {
         <div
           className='flex flex-col overflow-hidden'
           onClick={() => {
-            item.source !== "toponim" &&
-              setIsShowOpacity((prevState) => !prevState);
+            setIsShowOpacity((prevState) => !prevState);
           }}
         >
           <div className='font-semibold text-xs truncate'>{item.judul}</div>
