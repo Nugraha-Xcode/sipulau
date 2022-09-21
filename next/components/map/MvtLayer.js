@@ -28,6 +28,7 @@ const MvtLayer = ({ isSelectAll }) => {
         type: "symbol",
         source: titikPulauMvt,
         "source-layer": "titik-pulau",
+        paint: { "icon-opacity": 1 },
         layout: {
           visibility: "visible",
           "icon-image": isSelectAll
