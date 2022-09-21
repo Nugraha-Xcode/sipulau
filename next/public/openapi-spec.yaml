@@ -1,0 +1,553 @@
+openapi: 3.0.0
+info:
+  title: SIPULAU OpenAPI Spec
+  version: '1.0'
+paths:
+  /api/mvt/titik-pulau/{z}/{x}/{y}:
+    get:
+      tags:
+        - MVT
+      summary: MVT Pulau
+      responses:
+        '200':
+          description: MVT Protocol Buffer
+          content:
+            application/x-protobuf:
+              schema:
+                type: string
+                format: binary
+        '204':
+          description: Empty data
+        default:
+          $ref: '#/components/responses/error'
+    parameters:
+      - name: z
+        in: path
+        description: Slippy map zoom level
+        required: true
+        schema:
+          type: integer
+      - name: x
+        in: path
+        description: Slippy map x
+        required: true
+        schema:
+          type: integer
+      - name: 'y'
+        in: path
+        description: Slippy map y
+        required: true
+        schema:
+          type: integer
+      - $ref: '#/components/parameters/id_toponim'
+      - $ref: '#/components/parameters/nammap'
+      - $ref: '#/components/parameters/artinam'
+      - $ref: '#/components/parameters/sjhnam'
+      - $ref: '#/components/parameters/aslbhs'
+      - $ref: '#/components/parameters/id_wilayah'
+      - $ref: '#/components/parameters/wadmkd'
+      - $ref: '#/components/parameters/wadmkc'
+      - $ref: '#/components/parameters/wadmkk'
+      - $ref: '#/components/parameters/wadmpr'
+      - $ref: '#/components/parameters/status'
+      - $ref: '#/components/parameters/remark'
+  /api/titik-pulau:
+    get:
+      summary: Tabel pulau
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TitikPulauList'
+        default:
+          $ref: '#/components/responses/error'
+      tags:
+        - Titik pulau
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/ordby'
+        - $ref: '#/components/parameters/orddir'
+        - $ref: '#/components/parameters/fid'
+        - $ref: '#/components/parameters/id_toponim'
+        - $ref: '#/components/parameters/nammap'
+        - $ref: '#/components/parameters/artinam'
+        - $ref: '#/components/parameters/sjhnam'
+        - $ref: '#/components/parameters/aslbhs'
+        - $ref: '#/components/parameters/id_wilayah'
+        - $ref: '#/components/parameters/wadmkd'
+        - $ref: '#/components/parameters/wadmkc'
+        - $ref: '#/components/parameters/wadmkk'
+        - $ref: '#/components/parameters/wadmpr'
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/remark'
+        - $ref: '#/components/parameters/bbox'
+  /api/titik-pulau/{id_toponim}/popup:
+    get:
+      summary: Popup pulau
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TitikPulauPopup'
+        default:
+          $ref: '#/components/responses/error'
+      tags:
+        - Titik pulau
+      parameters:
+        - $ref: '#/components/parameters/idToponimParam'
+  /api/titik-pulau/{id_toponim}/popup-detail:
+    get:
+      summary: Popup detail pulau
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TitikPulauPopupDetail'
+        default:
+          $ref: '#/components/responses/error'
+      tags:
+        - Titik pulau
+      parameters:
+        - $ref: '#/components/parameters/idToponimParam'
+  /api/titik-pulau/extent:
+    get:
+      summary: Pulau extent
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Extent'
+        default:
+          $ref: '#/components/responses/error'
+      tags:
+        - Titik pulau
+      parameters:
+        - $ref: '#/components/parameters/id_toponim'
+        - $ref: '#/components/parameters/nammap'
+        - $ref: '#/components/parameters/artinam'
+        - $ref: '#/components/parameters/sjhnam'
+        - $ref: '#/components/parameters/aslbhs'
+        - $ref: '#/components/parameters/id_wilayah'
+        - $ref: '#/components/parameters/wadmkd'
+        - $ref: '#/components/parameters/wadmkc'
+        - $ref: '#/components/parameters/wadmkk'
+        - $ref: '#/components/parameters/wadmpr'
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/remark'
+        - $ref: '#/components/parameters/bbox'
+        - $ref: '#/components/parameters/selected'
+        - $ref: '#/components/parameters/unselected'
+  /api/titik-pulau/suggestion:
+    get:
+      summary: Pulau suggestion
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nammap:
+                      type: string
+        default:
+          $ref: '#/components/responses/error'
+      tags:
+        - Titik pulau
+      parameters:
+        - name: keyword
+          in: query
+          description: Search keyword for suggestion
+          schema:
+            type: string
+          required: true
+  /api/titik-pulau/download/csv:
+    post:
+      summary: Download pulau csv
+      security:
+        - oAuth2Password: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/csv:
+              schema:
+                type: string
+                format: binary
+        default:
+          $ref: '#/components/responses/error'
+      tags:
+        - Titik pulau
+      requestBody:
+        $ref: '#/components/requestBodies/downloadRequest'
+  /api/titik-pulau/download/shp:
+    post:
+      summary: Download pulau shp
+      security:
+        - oAuth2Password: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+        default:
+          $ref: '#/components/responses/error'
+      tags:
+        - Titik pulau
+      requestBody:
+        $ref: '#/components/requestBodies/downloadRequest'
+components:
+  schemas:
+    BasicMessage:
+      type: object
+      properties:
+        message:
+          type: string
+    TitikPulauPopup:
+      type: object
+      properties:
+        fid:
+          type: string
+        id_toponim:
+          type: string
+        nammap:
+          type: string
+        alias:
+          type: string
+        wadmkk:
+          type: string
+        wadmpr:
+          type: string
+        foto1:
+          type: string
+        foto2:
+          type: string
+        foto3:
+          type: string
+        foto4:
+          type: string
+    TitikPulauPopupDetail:
+      type: object
+      properties:
+        id_wilayah:
+          type: string
+        artinam:
+          type: string
+        sjhnam:
+          type: string
+        aslbhs:
+          type: string
+        wadmkd:
+          type: string
+        wadmkc:
+          type: string
+        remark:
+          type: string
+        pjg_gp:
+          type: string
+        luas:
+          type: string
+    TitikPulauList:
+      type: array
+      items:
+        type: object
+        properties:
+          fid:
+            type: string
+          id_toponim:
+            type: string
+          nammap:
+            type: string
+          alias:
+            type: string
+          artinam:
+            type: string
+          sjhnam:
+            type: string
+          aslbhs:
+            type: string
+          id_wilayah:
+            type: string
+          wadmkd:
+            type: string
+          wadmkc:
+            type: string
+          wadmkk:
+            type: string
+          wadmpr:
+            type: string
+          status:
+            type: string
+          remark:
+            type: string
+          lon:
+            type: number
+          lat:
+            type: number
+          pjg_gp:
+            type: string
+          luas:
+            type: string
+    Extent:
+      type: object
+      properties:
+        xmin:
+          type: number
+        ymin:
+          type: number
+        xmax:
+          type: number
+        ymax:
+          type: number
+    MultiPolygon:
+      type: object
+      required:
+        - type
+        - coordinates
+      properties:
+        type:
+          type: string
+          enum:
+            - MultiPolygon
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              minItems: 4
+              items:
+                type: array
+                minItems: 2
+                items:
+                  type: number
+        bbox:
+          type: array
+          minItems: 4
+          items:
+            type: number
+    DownloadRequest:
+      type: object
+      properties:
+        fid:
+          type: string
+        id_toponim:
+          type: integer
+        nammap:
+          type: string
+        artinam:
+          type: string
+        sjhnam:
+          type: string
+        aslbhs:
+          type: string
+        id_wilayah:
+          type: string
+        wadmkd:
+          type: string
+        wadmkc:
+          type: string
+        wadmkk:
+          type: string
+        wadmpr:
+          type: string
+        status:
+          type: string
+        remark:
+          type: string
+        bbox:
+          type: array
+          items:
+            type: number
+          minimum: 4
+          maximum: 4
+        selected:
+          type: array
+          items:
+            type: integer
+        unselected:
+          type: array
+          items:
+            type: integer
+        aoi:
+          $ref: '#/components/schemas/MultiPolygon'
+  parameters:
+    page:
+      name: page
+      in: query
+      description: Fetch page
+      schema:
+        type: integer
+        minimum: 1
+    ordby:
+      name: ordby
+      in: query
+      description: Order column
+      schema:
+        type: string
+        enum:
+          - fid
+          - id_toponim
+          - nammap
+          - alias
+          - artinam
+          - sjhnam
+          - aslbhs
+          - id_wilayah
+          - wadmkd
+          - wadmkc
+          - wadmkk
+          - wadmpr
+          - status
+          - remark
+          - pjg_gp
+          - luas
+    orddir:
+      name: orddir
+      in: query
+      description: Order direction
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+    fid:
+      name: fid
+      in: query
+      description: Feature ID (Internal ID)
+      schema:
+        type: string
+    id_toponim:
+      name: id_toponim
+      in: query
+      description: ID toponim
+      schema:
+        type: integer
+    nammap:
+      name: nammap
+      in: query
+      description: Nama pulau
+      schema:
+        type: string
+    artinam:
+      name: artinam
+      in: query
+      description: Arti nama
+      schema:
+        type: string
+    sjhnam:
+      name: sjhnam
+      in: query
+      description: Sejarah nama
+      schema:
+        type: string
+    aslbhs:
+      name: aslbhs
+      in: query
+      description: Asal bahasa
+      schema:
+        type: string
+    id_wilayah:
+      name: id_wilayah
+      in: query
+      description: ID wilayah
+      schema:
+        type: string
+    wadmkd:
+      name: wadmkd
+      in: query
+      description: Kelurahan/Desa
+      schema:
+        type: string
+    wadmkc:
+      name: wadmkc
+      in: query
+      description: Kecamatan
+      schema:
+        type: string
+    wadmkk:
+      name: wadmkk
+      in: query
+      description: Kabupaten/Kota
+      schema:
+        type: string
+    wadmpr:
+      name: wadmpr
+      in: query
+      description: Provinsi
+      schema:
+        type: string
+    status:
+      name: status
+      in: query
+      description: Status
+      schema:
+        type: string
+    remark:
+      name: remark
+      in: query
+      description: Remark
+      schema:
+        type: string
+    bbox:
+      name: bbox
+      in: query
+      description: Bounding box dengan format xmin,ymin,xmax,ymax
+      schema:
+        type: string
+    selected:
+      name: selected
+      in: query
+      description: 'id_toponim dipilih, dipisah dengan koma. Contoh: 1,2,3'
+      schema:
+        type: string
+    unselected:
+      name: unselected
+      in: query
+      description: >-
+        id_toponim tidak dipilih, dipisah dengan koma. Contoh: 1,2,3. Digunakan
+        pada logic select all
+      schema:
+        type: string
+    idToponimParam:
+      name: id_toponim
+      in: path
+      description: ID Toponim
+      schema:
+        type: integer
+      required: true
+  requestBodies:
+    downloadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DownloadRequest'
+  responses:
+    error:
+      description: Invalid payload / Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicMessage'
+  securitySchemes:
+    oAuth2Password:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: https://sipulau.braga.co.id/panel/inageoportal-login
+          scopes: {}
