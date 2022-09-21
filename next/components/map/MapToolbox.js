@@ -5,10 +5,12 @@ import shallow from "zustand/shallow";
 import MapContext from "../../context/MapContext";
 import { useNav } from "../../hooks";
 import MemoIcBasemap from "../core/icons/IcBasemap";
+import MemoIcCrs from "../core/icons/IcCrs";
 import MemoIcExtent from "../core/icons/IcExtent";
 import MemoIcMinimize from "../core/icons/IcMinimize";
 import MemoIcRuler from "../core/icons/IcRuler";
 import BasemapFeature from "./BasemapFeature";
+import CrsSelectorFeature from "./toolbox/CrsSelectorFeature";
 import MeasurementFeature from "./toolbox/MeasurementFeature";
 
 const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
@@ -81,6 +83,21 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
               className='flex h-7 w-7 items-center justify-center rounded text-gray-600 hover:bg-gray-50 hover:text-brand-400'
             >
               <MemoIcRuler />
+            </button>
+          </Tippy>
+          <Tippy content='Pointer CRS' placement='right' delay={300}>
+            <button
+              onClick={() =>
+                handleOpenCardFeature({
+                  featureId: "crs",
+                  iconId: "map-crs",
+                  label: "Pointer CRS",
+                  content: <CrsSelectorFeature />,
+                })
+              }
+              className='flex h-7 w-7 items-center justify-center rounded text-gray-600 hover:bg-gray-50 hover:text-brand-400'
+            >
+              <MemoIcCrs />
             </button>
           </Tippy>
           <Tippy content='Base map' placement='right' delay={300}>
