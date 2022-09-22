@@ -61,15 +61,21 @@ const FileFormatDownload = ({
           <p className='text-xl text-gray-900 font-semibold'>
             Non-Disclosure Agreement (NDA)
           </p>
-          <p className='text-xs text-gray-900'>
-            Informasi Geospasial Dasar (IGD) yang terdapat dalam portal ini
+          <p className='text-xs text-gray-900 text-justify'>
+            Informasi Geospasial Dasar (IGD) yang terdapat dalam SI Pulau ini
             adalah produk Badan Informasi Geospasial (BIG) dan hak ciptanya
             dimiliki oleh BIG. Pengguna diijinkan dan dibebaskan untuk
             mengunduh, mendistribusikan, mengadaptasi atau membuat turunan IGD
             yang ada dalam website ini, dengan syarat mencantumkan sumber
             informasi/data berasal dari BIG. Pengguna tidak diperkenankan untuk
-            memperjualbelikan kembali segala data yang diperoleh dari portal
+            memperjualbelikan kembali segala data yang diperoleh dari SI Pulau
             ini.
+          </p>
+          <p className='text-xs text-gray-900 text-justify'>Sitasi:</p>
+          <p className='text-xs text-gray-900 text-justify'>
+            Badan Informasi Geospasial Republik Indonesia, 2021. Titik Toponim
+            Pulau Indonesia. Bogor, Jawa Barat. Diakses dari :
+            http://sipulau.big.go.id
           </p>
           <div className='flex items-center gap-2 justify-center my-2'>
             <input
@@ -93,7 +99,7 @@ const FileFormatDownload = ({
             }}
             className='text-sm'
           >
-            Upload
+            Download
           </Button>
         </div>
       </Modal>
