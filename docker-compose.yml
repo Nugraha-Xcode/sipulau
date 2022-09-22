@@ -136,5 +136,4 @@ services:
 
 # networks:
 #   sipulaudev:
-#     external: true
 #     name: sipulaudev
