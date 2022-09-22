@@ -32,6 +32,7 @@ import {
   UploadLayerStore,
   titikPulauMvt,
 } from "../constant";
+import ToponimPopup from "../components/map/popup/ToponimPopup";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
@@ -532,6 +533,8 @@ const map = () => {
           {mapload && activeLayer.length > 0 && (
             <MapLayers isSelectAll={isSelectAll} />
           )}
+          <ToponimPopup mapLoad={mapload} />
+
           {/* {mapload && <MvtLayer isSelectAll={isSelectAll} />} */}
           <Modal
             isShowing={isOpenMapFilter}

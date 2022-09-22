@@ -1,9 +1,6 @@
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import PopupContext from "../../../context/PopupContext";
 
-const DetailInformasi = () => {
-  const { detailPulau } = useContext(PopupContext);
+const DetailInformasi = ({ detailPulau }) => {
   const { t } = useTranslation("popupPulau");
   const detailItems = [
     {

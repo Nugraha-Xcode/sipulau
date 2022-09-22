@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
-import PopupContext from "../../../context/PopupContext";
 import useToggle from "../../../utils/useToggle";
 import Modal from "../../modal";
 import AppContext from "../../../context/AppContext";
@@ -11,7 +10,13 @@ import { useComment, useNav } from "../../../hooks";
 import shallow from "zustand/shallow";
 import SideComment from "../comment/SideComment";
 
-const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
+const InformasiPulau = ({
+  infoPulau,
+  setActiveFeature,
+  setIsOpen,
+  toggle,
+  getPopupDetail,
+}) => {
   const { t } = useTranslation("popupPulau");
   const [setExpandSideNav, setActiveSideFeature] = useNav(
     (state) => [state.setExpandSideNav, state.setActiveSideFeature],
@@ -39,7 +44,6 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
       value: "wadmpr",
     },
   ];
-  const { infoPulau, getPopupDetail } = useContext(PopupContext);
   const { isAuth } = useContext(AppContext);
   const { map } = useContext(MapContext);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -51,31 +55,40 @@ const InformasiPulau = ({ setActiveFeature, setIsOpen, toggle }) => {
     },
   });
   const [isShowing, toggleModal] = useToggle();
+  const [first, setfirst] = useState(false);
+  useEffect(() => {
+    setfirst((prev) => !prev);
+  }, [infoPulau]);
 
   return (
     <>
       <div className='md:pt-2'>
         <div className='relative w-full'>
           <div className='navigation-wrapper'>
-            <div ref={sliderRef} className='keen-slider h-36 w-[250px]'>
-              {[
-                infoPulau.foto1,
-                infoPulau.foto2,
-                infoPulau.foto3,
-                infoPulau.foto4,
-              ].map((el, index) => (
-                <div
-                  className='keen-slider__slide flex items-center justify-center rounded-lg'
-                  key={index}
-                >
-                  {el ? (
-                    <img src={el} alt='popup' />
-                  ) : (
-                    <img src='images/empty-state-popup.jpg' alt='empty popup' />
-                  )}
-                </div>
-              ))}
-            </div>
+            {infoPulau && (
+              <div ref={sliderRef} className='keen-slider h-36 w-[250px]'>
+                {[
+                  infoPulau.foto1,
+                  infoPulau.foto2,
+                  infoPulau.foto3,
+                  infoPulau.foto4,
+                ].map((el, index) => (
+                  <div
+                    className='keen-slider__slide flex items-center justify-center rounded-lg'
+                    key={index}
+                  >
+                    {el ? (
+                      <img src={el} alt='popup' />
+                    ) : (
+                      <img
+                        src='images/empty-state-popup.jpg'
+                        alt='empty popup'
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           {slider && (
             <div className='dots absolute bottom-0 left-1/2 transform -translate-x-1/2'>

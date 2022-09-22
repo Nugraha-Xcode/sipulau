@@ -1,6 +1,5 @@
 import { useContext, useEffect } from "react";
 import MapContext from "../../context/MapContext";
-import Popup from "./popup/Popup";
 
 const MvtLayer = ({ item, isSelectAll }) => {
   const { map, refreshLayer } = useContext(MapContext);
@@ -61,7 +60,7 @@ const MvtLayer = ({ item, isSelectAll }) => {
     };
   }, [refreshLayer, isSelectAll]);
 
-  return <Popup layername={item.judul + item.nama} />;
+  return <></>;
 };
 
 export default MvtLayer;

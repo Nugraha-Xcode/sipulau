@@ -3,18 +3,21 @@ import { useTranslation } from "react-i18next";
 import CommentList from "./CommentList";
 import DetailInformasi from "./DetailInformasi";
 
-const SidePopup = ({ setIsOpen, feature }) => {
+const SidePopup = ({ setIsOpen, feature, detailPulau, infoPulau }) => {
   const { t } = useTranslation("popupPulau");
   let featureObj = {};
   switch (feature) {
     case "detail":
       featureObj = {
         label: t("viewDetailInfo"),
-        component: <DetailInformasi />,
+        component: <DetailInformasi detailPulau={detailPulau} />,
       };
       break;
     case "comment":
-      featureObj = { label: t("commentList"), component: <CommentList /> };
+      featureObj = {
+        label: t("commentList"),
+        component: <CommentList infoPulau={infoPulau} />,
+      };
       break;
     default:
       break;

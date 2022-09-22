@@ -1,15 +1,13 @@
 import { useContext, useState, useEffect, useRef } from "react";
 import "keen-slider/keen-slider.min.css";
 import AppContext from "../../../context/AppContext";
-import PopupContext from "../../../context/PopupContext";
 import ImageCarousel from "./ImageCarousel";
 
-const CommentList = () => {
+const CommentList = ({ infoPulau }) => {
   const observerRef = useRef(null);
   const rootObserver = useRef(null);
   const observer = useRef(null);
   const { handleSetSnack } = useContext(AppContext);
-  const { infoPulau } = useContext(PopupContext);
   const [commentPulau, setCommentPulau] = useState([]);
   const [page, setPage] = useState(1);
   const [load, setLoad] = useState(false);
