@@ -98,7 +98,7 @@ const SimpulLayer = ({ item }) => {
         type: "raster",
         source: item.judul + item.nama,
         paint: { "raster-opacity": 1 },
-        layout: { visibility: "visible" },
+        layout: { visibility: item.visibility },
       });
     }
 

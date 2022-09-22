@@ -3,7 +3,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import shallow from "zustand/shallow";
 import clsx from "clsx";
-import Tippy from "@tippyjs/react";
 import Head from "next/head";
 import Script from "next/script";
 import maplibregl from "maplibre-gl";
@@ -12,16 +11,9 @@ import SphericalMercator from "@mapbox/sphericalmercator";
 
 import useToggle from "../utils/useToggle";
 import { MapProvider } from "../context/MapContext";
-import Layout from "../components/Layout";
-import MapSearch from "../components/map/MapSearch";
-import MapFeature from "../components/map/MapFeature";
-import MapLegend from "../components/map/MapLegend";
 import MapTable from "../components/map/MapTable";
 import Modal from "../components/modal";
-import MvtLayer from "../components/map/MvtLayer";
-import ResizeableDrawer from "../components/core/ResizeableDrawer";
 import Filter from "../components/map/Filter";
-import SimpulLayer from "../components/map/SimpulLayer";
 import AppContext from "../context/AppContext";
 import SimpulLayers from "../components/map/SimpulLayers";
 import SideNav from "../components/navigation/SideNav";
@@ -69,12 +61,7 @@ const map = () => {
   const [activeFeature, setActiveFeature] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isOpenFeature, setIsOpenFeature] = useState(false);
-  const [filterArr, setFilterArr] = useState([
-    // {
-    //   id: (Math.random() * 10000).toFixed(0),
-    //   selectObj: { value: "nammap", label: "Nama Pulau" },
-    // },
-  ]);
+  const [filterArr, setFilterArr] = useState([]);
   const [activeFilter, setActiveFilter] = useState([]);
   const [queryFilter, setQueryFilter] = useState("");
   const [dataTable, setDataTable] = useState([]);
@@ -358,6 +345,7 @@ const map = () => {
           obj.nama = element.layer_id;
           obj.simpul = "Default Layer";
           obj.data = element.layer_defs;
+          obj.visibility = "visible";
           additionalLayer.push(obj);
         }
         setActiveLayer([...additionalLayer, ...activeLayerRef.current]);
@@ -370,6 +358,19 @@ const map = () => {
   }, []);
 
   useEffect(() => {
+    setActiveLayer([
+      {
+        source: "toponim",
+        judul: "Toponim_Pulau",
+        nama: "",
+        url: "",
+        format: "mvt",
+        simpul: "POI",
+        bbox: "",
+        srs: "",
+        visibility: "visible",
+      },
+    ]);
     addDefaultLayer();
     addUploadedLayer();
   }, []);
@@ -472,30 +473,6 @@ const map = () => {
           </div>
           {/* bottom left map controller */}
 
-          {/* top left map controller */}
-          {/* <div
-            className={clsx([
-              "absolute top-6 z-10 transition-all duration-100 ease-in-out",
-              sideNavPadding,
-            ])}
-          >
-            <Tippy
-              content={isOpenSideNav ? "Hide Sidebar" : "Open Sidebar"}
-              placement='right'
-              delay={300}
-            >
-              <button
-                onClick={() => {
-                  setOpenSideNav(!isOpenSideNav);
-                }}
-                className='z-50 flex h-10 w-10 items-center justify-center rounded-[4px] bg-white hover:text-brand-400'
-              >
-                <img src='/images/ic-tab.svg' alt='Menu Toggle' />
-              </button>
-            </Tippy>
-          </div> */}
-          {/* top left map controller */}
-
           {/* top right map controller */}
           {activeLegend.length > 0 && (
             <Legend
@@ -539,61 +516,6 @@ const map = () => {
             </BottomDrawer>
           </div>
           {/* bottom drawer table */}
-
-          {/* <MapSearch
-              category={category}
-              setCategory={(category) => {
-                setCategory(category);
-              }}
-            /> */}
-          {/* <MapFeature /> */}
-          {/* <div
-              data-cy="attribute-table-drawer-button"
-              onClick={() => {
-                setIsOpenDrawer(true);
-                setIsOpenFeature(false);
-                setActiveFeature("search");
-              }}
-              className="font-map absolute bottom-6 left-1/2 z-10 shadow-map-1 rounded-md p-1 hidden md:flex flex-col gap-1 bg-main-blue transform -translate-x-1/2 cursor-pointer"
-            >
-              <div className="flex gap-2 px-5 py-3 ">
-                <img
-                  src="/images/ic-table.svg"
-                  alt="legend icon"
-                  className="w-5"
-                />
-                <p className="text-sm font-semibold text-white">
-                  {t("buttonAttribute")}
-                </p>
-              </div>
-            </div> */}
-          {/* <div
-              onClick={() =>
-                mapRef.current.flyTo({
-                  center: [116.9213, -0.7893],
-                  zoom: 4,
-                })
-              }
-              className='absolute bottom-[4.25rem] md:bottom-[5.5rem] mb-[6px] left-[27px] md:left-8 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'
-            >
-              <img
-                src='/images/ic-reset-zoom.svg'
-                alt='extend default button'
-                className='w-5'
-              />
-            </div> */}
-          {/* <a
-              href={`/files/${t("userGuide")}.pdf`}
-              target='_blank'
-              className='absolute bottom-44 md:bottom-56 mb-[6px] right-[10px] md:right-6 z-10 bg-white ring-2 ring-main-gray ring-opacity-30 rounded-md p-1.5 md:p-2.5 cursor-pointer'
-            >
-              <img
-                src='/images/ic-question.svg'
-                alt='guide button'
-                className='w-5'
-              />
-            </a> */}
-          {/* <MapLegend /> */}
           {/* <ResizeableDrawer isOpen={isOpenDrawer}>
               <MapTable
                 dataTable={dataTable}
@@ -607,8 +529,10 @@ const map = () => {
               />
             </ResizeableDrawer> */}
 
-          {mapload && activeLayer.length > 0 && <SimpulLayers />}
-          {mapload && <MvtLayer isSelectAll={isSelectAll} />}
+          {mapload && activeLayer.length > 0 && (
+            <SimpulLayers isSelectAll={isSelectAll} />
+          )}
+          {/* {mapload && <MvtLayer isSelectAll={isSelectAll} />} */}
           <Modal
             isShowing={isOpenMapFilter}
             handleModal={toggleMapFilter}

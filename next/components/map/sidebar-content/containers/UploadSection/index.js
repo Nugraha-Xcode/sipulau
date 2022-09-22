@@ -72,6 +72,7 @@ const UploadSection = () => {
             item.bbox = "";
             item.srs = "";
             item.data = element;
+            item.visibility = "visible";
             addToIndexedDb(item);
             uploadLayer.push(item);
           }

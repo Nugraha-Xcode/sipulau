@@ -14,19 +14,8 @@ const LayerManagementItem = ({ item, index }) => {
   const { map } = useContext(MapContext);
 
   const [isShowOpacity, setIsShowOpacity] = React.useState(false);
-  const [layerVisibility, setLayerVisibility] = useState(true);
 
-  useEffect(() => {
-    if (
-      map.getLayoutProperty(item.judul + item.nama, "visibility") === "none"
-    ) {
-      setLayerVisibility(false);
-    } else {
-      setLayerVisibility(true);
-    }
-  }, [item]);
-
-  const [setDb, db] = useIndexedDB((state) => [state.setDb, state.db], shallow);
+  const db = useIndexedDB((state) => state.db, shallow);
 
   const [activeLayer, setActiveLayer, activeLegend, setActiveLegend] =
     useNetwork(
@@ -39,14 +28,17 @@ const LayerManagementItem = ({ item, index }) => {
       shallow
     );
 
-  useEffect(() => {
-    map.getLayer(item.judul + item.nama) &&
-      map.setLayoutProperty(
-        item.judul + item.nama,
-        "visibility",
-        layerVisibility ? "visible" : "none"
-      );
-  }, [layerVisibility, item]);
+  const handleVisibility = useCallback(() => {
+    let prevArr = [...activeLayer];
+    if (item.visibility === "visible") {
+      prevArr[index].visibility = "none";
+      map.setLayoutProperty(item.judul + item.nama, "visibility", "none");
+    } else {
+      prevArr[index].visibility = "visible";
+      map.setLayoutProperty(item.judul + item.nama, "visibility", "visible");
+    }
+    setActiveLayer(prevArr);
+  }, [activeLayer, item]);
 
   const handleLayerDown = useCallback(() => {
     setIsShowOpacity(false);
@@ -148,10 +140,10 @@ const LayerManagementItem = ({ item, index }) => {
         </div>
 
         <div className='flex gap-2 h-full items-center w-10 min-w-10'>
-          <button onClick={() => setLayerVisibility((prev) => !prev)}>
+          <button onClick={handleVisibility}>
             <img
               src={`${
-                layerVisibility
+                item.visibility === "visible"
                   ? "/images/ic-eye.svg"
                   : "/images/ic-eye-crossed.svg"
               }`}
