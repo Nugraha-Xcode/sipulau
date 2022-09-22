@@ -15,7 +15,7 @@ import MapTable from "../components/map/MapTable";
 import Modal from "../components/modal";
 import Filter from "../components/map/Filter";
 import AppContext from "../context/AppContext";
-import SimpulLayers from "../components/map/SimpulLayers";
+import MapLayers from "../components/map/MapLayers";
 import SideNav from "../components/navigation/SideNav";
 import { useIndexedDB, useNav, useNetwork } from "../hooks";
 import MapToolbox from "../components/map/MapToolbox";
@@ -530,7 +530,7 @@ const map = () => {
             </ResizeableDrawer> */}
 
           {mapload && activeLayer.length > 0 && (
-            <SimpulLayers isSelectAll={isSelectAll} />
+            <MapLayers isSelectAll={isSelectAll} />
           )}
           {/* {mapload && <MvtLayer isSelectAll={isSelectAll} />} */}
           <Modal

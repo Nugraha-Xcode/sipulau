@@ -5,7 +5,7 @@ import MvtLayer from "./MvtLayer";
 import SimpulLayer from "./SimpulLayer";
 import UploadLayer from "./UploadLayer";
 
-const SimpulLayers = ({ isSelectAll }) => {
+const MapLayers = ({ isSelectAll }) => {
   const activeLayer = useNetwork((state) => state.activeLayer);
 
   return activeLayer.map((el) => {
@@ -27,4 +27,4 @@ const SimpulLayers = ({ isSelectAll }) => {
   });
 };
 
-export default SimpulLayers;
+export default MapLayers;
