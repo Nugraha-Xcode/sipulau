@@ -1,0 +1,40 @@
+import{a as l,o as c,b as h,w as t,h as s,e as a,E as e}from"./runtime-core.esm-bundler.15edf3c4.js";const d={class:"markdown-body"},p=e("Revisions are individual changes to items made. Directus keeps track of changes made, so you\u2019re able to revert to a previous state at will. "),u=e("Learn more about Revisions"),_=e("."),m=s("hr",null,null,-1),v=s("h2",{id:"the-revision-object",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#the-revision-object"},"#"),e(" The Revision Object")],-1),j=s("p",null,[s("code",null,"id"),e(),s("strong",null,"integer"),s("br"),e(" Primary key of the revision.")],-1),y=s("code",null,"activity",-1),g=e(),b=s("strong",null,"many-to-one",-1),f=s("br",null,null,-1),x=e(" Related activity record. Many-to-one to "),q=e("activity"),R=e("."),k=s("p",null,[s("code",null,"collection"),e(),s("strong",null,"string"),s("br"),e(" Collection in which this revision happened.")],-1),w=s("p",null,[s("code",null,"item"),e(),s("strong",null,"string"),s("br"),e(" Primary key of the item that was changed.")],-1),E=s("p",null,[s("code",null,"data"),e(),s("strong",null,"object"),s("br"),e(" Snapshot of the top-level item data.")],-1),T=s("p",null,[s("code",null,"delta"),e(),s("strong",null,"object"),s("br"),e(" Snapshot of the changes made in this revision.")],-1),P=s("p",null,[s("code",null,"parent"),e(),s("strong",null,"many-to-one"),s("br"),e(" Parent revision that triggered this revision. Many-to-one to revisions (recursive).")],-1),S=s("pre",null,[s("code",{class:"language-json"},[s("span",{class:"hljs-punctuation"},"{"),e(`
+	`),s("span",{class:"hljs-attr"},'"id"'),s("span",{class:"hljs-punctuation"},":"),e(),s("span",{class:"hljs-number"},"368"),s("span",{class:"hljs-punctuation"},","),e(`
+	`),s("span",{class:"hljs-attr"},'"activity"'),s("span",{class:"hljs-punctuation"},":"),e(),s("span",{class:"hljs-number"},"438"),s("span",{class:"hljs-punctuation"},","),e(`
+	`),s("span",{class:"hljs-attr"},'"collection"'),s("span",{class:"hljs-punctuation"},":"),e(),s("span",{class:"hljs-string"},'"articles"'),s("span",{class:"hljs-punctuation"},","),e(`
+	`),s("span",{class:"hljs-attr"},'"item"'),s("span",{class:"hljs-punctuation"},":"),e(),s("span",{class:"hljs-string"},'"1"'),s("span",{class:"hljs-punctuation"},","),e(`
+	`),s("span",{class:"hljs-attr"},'"data"'),s("span",{class:"hljs-punctuation"},":"),e(),s("span",{class:"hljs-punctuation"},"{"),e(`
+		`),s("span",{class:"hljs-attr"},'"title"'),s("span",{class:"hljs-punctuation"},":"),e(),s("span",{class:"hljs-string"},'"Hello World"'),e(`
+	`),s("span",{class:"hljs-punctuation"},"}"),s("span",{class:"hljs-punctuation"},","),e(`
+	`),s("span",{class:"hljs-attr"},'"delta"'),s("span",{class:"hljs-punctuation"},":"),e(),s("span",{class:"hljs-punctuation"},"{"),e(`
+		`),s("span",{class:"hljs-attr"},'"title"'),s("span",{class:"hljs-punctuation"},":"),e(),s("span",{class:"hljs-string"},'"Hello from the Docs!"'),e(`
+	`),s("span",{class:"hljs-punctuation"},"}"),s("span",{class:"hljs-punctuation"},","),e(`
+	`),s("span",{class:"hljs-attr"},'"parent"'),s("span",{class:"hljs-punctuation"},":"),e(),s("span",{class:"hljs-literal"},[s("span",{class:"hljs-keyword"},"null")]),e(`
+`),s("span",{class:"hljs-punctuation"},"}"),e(`
+`)])],-1),L=s("hr",null,null,-1),Q=s("h2",{id:"list-revisions",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#list-revisions"},"#"),e(" List revisions")],-1),A=s("p",null,"List all revisions that exist in Directus.",-1),C=s("div",{class:"tip hint"},[s("div",{class:"hint-title"},"Permissions"),s("p",null,"The data returned in this endpoint will be filtered based on the user\u2019s permissions. For example, revisions that apply to a collection that the current user doesn\u2019t have access to are stripped out.")],-1),G=s("h3",{id:"query-parameters",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#query-parameters"},"#"),e(" Query Parameters")],-1),D=e("Supports all "),I=e("global query parameters"),H=e("."),B=s("h3",{id:"returns",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#returns"},"#"),e(" Returns")],-1),N=e("An array of up to "),O=e("limit"),V=e(),M=s("a",{href:"#the-revision-object"},"revision objects",-1),F=e(". If no items are available, data will be an empty array."),W=s("h3",{id:"rest-api",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#rest-api"},"#"),e(" REST API")],-1),z=s("pre",null,[s("code",null,`GET /revisions
+SEARCH /revisions
+`)],-1),J=e("Learn more about SEARCH ->"),K=s("h3",{id:"graphql",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#graphql"},"#"),e(" GraphQL")],-1),U=s("pre",null,[s("code",null,`POST /graphql/system
+`)],-1),X=s("pre",null,[s("code",{class:"language-graphql"},[s("span",{class:"hljs-keyword"},"type"),s("span",{class:"hljs-type"}," Query"),e(` {
+	revisions: [directus_revisions]
+}
+`)])],-1),Y=s("h5",{id:"examples",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#examples"},"#"),e(" Examples")],-1),Z=s("pre",null,[s("code",{class:"language-graphql"},[s("span",{class:"hljs-keyword"},"query"),e(` {
+	revisions {
+		id
+		data
+		delta
+	}
+}
+`)])],-1),$=s("hr",null,null,-1),ss=s("h2",{id:"retrieve-a-revision",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#retrieve-a-revision"},"#"),e(" Retrieve a revision")],-1),es=s("p",null,"List an existing revision by primary key.",-1),ts=s("h3",{id:"query-parameters-1",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#query-parameters-1"},"#"),e(" Query Parameters")],-1),ns=e("Supports all "),as=e("global query parameters"),os=e("."),ls=s("h3",{id:"returns-1",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#returns-1"},"#"),e(" Returns")],-1),is=s("p",null,[e("Returns the requested "),s("a",{href:"#the-revision-object"},"revision object"),e(".")],-1),rs=s("h3",{id:"rest-api-1",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#rest-api-1"},"#"),e(" REST API")],-1),cs=s("pre",null,[s("code",null,`GET /revisions/:id
+`)],-1),hs=s("h5",{id:"example",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#example"},"#"),e(" Example")],-1),ds=s("pre",null,[s("code",null,`GET /revisions/322
+`)],-1),ps=s("h3",{id:"graphql-1",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#graphql-1"},"#"),e(" GraphQL")],-1),us=s("pre",null,[s("code",null,`POST /graphql/system
+`)],-1),_s=s("pre",null,[s("code",{class:"language-graphql"},[s("span",{class:"hljs-keyword"},"type"),s("span",{class:"hljs-type"}," Query"),e(` {
+	revisions_by_id(id:`),s("span",{class:"hljs-literal"}," ID"),e(`!): directus_revisions
+}
+`)])],-1),ms=s("h5",{id:"example-1",tabindex:"-1"},[s("a",{class:"header-anchor",href:"#example-1"},"#"),e(" Example")],-1),vs=s("pre",null,[s("code",{class:"language-graphql"},[s("span",{class:"hljs-keyword"},"query"),e(` {
+	revisions_by_id(id: `),s("span",{class:"hljs-number"},"322"),e(`) {
+		id
+		data
+		delta
+	}
+}
+`)])],-1),fs="Revisions",xs=!1,qs="REST and GraphQL API documentation on the Revisions collection in Directus.",Rs="2 min read",ks="page-reference",ws={name:"revisions",setup(js,{expose:i}){const o={title:"Revisions",modularExtension:!1,description:"REST and GraphQL API documentation on the Revisions collection in Directus.",readTime:"2 min read",pageClass:"page-reference"};return i({frontmatter:o}),(ys,gs)=>{const n=l("router-link"),r=l("docs-wrapper");return c(),h(r,{frontmatter:o},{default:t(()=>[s("div",d,[s("blockquote",null,[s("p",null,[p,a(n,{to:"/docs/getting-started/glossary#revisions"},{default:t(()=>[u]),_:1}),_])]),m,v,j,s("p",null,[y,g,b,f,x,a(n,{to:"/docs/reference/system/activity"},{default:t(()=>[q]),_:1}),R]),k,w,E,T,P,S,L,Q,A,C,G,s("p",null,[D,a(n,{to:"/docs/reference/query"},{default:t(()=>[I]),_:1}),H]),B,s("p",null,[N,a(n,{to:"/docs/reference/query#limit"},{default:t(()=>[O]),_:1}),V,M,F]),W,z,s("p",null,[a(n,{to:"/docs/reference/introduction#search-http-method"},{default:t(()=>[J]),_:1})]),K,U,X,Y,Z,$,ss,es,ts,s("p",null,[ns,a(n,{to:"/docs/reference/query"},{default:t(()=>[as]),_:1}),os]),ls,is,rs,cs,hs,ds,ps,us,_s,ms,vs])]),_:1})}}};export{ws as default,qs as description,xs as modularExtension,ks as pageClass,Rs as readTime,fs as title};

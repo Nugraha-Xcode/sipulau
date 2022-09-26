@@ -51,7 +51,6 @@ http {
 
         location /panel/ {
             client_max_body_size 25m;
-            add_header Content-Security-Policy "default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval'; worker-src 'self' blob:; connect-src 'self' *.tile.openstreetmap.org; frame-ancestors 'none';" always;
             
             proxy_pass  http://directus:8055/;
             proxy_http_version    1.1;

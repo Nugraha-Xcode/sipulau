@@ -19,6 +19,7 @@ RUN npm run build
 # runner
 FROM directus/directus:9.16 as runner
 WORKDIR /directus
+COPY directus-app-with-captcha ./node_modules/@directus/app/dist
 RUN npx directus database install
 COPY schema.yml ./schema.yml
 # if using prebuilt:
