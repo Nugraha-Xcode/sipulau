@@ -52,6 +52,7 @@ services:
       - REFRESH_TOKEN_COOKIE_SECURE=true
       - REFRESH_TOKEN_COOKIE_NAME=sipulau_refresh_token
       - REFRESH_TOKEN_TTL=1d
+      - HCAPTCHA_SECRET_KEY
     restart: unless-stopped
     # networks:
     #   - default
