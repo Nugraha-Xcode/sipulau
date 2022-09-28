@@ -5,6 +5,14 @@ import isValidMultiPolygonGeom from "../../../../utils/api/isValidMultiPolygonGe
 import getCurrentActiveTable from "../../../../utils/api/getCurrentActiveTable";
 import getDirectusUserId from "../../../../utils/api/getDirectusUserId";
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '25mb',
+    },
+  },
+}
+
 export default async function downloadCsvHandler(req, res) {
   const { method } = req;
   if (method !== "POST") {

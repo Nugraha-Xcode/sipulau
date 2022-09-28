@@ -5,6 +5,14 @@ import { sipulauPool } from "../../../../db";
 import getCurrentActiveTable from "../../../../utils/api/getCurrentActiveTable";
 import getDirectusUserId from "../../../../utils/api/getDirectusUserId";
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '25mb',
+    },
+  },
+}
+
 const USER_DOWNLOADS_FOLDER_ID = "45f438ab-3124-43aa-90ac-b52d1954c95b";
 
 function postDownloadRequestToWorker(requestBody) {
