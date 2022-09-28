@@ -75,6 +75,7 @@ export default async function tableHandler(req, res) {
     status,
     remark,
     bbox,
+    point,
   } = req.query;
   let filters = [];
   let paramVal = [limit, offset];
@@ -122,7 +123,7 @@ export default async function tableHandler(req, res) {
     }
   }
 
-  // bbox filter
+  // bbox OR point filter
   if (bbox !== undefined) {
     bbox = bbox.split(",");
     if (bbox.length !== 4) {
@@ -153,6 +154,27 @@ export default async function tableHandler(req, res) {
     paramVal.push(xmin, ymin, xmax, ymax);
     filters.push(
       `geom && ST_MakeEnvelope($${param++}, $${param++}, $${param++}, $${param++}, 4326)`
+    );
+  } else if (point !== undefined) {
+    point = point.split(",");
+    if (point.length !== 2) {
+      return res.status(400).json({ message: "Format point harus: lon,lat" });
+    }
+    point = point.map((el) => parseFloat(el));
+    let [lon, lat] = point;
+    if (
+      isNaN(lon) ||
+      isNaN(lat) ||
+      lon < -180 ||
+      lon > 180 ||
+      lat < -90 ||
+      lat > 90
+    ) {
+      return res.status(400).json({ message: "point tidak valid" });
+    }
+    paramVal.push(lon, lat);
+    filters.push(
+      `ST_DWithin(ST_SetSRID(ST_MakePoint($${param++}, $${param++}), 4326), geom, 0.05)`
     );
   }
 
