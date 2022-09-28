@@ -1,7 +1,5 @@
 import React, { Fragment } from "react";
 import IcAccordion from "../../../../core/icons/icAccordion";
-import style from "./dropdown.module.css";
-import { Transition } from "@headlessui/react";
 import CustomTransition from "../CustomTransition";
 import clsx from "clsx";
 
@@ -26,7 +24,7 @@ const Dropdown = ({
   };
 
   return (
-    <div className='flex flex-col gap-2 w-full'>
+    <div className='flex flex-col w-full'>
       <CustomTransition
         show={direction === "up" && isActive}
         variant='fade-up'
