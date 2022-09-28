@@ -6,19 +6,16 @@ import React, {
   useRef,
 } from "react";
 import shallow from "zustand/shallow";
-import AppContext from "../../context/AppContext";
-import MapContext from "../../context/MapContext";
-import { useAuth, useDownloadAoi } from "../../hooks";
-import { useNav } from "../../hooks/useNav";
-import {
-  Accordion,
-  AreaInterest,
-  FileFormatDownload,
-  LayerListDownload,
-  Dropdown,
-} from "./sidebar-content";
+import AppContext from "../../../context/AppContext";
+import MapContext from "../../../context/MapContext";
+import { useAuth, useDownloadAoi } from "../../../hooks";
+import { useNav } from "../../../hooks/useNav";
+import { Accordion, Dropdown } from "../sidebar-content";
+import AreaInterest from "./AreaInterest";
+import FileFormatDownload from "./FileFormatDownload";
+import LayerListDownload from "./LayerListDownload";
 
-const SideDownload = () => {
+const Download = () => {
   const { draw } = useContext(MapContext);
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
@@ -267,4 +264,4 @@ const SideDownload = () => {
   );
 };
 
-export default SideDownload;
+export default Download;

@@ -13,12 +13,12 @@ import MemoIcNetwork from "../core/icons/IcNetwork";
 import MemoIcSearch from "../core/icons/IcSearch";
 import MemoIcUpload from "../core/icons/IcUpload";
 import SideComment from "../map/comment/SideComment";
-import SideDownload from "../map/SideDownload";
 import LayerManagement from "../map/layerManagement/LayerManagement";
 // import SideLayerTable from "../map/SideLayerTable";
 import NetworkNode from "../map/networkNode/NetworkNode";
 import SideSearchIsland from "../map/SideSearchIsland";
-import SideUpload from "../map/SideUpload";
+import SideUpload from "../map/uploadLayer/SideUpload";
+import Download from "../map/download/Download";
 
 import NavItem from "./NavItem";
 import Tippy from "@tippyjs/react";
@@ -89,7 +89,7 @@ const NavMenu = ({
         handleOpenSideFeature({
           featureId: "download",
           label: "Download",
-          content: <SideDownload />,
+          content: <Download />,
         }),
     },
     {

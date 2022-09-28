@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Modal from "../../../../modal";
-import { Button, Dropdown } from "../../core";
-import style from "./FileFormatDownload.module.css";
+import Modal from "../../modal";
+import { Button, Dropdown } from "../sidebar-content/core";
 
 const FileFormatDownload = ({ type, setType, handleDownload }) => {
-  // dropdown value
+  // dropdown valued
   const value = [
     { label: "CSV", value: "csv" },
     { label: "SHP", value: "shp" },
@@ -17,7 +16,7 @@ const FileFormatDownload = ({ type, setType, handleDownload }) => {
   }, [ndaModal]);
 
   return (
-    <div className={style.container}>
+    <div className='flex flex-col gap-2'>
       <Dropdown
         value={value}
         onValueSelected={(item) => setType(item)}

@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import shallow from "zustand/shallow";
-import MapContext from "../../../../../context/MapContext";
-import { useDownloadAoi } from "../../../../../hooks";
+import MapContext from "../../../context/MapContext";
+import { useDownloadAoi } from "../../../hooks";
 
 const AreaInterest = () => {
   const { t } = useTranslation("sideBarRight");

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import shallow from "zustand/shallow";
-import { useDownloadAoi, useNetwork } from "../../../../../hooks";
+import { useDownloadAoi, useNetwork } from "../../../hooks";
 
 const LayerListDownload = () => {
   const [activeLayer] = useNetwork((state) => [state.activeLayer], shallow);

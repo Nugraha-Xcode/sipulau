@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
 import shallow from "zustand/shallow";
-import { UploadLayerStore } from "../../../../../constant";
-import AppContext from "../../../../../context/AppContext";
-import { useIndexedDB, useNetwork } from "../../../../../hooks";
-import { Button, InputDropFiles } from "../../core";
-import style from "./UploadSection.module.css";
+import { UploadLayerStore } from "../../../constant";
+import AppContext from "../../../context/AppContext";
+import { useIndexedDB, useNetwork } from "../../../hooks";
+import { Button, InputDropFiles } from "../sidebar-content/core";
 
 const UploadSection = () => {
   // state for save the files value
@@ -37,10 +36,11 @@ const UploadSection = () => {
   };
 
   return (
-    <div className={style.container}>
+    <div className='w-full h-[fit-content] flex flex-col gap-2'>
       <input
-        className={style.input_layer}
+        className='w-full border-[1px] border-[#B4B2AF] rounded-[8px] placeholder-[#4F4C4A] focus:outline-none p-3'
         placeholder='Input Layer Name'
+        value={valueInput}
         onChange={(e) => setValueInput(e.target.value)}
       ></input>
 
@@ -51,9 +51,14 @@ const UploadSection = () => {
         setShpData={setShpData}
       />
 
-      <div className={style.info_upload_container}>
-        <img src='images/upload_info.png' className={style.info_upload_image} />
-        <p className={style.info_text}>Accepted format .zip</p>
+      <div className='w-full flex gap-2 items-center'>
+        <img
+          src='images/upload_info.png'
+          className='w-[fit-content] h-[fit-content]'
+        />
+        <p className='text-sm font-semibold text-[#B4B2AF]'>
+          Accepted format .zip
+        </p>
       </div>
 
       <Button

@@ -1,11 +1,5 @@
 // container
-import {
-  SearchResult,
-  AreaInterest,
-  FileFormatDownload,
-  LayerListDownload,
-  UploadSection,
-} from "./containers";
+import { SearchResult } from "./containers";
 
 // core
 import {
@@ -24,11 +18,7 @@ export {
   SearchResult,
   Accordion,
   Dropdown,
-  FileFormatDownload,
-  AreaInterest,
-  LayerListDownload,
   Button,
-  UploadSection,
   InputDropFiles,
   CustomTransition,
 };

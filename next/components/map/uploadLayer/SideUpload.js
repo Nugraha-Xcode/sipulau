@@ -1,7 +1,8 @@
 import React from "react";
 import shallow from "zustand/shallow";
-import { useNav } from "../../hooks/useNav";
-import { AboutContent, UploadSection } from "./sidebar-content";
+import { useNav } from "../../../hooks/useNav";
+import { AboutContent } from "../sidebar-content";
+import UploadSection from "./UploadSection";
 
 const SideUpload = () => {
   const [setActiveSideFeature, activeSideFeature] = useNav(
