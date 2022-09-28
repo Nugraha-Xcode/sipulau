@@ -1,10 +1,16 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, {
+  useState,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import shallow from "zustand/shallow";
 import AppContext from "../../context/AppContext";
+import MapContext from "../../context/MapContext";
 import { useAuth, useDownloadAoi } from "../../hooks";
 import { useNav } from "../../hooks/useNav";
 import {
-  AboutContent,
   Accordion,
   AreaInterest,
   FileFormatDownload,
@@ -13,51 +19,42 @@ import {
 } from "./sidebar-content";
 
 const SideDownload = () => {
+  const { draw } = useContext(MapContext);
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
     shallow
   );
+  const [active, setActive] = useState("");
   const [isLoad, setIsLoad] = useState(false);
 
-  // dropdown value select by province
-  const provinceValue = [
-    { name: "Kepulauan Riau" },
-    { name: "Lampung" },
-    { name: "Maluku" },
-    { name: "Maluku Utara" },
-    { name: "Nusa Tenggara Barat" },
-    { name: "Nusa Tenggara Timur" },
-    { name: "Papua" },
-  ];
+  const [listProvince, setListProvince] = useState(null);
 
   // selected value from dropdown
   const { handleSetSnack } = useContext(AppContext);
   const authToken = useAuth((state) => state.authToken);
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [type, setType] = useState({ label: "CSV", value: "csv" });
-  const [drawItem] = useDownloadAoi((state) => [state.drawItem], shallow);
+  const [drawItem, selectedLayer, setDrawItem, setDrawSelected] =
+    useDownloadAoi(
+      (state) => [
+        state.drawItem,
+        state.selectedLayer,
+        state.setDrawItem,
+        state.setDrawSelected,
+      ],
+      shallow
+    );
+  const drawItemRef = useRef(null);
 
-  const buildObjBody = useCallback(() => {
-    let objBody = {};
-    if (Array.isArray(drawItem) && drawItem.length > 0) {
-      // create multipolygon
-      const multiPolygon = { type: "MultiPolygon", coordinates: [] };
-      for (const poly of drawItem) {
-        multiPolygon.coordinates.push(poly.geometry.coordinates);
-      }
-      objBody.aoi = multiPolygon;
-    }
-    return objBody;
+  useEffect(() => {
+    drawItemRef.current = drawItem;
   }, [drawItem]);
 
   const handleDownloadCsv = useCallback(
-    async (e) => {
+    async (objBody) => {
       umami.trackEvent("from-aoi", "download");
       try {
         setIsLoad(true);
-        const objBody = buildObjBody();
-        console.log(objBody);
-        console.log(authToken);
         const response = await fetch("/api/titik-pulau/download/csv", {
           method: "POST",
           body: JSON.stringify(objBody),
@@ -72,7 +69,6 @@ const SideDownload = () => {
         }
 
         const resData = await response.blob();
-        console.log(resData);
         let anchor = document.createElement("a");
         const href = window.URL.createObjectURL(resData);
         anchor.href = href;
@@ -81,21 +77,19 @@ const SideDownload = () => {
         window.URL.revokeObjectURL(href);
         anchor.remove();
       } catch (error) {
-        console.log(error);
         handleSetSnack(error.message, "error");
       } finally {
         setIsLoad(false);
       }
     },
-    [buildObjBody, authToken]
+    [authToken]
   );
 
   const handleDownloadShp = useCallback(
-    async (e) => {
+    async (objBody) => {
       umami.trackEvent("from-aoi", "download");
       try {
         setIsLoad(true);
-        const objBody = buildObjBody();
         const response = await fetch("/api/titik-pulau/download/shp", {
           method: "POST",
           body: JSON.stringify(objBody),
@@ -119,8 +113,83 @@ const SideDownload = () => {
         setIsLoad(false);
       }
     },
-    [buildObjBody, authToken]
+    [authToken]
   );
+
+  const download = useCallback(() => {
+    if (active === "aoi") {
+      if (Array.isArray(drawItem) && drawItem.length > 0) {
+        let objBody = {};
+        // create multipolygon
+        const multiPolygon = { type: "MultiPolygon", coordinates: [] };
+        for (const poly of drawItem) {
+          multiPolygon.coordinates.push(poly.geometry.coordinates);
+        }
+        objBody.aoi = multiPolygon;
+        type.value === "csv"
+          ? handleDownloadCsv(objBody)
+          : handleDownloadShp(objBody);
+      }
+    } else if (active === "upload") {
+      if (selectedLayer) {
+        let objBody = {};
+        const multiPolygon = { type: "MultiPolygon", coordinates: [] };
+        for (const poly of selectedLayer.data.features) {
+          if (poly.geometry.type === "MultiPolygon") {
+            multiPolygon.coordinates.push(...poly.geometry.coordinates);
+          } else if (poly.geometry.type === "Polygon") {
+            multiPolygon.coordinates.push(poly.geometry.coordinates);
+          }
+        }
+        objBody.aoi = multiPolygon;
+        type.value === "csv"
+          ? handleDownloadCsv(objBody)
+          : handleDownloadShp(objBody);
+      }
+    } else if (active === "province") {
+      if (selectedValue) {
+        let objBody = {};
+        objBody.wadmpr = selectedValue.value;
+        type.value === "csv"
+          ? handleDownloadCsv(objBody)
+          : handleDownloadShp(objBody);
+      }
+    }
+  }, [drawItem, type, selectedLayer, selectedValue, active]);
+
+  const getProvince = useCallback(async () => {
+    try {
+      const response = await fetch("/api/titik-pulau/provinsi", {
+        method: "GET",
+      });
+
+      const resData = await response.json();
+      if (resData.length) {
+        let list = [];
+        for (const item of resData) {
+          list.push({ label: item, value: item });
+        }
+        setListProvince(list);
+      }
+      if (response.status !== 200) {
+        throw Error(resData.message);
+      }
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+    }
+  }, []);
+
+  useEffect(() => {
+    getProvince();
+    return () => {
+      if (drawItemRef.current.length)
+        for (const item of drawItemRef.current) {
+          draw.delete(item.id);
+        }
+      setDrawItem([]);
+      setDrawSelected([]);
+    };
+  }, []);
 
   return (
     <div
@@ -142,10 +211,16 @@ const SideDownload = () => {
         <div className='flex flex-col h-full  justify-between'>
           <div className='flex flex-col gap-2 h-full w-full'>
             {/* pass children props for fill the content of the accordion & pass name for the name of accordion */}
-            <Accordion name='Select by Province'>
+            <Accordion
+              id='province'
+              label='Select by Province'
+              activeId={active}
+              isOpen={active === "province"}
+              setValue={setActive}
+            >
               {/* dropdown component should pass value props for the value of the dropdown and should pass the selected value instead */}
               <Dropdown
-                value={provinceValue}
+                value={listProvince}
                 onValueSelected={(item) => setSelectedValue(item)}
                 valueSelected={selectedValue}
                 label='Select Province'
@@ -153,11 +228,23 @@ const SideDownload = () => {
               />
             </Accordion>
 
-            <Accordion name='Area of Interest'>
+            <Accordion
+              id='aoi'
+              label='Area of Interest'
+              activeId={active}
+              isOpen={active === "aoi"}
+              setValue={setActive}
+            >
               <AreaInterest />
             </Accordion>
 
-            <Accordion name='Selected Layer'>
+            <Accordion
+              id='upload'
+              label='Selected Layer'
+              activeId={active}
+              isOpen={active === "upload"}
+              setValue={setActive}
+            >
               <LayerListDownload />
             </Accordion>
           </div>
@@ -165,8 +252,7 @@ const SideDownload = () => {
           <FileFormatDownload
             type={type}
             setType={setType}
-            handleDownloadCsv={handleDownloadCsv}
-            handleDownloadShp={handleDownloadShp}
+            handleDownload={download}
           />
         </div>
       </div>

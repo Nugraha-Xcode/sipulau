@@ -1,14 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "../../../../modal";
 import { Button, Dropdown } from "../../core";
 import style from "./FileFormatDownload.module.css";
 
-const FileFormatDownload = ({
-  type,
-  setType,
-  handleDownloadCsv,
-  handleDownloadShp,
-}) => {
+const FileFormatDownload = ({ type, setType, handleDownload }) => {
   // dropdown value
   const value = [
     { label: "CSV", value: "csv" },
@@ -16,6 +11,10 @@ const FileFormatDownload = ({
   ];
   const [ndaModal, setNdaModal] = useState(false);
   const [isAccept, setAccept] = useState(false);
+
+  useEffect(() => {
+    setAccept(false);
+  }, [ndaModal]);
 
   return (
     <div className={style.container}>
@@ -95,7 +94,8 @@ const FileFormatDownload = ({
             isActive={isAccept}
             disabled={!isAccept}
             onClick={() => {
-              type.value === "csv" ? handleDownloadCsv() : handleDownloadShp();
+              handleDownload();
+              setNdaModal(false);
             }}
             className='text-sm'
           >
