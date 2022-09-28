@@ -32,10 +32,6 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
     if data.selected is not None and len(data.selected) > 0:
         data_selected_str = ",".join(map(str, data.selected))
         filters.append(f"id_toponim IN ({data_selected_str})")
-    # then prioritize aoi
-    elif data.aoi is not None:
-        escaped = data.aoi.replace("'", "''")
-        filters.append(f"geom && ST_GeomFromGeoJSON('{escaped}')")
     else:
         equal_filters: List[List[Union[str, None]]] = [
             [data.fid, "fid"],
@@ -63,11 +59,14 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
                 filters.append(
                     "SPLIT_PART(remark, ' - ', 2) !~* '^Berpenduduk|^Tidak Berpenduduk'"
                 )
-        # bbox filter
+        # bbox OR aoi filter
         if data.bbox is not None:
             filters.append(
                 f"geom && ST_MakeEnvelope({data.bbox.xmin}, {data.bbox.ymin}, {data.bbox.xmax}, {data.bbox.ymax}, 4326)"
             )
+        elif data.aoi is not None:
+            escaped = data.aoi.replace("'", "''")
+            filters.append(f"ST_Intersects(ST_GeomFromGeoJSON('{escaped}'), geom)")
         # unselected filter
         if data.unselected is not None and len(data.unselected) > 0:
             data_unselected_str = ",".join(map(str, data.unselected))

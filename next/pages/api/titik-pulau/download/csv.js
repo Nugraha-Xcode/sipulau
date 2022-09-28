@@ -72,21 +72,6 @@ export default async function downloadCsvHandler(req, res) {
     }
     if (validId.length > 0)
       filters.push(`id_toponim IN (${validId.join(",")})`);
-  } else if (typeof aoi === "object") {
-    // then prioritize aoi
-    if (isValidMultiPolygonGeom(aoi)) {
-      filters.push(
-        `geom && ST_GeomFromGeoJSON('${JSON.stringify(aoi).replace(
-          /'/g,
-          "''"
-        )}')`
-      );
-    } else {
-      return res.status(400).json({
-        message:
-          "AOI harus berbentuk geometri GeoJSON bertipe MultiPolygon yang valid",
-      });
-    }
   } else {
     let equalStringFilters = [
       [fid, "fid"],
@@ -117,7 +102,7 @@ export default async function downloadCsvHandler(req, res) {
         );
       }
     }
-    // bbox filter
+    // bbox OR aoi filter
     if (typeof bbox === "object") {
       let { xmin, ymin, xmax, ymax } = bbox;
       if (
@@ -141,6 +126,20 @@ export default async function downloadCsvHandler(req, res) {
       filters.push(
         `geom && ST_MakeEnvelope(${xmin}, ${ymin}, ${xmax}, ${ymax}, 4326)`
       );
+    } else if (typeof aoi === "object") {
+      if (isValidMultiPolygonGeom(aoi)) {
+        filters.push(
+          `ST_Intersects(ST_GeomFromGeoJSON('${JSON.stringify(aoi).replace(
+            /'/g,
+            "''"
+          )}'), geom)`
+        );
+      } else {
+        return res.status(400).json({
+          message:
+            "AOI harus berbentuk geometri GeoJSON bertipe MultiPolygon yang valid",
+        });
+      }
     }
     // unselected filter
     if (Array.isArray(unselected)) {

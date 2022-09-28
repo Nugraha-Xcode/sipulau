@@ -113,16 +113,6 @@ export default async function downloadShpHandler(req, res) {
       if (Number.isInteger(id)) validId.push(id);
     }
     if (validId.length > 0) downloadDetails.selected = validId;
-  } else if (typeof aoi === "object") {
-    // then prioritize aoi
-    if (isValidMultiPolygonGeom(aoi)) {
-      downloadDetails.aoi = JSON.stringify(aoi);
-    } else {
-      return res.status(400).json({
-        message:
-          "AOI harus berbentuk geometri GeoJSON bertipe MultiPolygon yang valid",
-      });
-    }
   } else {
     let stringFilters = [
       [fid, "fid"],
@@ -142,7 +132,7 @@ export default async function downloadShpHandler(req, res) {
     if (Number.isInteger(id_toponim)) {
       downloadDetails.id_toponim = id_toponim;
     }
-    // bbox filter
+    // bbox OR aoi filter
     if (typeof bbox === "object") {
       let { xmin, ymin, xmax, ymax } = bbox;
       if (
@@ -164,6 +154,15 @@ export default async function downloadShpHandler(req, res) {
         return res.status(400).json({ message: "bbox tidak valid" });
       }
       downloadDetails.bbox = { xmin, ymin, xmax, ymax };
+    } else if (typeof aoi === "object") {
+      if (isValidMultiPolygonGeom(aoi)) {
+        downloadDetails.aoi = JSON.stringify(aoi);
+      } else {
+        return res.status(400).json({
+          message:
+            "AOI harus berbentuk geometri GeoJSON bertipe MultiPolygon yang valid",
+        });
+      }
     }
     // unselected filter
     if (Array.isArray(unselected)) {
