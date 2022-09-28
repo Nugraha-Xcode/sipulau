@@ -36,6 +36,8 @@ http {
         proxy_read_timeout 300;
 
         location / {
+            client_max_body_size 25m;
+
             add_header Content-Security-Policy "default-src 'self'; script-src 'self' hcaptcha.com *.hcaptcha.com blob:; style-src 'self' 'unsafe-inline' fonts.googleapis.com api.mapbox.com unpkg.com; font-src 'self' fonts.gstatic.com; img-src * data: blob:; connect-src *; frame-src hcaptcha.com *.hcaptcha.com; frame-ancestors 'none';" always;
             
             proxy_pass  http://nextjs:3000/;
