@@ -3,16 +3,17 @@ export default function isValidMultiPolygonGeom(aoi) {
     return false;
   }
   for (const polyGeom of aoi.coordinates) {
-    if (
-      !Array.isArray(polyGeom) ||
-      (polyGeom.length !== 1 && polyGeom.length !== 2)
-    ) {
+    if (!Array.isArray(polyGeom) || polyGeom.length < 1) {
       return false;
     }
     for (const polyDetails of polyGeom) {
+      if (!Array.isArray(polyDetails) || polyDetails.length < 4) {
+        return false;
+      }
       for (const polyCoords of polyDetails) {
         if (
-          polyCoords.length !== 2 ||
+          !Array.isArray(polyCoords) ||
+          (polyCoords.length !== 2 && polyCoords.length !== 3) ||
           typeof polyCoords[0] !== "number" ||
           typeof polyCoords[1] !== "number"
         ) {
