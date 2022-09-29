@@ -66,7 +66,7 @@ const InformasiPulau = ({
         <div className='relative w-full'>
           <div className='navigation-wrapper'>
             {infoPulau && (
-              <div ref={sliderRef} className='keen-slider h-36 w-[250px]'>
+              <div ref={sliderRef} className='keen-slider h-36 w-full'>
                 {[
                   infoPulau.foto1,
                   infoPulau.foto2,
