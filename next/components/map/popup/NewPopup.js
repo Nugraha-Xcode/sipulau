@@ -8,15 +8,17 @@ const NewPopup = ({
   children,
   map,
   mapLoad,
+  title,
 }) => {
   const contentRef = useRef(null);
+  const popRef = useRef(null);
 
   useEffect(() => {
-    let popup = { remove: () => {} };
+    // let popup = { remove: () => {} };
     if (mapLoad)
       try {
         map.on("click", layername, function (e) {
-          popup = new maplibregl.Popup({ closeButton: false })
+          popRef.current = new maplibregl.Popup({ closeButton: false })
             .setMaxWidth("300px")
             .setLngLat(e.lngLat)
             .setDOMContent(contentRef.current)
@@ -36,12 +38,24 @@ const NewPopup = ({
       } catch (error) {
         console.error(error);
       }
-    return popup.remove;
+    return () => {
+      popRef.current = null;
+    };
   }, [mapLoad]);
 
   return (
     <div className='hidden'>
       <div ref={contentRef} className='font-map'>
+        <div className='flex items-center justify-between px-2 pt-2'>
+          <p className='text-black-2 font-semibold'>{title}</p>
+          <button
+            onClick={() => {
+              popRef.current && popRef.current.remove();
+            }}
+          >
+            <img src='/images/ic-close.svg' alt='close' />
+          </button>
+        </div>
         {children}
       </div>
     </div>

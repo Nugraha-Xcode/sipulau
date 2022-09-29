@@ -78,20 +78,9 @@ const ToponimPopup = ({ mapLoad }) => {
       setFeatureGeom={(el) => setFeatureGeom(el)}
       map={map}
       mapLoad={mapLoad}
+      title={t("headerPopup")}
     >
       <div className='p-2 rounded-xl'>
-        <div className='flex py-3 px-4'>
-          <p className='flex-1 text-center text-black-2 tracking-wide font-semibold'>
-            {t("headerPopup")}
-          </p>
-          {/* <button
-            onClick={() => {
-              setIsOpen(false);
-            }}
-          >
-            <img src='/images/ic-close.svg' alt='close button' />
-          </button> */}
-        </div>
         <hr />
 
         {!loading ? (
