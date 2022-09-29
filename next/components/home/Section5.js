@@ -20,6 +20,38 @@ const Section5 = () => {
     isiRef.current.value = "";
   };
 
+  const submitForm = async () => {
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        body: JSON.stringify({
+          nama: namaRef.current.value,
+          email: emailRef.current.value,
+          isi: isiRef.current.value,
+          captchaToken,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const resData = await res.json();
+      if (resData.message) {
+        handleSetSnack(resData.message, "success");
+        handleReset();
+      }
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+    } finally {
+      captchaRef.current.resetCaptcha();
+    }
+  };
+
+  useEffect(() => {
+    if (captchaToken) {
+      submitForm();
+    }
+  }, [captchaToken]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -30,33 +62,36 @@ const Section5 = () => {
       ];
       if (inputArr.indexOf("") !== -1) {
         throw new Error("Mohon lengkapi form");
-      }
-      if (captchaToken) {
-        const res = await fetch("/api/feedback", {
-          method: "POST",
-          body: JSON.stringify({
-            nama: namaRef.current.value,
-            email: emailRef.current.value,
-            isi: isiRef.current.value,
-            captchaToken,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const resData = await res.json();
-        if (resData.message) {
-          handleSetSnack(resData.message, "success");
-          handleReset();
-        }
       } else {
-        throw new Error("Mohon verifikasi terlebih dahulu");
+        captchaRef.current.execute();
       }
+      // if (captchaToken) {
+      //   const res = await fetch("/api/feedback", {
+      //     method: "POST",
+      //     body: JSON.stringify({
+      //       nama: namaRef.current.value,
+      //       email: emailRef.current.value,
+      //       isi: isiRef.current.value,
+      //       captchaToken,
+      //     }),
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   });
+      //   const resData = await res.json();
+      //   if (resData.message) {
+      //     handleSetSnack(resData.message, "success");
+      //     handleReset();
+      //   }
+      // } else {
+      //   throw new Error("Mohon verifikasi terlebih dahulu");
+      // }
     } catch (error) {
       handleSetSnack(error.message, "error");
-    } finally {
-      captchaRef.current.resetCaptcha();
     }
+    // finally {
+    //   captchaRef.current.resetCaptcha();
+    // }
   };
 
   return (
@@ -102,6 +137,7 @@ const Section5 = () => {
           ></textarea>
           <HCaptcha
             sitekey='e45cae2e-2906-45bf-abe7-9424392c31c6'
+            size='invisible'
             onVerify={setCaptchaToken}
             onError={(err) => {
               handleSetSnack(`hCaptcha Error: ${err}`, "error");

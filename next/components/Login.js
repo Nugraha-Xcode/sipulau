@@ -1,8 +1,8 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { CgClose } from "react-icons/cg";
 import { BiLock } from "react-icons/bi";
 import { FaRegUser } from "react-icons/fa";
-import { AiOutlineEye } from "react-icons/ai";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 import { changeExpireTime } from "../utils/expireTime";
 import AppContext from "../context/AppContext";
@@ -40,6 +40,9 @@ const Login = ({ toggle }) => {
   const userRef = useRef(null);
   const passwordRef = useRef(null);
 
+  const captchaRef = useRef(null);
+  const [captchaToken, setCaptchaToken] = useState(null);
+
   const handleLogin = async () => {
     // e.preventDefault();
     try {
@@ -60,7 +63,7 @@ const Login = ({ toggle }) => {
           },
           method: "POST",
           credentials: "include",
-          body: JSON.stringify(body),
+          body: JSON.stringify(body, captchaToken),
         }
       );
       const resJson = await res.json();
@@ -77,6 +80,7 @@ const Login = ({ toggle }) => {
       handleSetSnack(err.message, "error");
     } finally {
       setIsLoading(false);
+      captchaRef.current.resetCaptcha();
     }
   };
 
@@ -93,6 +97,26 @@ const Login = ({ toggle }) => {
     };
   }, [keyShortcut]);
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const inputArr = [userRef.current.value, passwordRef.current.value];
+      if (inputArr.indexOf("") !== -1) {
+        throw new Error("Masukkan user dan password");
+      } else {
+        captchaRef.current.execute();
+      }
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+    }
+  };
+
+  useEffect(() => {
+    if (captchaToken) {
+      handleLogin();
+    }
+  }, [captchaToken]);
+
   return (
     <div className='font-map'>
       <div className='flex justify-between items-center px-6 py-3 relative'>
@@ -104,84 +128,94 @@ const Login = ({ toggle }) => {
         </button>
       </div>
       <hr />
-
-      <div className='px-6 pb-8 pt-4 flex flex-col items-center gap-6'>
-        <img src='/images/ic-lock.svg' alt='form login' />
-        <div className='flex flex-col items-center text-center max-w-[60%] gap-1'>
-          <p className='text-black-2 text-sm'>{login[t].modalCase1}</p>
-          <p className='text-xs text-main-gray'>{login[t].modalCase2}</p>
-        </div>
-        <div className='flex flex-col w-full gap-4'>
-          <div className='flex items-center border border-gray-4 rounded-lg py-3 px-5'>
-            <FaRegUser className='text-main-gray w-4 h-4' />
-            <input
-              data-cy='login-input-username'
-              ref={userRef}
-              className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm px-3'
-              placeholder={login[t].placeholder1}
-            />
+      <form onSubmit={handleSubmit}>
+        <div className='px-6 pb-8 pt-4 flex flex-col items-center gap-6'>
+          <img src='/images/ic-lock.svg' alt='form login' />
+          <div className='flex flex-col items-center text-center max-w-[60%] gap-1'>
+            <p className='text-black-2 text-sm'>{login[t].modalCase1}</p>
+            <p className='text-xs text-main-gray'>{login[t].modalCase2}</p>
           </div>
-          <div className='flex items-center border border-gray-4 rounded-lg py-3 px-5'>
-            <BiLock className='text-main-gray w-4 h-4' />
-            <input
-              data-cy='login-input-password'
-              ref={passwordRef}
-              className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm py-0 border-0 focus:ring-0 px-3'
-              placeholder={login[t].placeholder2}
-              type={passwordVisibility ? "text" : "password"}
-            />
-            <button onClick={() => setPasswordVisibility((prev) => !prev)}>
-              <img
-                src={`${
-                  passwordVisibility
-                    ? "images/ic-eye.svg"
-                    : "images/ic-eye-crossed.svg"
-                }`}
-                alt='Password Visibility'
-              />
-            </button>
-          </div>
-        </div>
-        <div className='flex flex-col w-full gap-4'>
-          {!isLoading ? (
-            <button
-              data-cy='login-submit-button'
-              onClick={handleLogin}
-              className='bg-main-blue text-white rounded-lg py-2 text-sm'
-            >
-              {login[t].buttonLogin}
-            </button>
-          ) : (
-            <div className='flex items-center justify-center'>
-              <img
-                src='images/loader.svg'
-                alt='loader'
-                className='w-10 h-10 text-center'
+          <div className='flex flex-col w-full gap-4'>
+            <div className='flex items-center border border-gray-4 rounded-lg py-3 px-5'>
+              <FaRegUser className='text-main-gray w-4 h-4' />
+              <input
+                data-cy='login-input-username'
+                ref={userRef}
+                className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm px-3'
+                placeholder={login[t].placeholder1}
               />
             </div>
-          )}
-          <div className='flex items-center'>
-            <hr className='flex-1' />
-            <p className='mx-3 text-xs text-black-2'>{login[t].or1}</p>
-            <hr className='flex-1' />
+            <div className='flex items-center border border-gray-4 rounded-lg py-3 px-5'>
+              <BiLock className='text-main-gray w-4 h-4' />
+              <input
+                data-cy='login-input-password'
+                ref={passwordRef}
+                className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm py-0 border-0 focus:ring-0 px-3'
+                placeholder={login[t].placeholder2}
+                type={passwordVisibility ? "text" : "password"}
+              />
+              <button onClick={() => setPasswordVisibility((prev) => !prev)}>
+                <img
+                  src={`${
+                    passwordVisibility
+                      ? "images/ic-eye.svg"
+                      : "images/ic-eye-crossed.svg"
+                  }`}
+                  alt='Password Visibility'
+                />
+              </button>
+            </div>
           </div>
-          <a
-            href='https://tanahair.indonesia.go.id/register'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='border border-main-blue text-main-blue rounded-lg py-2 text-sm text-center'
-          >
-            {/* <button
+          <HCaptcha
+            sitekey='e45cae2e-2906-45bf-abe7-9424392c31c6'
+            size='invisible'
+            onVerify={setCaptchaToken}
+            onError={(err) => {
+              handleSetSnack(`hCaptcha Error: ${err}`, "error");
+            }}
+            ref={captchaRef}
+          />
+          <div className='flex flex-col w-full gap-4'>
+            {!isLoading ? (
+              <input
+                type='submit'
+                value={login[t].buttonLogin}
+                data-cy='login-submit-button'
+                // onClick={handleLogin}
+                className='bg-main-blue text-white rounded-lg py-2 text-sm cursor-pointer'
+              ></input>
+            ) : (
+              <div className='flex items-center justify-center'>
+                <img
+                  src='images/loader.svg'
+                  alt='loader'
+                  className='w-10 h-10 text-center'
+                />
+              </div>
+            )}
+            <div className='flex items-center'>
+              <hr className='flex-1' />
+              <p className='mx-3 text-xs text-black-2'>{login[t].or1}</p>
+              <hr className='flex-1' />
+            </div>
+            <a
+              href='https://tanahair.indonesia.go.id/register'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='border border-main-blue text-main-blue rounded-lg py-2 text-sm text-center'
+            >
+              {/* <button
             href='https://tanahair.indonesia.go.id/register'
             target='_blank'
             rel='noopener noreferrer'
             className='flex space-x-2 bg-main-blue rounded-full text-white text-sm py-3 px-4'
             alt='registrasi'
           > */}
-            {login[t].buttonRegist}
-          </a>
+              {login[t].buttonRegist}
+            </a>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
