@@ -1,7 +1,5 @@
 import React, { useContext } from "react";
-import MapContext from "../../../../../context/MapContext";
-// import Slider from "./Slider";
-
+import MapContext from "../../../context/MapContext";
 const SearchResult = ({ item }) => {
   const { map } = useContext(MapContext);
   return (
@@ -21,14 +19,6 @@ const SearchResult = ({ item }) => {
       <div className='text-[10px] text-[#777574]'>
         {item.lat.toFixed(7)}, {item.lon.toFixed(7)}
       </div>
-      {/* <div className='w-full h-[fit-content] flex justify-center items-center'>
-        <Slider data={imageData} />
-      </div> */}
-      {/* <div className='flex flex-col gap-1'>
-        <div className='cursor-pointer text-[#4086EF]'>
-          <a onClick={onDetail}>{name}</a>
-        </div>
-      </div> */}
     </div>
   );
 };

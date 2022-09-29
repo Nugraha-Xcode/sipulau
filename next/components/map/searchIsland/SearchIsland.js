@@ -5,20 +5,17 @@ import React, {
   useEffect,
   useRef,
 } from "react";
+import * as turf from "@turf/turf";
 import shallow from "zustand/shallow";
-import AppContext from "../../context/AppContext";
-import MapContext from "../../context/MapContext";
-import { useAuth, useComment } from "../../hooks";
-import { useNav } from "../../hooks/useNav";
-import AddCommentForm from "./popup/AddCommentForm";
-import {
-  AboutContent,
-  Button,
-  Searchbar,
-  SearchResult,
-} from "./sidebar-content";
+import AppContext from "../../../context/AppContext";
+import MapContext from "../../../context/MapContext";
+import { useAuth, useComment } from "../../../hooks";
+import { useNav } from "../../../hooks/useNav";
+import AddCommentForm from "../popup/AddCommentForm";
+import { AboutContent, Button, Searchbar } from "../sidebar-content";
+import SearchResult from "./SearchResult";
 
-const SideSearchIsland = () => {
+const SearchIsland = () => {
   const { map } = useContext(MapContext);
   const { handleSetSnack } = useContext(AppContext);
   const timeoutRef = useRef(null);
@@ -71,6 +68,30 @@ const SideSearchIsland = () => {
     }
   }, [value]);
 
+  const getPulauBuffer = useCallback(async (point) => {
+    try {
+      const params = new URLSearchParams({
+        point: point,
+      });
+      const response = await fetch("/api/titik-pulau?" + params, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + authToken,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+      if (response.status === 200) {
+        setSearchResult(result);
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+    }
+  }, []);
+
   const getPulau = useCallback(async (searchValue) => {
     try {
       setCoor({});
@@ -112,6 +133,7 @@ const SideSearchIsland = () => {
     setSearchResult([]);
     setCommentButton(true);
     let latLong = value.replace(/\s/g, "").split(",");
+    getPulauBuffer(latLong[1] + "," + latLong[0]);
     map.flyTo({
       center: [latLong[1], latLong[0]],
       zoom: 12.5,
@@ -119,12 +141,25 @@ const SideSearchIsland = () => {
         left: 400,
       },
     });
+
+    let radius = 0.05;
+    let options = {
+      units: "degrees",
+    };
+    let circle = turf.circle([latLong[1], latLong[0]], radius, options);
+
     map.getSource("comment-point").setData({
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [latLong[1], latLong[0]],
-      },
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [latLong[1], latLong[0]],
+          },
+        },
+        circle,
+      ],
     });
   };
 
@@ -133,11 +168,16 @@ const SideSearchIsland = () => {
       map.addSource("comment-point", {
         type: "geojson",
         data: {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [],
-          },
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [],
+              },
+            },
+          ],
         },
       });
       map.loadImage("/images/marker-point.png", function (error, image) {
@@ -152,6 +192,17 @@ const SideSearchIsland = () => {
           "icon-image": "marker-comment",
           "icon-size": 0.2,
         },
+        filter: ["==", "$type", "Point"],
+      });
+      map.addLayer({
+        id: "comment-point-fill",
+        type: "fill",
+        source: "comment-point",
+        paint: {
+          "fill-color": "#4086EF",
+          "fill-opacity": 0.4,
+        },
+        filter: ["==", "$type", "Polygon"],
       });
     }
 
@@ -159,6 +210,8 @@ const SideSearchIsland = () => {
       if (window.location.pathname === "/map") {
         map.hasImage("marker-comment") && map.removeImage("marker-comment");
         map.getLayer("comment-point") && map.removeLayer("comment-point");
+        map.getLayer("comment-point-fill") &&
+          map.removeLayer("comment-point-fill");
         map.getSource("comment-point") && map.removeSource("comment-point");
       }
     };
@@ -268,7 +321,7 @@ const SideSearchIsland = () => {
           />
         )}
         {/* loop this component  */}
-        {searchResult.length > 0
+        {searchResult.length > 0 && !Object.keys(coor).length
           ? searchResult.map((el) => <SearchResult item={el} />)
           : null}
       </div>
@@ -283,4 +336,4 @@ const SideSearchIsland = () => {
   );
 };
 
-export default SideSearchIsland;
+export default SearchIsland;

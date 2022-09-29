@@ -1,6 +1,3 @@
-// container
-import { SearchResult } from "./containers";
-
 // core
 import {
   Button,
@@ -15,7 +12,6 @@ import {
 export {
   AboutContent,
   Searchbar,
-  SearchResult,
   Accordion,
   Dropdown,
   Button,
