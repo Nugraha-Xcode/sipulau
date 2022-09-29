@@ -3,10 +3,10 @@ import http from "http";
 // import https from "https";
 
 interface ILoginPayload {
-  email?: string
-  password?: string
-  mode?: string
-  captchaToken?: string
+  email?: string;
+  password?: string;
+  mode?: string;
+  captchaToken?: string;
 }
 
 const reqOptions = {
@@ -17,7 +17,7 @@ const reqOptions = {
   },
 };
 
-function validateCaptcha(captchaToken: string) {
+function validateCaptcha(captchaToken: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
     if (typeof process.env.HCAPTCHA_SECRET_KEY !== "string")
       return reject("HCaptcha secret key not set");
@@ -96,10 +96,14 @@ export default defineHook(({ filter }, { exceptions }) => {
     if (!payload.captchaToken) {
       throw new InvalidPayloadException("captchaToken required");
     }
+    let isCatpchaValid = false;
     try {
-      await validateCaptcha(payload.captchaToken);
+      isCatpchaValid = await validateCaptcha(payload.captchaToken);
     } catch (error) {
       throw new ServiceUnavailableException(error);
+    }
+    if (!isCatpchaValid) {
+      throw new InvalidPayloadException("Invalid captcha");
     }
     return payload;
   });
