@@ -3,7 +3,8 @@ import shallow from "zustand/shallow";
 import { UploadLayerStore } from "../../../constant";
 import AppContext from "../../../context/AppContext";
 import { useIndexedDB, useNetwork } from "../../../hooks";
-import { Button, InputDropFiles } from "../sidebar-content/core";
+import Button from "../../core/Button";
+import { InputDropFiles } from "../sidebar-content/core";
 
 const UploadSection = () => {
   // state for save the files value

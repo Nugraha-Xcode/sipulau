@@ -12,8 +12,9 @@ import MapContext from "../../../context/MapContext";
 import { useAuth, useComment } from "../../../hooks";
 import { useNav } from "../../../hooks/useNav";
 import AddCommentForm from "../popup/AddCommentForm";
-import { AboutContent, Button, Searchbar } from "../sidebar-content";
+import { AboutContent, Searchbar } from "../sidebar-content";
 import SearchResult from "./SearchResult";
+import Button from "../../core/Button";
 
 const SearchIsland = () => {
   const { map } = useContext(MapContext);

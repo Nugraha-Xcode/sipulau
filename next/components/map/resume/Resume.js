@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import shallow from "zustand/shallow";
 import { useNav } from "../../../hooks";
-import { AboutContent, Button } from "../sidebar-content";
+import { AboutContent } from "../sidebar-content";
 import DropdownMenu from "../../core/DropdownMenu";
+import Button from "../../core/Button";
 
 const Resume = () => {
   const [setActiveSideFeature, activeSideFeature] = useNav(

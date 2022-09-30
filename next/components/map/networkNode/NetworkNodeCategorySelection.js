@@ -3,9 +3,10 @@ import React, { useContext } from "react";
 import shallow from "zustand/shallow";
 import AppContext from "../../../context/AppContext";
 import { useNetwork } from "../../../hooks";
+import Button from "../../core/Button";
 import Loader from "../../core/Loader";
 
-import { Button, Dropdown } from "../sidebar-content/core";
+import { Dropdown } from "../sidebar-content/core";
 
 const NetworkNodeCategorySelection = ({
   onSubmit,
@@ -145,7 +146,6 @@ const NetworkNodeCategorySelection = ({
         variant='normal'
         isActive={selectedOrganization}
         onClick={() => getSimpulList(1)}
-        disabled={!selectedOrganization}
       >
         Proceed
       </Button>

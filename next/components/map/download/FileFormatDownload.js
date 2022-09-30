@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import Button from "../../core/Button";
 import Modal from "../../modal";
-import { Button, Dropdown } from "../sidebar-content/core";
+import { Dropdown } from "../sidebar-content/core";
 
 const FileFormatDownload = ({ type, setType, handleDownload }) => {
   // dropdown valued
@@ -91,7 +92,6 @@ const FileFormatDownload = ({ type, setType, handleDownload }) => {
           <Button
             variant='normal'
             isActive={isAccept}
-            disabled={!isAccept}
             onClick={() => {
               handleDownload();
               setNdaModal(false);

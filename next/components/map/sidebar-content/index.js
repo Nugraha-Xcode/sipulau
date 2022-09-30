@@ -1,6 +1,5 @@
 // core
 import {
-  Button,
   AboutContent,
   Accordion,
   Searchbar,
@@ -14,7 +13,6 @@ export {
   Searchbar,
   Accordion,
   Dropdown,
-  Button,
   InputDropFiles,
   CustomTransition,
 };
