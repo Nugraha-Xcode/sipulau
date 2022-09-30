@@ -17,6 +17,7 @@ export const useAuthHandler = () => {
             Accept: "application/json",
           },
           method: "POST",
+          body: JSON.stringify({ mode: "cookie" }),
           credentials: "include",
         }
       );
