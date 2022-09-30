@@ -25,6 +25,8 @@ import Tippy from "@tippyjs/react";
 import MemoIcQuestion from "../core/icons/IcQuestion";
 import Link from "next/link";
 import MemoIcGlobe from "../core/icons/IcGlobe";
+import Summary from "../map/resume/Resume";
+import Resume from "../map/resume/Resume";
 
 const NavMenu = ({
   expand,
@@ -123,6 +125,17 @@ const NavMenu = ({
           featureId: "upload-data",
           label: "Upload Data",
           content: <SideUpload />,
+        }),
+    },
+    {
+      id: "resume-island",
+      label: "Resume",
+      icon: <MemoIcUpload />,
+      onClick: () =>
+        handleOpenSideFeature({
+          featureId: "resume-island",
+          label: "Resume Pulau",
+          content: <Resume />,
         }),
     },
   ];
