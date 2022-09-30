@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
-import { CgClose } from "react-icons/cg";
 
 import Table from "../../components/core/table";
 import AppContext from "../../context/AppContext";
@@ -56,22 +55,23 @@ const MapTable = ({
     orderAsc: true,
   });
   const [columns, setColums] = useState([
-    { title: "column1", field: "fid", show: true, sort: true },
+    { title: "column1", field: "fid", show: false, sort: true },
     { title: "column14", field: "id_toponim", show: true, sort: true },
     { title: "column2", field: "id_wilayah", show: true, sort: true },
     { title: "column3", field: "nammap", show: true, sort: true },
     { title: "column13", field: "alias", show: true, sort: true },
-    { title: "column4", field: "artinam", show: true, sort: true },
-    { title: "column5", field: "aslbhs", show: true, sort: true },
-    { title: "column6", field: "sjhnam", show: true, sort: true },
-    { title: "column8", field: "wadmkd", show: true, sort: true },
-    { title: "column7", field: "wadmkc", show: true, sort: true },
+    { title: "column17", field: "beforename", show: true, sort: true },
+    { title: "column4", field: "artinam", show: false, sort: true },
+    { title: "column5", field: "aslbhs", show: false, sort: true },
+    { title: "column6", field: "sjhnam", show: false, sort: true },
+    { title: "column8", field: "wadmkd", show: false, sort: true },
+    { title: "column7", field: "wadmkc", show: false, sort: true },
     { title: "column9", field: "wadmkk", show: true, sort: true },
     { title: "column10", field: "wadmpr", show: true, sort: true },
-    { title: "column11", field: "status", show: false, sort: true },
-    { title: "column12", field: "remark", show: true, sort: true },
-    { title: "column15", field: "luas", show: true, sort: true },
-    { title: "column16", field: "pjg_gp", show: true, sort: true },
+    { title: "column11", field: "status", show: true, sort: true },
+    { title: "column12", field: "remark", show: false, sort: true },
+    { title: "column15", field: "luas", show: false, sort: true },
+    { title: "column16", field: "pjg_gp", show: false, sort: true },
   ]);
 
   useEffect(async () => {
