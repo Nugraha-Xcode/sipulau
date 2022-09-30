@@ -27,6 +27,7 @@ import Link from "next/link";
 import MemoIcGlobe from "../core/icons/IcGlobe";
 import Summary from "../map/resume/Resume";
 import Resume from "../map/resume/Resume";
+import MemoIcResume from "../core/icons/IcResume";
 
 const NavMenu = ({
   expand,
@@ -130,7 +131,7 @@ const NavMenu = ({
     {
       id: "resume-island",
       label: "Resume",
-      icon: <MemoIcUpload />,
+      icon: <MemoIcResume />,
       onClick: () =>
         handleOpenSideFeature({
           featureId: "resume-island",
