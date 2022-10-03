@@ -3,8 +3,14 @@ import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import IcAccordion from "./icons/icAccordion";
 
-const DropdownMenu = ({ label, menu, onSelect }) => {
-  const [selected, setSelected] = useState(menu[0]);
+const DropdownMenu = ({
+  label,
+  menu,
+  onSelect,
+  initialValue = null,
+  maxH = "max-h-72",
+}) => {
+  const [selected, setSelected] = useState(initialValue);
 
   return (
     <Popover className='relative'>
@@ -12,7 +18,7 @@ const DropdownMenu = ({ label, menu, onSelect }) => {
         <>
           <Popover.Button
             className={clsx([
-              "flex w-full h-[40px] rounded-[8px] text-gray-600 border-[1px] border-gray-600 items-center px-4 py-2 justify-between bg-white text-left text-xs",
+              "flex w-full gap-2 h-[40px] rounded-[8px] text-gray-600 border-[1px] border-gray-600 items-center px-4 py-2 justify-between bg-white text-left text-xs",
               { "rounded-[8px]": !open, "rounded-b-none border-b-0": open },
             ])}
           >
@@ -28,7 +34,9 @@ const DropdownMenu = ({ label, menu, onSelect }) => {
             leaveFrom='opacity-100 translate-y-0'
             leaveTo='opacity-0 -translate-y-1'
           >
-            <Popover.Panel className='absolute w-full z-10 flex flex-col border-[#777574] border-[1px] overflow-auto hide-scrollbar mb-[-8px] bg-white max-h-72 rounded-b-[8px]'>
+            <Popover.Panel
+              className={`absolute w-full z-10 flex flex-col border-[#777574] border-[1px] overflow-auto hide-scrollbar mb-[-8px] bg-white ${maxH} rounded-b-[8px]`}
+            >
               {({ close }) =>
                 menu.map((el) => (
                   <button
@@ -36,10 +44,10 @@ const DropdownMenu = ({ label, menu, onSelect }) => {
                     value={el}
                     onClick={() => {
                       setSelected(el);
-                      onSelect(el.value);
+                      onSelect(el);
                       close();
                     }}
-                    className='cursor-pointer text-sm hover:bg-[#F2F2F2] py-3 px-4 transition-all text-gray-600 text-left'
+                    className='cursor-pointer text-sm hover:bg-[#F2F2F2] py-1 px-2 transition-all text-gray-600 text-left'
                   >
                     {el.label}
                   </button>
