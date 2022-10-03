@@ -43,6 +43,7 @@ const MvtLayer = ({ item, isSelectAll }) => {
                 "marker-pulau",
               ],
           "icon-size": 0.3,
+          "icon-offset": [0, -41],
         },
       });
     }
