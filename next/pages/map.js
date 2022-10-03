@@ -33,6 +33,7 @@ import {
   titikPulauMvt,
 } from "../constant";
 import ToponimPopup from "../components/map/popup/ToponimPopup";
+import AdvanceFilter from "../components/map/advanceFilter/AdvanceFilter";
 
 const map = () => {
   const { t } = useTranslation("attributetable");
@@ -548,6 +549,10 @@ const map = () => {
               setPage={setPage}
             />
           </Modal>
+
+          {/* <Modal isShowing={true} handleModal={() => {}} size='lg'>
+            <AdvanceFilter />
+          </Modal> */}
         </MapProvider>
       </div>
       {/* </Layout> */}
