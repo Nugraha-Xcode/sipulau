@@ -1,6 +1,5 @@
 import { sipulauPool } from "../../../db";
 import getCurrentActiveTable from "../../../utils/api/getCurrentActiveTable";
-import isValidMultiPolygonGeom from "../../../utils/api/isValidMultiPolygonGeom";
 import {
   parseQuery,
   QueryError,
