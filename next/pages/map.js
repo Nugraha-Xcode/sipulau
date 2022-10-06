@@ -550,8 +550,12 @@ const map = () => {
             />
           </Modal>
 
-          {/* <Modal isShowing={true} handleModal={() => {}} size='lg'>
-            <AdvanceFilter />
+          {/* <Modal
+            isShowing={isOpenMapFilter}
+            handleModal={toggleMapFilter}
+            size='xl'
+          >
+            <AdvanceFilter handleClose={toggleMapFilter} />
           </Modal> */}
         </MapProvider>
       </div>

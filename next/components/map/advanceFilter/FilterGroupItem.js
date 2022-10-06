@@ -1,23 +1,38 @@
 import { useTranslation } from "next-i18next";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import shallow from "zustand/shallow";
 import { useAdvanceFilter } from "../../../hooks";
 import useDebounce from "../../../hooks/useDebounce";
 import DropdownMenu from "../../core/DropdownMenu";
 
-const FilterItem = ({ id, item }) => {
+const FilterGroupItem = ({ id, item }) => {
   const { t } = useTranslation("attributetable");
   const [filterItem, setFilterItem] = useAdvanceFilter(
     (state) => [state.filterItem, state.setFilterItem],
     shallow
   );
-  const [input, setInput] = useState("");
 
+  const [input, setInput] = useState("");
   const debounceInput = useDebounce(input, 500);
+
+  const get = (obj, ...selectors) =>
+    [...selectors].map((s) =>
+      s
+        .replace(/\[([^\[\]]*)\]/g, ".$1.")
+        .split(".")
+        .filter((t) => t !== "")
+        .reduce((prev, cur) => prev && prev[cur], obj)
+    );
+
   useEffect(() => {
-    let current = filterItem;
-    current[id]["value"] = debounceInput;
-    setFilterItem(current);
+    const newFilterItem = { ...filterItem };
+    let a = [];
+    item["parents"].forEach((el) => a.push(el, "members"));
+
+    const b = get(newFilterItem, a.toString().replace(/,/g, "."));
+
+    b[0][id]["value"] = debounceInput;
+    setFilterItem({ ...newFilterItem });
   }, [debounceInput, item]);
 
   const columnsList = [
@@ -58,9 +73,14 @@ const FilterItem = ({ id, item }) => {
         menu={columnsList}
         initialValue={item["column"]}
         onSelect={(value) => {
-          let current = filterItem;
-          current[id]["column"] = value;
-          setFilterItem(current);
+          const newFilterItem = { ...filterItem };
+          let a = [];
+          item["parents"].forEach((el) => a.push(el, "members"));
+
+          const b = get(newFilterItem, a.toString().replace(/,/g, "."));
+
+          b[0][id]["column"] = value;
+          setFilterItem({ ...newFilterItem });
         }}
         maxH='max-h-52'
       />
@@ -68,9 +88,14 @@ const FilterItem = ({ id, item }) => {
         label='Select Operator'
         menu={filterOperatosList}
         onSelect={(value) => {
-          let current = filterItem;
-          current[id]["operator"] = value;
-          setFilterItem(current);
+          const newFilterItem = { ...filterItem };
+          let a = [];
+          item["parents"].forEach((el) => a.push(el, "members"));
+
+          const b = get(newFilterItem, a.toString().replace(/,/g, "."));
+
+          b[0][id]["operator"] = value;
+          setFilterItem({ ...newFilterItem });
         }}
         maxH='max-h-52'
       />
@@ -82,9 +107,15 @@ const FilterItem = ({ id, item }) => {
       />
       <button
         onClick={() => {
-          let current = filterItem;
-          delete current[id];
-          setFilterItem({ ...current });
+          const newFilterItem = { ...filterItem };
+          let a = [];
+          item["parents"].forEach((el) => a.push(el, "members"));
+
+          const b = get(newFilterItem, a.toString().replace(/,/g, "."));
+
+          delete b[0][id];
+
+          setFilterItem({ ...newFilterItem });
         }}
         className='flex items-center justify-center h-[40px] w-[40px] rounded-[8px] text-gray-600 border text-xs border-gray-600'
       >
@@ -94,4 +125,4 @@ const FilterItem = ({ id, item }) => {
   );
 };
 
-export default FilterItem;
+export default FilterGroupItem;
