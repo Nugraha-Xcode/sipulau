@@ -1,7 +1,14 @@
 import clsx from "clsx";
 import React from "react";
 
-const Button = ({ variant, children, onClick, isActive, className }) => {
+const Button = ({
+  variant,
+  children,
+  onClick,
+  isActive = false,
+  disabled = false,
+  className,
+}) => {
   return (
     <button
       className={clsx([
@@ -13,11 +20,11 @@ const Button = ({ variant, children, onClick, isActive, className }) => {
             variant === "normal",
           "bg-[#BCDFFB] font-semibold": variant === "outline" && isActive,
           "bg-[#3675BC]": variant === "normal" && isActive,
-          "cursor-disable": !isActive,
+          "cursor-disable": disabled,
         },
       ])}
       onClick={onClick}
-      disabled={!isActive}
+      disabled={disabled}
     >
       {children}
     </button>
