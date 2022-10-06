@@ -12,7 +12,7 @@ const FilterGroupItem = ({ id, item, columnsList }) => {
     shallow
   );
 
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(item["value"] || "");
   const debounceInput = useDebounce(input, 500);
 
   useEffect(() => {
@@ -53,6 +53,7 @@ const FilterGroupItem = ({ id, item, columnsList }) => {
       <DropdownMenu
         label='Select Operator'
         menu={filterOperatosList}
+        initialValue={item["operator"]}
         onSelect={(value) => {
           const newFilterItem = { ...filterObject };
           let a = [];
@@ -71,6 +72,7 @@ const FilterGroupItem = ({ id, item, columnsList }) => {
       <input
         type='text'
         placeholder='-'
+        value={input}
         onChange={(e) => setInput(e.target.value)}
         className='h-[40px] rounded-[8px] px-4 py-2 text-gray-600 border text-xs border-gray-600 focus:ring-0'
       />

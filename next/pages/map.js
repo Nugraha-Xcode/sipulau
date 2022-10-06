@@ -537,7 +537,7 @@ const map = () => {
           <ToponimPopup mapLoad={mapload} />
 
           {/* {mapload && <MvtLayer isSelectAll={isSelectAll} />} */}
-          <Modal
+          {/* <Modal
             isShowing={isOpenMapFilter}
             handleModal={toggleMapFilter}
             size='lg'
@@ -548,15 +548,20 @@ const map = () => {
               setDataTable={setDataTable}
               setPage={setPage}
             />
-          </Modal>
+          </Modal> */}
 
-          {/* <Modal
+          <Modal
             isShowing={isOpenMapFilter}
             handleModal={toggleMapFilter}
             size='xl'
           >
-            <AdvanceFilter handleClose={toggleMapFilter} />
-          </Modal> */}
+            <AdvanceFilter
+              setToggledRow={setToggledRow}
+              setDataTable={setDataTable}
+              setPage={setPage}
+              handleClose={toggleMapFilter}
+            />
+          </Modal>
         </MapProvider>
       </div>
       {/* </Layout> */}

@@ -8,7 +8,12 @@ import FilterItem from "./FilterItem";
 import FilterGroupItem from "./FilterGroupItem";
 import { filterGroupList } from "../../../constant";
 
-const AdvanceFilter = ({ handleClose }) => {
+const AdvanceFilter = ({
+  handleClose,
+  setDataTable,
+  setPage,
+  setToggledRow,
+}) => {
   const { t } = useTranslation("attributetable");
   const [
     filterObject,
@@ -21,6 +26,8 @@ const AdvanceFilter = ({ handleClose }) => {
     addGroupItemNested,
     deleteGroup,
     deleteGroupNested,
+    createQueryFilter,
+    advanceFilterQuery,
   ] = useAdvanceFilter(
     (state) => [
       state.filterObject,
@@ -33,6 +40,8 @@ const AdvanceFilter = ({ handleClose }) => {
       state.addGroupItemNested,
       state.deleteGroup,
       state.deleteGroupNested,
+      state.createQueryFilter,
+      state.advanceFilterQuery,
     ],
     shallow
   );
@@ -231,7 +240,7 @@ const AdvanceFilter = ({ handleClose }) => {
   );
 
   return (
-    <div className='py-3 px-6 min-h-[18rem]'>
+    <div className='py-5 px-6 min-h-[20rem]'>
       <div className='flex items-center justify-between'>
         <p>Filter</p>
         <button className='focus:outline-none' onClick={handleClose}>
@@ -251,7 +260,7 @@ const AdvanceFilter = ({ handleClose }) => {
 
             <Popover.Panel className='absolute z-10'>
               {({ close }) => (
-                <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll rounded-[8px] text-gray-600 border text-xs border-gray-600 bg-white'>
+                <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll py-2 rounded-[8px] text-gray-600 border text-xs border-gray-600 bg-white'>
                   {filterGroupList.map((el) => (
                     <button
                       className='text-left hover:bg-[#F2F2F2] px-4 py-2'
@@ -275,7 +284,13 @@ const AdvanceFilter = ({ handleClose }) => {
               + Add Filter
             </Popover.Button>
 
-            <Popover.Panel className='absolute z-10'>
+            <Popover.Panel
+              className={`${
+                Object.keys(filterObject).length > 0
+                  ? "absolute bottom-0 z-10"
+                  : "absolute z-10"
+              }`}
+            >
               {({ close }) => (
                 <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll rounded-[8px] py-2 text-gray-600 border text-xs border-gray-600 bg-white'>
                   {columnsList.map((el) => (
@@ -299,7 +314,11 @@ const AdvanceFilter = ({ handleClose }) => {
           variant='normal'
           isActive={true}
           onClick={() => {
-            console.log(filterObject);
+            setToggledRow([]);
+            setPage(1);
+            setDataTable([]);
+            createQueryFilter();
+            handleClose();
           }}
         >
           Set Filter
@@ -311,6 +330,7 @@ const AdvanceFilter = ({ handleClose }) => {
             isActive={false}
             onClick={() => {
               setFilterObject({});
+              createQueryFilter();
             }}
           >
             Reset Filter

@@ -10,6 +10,8 @@ import Modal from "../modal";
 import MapTableDownload from "./MapTableDownload";
 import useToggle from "../../utils/useToggle";
 import { useAuth } from "../../hooks/useAuth";
+import { useAdvanceFilter } from "../../hooks";
+import shallow from "zustand/shallow";
 
 const MapTable = ({
   dataTable,
@@ -43,6 +45,16 @@ const MapTable = ({
     setBbox,
     handleZoomExtend,
   } = useContext(MapContext);
+
+  const [advanceFilterQuery, setFilterObject, createQueryFilter] =
+    useAdvanceFilter(
+      (state) => [
+        state.advanceFilterQuery,
+        state.setFilterObject,
+        state.createQueryFilter,
+      ],
+      shallow
+    );
 
   const [activeTab, setActiveTab] = useState("nama");
   const [isOption, setOption] = useState(false);
@@ -80,16 +92,21 @@ const MapTable = ({
       : null;
     try {
       const response = await fetch(
-        "/api/titik-pulau?page=" +
-          page +
-          "&ordby=" +
-          order.orderBy +
-          "&orddir=" +
-          (order.orderAsc ? "ASC" : "DESC") +
-          queryFilter +
-          (bboxStr ? "&bbox=" + bboxStr : ""),
+        "/api/titik-pulau",
+        // page +
+        // "&ordby=" +
+        // order.orderBy +
+        // "&orddir=" +
+        // (order.orderAsc ? "ASC" : "DESC") +
+        // (bboxStr ? "&bbox=" + bboxStr : "")
         {
-          method: "GET",
+          method: "POST",
+          body: JSON.stringify({
+            page,
+            ordBy: order.orderBy,
+            ordDir: order.orderAsc ? "ASC" : "DESC",
+            query: advanceFilterQuery._and.length > 0 ? advanceFilterQuery : "",
+          }),
           headers: {
             Authorization: "Bearer " + authToken,
             "Content-Type": "application/json",
@@ -110,7 +127,14 @@ const MapTable = ({
     } catch (error) {
       handleSetSnack(error.message, "error");
     }
-  }, [order.orderBy, order.orderAsc, page, queryFilter, bbox]);
+  }, [
+    order.orderBy,
+    order.orderAsc,
+    page,
+    queryFilter,
+    bbox,
+    advanceFilterQuery,
+  ]);
 
   // const handleZoomTo = useCallback(async () => {
   //   const bboxStr = bbox
@@ -259,25 +283,29 @@ const MapTable = ({
               <MemoIcFilter queryFilter={queryFilter} />
               <p className='text-xs'>{t("filter")}</p>
             </button>
-            <button
-              data-cy='map-table-reset-filter-button'
-              disabled={queryFilter ? false : true}
-              onClick={() => {
-                setIsSelectAll(false);
-                setActiveFilter([]);
-                setQueryFilter("");
-                setDataTable([]);
-                setFilterArr([{ id: (Math.random() * 10000).toFixed(0) }]);
-                setColumn(columnObj);
-                setToggledRow([]);
-              }}
-              className={`${
-                queryFilter ? "cursor-pointer" : "cursor-disable"
-              } flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg`}
-            >
-              <img src='/images/ic-close.svg' alt='button' className='h-4' />
-              <p className='text-xs text-gray-900'>{t("resetFilter")}</p>
-            </button>
+            {advanceFilterQuery._and.length > 0 && (
+              <button
+                data-cy='map-table-reset-filter-button'
+                onClick={() => {
+                  setToggledRow([]);
+                  setPage(1);
+                  setDataTable([]);
+                  setFilterObject({});
+                  createQueryFilter();
+                  // setIsSelectAll(false);
+                  // setActiveFilter([]);
+                  // setQueryFilter("");
+                  // setDataTable([]);
+                  // setFilterArr([{ id: (Math.random() * 10000).toFixed(0) }]);
+                  // setColumn(columnObj);
+                  // setToggledRow([]);
+                }}
+                className='flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg'
+              >
+                <img src='/images/ic-close.svg' alt='button' className='h-4' />
+                <p className='text-xs text-gray-900'>{t("resetFilter")}</p>
+              </button>
+            )}
             {/* <button
               onClick={() => {
                 setActiveFilter([]);
@@ -357,12 +385,12 @@ const MapTable = ({
                 ))}
               </div>
             </div> */}
-            <button
+            {/* <button
               onClick={() => {}}
               className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
             >
               <img src='/images/ic-checkbox.svg' alt='button' className='h-4' />
-            </button>
+            </button> */}
             <button
               data-cy='map-table-download-button'
               onClick={toggle}
