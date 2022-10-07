@@ -6,6 +6,14 @@ import {
   validColumns,
 } from "../../../utils/api/parseQuery";
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "25mb",
+    },
+  },
+};
+
 const allowedMethods = ["GET", "POST"];
 
 export default async function tableHandler(req, res) {
