@@ -23,6 +23,7 @@ export default async function kabkotHandler(req, res) {
       SELECT DISTINCT wadmkk
       FROM ${tableName}
       WHERE wadmpr = $1
+      ORDER BY wadmkk
       `,
       [prov]
     );

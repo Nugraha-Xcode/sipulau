@@ -23,6 +23,7 @@ export default async function kecamatanHandler(req, res) {
       SELECT DISTINCT wadmkd
       FROM ${tableName}
       WHERE wadmkc = $1
+      ORDER BY wadmkd
       `,
       [kec]
     );
