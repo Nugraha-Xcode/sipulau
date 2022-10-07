@@ -153,22 +153,52 @@ const geomColumnParser = (queryObj, columnName, filterOpts) => {
   const value = queryObj[operator];
 
   let newParam = filterOpts.filterParam;
-  switch (operator) {
-    case "_within":
-      if (isValidMultiPolygonGeom(value)) {
-        filterOpts.filterValues.push(value);
-        filterOpts.filterDirectives.push(
-          `ST_Within(geom, ST_GeomFromGeoJSON($${newParam++}))`
-        );
-      } else {
-        throw new QueryError(
-          `_within operator must provide a valid MultiPolygon GeoJSON`
-        );
-      }
-      break;
-
-    default:
-      throw new QueryError(`Invalid operator ${operator} in ${columnName}`);
+  if (operator === "_within" || operator === "_nwithin") {
+    if (isValidMultiPolygonGeom(value)) {
+      filterOpts.filterValues.push(value);
+      filterOpts.filterDirectives.push(
+        `${
+          operator === "_nwithin" ? "NOT " : ""
+        }ST_Within(geom, ST_GeomFromGeoJSON($${newParam++}))`
+      );
+    } else {
+      throw new QueryError(
+        `${operator} operator must provide a valid MultiPolygon GeoJSON`
+      );
+    }
+  } else if (operator === "_within_bbox" || operator === "_nwithin_bbox") {
+    if (!Array.isArray(value) || value.length !== 4) {
+      throw new QueryError(
+        `${operator} operator must provide array [xmin, ymin, xmax, ymax]`
+      );
+    }
+    const [xmin, ymin, xmax, ymax] = value;
+    if (
+      typeof xmin !== "number" ||
+      typeof ymin !== "number" ||
+      typeof xmax !== "number" ||
+      typeof ymax !== "number" ||
+      xmin < -180 ||
+      xmin > 180 ||
+      xmax < -180 ||
+      xmax > 180 ||
+      ymin < -90 ||
+      ymin > 90 ||
+      ymax < -90 ||
+      ymax > 90 ||
+      xmin > xmax ||
+      ymin > ymax
+    ) {
+      throw new QueryError("Invalid bbox");
+    }
+    filterOpts.filterValues.push(xmin, ymin, xmax, ymax);
+    filterOpts.filterDirectives.push(
+      `${
+        operator === "_nwithin_bbox" ? "NOT " : ""
+      }geom && ST_MakeEnvelope($${newParam++}, $${newParam++}, $${newParam++}, $${newParam++}, 4326)`
+    );
+  } else {
+    throw new QueryError(`Invalid operator ${operator} in ${columnName}`);
   }
   // update parent filterOpts
   filterOpts.filterParam = newParam;
