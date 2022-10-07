@@ -21,6 +21,28 @@ export const validColumns = [
   "luas",
 ];
 
+const sqlQuoteLiteral = (value) => {
+  if (typeof value === "string") {
+    value = "'" + value.replace(/'/g, "''") + "'";
+  } else if (value === true) {
+    value = "TRUE";
+  } else if (value === false) {
+    value = "FALSE";
+  } else if (value === undefined || value === null) {
+    value = "NULL";
+  }
+  return value;
+};
+
+const arraySqlQuoteLiteral = (value, operator, columnName) => {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new QueryError(
+      `${operator} operator must contains array of values. Location: ${columnName}`
+    );
+  }
+  return value.map(sqlQuoteLiteral);
+};
+
 const generateParamArr = (value, filterOpts, operator, columnName) => {
   if (!Array.isArray(value) || value.length === 0) {
     throw new QueryError(
@@ -69,72 +91,147 @@ const columnParser = (queryObj, columnName, filterOpts) => {
         throw new Error("How do we get here?");
     }
     // push filter directive
-    filterOpts.filterDirectives.push(
-      `${columnName} ${directive} (${generateParamArr(
-        value,
-        filterOpts,
-        operator,
-        columnName
-      )})`
-    );
-  } else {
-    let newParam = filterOpts.filterParam;
-    switch (operator) {
-      case "_eq":
-        filterOpts.filterValues.push(value);
-        filterOpts.filterDirectives.push(`${columnName} = $${newParam++}`);
-        break;
-
-      case "_neq":
-        filterOpts.filterValues.push(value);
-        filterOpts.filterDirectives.push(`${columnName} != $${newParam++}`);
-        break;
-
-      case "_lt":
-        filterOpts.filterValues.push(value);
-        filterOpts.filterDirectives.push(`${columnName} < $${newParam++}`);
-        break;
-
-      case "_lte":
-        filterOpts.filterValues.push(value);
-        filterOpts.filterDirectives.push(`${columnName} <= $${newParam++}`);
-        break;
-
-      case "_gt":
-        filterOpts.filterValues.push(value);
-        filterOpts.filterDirectives.push(`${columnName} > $${newParam++}`);
-        break;
-
-      case "_gte":
-        filterOpts.filterValues.push(value);
-        filterOpts.filterDirectives.push(`${columnName} >= $${newParam++}`);
-        break;
-
-      case "_null":
-        filterOpts.filterDirectives.push(`${columnName} IS NULL`);
-        break;
-
-      case "_nnull":
-        filterOpts.filterDirectives.push(`${columnName} IS NOT NULL`);
-        break;
-
-      case "_contains":
-        filterOpts.filterValues.push(`%${value}%`);
-        filterOpts.filterDirectives.push(`${columnName} ILIKE $${newParam++}`);
-        break;
-
-      case "_ncontains":
-        filterOpts.filterValues.push(`%${value}%`);
-        filterOpts.filterDirectives.push(
-          `${columnName} NOT ILIKE $${newParam++}`
-        );
-        break;
-
-      default:
-        throw new QueryError(`Invalid operator ${operator} in ${columnName}`);
+    if (filterOpts.unparameterized) {
+      filterOpts.filterDirectives.push(
+        `${columnName} ${directive} (${arraySqlQuoteLiteral(
+          value,
+          operator,
+          columnName
+        )})`
+      );
+    } else {
+      filterOpts.filterDirectives.push(
+        `${columnName} ${directive} (${generateParamArr(
+          value,
+          filterOpts,
+          operator,
+          columnName
+        )})`
+      );
     }
-    // update parent filterOpts
-    filterOpts.filterParam = newParam;
+  } else {
+    if (filterOpts.unparameterized) {
+      switch (operator) {
+        case "_eq":
+          filterOpts.filterDirectives.push(
+            `${columnName} = ${sqlQuoteLiteral(value)}`
+          );
+          break;
+
+        case "_neq":
+          filterOpts.filterDirectives.push(
+            `${columnName} != ${sqlQuoteLiteral(value)}`
+          );
+          break;
+
+        case "_lt":
+          filterOpts.filterDirectives.push(
+            `${columnName} < ${sqlQuoteLiteral(value)}`
+          );
+          break;
+
+        case "_lte":
+          filterOpts.filterDirectives.push(
+            `${columnName} <= ${sqlQuoteLiteral(value)}`
+          );
+          break;
+
+        case "_gt":
+          filterOpts.filterDirectives.push(
+            `${columnName} > ${sqlQuoteLiteral(value)}`
+          );
+          break;
+
+        case "_gte":
+          filterOpts.filterDirectives.push(
+            `${columnName} >= ${sqlQuoteLiteral(value)}`
+          );
+          break;
+
+        case "_null":
+          filterOpts.filterDirectives.push(`${columnName} IS NULL`);
+          break;
+
+        case "_nnull":
+          filterOpts.filterDirectives.push(`${columnName} IS NOT NULL`);
+          break;
+
+        case "_contains":
+          filterOpts.filterDirectives.push(
+            `${columnName} ILIKE ${sqlQuoteLiteral("%" + value + "%")}`
+          );
+          break;
+
+        case "_ncontains":
+          filterOpts.filterDirectives.push(
+            `${columnName} NOT ILIKE ${sqlQuoteLiteral("%" + value + "%")}`
+          );
+          break;
+
+        default:
+          throw new QueryError(`Invalid operator ${operator} in ${columnName}`);
+      }
+    } else {
+      let newParam = filterOpts.filterParam;
+      switch (operator) {
+        case "_eq":
+          filterOpts.filterValues.push(value);
+          filterOpts.filterDirectives.push(`${columnName} = $${newParam++}`);
+          break;
+
+        case "_neq":
+          filterOpts.filterValues.push(value);
+          filterOpts.filterDirectives.push(`${columnName} != $${newParam++}`);
+          break;
+
+        case "_lt":
+          filterOpts.filterValues.push(value);
+          filterOpts.filterDirectives.push(`${columnName} < $${newParam++}`);
+          break;
+
+        case "_lte":
+          filterOpts.filterValues.push(value);
+          filterOpts.filterDirectives.push(`${columnName} <= $${newParam++}`);
+          break;
+
+        case "_gt":
+          filterOpts.filterValues.push(value);
+          filterOpts.filterDirectives.push(`${columnName} > $${newParam++}`);
+          break;
+
+        case "_gte":
+          filterOpts.filterValues.push(value);
+          filterOpts.filterDirectives.push(`${columnName} >= $${newParam++}`);
+          break;
+
+        case "_null":
+          filterOpts.filterDirectives.push(`${columnName} IS NULL`);
+          break;
+
+        case "_nnull":
+          filterOpts.filterDirectives.push(`${columnName} IS NOT NULL`);
+          break;
+
+        case "_contains":
+          filterOpts.filterValues.push(`%${value}%`);
+          filterOpts.filterDirectives.push(
+            `${columnName} ILIKE $${newParam++}`
+          );
+          break;
+
+        case "_ncontains":
+          filterOpts.filterValues.push(`%${value}%`);
+          filterOpts.filterDirectives.push(
+            `${columnName} NOT ILIKE $${newParam++}`
+          );
+          break;
+
+        default:
+          throw new QueryError(`Invalid operator ${operator} in ${columnName}`);
+      }
+      // update parent filterOpts
+      filterOpts.filterParam = newParam;
+    }
   }
 };
 
@@ -155,12 +252,22 @@ const geomColumnParser = (queryObj, columnName, filterOpts) => {
   let newParam = filterOpts.filterParam;
   if (operator === "_within" || operator === "_nwithin") {
     if (isValidMultiPolygonGeom(value)) {
-      filterOpts.filterValues.push(value);
-      filterOpts.filterDirectives.push(
-        `${
-          operator === "_nwithin" ? "NOT " : ""
-        }ST_Within(geom, ST_GeomFromGeoJSON($${newParam++}))`
-      );
+      if (filterOpts.unparameterized) {
+        filterOpts.filterDirectives.push(
+          `${
+            operator === "_nwithin" ? "NOT " : ""
+          }ST_Within(geom, ST_GeomFromGeoJSON(${sqlQuoteLiteral(
+            JSON.stringify(value)
+          )}))`
+        );
+      } else {
+        filterOpts.filterValues.push(value);
+        filterOpts.filterDirectives.push(
+          `${
+            operator === "_nwithin" ? "NOT " : ""
+          }ST_Within(geom, ST_GeomFromGeoJSON($${newParam++}))`
+        );
+      }
     } else {
       throw new QueryError(
         `${operator} operator must provide a valid MultiPolygon GeoJSON`
@@ -191,12 +298,22 @@ const geomColumnParser = (queryObj, columnName, filterOpts) => {
     ) {
       throw new QueryError("Invalid bbox");
     }
-    filterOpts.filterValues.push(xmin, ymin, xmax, ymax);
-    filterOpts.filterDirectives.push(
-      `${
-        operator === "_nwithin_bbox" ? "NOT " : ""
-      }geom && ST_MakeEnvelope($${newParam++}, $${newParam++}, $${newParam++}, $${newParam++}, 4326)`
-    );
+    if (filterOpts.unparameterized) {
+      filterOpts.filterDirectives.push(
+        `${
+          operator === "_nwithin_bbox" ? "NOT " : ""
+        }geom && ST_MakeEnvelope(${sqlQuoteLiteral(xmin)}, ${sqlQuoteLiteral(
+          ymin
+        )}, ${sqlQuoteLiteral(xmax)}, ${sqlQuoteLiteral(ymax)}, 4326)`
+      );
+    } else {
+      filterOpts.filterValues.push(xmin, ymin, xmax, ymax);
+      filterOpts.filterDirectives.push(
+        `${
+          operator === "_nwithin_bbox" ? "NOT " : ""
+        }geom && ST_MakeEnvelope($${newParam++}, $${newParam++}, $${newParam++}, $${newParam++}, 4326)`
+      );
+    }
   } else {
     throw new QueryError(`Invalid operator ${operator} in ${columnName}`);
   }
@@ -267,7 +384,12 @@ const logicalOperatorParser = (logicalOperator, queryObj, filterOpts) => {
 
 export const parseQuery = (queryObj, filterOpts) => {
   if (!filterOpts) {
-    filterOpts = { filterDirectives: [], filterValues: [], filterParam: 1 };
+    filterOpts = {
+      filterDirectives: [],
+      filterValues: [],
+      filterParam: 1,
+      unparameterized: false,
+    };
   }
 
   const queryObjKeys = Object.keys(queryObj);

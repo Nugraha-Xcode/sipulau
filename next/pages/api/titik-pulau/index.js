@@ -239,6 +239,7 @@ export default async function tableHandler(req, res) {
       filterDirectives: [],
       filterValues: [limit, offset],
       filterParam: 3,
+      unparameterized: false,
     };
     if (query) {
       try {
