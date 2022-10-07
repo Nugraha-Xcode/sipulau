@@ -123,7 +123,7 @@ const columnParser = (queryObj, columnName, filterOpts) => {
         filterOpts.filterDirectives.push(`${columnName} ILIKE $${newParam++}`);
         break;
 
-      case "_ncontain":
+      case "_ncontains":
         filterOpts.filterValues.push(`%${value}%`);
         filterOpts.filterDirectives.push(
           `${columnName} NOT ILIKE $${newParam++}`
