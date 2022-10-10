@@ -243,6 +243,30 @@ collections:
       comment: null
       name: komentar_titik
       schema: public
+  - collection: prov_summary
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: prov_summary
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      comment: null
+      name: prov_summary
+      schema: public
   - collection: titik_pulau
     meta:
       accountability: all
@@ -4624,6 +4648,137 @@ fields:
       schema: public
       table: komentar_titik
     type: uuid
+  - collection: prov_summary
+    field: deskripsi
+    meta:
+      collection: prov_summary
+      conditions: null
+      display: null
+      display_options: null
+      field: deskripsi
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: text
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: deskripsi
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: prov_summary
+    type: text
+  - collection: prov_summary
+    field: extent
+    meta:
+      collection: prov_summary
+      conditions: null
+      display: null
+      display_options: null
+      field: extent
+      group: null
+      hidden: false
+      interface: map
+      note: null
+      options:
+        defaultView:
+          bearing: 0
+          center:
+            lat: -1.0721988224023562
+            lng: 118.10570955341132
+          pitch: 0
+          zoom: 3.377612294371291
+        geometryType: Polygon
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: POLYGON
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: extent
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: prov_summary
+    type: geometry.Polygon
+  - collection: prov_summary
+    field: nama_provinsi
+    meta:
+      collection: prov_summary
+      conditions: null
+      display: null
+      display_options: null
+      field: nama_provinsi
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: false
+      is_primary_key: true
+      is_unique: true
+      max_length: 255
+      name: nama_provinsi
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: prov_summary
+    type: string
   - collection: titik_pulau
     field: akurasi
     meta:
