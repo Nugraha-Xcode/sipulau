@@ -1,13 +1,18 @@
 {
   "name": "SIPULAU Worker",
-  "dockerComposeFile": "./docker-compose.yml",
+  "dockerComposeFile": "docker-compose.yml",
   "service": "worker",
-  "settings": {
-    "python.pythonPath": "/usr/bin/python",
-    "python.formatting.provider": "black",
-    "python.formatting.blackPath": "black"
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.pythonPath": "/usr/bin/python",
+        "python.formatting.provider": "black",
+        "python.formatting.blackPath": "black"
+      },
+      "extensions": ["ms-python.python"]
+    }
   },
-  "extensions": ["ms-python.python"],
-  "workspaceFolder": "/app",
-  "postCreateCommand": "pip3 install black"
+  "postCreateCommand": "pip3 install black",
+  "workspaceFolder": "/workspace",
+  "overrideCommand": true
 }
