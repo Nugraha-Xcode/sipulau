@@ -24,63 +24,68 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
 
     unq_id = str(uuid4())
     tmp_dir = f"/tmp/sipulau_worker/{unq_id}"
+    storage_root = settings.STORAGE_ROOT + "/" if settings.STORAGE_ROOT else ""
 
     # process filters
     filters: List[str] = []
 
-    # prioritize selected filter
-    if data.selected is not None and len(data.selected) > 0:
-        data_selected_str = ",".join(map(str, data.selected))
-        filters.append(f"id_toponim IN ({data_selected_str})")
+    # advanced query body first, then classic filter
+    if data.filterOpts is not None:
+        filters = data.filterOpts.filterDirectives
     else:
-        equal_filters: List[List[Union[str, None]]] = [
-            [data.fid, "fid"],
-            [data.id_wilayah, "id_wilayah"],
-            [data.wadmkd, "wadmkd"],
-            [data.wadmkc, "wadmkc"],
-            [data.wadmkk, "wadmkk"],
-            [data.wadmpr, "wadmpr"],
-        ]
-        like_filters: List[List[Union[str, None]]] = [
-            [data.nammap, "nammap"],
-            [data.artinam, "artinam"],
-            [data.sjhnam, "sjhnam"],
-            [data.aslbhs, "aslbhs"],
-            [data.status, "status"],
-        ]
-        # id_toponim filter
-        if data.id_toponim is not None:
-            filters.append(f"id_toponim = {data.id_toponim}")
-        # remark filter
-        if data.remark is not None:
-            if data.remark == "Berpenduduk" or data.remark == "Tidak Berpenduduk":
-                filters.append(f"SPLIT_PART(remark, ' - ', 2) ~* '^{data.remark}'")
-            else:
+        # prioritize selected filter
+        if data.selected is not None and len(data.selected) > 0:
+            data_selected_str = ",".join(map(str, data.selected))
+            filters.append(f"id_toponim IN ({data_selected_str})")
+        else:
+            equal_filters: List[List[Union[str, None]]] = [
+                [data.fid, "fid"],
+                [data.id_wilayah, "id_wilayah"],
+                [data.wadmkd, "wadmkd"],
+                [data.wadmkc, "wadmkc"],
+                [data.wadmkk, "wadmkk"],
+                [data.wadmpr, "wadmpr"],
+            ]
+            like_filters: List[List[Union[str, None]]] = [
+                [data.nammap, "nammap"],
+                [data.artinam, "artinam"],
+                [data.sjhnam, "sjhnam"],
+                [data.aslbhs, "aslbhs"],
+                [data.status, "status"],
+            ]
+            # id_toponim filter
+            if data.id_toponim is not None:
+                filters.append(f"id_toponim = {data.id_toponim}")
+            # remark filter
+            if data.remark is not None:
+                if data.remark == "Berpenduduk" or data.remark == "Tidak Berpenduduk":
+                    filters.append(f"SPLIT_PART(remark, ' - ', 2) ~* '^{data.remark}'")
+                else:
+                    filters.append(
+                        "SPLIT_PART(remark, ' - ', 2) !~* '^Berpenduduk|^Tidak Berpenduduk'"
+                    )
+            # bbox OR aoi filter
+            if data.bbox is not None:
                 filters.append(
-                    "SPLIT_PART(remark, ' - ', 2) !~* '^Berpenduduk|^Tidak Berpenduduk'"
+                    f"geom && ST_MakeEnvelope({data.bbox.xmin}, {data.bbox.ymin}, {data.bbox.xmax}, {data.bbox.ymax}, 4326)"
                 )
-        # bbox OR aoi filter
-        if data.bbox is not None:
-            filters.append(
-                f"geom && ST_MakeEnvelope({data.bbox.xmin}, {data.bbox.ymin}, {data.bbox.xmax}, {data.bbox.ymax}, 4326)"
-            )
-        elif data.aoi is not None:
-            escaped = data.aoi.replace("'", "''")
-            filters.append(f"ST_Intersects(ST_GeomFromGeoJSON('{escaped}'), geom)")
-        # unselected filter
-        if data.unselected is not None and len(data.unselected) > 0:
-            data_unselected_str = ",".join(map(str, data.unselected))
-            filters.append(f"id_toponim NOT IN ({data_unselected_str})")
-        # equal str filters
-        for fil in equal_filters:
-            if fil[0] is not None:
-                escaped = fil[0].replace("'", "''")
-                filters.append(f"{fil[1]} = '{escaped}'")
-        # like filters
-        for fil in like_filters:
-            if fil[0] is not None:
-                escaped = fil[0].replace("'", "''")
-                filters.append(f"{fil[1]} ILIKE '%{escaped}%'")
+            elif data.aoi is not None:
+                escaped = data.aoi.replace("'", "''")
+                filters.append(f"ST_Intersects(ST_GeomFromGeoJSON('{escaped}'), geom)")
+            # unselected filter
+            if data.unselected is not None and len(data.unselected) > 0:
+                data_unselected_str = ",".join(map(str, data.unselected))
+                filters.append(f"id_toponim NOT IN ({data_unselected_str})")
+            # equal str filters
+            for fil in equal_filters:
+                if fil[0] is not None:
+                    escaped = fil[0].replace("'", "''")
+                    filters.append(f"{fil[1]} = '{escaped}'")
+            # like filters
+            for fil in like_filters:
+                if fil[0] is not None:
+                    escaped = fil[0].replace("'", "''")
+                    filters.append(f"{fil[1]} ILIKE '%{escaped}%'")
 
     shp_driver: ogr.Driver = ogr.GetDriverByName("ESRI Shapefile")
     pg_driver: ogr.Driver = ogr.GetDriverByName("PostgreSQL")
@@ -153,7 +158,10 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
 
     try:
         minio_client.fput_object(
-            settings.STORAGE_BUCKET, unq_id + ".zip", zip_file_path, "application/zip"
+            settings.STORAGE_BUCKET,
+            storage_root + unq_id + ".zip",
+            zip_file_path,
+            "application/zip",
         )
     finally:
         shutil.rmtree(tmp_dir)

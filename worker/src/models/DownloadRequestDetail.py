@@ -1,12 +1,20 @@
-from typing import List, Optional
+from typing import List, Optional, Any
 
 from pydantic import BaseModel
+
 
 class BoundingBox(BaseModel):
     xmin: float
     ymin: float
     xmax: float
     ymax: float
+
+
+class FilterOptions(BaseModel):
+    filterDirectives: List[str]
+    filterValues: List[Any]
+    filterParam: int
+    unparameterized: bool
 
 
 class DownloadRequestDetail(BaseModel):
@@ -27,3 +35,4 @@ class DownloadRequestDetail(BaseModel):
     selected: Optional[List[int]] = None
     unselected: Optional[List[int]] = None
     aoi: Optional[str] = None
+    filterOpts: Optional[FilterOptions] = None

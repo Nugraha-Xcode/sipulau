@@ -4,14 +4,15 @@ import isValidMultiPolygonGeom from "../../../../utils/api/isValidMultiPolygonGe
 import { sipulauPool } from "../../../../db";
 import getCurrentActiveTable from "../../../../utils/api/getCurrentActiveTable";
 import getDirectusUserId from "../../../../utils/api/getDirectusUserId";
+import { parseQuery } from "../../../../utils/api/parseQuery";
 
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '25mb',
+      sizeLimit: "25mb",
     },
   },
-}
+};
 
 const USER_DOWNLOADS_FOLDER_ID = "45f438ab-3124-43aa-90ac-b52d1954c95b";
 
@@ -112,78 +113,90 @@ export default async function downloadShpHandler(req, res) {
     selected,
     unselected,
     aoi,
+    query,
   } = parsedBody;
 
-  // prioritize selected filter
-  if (Array.isArray(selected)) {
-    let validId = [];
-    for (let id of selected) {
-      if (Number.isInteger(id)) validId.push(id);
-    }
-    if (validId.length > 0) downloadDetails.selected = validId;
+  // advanced query body first, then classic filter
+  if (query) {
+    const filterOpts = {
+      filterDirectives: [],
+      filterValues: [],
+      filterParam: 1,
+      unparameterized: true,
+    };
+    downloadDetails.filterOpts = parseQuery(query, filterOpts);
   } else {
-    let stringFilters = [
-      [fid, "fid"],
-      [id_wilayah, "id_wilayah"],
-      [wadmkd, "wadmkd"],
-      [wadmkc, "wadmkc"],
-      [wadmkk, "wadmkk"],
-      [wadmpr, "wadmpr"],
-      [nammap, "nammap"],
-      [artinam, "artinam"],
-      [sjhnam, "sjhnam"],
-      [aslbhs, "aslbhs"],
-      [status, "status"],
-      [remark, "remark"],
-    ];
-    // id_toponim filter
-    if (Number.isInteger(id_toponim)) {
-      downloadDetails.id_toponim = id_toponim;
-    }
-    // bbox OR aoi filter
-    if (typeof bbox === "object") {
-      let { xmin, ymin, xmax, ymax } = bbox;
-      if (
-        typeof xmin !== "number" ||
-        typeof ymin !== "number" ||
-        typeof xmax !== "number" ||
-        typeof ymax !== "number" ||
-        xmin < -180 ||
-        xmin > 180 ||
-        xmax < -180 ||
-        xmax > 180 ||
-        ymin < -90 ||
-        ymin > 90 ||
-        ymax < -90 ||
-        ymax > 90 ||
-        xmin > xmax ||
-        ymin > ymax
-      ) {
-        return res.status(400).json({ message: "bbox tidak valid" });
-      }
-      downloadDetails.bbox = { xmin, ymin, xmax, ymax };
-    } else if (typeof aoi === "object") {
-      if (isValidMultiPolygonGeom(aoi)) {
-        downloadDetails.aoi = JSON.stringify(aoi);
-      } else {
-        return res.status(400).json({
-          message:
-            "AOI harus berbentuk geometri GeoJSON bertipe MultiPolygon yang valid",
-        });
-      }
-    }
-    // unselected filter
-    if (Array.isArray(unselected)) {
+    // prioritize selected filter
+    if (Array.isArray(selected)) {
       let validId = [];
-      for (let id of unselected) {
+      for (let id of selected) {
         if (Number.isInteger(id)) validId.push(id);
       }
-      if (validId.length > 0) downloadDetails.unselected = validId;
-    }
-    // string filters
-    for (const filter of stringFilters) {
-      if (filter[0] !== undefined) {
-        downloadDetails[filter[1]] = filter[0];
+      if (validId.length > 0) downloadDetails.selected = validId;
+    } else {
+      let stringFilters = [
+        [fid, "fid"],
+        [id_wilayah, "id_wilayah"],
+        [wadmkd, "wadmkd"],
+        [wadmkc, "wadmkc"],
+        [wadmkk, "wadmkk"],
+        [wadmpr, "wadmpr"],
+        [nammap, "nammap"],
+        [artinam, "artinam"],
+        [sjhnam, "sjhnam"],
+        [aslbhs, "aslbhs"],
+        [status, "status"],
+        [remark, "remark"],
+      ];
+      // id_toponim filter
+      if (Number.isInteger(id_toponim)) {
+        downloadDetails.id_toponim = id_toponim;
+      }
+      // bbox OR aoi filter
+      if (typeof bbox === "object") {
+        let { xmin, ymin, xmax, ymax } = bbox;
+        if (
+          typeof xmin !== "number" ||
+          typeof ymin !== "number" ||
+          typeof xmax !== "number" ||
+          typeof ymax !== "number" ||
+          xmin < -180 ||
+          xmin > 180 ||
+          xmax < -180 ||
+          xmax > 180 ||
+          ymin < -90 ||
+          ymin > 90 ||
+          ymax < -90 ||
+          ymax > 90 ||
+          xmin > xmax ||
+          ymin > ymax
+        ) {
+          return res.status(400).json({ message: "bbox tidak valid" });
+        }
+        downloadDetails.bbox = { xmin, ymin, xmax, ymax };
+      } else if (typeof aoi === "object") {
+        if (isValidMultiPolygonGeom(aoi)) {
+          downloadDetails.aoi = JSON.stringify(aoi);
+        } else {
+          return res.status(400).json({
+            message:
+              "AOI harus berbentuk geometri GeoJSON bertipe MultiPolygon yang valid",
+          });
+        }
+      }
+      // unselected filter
+      if (Array.isArray(unselected)) {
+        let validId = [];
+        for (let id of unselected) {
+          if (Number.isInteger(id)) validId.push(id);
+        }
+        if (validId.length > 0) downloadDetails.unselected = validId;
+      }
+      // string filters
+      for (const filter of stringFilters) {
+        if (filter[0] !== undefined) {
+          downloadDetails[filter[1]] = filter[0];
+        }
       }
     }
   }
