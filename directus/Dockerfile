@@ -25,4 +25,4 @@ COPY schema.yml ./schema.yml
 # COPY extensions/dist extensions
 # if using builder:
 COPY --from=builder /extensions/dist extensions
-CMD npx directus database install && npx directus schema apply --yes ./schema.yml && npx directus database migrate:latest && npx directus start
+CMD npx directus database install ; npx directus schema apply --yes ./schema.yml && npx directus database migrate:latest && npx directus start
