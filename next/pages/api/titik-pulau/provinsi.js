@@ -17,6 +17,7 @@ export default async function provHandler(req, res) {
       `
       SELECT DISTINCT wadmpr
       FROM ${tableName}
+      ORDER BY wadmpr
       `
     );
   } catch (error) {
