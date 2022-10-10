@@ -20,10 +20,9 @@ RUN npm run build
 FROM directus/directus:9.16 as runner
 WORKDIR /directus
 COPY directus-app-with-captcha ./node_modules/@directus/app/dist
-RUN npx directus database install
 COPY schema.yml ./schema.yml
 # if using prebuilt:
 # COPY extensions/dist extensions
 # if using builder:
 COPY --from=builder /extensions/dist extensions
-CMD npx directus schema apply --yes ./schema.yml && npx directus database migrate:latest && npx directus start
+CMD npx directus database install && npx directus schema apply --yes ./schema.yml && npx directus database migrate:latest && npx directus start
