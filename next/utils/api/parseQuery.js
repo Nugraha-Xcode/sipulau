@@ -382,16 +382,15 @@ const logicalOperatorParser = (logicalOperator, queryObj, filterOpts) => {
   );
 };
 
-export const parseQuery = (queryObj, filterOpts) => {
-  if (!filterOpts) {
-    filterOpts = {
-      filterDirectives: [],
-      filterValues: [],
-      filterParam: 1,
-      unparameterized: false,
-    };
+export const parseQuery = (
+  queryObj,
+  filterOpts = {
+    filterDirectives: [],
+    filterValues: [],
+    filterParam: 1,
+    unparameterized: false,
   }
-
+) => {
   const queryObjKeys = Object.keys(queryObj);
   if (
     typeof queryObj !== "object" ||
