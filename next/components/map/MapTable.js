@@ -10,7 +10,7 @@ import Modal from "../modal";
 import MapTableDownload from "./MapTableDownload";
 import useToggle from "../../utils/useToggle";
 import { useAuth } from "../../hooks/useAuth";
-import { useAdvanceFilter } from "../../hooks";
+import { useAdvanceFilter, useBbox } from "../../hooks";
 import shallow from "zustand/shallow";
 
 const MapTable = ({
@@ -41,10 +41,15 @@ const MapTable = ({
     setFilterArr,
     setColumn,
     columnObj,
-    bbox,
-    setBbox,
     handleZoomExtend,
   } = useContext(MapContext);
+
+  const [bbox, setBbox] = useBbox(
+    (state) => [state.bbox, state.setBbox],
+    shallow
+  );
+
+  console.log(bbox);
 
   const [advanceFilterQuery, setFilterObject, createQueryFilter] =
     useAdvanceFilter(
@@ -87,32 +92,32 @@ const MapTable = ({
   ]);
 
   useEffect(async () => {
-    const bboxStr = bbox
-      ? `${bbox.xmin},${bbox.ymin},${bbox.xmax},${bbox.ymax}`
-      : null;
+    let query = [...advanceFilterQuery];
+    bbox &&
+      query.push({
+        geom: {
+          _within_bbox: [bbox.xmin, bbox.ymin, bbox.xmax, bbox.ymax],
+        },
+      });
+
     try {
-      const response = await fetch(
-        "/api/titik-pulau",
-        // page +
-        // "&ordby=" +
-        // order.orderBy +
-        // "&orddir=" +
-        // (order.orderAsc ? "ASC" : "DESC") +
-        // (bboxStr ? "&bbox=" + bboxStr : "")
-        {
-          method: "POST",
-          body: JSON.stringify({
-            page,
-            ordBy: order.orderBy,
-            ordDir: order.orderAsc ? "ASC" : "DESC",
-            query: advanceFilterQuery._and.length > 0 ? advanceFilterQuery : "",
+      const response = await fetch("/api/titik-pulau", {
+        method: "POST",
+        body: JSON.stringify({
+          page,
+          ordBy: order.orderBy,
+          ordDir: order.orderAsc ? "ASC" : "DESC",
+          ...((query.length > 0 || bbox) && {
+            query: {
+              _and: query,
+            },
           }),
-          headers: {
-            Authorization: "Bearer " + authToken,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+        }),
+        headers: {
+          Authorization: "Bearer " + authToken,
+          "Content-Type": "application/json",
+        },
+      });
       const result = await response.json();
       if (response.status === 200) {
         if (result.length > 0) {
@@ -132,8 +137,8 @@ const MapTable = ({
     order.orderAsc,
     page,
     queryFilter,
-    bbox,
     advanceFilterQuery,
+    bbox,
   ]);
 
   // const handleZoomTo = useCallback(async () => {
@@ -283,7 +288,7 @@ const MapTable = ({
               <MemoIcFilter queryFilter={queryFilter} />
               <p className='text-xs'>{t("filter")}</p>
             </button>
-            {advanceFilterQuery._and.length > 0 && (
+            {advanceFilterQuery.length > 0 && (
               <button
                 data-cy='map-table-reset-filter-button'
                 onClick={() => {

@@ -6,6 +6,7 @@ import Modal from "../modal";
 import AppContext from "../../context/AppContext";
 import MapContext from "../../context/MapContext";
 import { useAuth } from "../../hooks/useAuth";
+import { useBbox } from "../../hooks";
 
 const MapTableDownload = ({
   toggledRow,
@@ -17,7 +18,8 @@ const MapTableDownload = ({
   const { t } = useTranslation("sideBarRight");
   const { handleSetSnack } = useContext(AppContext);
   const authToken = useAuth((state) => state.authToken);
-  const { bbox, activeFilter } = useContext(MapContext);
+  const { activeFilter } = useContext(MapContext);
+  const bbox = useBbox((state) => state.bbox);
 
   const [isLoad, setIsLoad] = useState(false);
   const [type, setType] = useState({ label: "csv", value: "csv" });

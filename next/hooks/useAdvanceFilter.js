@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getDeepObjectValue } from "../utils/function";
 
 export const useAdvanceFilter = create((set, get) => ({
-  advanceFilterQuery: { _and: [] },
+  advanceFilterQuery: [],
   filterObject: {},
   setFilterObject: (item) => set({ filterObject: item }),
   addFilterMain: (el) => {
@@ -122,9 +122,9 @@ export const useAdvanceFilter = create((set, get) => ({
           });
         }
       }
-      set({ advanceFilterQuery: { _and: queryArray } });
+      set({ advanceFilterQuery: queryArray });
     } else {
-      set({ advanceFilterQuery: { _and: [] } });
+      set({ advanceFilterQuery: [] });
     }
   },
 }));

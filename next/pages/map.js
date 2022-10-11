@@ -17,7 +17,7 @@ import Filter from "../components/map/Filter";
 import AppContext from "../context/AppContext";
 import MapLayers from "../components/map/MapLayers";
 import SideNav from "../components/navigation/SideNav";
-import { useIndexedDB, useNav, useNetwork } from "../hooks";
+import { useBbox, useIndexedDB, useNav, useNetwork } from "../hooks";
 import MapToolbox from "../components/map/MapToolbox";
 import MapToolboxCard from "../components/map/MapToolboxCard";
 import BottomDrawer from "../components/core/BottomDrawer";
@@ -77,12 +77,15 @@ const map = () => {
   const [page, setPage] = useState(1);
   const [column, setColumn] = useState(columnObj);
   const [refreshLayer, setRefreshLayer] = useState(false);
-  const [bbox, setBbox] = useState(null);
   // const [activeLegend, setActiveLegend] = useState([]);
   const [drawPoly, setDrawPoly] = useState(false);
 
   const mercRef = useRef(new SphericalMercator());
   const [setDb, db] = useIndexedDB((state) => [state.setDb, state.db], shallow);
+  const [bbox, setBbox] = useBbox(
+    (state) => [state.bbox, state.setBbox],
+    shallow
+  );
 
   const fetchRBIStyle = useCallback(async () => {
     let vts =
@@ -429,8 +432,6 @@ const map = () => {
             columnObj,
             refreshLayer,
             setRefreshLayer,
-            bbox,
-            setBbox,
             handleZoomExtend,
             // activeLegend,
             // setActiveLegend,

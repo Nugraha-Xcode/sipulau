@@ -1,5 +1,6 @@
 export * from "./useAuth";
 export * from "./useAuthHandler";
+export * from "./useBbox";
 export * from "./useCrs";
 export * from "./useNav";
 export * from "./useNetwork";
