@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from "react";
+import React, { useContext, useCallback, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import useToggle from "../../utils/useToggle";
 import Select from "../core/select";
@@ -6,7 +6,8 @@ import Modal from "../modal";
 import AppContext from "../../context/AppContext";
 import MapContext from "../../context/MapContext";
 import { useAuth } from "../../hooks/useAuth";
-import { useBbox } from "../../hooks";
+import { useAdvanceFilter, useBbox } from "../../hooks";
+import Button from "../core/Button";
 
 const MapTableDownload = ({
   toggledRow,
@@ -20,16 +21,32 @@ const MapTableDownload = ({
   const authToken = useAuth((state) => state.authToken);
   const { activeFilter } = useContext(MapContext);
   const bbox = useBbox((state) => state.bbox);
+  const advanceFilterQuery = useAdvanceFilter(
+    (state) => state.advanceFilterQuery
+  );
 
   const [isLoad, setIsLoad] = useState(false);
   const [type, setType] = useState({ label: "csv", value: "csv" });
+  const [ndaModal, setNdaModal] = useState(false);
+  const [isAccept, setAccept] = useState(false);
+
+  useEffect(() => {
+    setAccept(false);
+  }, [ndaModal]);
 
   const buildObjBody = useCallback(() => {
     let objBody = {};
-    if (activeFilter.length > 0) {
-      activeFilter.forEach((el) => {
-        objBody[el.value] = el.content;
+    let query = [...advanceFilterQuery];
+    bbox &&
+      query.push({
+        geom: {
+          _within_bbox: [bbox.xmin, bbox.ymin, bbox.xmax, bbox.ymax],
+        },
       });
+    if (query.length > 0) {
+      objBody["query"] = {
+        _and: query,
+      };
     }
     if (Array.isArray(toggledRow) && toggledRow.length > 0) {
       if (isSelectAll) {
@@ -38,19 +55,23 @@ const MapTableDownload = ({
         objBody["selected"] = toggledRow.map((el) => parseInt(el.id));
       }
     }
-    if (bbox) {
-      objBody.bbox = { ...bbox };
-    }
-    if (Array.isArray(drawItem) && drawItem.length > 0) {
-      // create multipolygon
-      const multiPolygon = { type: "MultiPolygon", coordinates: [] };
-      for (const poly of drawItem) {
-        multiPolygon.coordinates.push(poly.geometry.coordinates);
-      }
-      objBody.aoi = multiPolygon;
-    }
+    // if (Array.isArray(drawItem) && drawItem.length > 0) {
+    //   // create multipolygon
+    //   const multiPolygon = { type: "MultiPolygon", coordinates: [] };
+    //   for (const poly of drawItem) {
+    //     multiPolygon.coordinates.push(poly.geometry.coordinates);
+    //   }
+    //   objBody.aoi = multiPolygon;
+    // }
     return objBody;
-  }, [bbox, activeFilter, toggledRow, isSelectAll, drawItem]);
+  }, [
+    bbox,
+    activeFilter,
+    toggledRow,
+    isSelectAll,
+    drawItem,
+    advanceFilterQuery,
+  ]);
 
   const handleDownloadCsv = useCallback(
     async (e) => {
@@ -151,12 +172,82 @@ const MapTableDownload = ({
           data-cy='download-feature-download-button'
           className='text-white bg-main-blue rounded-lg py-2 mx-auto w-full text-sm'
           onClick={() => {
-            type.value === "csv" ? handleDownloadCsv() : handleDownloadShp();
+            setNdaModal(true);
           }}
         >
           {t("buttonDownload")}
         </button>
       )}
+      <Modal
+        isShowing={ndaModal}
+        handleModal={() => {
+          setNdaModal(false);
+        }}
+        size='md'
+      >
+        <div className='py-5 px-8 flex flex-col gap-2'>
+          <div className='flex items-center justify-between'>
+            <img src='/images/big-logo.svg' alt='logo' className='w-14 h-14' />
+            <button
+              onClick={() => {
+                setNdaModal(false);
+              }}
+            >
+              <img
+                src='/images/ic-close.svg'
+                alt='close button'
+                className='w-3 h-3'
+              />
+            </button>
+          </div>
+          <p className='text-xl text-gray-900 font-semibold'>
+            Non-Disclosure Agreement (NDA)
+          </p>
+          <p className='text-xs text-gray-900 text-justify'>
+            Informasi Geospasial Dasar (IGD) yang terdapat dalam SI Pulau ini
+            adalah produk Badan Informasi Geospasial (BIG) dan hak ciptanya
+            dimiliki oleh BIG. Pengguna diijinkan dan dibebaskan untuk
+            mengunduh, mendistribusikan, mengadaptasi atau membuat turunan IGD
+            yang ada dalam website ini, dengan syarat mencantumkan sumber
+            informasi/data berasal dari BIG. Pengguna tidak diperkenankan untuk
+            memperjualbelikan kembali segala data yang diperoleh dari SI Pulau
+            ini.
+          </p>
+          <p className='text-xs text-gray-900 text-justify'>Sitasi:</p>
+          <p className='text-xs text-gray-900 text-justify'>
+            Badan Informasi Geospasial Republik Indonesia, 2021. Titik Toponim
+            Pulau Indonesia. Bogor, Jawa Barat. Diakses dari :
+            http://sipulau.big.go.id
+          </p>
+          <div className='flex items-center gap-2 justify-center my-2'>
+            <input
+              type='checkbox'
+              id='acceptTermCondition'
+              name='acceptTermCondition'
+              onChange={() => {
+                setAccept((prev) => !prev);
+              }}
+            />
+            <label
+              htmlFor='acceptTermCondition'
+              className='text-blue-500 text-xs'
+            >
+              Accept Terms & Condition
+            </label>
+          </div>
+          <Button
+            variant='normal'
+            isActive={isAccept}
+            onClick={() => {
+              type.value === "csv" ? handleDownloadCsv() : handleDownloadShp();
+              setNdaModal(false);
+            }}
+            className='text-sm'
+          >
+            Download
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
