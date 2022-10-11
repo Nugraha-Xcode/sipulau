@@ -107,7 +107,7 @@ const MapTable = ({
           page,
           ordBy: order.orderBy,
           ordDir: order.orderAsc ? "ASC" : "DESC",
-          ...((query.length > 0 || bbox) && {
+          ...(query.length > 0 && {
             query: {
               _and: query,
             },
