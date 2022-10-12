@@ -1,16 +1,39 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import shallow from "zustand/shallow";
 import { useNav } from "../../../hooks";
 import { AboutContent } from "../sidebar-content";
 import DropdownMenu from "../../core/DropdownMenu";
 import Button from "../../core/Button";
+import AppContext from "../../../context/AppContext";
 
 const Resume = () => {
+  const { handleSetSnack } = useContext(AppContext);
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
     shallow
   );
   const [listProvince, setListProvince] = useState([]);
+  const [resumeProvince, setResumeProvince] = useState(null);
+
+  const getResume = useCallback(async (prov) => {
+    const params = new URLSearchParams({
+      prov: prov,
+    });
+    try {
+      const response = await fetch("/api/titik-pulau/prov-summary?" + params, {
+        method: "GET",
+      });
+
+      const resData = await response.json();
+      if (response.status === 200) {
+        setResumeProvince(resData);
+      } else {
+        throw Error(resData.message);
+      }
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+    }
+  }, []);
 
   const getProvince = useCallback(async () => {
     try {
@@ -38,14 +61,6 @@ const Resume = () => {
     getProvince();
   }, []);
 
-  const people = [
-    { value: 1, label: "Durward Reynolds" },
-    { value: 2, label: "Kenton Towne" },
-    { value: 3, label: "Therese Wunsch" },
-    { value: 4, label: "Benedict Kessler" },
-    { value: 5, label: "Katelyn Rohan" },
-  ];
-
   return (
     <div
       id='side-feature-content'
@@ -66,58 +81,89 @@ const Resume = () => {
         <DropdownMenu
           label='Select Province'
           menu={listProvince}
-          onSelect={(value) => {
-            console.log(value);
+          onSelect={(selectedItem) => {
+            getResume(selectedItem.value);
           }}
         />
-        <div className='border border-gray-500 p-2 rounded-[8px]'>
-          <div
-            className={`h-40 w-full bg-no-repeat bg-cover rounded-[8px]`}
-            style={{
-              backgroundImage: `url(${"/images/dummy-popup.jpg"})`,
-            }}
-          />
-        </div>
-        <div className='flex flex-col gap-1'>
-          {[
-            { label: "Uninhabited Island", value: "85 Islands" },
-            { label: "Area", value: "5.636,66 Km2" },
-            { label: "Coastline Length", value: "633,35 Km" },
-            { label: "Largest Island", value: "island" },
-            { label: "Smallest Island", value: "island" },
-            { label: "Inhabited Island", value: "island" },
-            { label: "Uninhabited Island", value: "island" },
-          ].map((el) => (
-            <div className='flex items-center text-gray-600 text-sm gap-1'>
-              <div className='w-1/2 flex items-center justify-between'>
-                <p>{el.label}</p>
-                <p>:</p>
-              </div>
-              <div className='w-1/2 overflow-x-scroll whitespace-nowrap hide-scrollbar'>
-                {el.value}
-              </div>
+        {resumeProvince && (
+          <div className='flex flex-col gap-2'>
+            <div className='border border-gray-500 p-2 rounded-[8px]'>
+              {/* <div
+                className={`h-40 w-full bg-no-repeat bg-cover rounded-[8px]`}
+                style={{
+                  backgroundImage: `url(${"/images/dummy-popup.jpg"})`,
+                }}
+              /> */}
+              <img
+                src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/[${
+                  resumeProvince.xmin +
+                  "," +
+                  resumeProvince.ymin +
+                  "," +
+                  resumeProvince.xmax +
+                  "," +
+                  resumeProvince.ymax
+                }]/1280x1280?access_token=pk.eyJ1IjoiaGFmaXphbmFkbGkiLCJhIjoiY2s0M3pxdmtnMGRmODNkcG11a2RkdGEyNiJ9.zJ_0jcPOGZko34FBrPxDRA`}
+                className='w-full rounded-lg'
+              />
             </div>
-          ))}
-        </div>
-        <p className='text-gray-600 text-sm'>
-          Bali is known as the Pulau Dewata (Island of the Gods). Located
-          between the island of Java and the island of Lombok. Bali was
-          previously part of the Smaller Sunda Province along with Lombok,
-          Sumbawa, Sumba, Flores and Timor. In 1958 Bali officially became its
-          own province with the capital Singaraja. Then in 1960 moved to
-          Denpasar. The province of Bali consists of the island of Bali and the
-          surrounding small islands, including Nusa Penida, Nusa.
-        </p>
-        <Button
-          className='text-sm'
-          variant='normal'
-          onClick={() => {
-            console.log("test");
-          }}
-          isActive={true}
-        >
-          Download as PDF
-        </Button>
+            <div className='flex flex-col gap-1'>
+              {[
+                {
+                  label: "Number of Islands",
+                  value: resumeProvince.total_island,
+                },
+                { label: "Area", value: resumeProvince.total_area },
+                {
+                  label: "Coastline Length",
+                  value: resumeProvince.total_coastline,
+                },
+                {
+                  label: "Largest Island",
+                  value: resumeProvince.largest_island,
+                },
+                {
+                  label: "Smallest Island",
+                  value: resumeProvince.smallest_island,
+                },
+                {
+                  label: "Inhabited Island",
+                  value: resumeProvince.total_inhabited,
+                },
+                {
+                  label: "Uninhabited Island",
+                  value: resumeProvince.total_uninhabited,
+                },
+              ].map((el) => (
+                <div
+                  key={el.label}
+                  className='flex items-center text-gray-600 text-sm gap-1'
+                >
+                  <div className='w-1/2 flex items-center justify-between'>
+                    <p>{el.label}</p>
+                    <p>:</p>
+                  </div>
+                  <div className='w-1/2 overflow-x-scroll whitespace-nowrap hide-scrollbar'>
+                    {el.value || "-"}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className='text-gray-600 text-sm'>
+              {resumeProvince.deskripsi || "-"}
+            </p>
+            <Button
+              className='text-sm'
+              variant='normal'
+              onClick={() => {
+                console.log("test");
+              }}
+              isActive={true}
+            >
+              Download as PDF
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className='mt-2 rounded-[4px] bg-gray-50 p-2 dark:bg-gray-700'>
