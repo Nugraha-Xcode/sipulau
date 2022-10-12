@@ -9,3 +9,4 @@ export * from "./useComment";
 export * from "./useIndexedDB";
 export * from "./useAdvanceFilter";
 export * from "./useDebounce";
+export * from "./useDrawAoi";

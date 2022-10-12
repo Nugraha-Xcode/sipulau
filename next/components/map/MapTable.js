@@ -10,8 +10,9 @@ import Modal from "../modal";
 import MapTableDownload from "./MapTableDownload";
 import useToggle from "../../utils/useToggle";
 import { useAuth } from "../../hooks/useAuth";
-import { useAdvanceFilter, useBbox } from "../../hooks";
+import { useAdvanceFilter, useBbox, useDrawAoi } from "../../hooks";
 import shallow from "zustand/shallow";
+import SelectAoi from "./bottomDrawer/SelectAoi";
 
 const MapTable = ({
   dataTable,
@@ -31,6 +32,7 @@ const MapTable = ({
   const {
     map,
     queryFilter,
+    draw,
     setIsOpenDrawer,
     setActiveFeature,
     setIsOpenFeature,
@@ -49,8 +51,6 @@ const MapTable = ({
     shallow
   );
 
-  console.log(bbox);
-
   const [advanceFilterQuery, setFilterObject, createQueryFilter] =
     useAdvanceFilter(
       (state) => [
@@ -60,6 +60,10 @@ const MapTable = ({
       ],
       shallow
     );
+  const [aoiPoly, setAoiPoly] = useDrawAoi(
+    (state) => [state.aoiPoly, state.setAoiPoly],
+    shallow
+  );
 
   const [activeTab, setActiveTab] = useState("nama");
   const [isOption, setOption] = useState(false);
@@ -97,6 +101,15 @@ const MapTable = ({
       query.push({
         geom: {
           _within_bbox: [bbox.xmin, bbox.ymin, bbox.xmax, bbox.ymax],
+        },
+      });
+    aoiPoly &&
+      query.push({
+        geom: {
+          _within: {
+            type: "MultiPolygon",
+            coordinates: [aoiPoly.geometry.coordinates],
+          },
         },
       });
 
@@ -139,6 +152,7 @@ const MapTable = ({
     queryFilter,
     advanceFilterQuery,
     bbox,
+    aoiPoly,
   ]);
 
   // const handleZoomTo = useCallback(async () => {
@@ -231,7 +245,7 @@ const MapTable = ({
                   : "border-gray-300 text-gray-900"
               } flex items-center gap-2 border-2 h-10 py-2 px-5 rounded-lg `}
             >
-              <MemoIcMapFilter bbox={bbox} />
+              <MemoIcMapFilter />
               <p className='text-xs'>Filter by Map Extent</p>
             </button>
             <div className='relative'>
@@ -242,7 +256,7 @@ const MapTable = ({
                 <img
                   src='/images/ic-filter-column.svg'
                   alt='button'
-                  className='h-4'
+                  className='h-4 text-gray-900'
                 />
                 <p className='text-xs text-gray-900'>Show All Fields</p>
               </button>
@@ -288,7 +302,7 @@ const MapTable = ({
               <MemoIcFilter queryFilter={queryFilter} />
               <p className='text-xs'>{t("filter")}</p>
             </button>
-            {advanceFilterQuery.length > 0 && (
+            {(advanceFilterQuery.length > 0 || aoiPoly) && (
               <button
                 data-cy='map-table-reset-filter-button'
                 onClick={() => {
@@ -297,6 +311,10 @@ const MapTable = ({
                   setDataTable([]);
                   setFilterObject({});
                   createQueryFilter();
+                  if (aoiPoly) {
+                    setAoiPoly(null);
+                    draw.delete(aoiPoly.id);
+                  }
                   // setIsSelectAll(false);
                   // setActiveFilter([]);
                   // setQueryFilter("");
@@ -311,19 +329,7 @@ const MapTable = ({
                 <p className='text-xs text-gray-900'>{t("resetFilter")}</p>
               </button>
             )}
-            {/* <button
-              onClick={() => {
-                setActiveFilter([]);
-                setQueryFilter("");
-                setDataTable([]);
-                setFilterArr([{ id: (Math.random() * 10000).toFixed(0) }]);
-                setColumn(columnObj);
-              }}
-              className='flex items-center gap-2 border py-2 px-5 rounded-full'
-            >
-              <img src='/images/ic-refresh.svg' alt='button' className='h-4' />
-              <p className='text-xs text-main-gray'>Refresh</p>
-            </button> */}
+            <SelectAoi setPage={setPage} setDataTable={setDataTable} />
             <Modal isShowing={isShowing} handleModal={toggle} size='sm'>
               <div className=''>
                 <div className='flex items-center p-2'>
