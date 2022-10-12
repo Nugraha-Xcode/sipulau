@@ -6,7 +6,7 @@ WORKDIR /app
 RUN npm update -g
 ENV NODE_ENV development
 COPY ./package*.json ./
-RUN npm ci
+RUN npm install
 
 # builder
 FROM node:14-alpine as builder
