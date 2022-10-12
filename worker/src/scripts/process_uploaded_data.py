@@ -73,6 +73,7 @@ def get_fields_type(data_type: DataTypeEnum) -> Dict[str, Any]:
         "created_by": ogr.OFTInteger64,
         "pjg_gp": ogr.OFTReal,
         "luas": ogr.OFTReal,
+        "updated_date": ogr.OFTString,
     }
 
 
@@ -129,6 +130,7 @@ def get_fields(data_type: DataTypeEnum) -> List[str]:
         "created_by",
         "pjg_gp",
         "luas",
+        "updated_date",
     ]
 
 
