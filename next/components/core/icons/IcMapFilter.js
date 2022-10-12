@@ -7,9 +7,7 @@ function IcMapFilter({ bbox }) {
       height='1em'
       viewBox='0 0 16 16'
       fill='none'
-      className={`fill-current text-xl ${
-        bbox ? "text-main-blue" : "text-[#747B85]"
-      }`}
+      className='fill-current'
     >
       <path d='M12.19 3c.421 0 .762.34.762.761v.008a.762.762 0 11-1.523 0V3.76c0-.42.34-.762.761-.762z' />
       <path

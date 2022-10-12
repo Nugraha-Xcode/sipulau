@@ -1,15 +1,13 @@
 import React from "react";
 
-function IcFilter({ queryFilter }) {
+function IcFilter() {
   return (
     <svg
       width='1em'
       height='1em'
       viewBox='0 0 16 15'
       fill='none'
-      className={`h-4 fill-current ${
-        queryFilter ? "text-main-blue" : "text-main-gray"
-      }`}
+      className='fill-current'
     >
       <path
         fillRule='evenodd'
