@@ -18,6 +18,8 @@ RUN npm run build
 
 # runner
 FROM directus/directus:9.16 as runner
+ENV HTTP_PROXY="http://192.168.1.28:3128"
+ENV HTTPS_PROXY="http://192.168.1.28:3128"
 WORKDIR /directus
 COPY directus-app-with-captcha ./node_modules/@directus/app/dist
 COPY schema.yml ./schema.yml

@@ -1,6 +1,6 @@
 import { defineHook } from "@directus/extensions-sdk";
 import http from "http";
-// import https from "https";
+import https from "https";
 
 interface ILoginPayload {
   email?: string;
@@ -9,13 +9,27 @@ interface ILoginPayload {
   captchaToken?: string;
 }
 
-const reqOptions = {
+const methodHeaders = {
   method: "POST",
   headers: {
     Host: "hcaptcha.com",
     "Content-Type": "application/x-www-form-urlencoded",
   },
 };
+
+const proxyUrl = process.env.HTTPS_PROXY
+  ? new URL(process.env.HTTPS_PROXY)
+  : null;
+
+const reqOptions = proxyUrl
+  ? {
+      host: proxyUrl.host,
+      path: "https://hcaptcha.com/siteverify",
+      ...methodHeaders,
+    }
+  : { hostname: "hcaptcha.com", path: "/siteverify", ...methodHeaders };
+
+const httpOrHttps = proxyUrl?.protocol === "http:" ? http : https;
 
 function validateCaptcha(captchaToken: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
@@ -25,64 +39,27 @@ function validateCaptcha(captchaToken: string): Promise<boolean> {
       process.env.HCAPTCHA_SECRET_KEY
     )}&response=${encodeURIComponent(captchaToken)}`;
 
-    const req = http
-      .request(
-        {
-          hostname: "192.168.1.28",
-          port: 3128,
-          path: "https://hcaptcha.com/siteverify",
-          ...reqOptions,
-        },
-        (res) => {
-          let data = "";
-          res.on("data", (chunk) => {
-            data += chunk;
-          });
-          res.on("end", () => {
-            if (res.statusCode !== 200) {
-              reject("HCaptcha error: " + data);
-            } else {
-              let parsedRes = JSON.parse(data);
-              resolve(parsedRes.success);
-            }
-          });
-          res.on("error", (error) => {
-            reject(error);
-          });
-        }
-      )
+    const req = httpOrHttps
+      .request(reqOptions, (res) => {
+        let data = "";
+        res.on("data", (chunk) => {
+          data += chunk;
+        });
+        res.on("end", () => {
+          if (res.statusCode !== 200) {
+            reject("HCaptcha error: " + data);
+          } else {
+            let parsedRes = JSON.parse(data);
+            resolve(parsedRes.success);
+          }
+        });
+        res.on("error", (error) => {
+          reject(error);
+        });
+      })
       .on("error", (error) => {
         reject(error);
       });
-
-    // const req = https
-    //   .request(
-    //     {
-    //       hostname: "hcaptcha.com",
-    //       path: "/siteverify",
-    //       ...reqOptions,
-    //     },
-    //     (res) => {
-    //       let data = "";
-    //       res.on("data", (chunk) => {
-    //         data += chunk;
-    //       });
-    //       res.on("end", () => {
-    //         if (res.statusCode !== 200) {
-    //           reject("HCaptcha error: " + data);
-    //         } else {
-    //           let parsedRes = JSON.parse(data);
-    //           resolve(parsedRes.success);
-    //         }
-    //       });
-    //       res.on("error", (error) => {
-    //         reject(error);
-    //       });
-    //     }
-    //   )
-    //   .on("error", (error) => {
-    //     reject(error);
-    //   });
 
     req.write(reqBody);
     req.end();
