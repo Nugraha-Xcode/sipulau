@@ -12,17 +12,22 @@ const Resume = () => {
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
     shallow
   );
-  const [listProvince, setListProvince] = useState([]);
+  const [listProvince, setListProvince] = useState([
+    { label: "Seluruh Indonesia", value: "all" },
+  ]);
   const [resumeProvince, setResumeProvince] = useState(null);
 
-  const getResume = useCallback(async (prov) => {
+  const getResume = useCallback(async (selected) => {
     const params = new URLSearchParams({
-      prov: prov,
+      prov: selected,
     });
     try {
-      const response = await fetch("/api/titik-pulau/prov-summary?" + params, {
-        method: "GET",
-      });
+      const response = await fetch(
+        "/api/titik-pulau/prov-summary?" + (selected !== "all" ? params : ""),
+        {
+          method: "GET",
+        }
+      );
 
       const resData = await response.json();
       if (response.status === 200) {
@@ -37,7 +42,7 @@ const Resume = () => {
 
   const getProvince = useCallback(async () => {
     try {
-      const response = await fetch("/api/titik-pulau/provinsi", {
+      const response = await fetch("/api/titik-pulau/prov-summary/list", {
         method: "GET",
       });
 
@@ -47,7 +52,7 @@ const Resume = () => {
         for (const item of resData) {
           list.push({ label: item, value: item });
         }
-        setListProvince(list);
+        setListProvince((prev) => [...prev, ...list]);
       }
       if (response.status !== 200) {
         throw Error(resData.message);
