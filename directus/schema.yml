@@ -340,7 +340,25 @@ collections:
       name: titik_pulau_tables
       schema: public
   - collection: titik_pulau_template
-    meta: null
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: titik_pulau_template
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
     schema:
       comment: null
       name: titik_pulau_template
@@ -4854,7 +4872,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: alias
       numeric_precision: null
       numeric_scale: null
@@ -4895,7 +4913,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: artinam
       numeric_precision: null
       numeric_scale: null
@@ -4936,13 +4954,63 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 50
+      max_length: -5
       name: aslbhs
       numeric_precision: null
       numeric_scale: null
       schema: public
       table: titik_pulau
     type: string
+  - collection: titik_pulau
+    field: b_box
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: b_box
+      group: null
+      hidden: false
+      interface: map
+      note: null
+      options:
+        defaultView:
+          bearing: 0
+          center:
+            lat: 0
+            lng: 0
+          pitch: 0
+          zoom: 0
+        geometryType: Point
+      readonly: false
+      required: false
+      sort: null
+      special:
+        - geometry
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: GEOMETRY
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: b_box
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau
+    type: geometry
   - collection: titik_pulau
     field: created_by
     meta:
@@ -5018,7 +5086,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: ejaan
       numeric_precision: null
       numeric_scale: null
@@ -5141,7 +5209,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: foto1
       numeric_precision: null
       numeric_scale: null
@@ -5182,7 +5250,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: foto2
       numeric_precision: null
       numeric_scale: null
@@ -5223,7 +5291,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: foto3
       numeric_precision: null
       numeric_scale: null
@@ -5264,7 +5332,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: foto4
       numeric_precision: null
       numeric_scale: null
@@ -5305,7 +5373,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 75
+      max_length: -5
       name: ftype
       numeric_precision: null
       numeric_scale: null
@@ -5354,6 +5422,211 @@ fields:
       table: titik_pulau
     type: geometry.Point
   - collection: titik_pulau
+    field: id_klstpn
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_klstpn
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_klstpn
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau
+    type: integer
+  - collection: titik_pulau
+    field: id_lingkup
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_lingkup
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_lingkup
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau
+    type: integer
+  - collection: titik_pulau
+    field: id_statpem
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_statpem
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_statpem
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau
+    type: integer
+  - collection: titik_pulau
+    field: id_statpub
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_statpub
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_statpub
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau
+    type: integer
+  - collection: titik_pulau
+    field: id_status
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_status
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_status
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau
+    type: integer
+  - collection: titik_pulau
     field: id_toponim
     meta:
       collection: titik_pulau
@@ -5395,6 +5668,211 @@ fields:
       table: titik_pulau
     type: bigInteger
   - collection: titik_pulau
+    field: id_unsur
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_unsur
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_unsur
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau
+    type: integer
+  - collection: titik_pulau
+    field: id_wadmkc
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wadmkc
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: id_wadmkc
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau
+    type: string
+  - collection: titik_pulau
+    field: id_wadmkd
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wadmkd
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: id_wadmkd
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau
+    type: string
+  - collection: titik_pulau
+    field: id_wadmkk
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wadmkk
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: id_wadmkk
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau
+    type: string
+  - collection: titik_pulau
+    field: id_wadmpr
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wadmpr
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_wadmpr
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau
+    type: integer
+  - collection: titik_pulau
     field: id_wilayah
     meta:
       collection: titik_pulau
@@ -5428,8 +5906,90 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 13
+      max_length: -5
       name: id_wilayah
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau
+    type: string
+  - collection: titik_pulau
+    field: id_wilayah_administrasi
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wilayah_administrasi
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: id_wilayah_administrasi
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau
+    type: string
+  - collection: titik_pulau
+    field: jenis_toponim
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: jenis_toponim
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: jenis_toponim
       numeric_precision: null
       numeric_scale: null
       schema: public
@@ -5469,7 +6029,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 50
+      max_length: -5
       name: klstpn
       numeric_precision: null
       numeric_scale: null
@@ -5510,7 +6070,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 35
+      max_length: -5
       name: koordinat1
       numeric_precision: null
       numeric_scale: null
@@ -5551,7 +6111,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 35
+      max_length: -5
       name: koordinat2
       numeric_precision: null
       numeric_scale: null
@@ -5797,7 +6357,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 10
+      max_length: -5
       name: lcode
       numeric_precision: null
       numeric_scale: null
@@ -5805,8 +6365,67 @@ fields:
       table: titik_pulau
     type: string
   - collection: titik_pulau
+    field: lingkup
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: lingkup
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: lingkup
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau
+    type: string
+  - collection: titik_pulau
     field: luas
-    meta: null
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: luas
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -5861,7 +6480,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: nambef
       numeric_precision: null
       numeric_scale: null
@@ -5902,7 +6521,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: namgaz
       numeric_precision: null
       numeric_scale: null
@@ -5943,7 +6562,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: namlok
       numeric_precision: null
       numeric_scale: null
@@ -5984,7 +6603,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: nammap
       numeric_precision: null
       numeric_scale: null
@@ -6025,7 +6644,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: namrec
       numeric_precision: null
       numeric_scale: null
@@ -6066,7 +6685,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: namspe
       numeric_precision: null
       numeric_scale: null
@@ -6107,7 +6726,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 50
+      max_length: -5
       name: narsum
       numeric_precision: null
       numeric_scale: null
@@ -6148,7 +6767,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 100
+      max_length: -5
       name: negara
       numeric_precision: null
       numeric_scale: null
@@ -6189,7 +6808,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 15
+      max_length: -5
       name: nlp
       numeric_precision: null
       numeric_scale: null
@@ -6230,7 +6849,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: nsurveyor
       numeric_precision: null
       numeric_scale: null
@@ -6238,8 +6857,67 @@ fields:
       table: titik_pulau
     type: string
   - collection: titik_pulau
+    field: pendataan_type_id
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: pendataan_type_id
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: pendataan_type_id
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau
+    type: integer
+  - collection: titik_pulau
     field: pjg_gp
-    meta: null
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: pjg_gp
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -6294,7 +6972,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: rekaman1
       numeric_precision: null
       numeric_scale: null
@@ -6335,7 +7013,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: rekaman2
       numeric_precision: null
       numeric_scale: null
@@ -6376,7 +7054,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: remark
       numeric_precision: null
       numeric_scale: null
@@ -6417,7 +7095,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: sjhnam
       numeric_precision: null
       numeric_scale: null
@@ -6458,7 +7136,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: sketsa
       numeric_precision: null
       numeric_scale: null
@@ -6499,7 +7177,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: statpem
       numeric_precision: null
       numeric_scale: null
@@ -6540,7 +7218,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 10
+      max_length: -5
       name: statpub
       numeric_precision: null
       numeric_scale: null
@@ -6581,7 +7259,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 10
+      max_length: -5
       name: status
       numeric_precision: null
       numeric_scale: null
@@ -6622,7 +7300,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: sumber
       numeric_precision: null
       numeric_scale: null
@@ -6704,13 +7382,54 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: ucapan
       numeric_precision: null
       numeric_scale: null
       schema: public
       table: titik_pulau
     type: string
+  - collection: titik_pulau
+    field: updated_date
+    meta:
+      collection: titik_pulau
+      conditions: null
+      display: null
+      display_options: null
+      field: updated_date
+      group: null
+      hidden: false
+      interface: datetime
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: timestamp with time zone
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: updated_date
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau
+    type: timestamp
   - collection: titik_pulau
     field: wadmkc
     meta:
@@ -6745,7 +7464,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: wadmkc
       numeric_precision: null
       numeric_scale: null
@@ -6786,7 +7505,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: wadmkd
       numeric_precision: null
       numeric_scale: null
@@ -6827,7 +7546,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: wadmkk
       numeric_precision: null
       numeric_scale: null
@@ -6868,7 +7587,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: wadmpr
       numeric_precision: null
       numeric_scale: null
@@ -6909,7 +7628,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 3
+      max_length: -5
       name: zonautm
       numeric_precision: null
       numeric_scale: null
@@ -7129,7 +7848,25 @@ fields:
     type: uuid
   - collection: titik_pulau_template
     field: akurasi
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: akurasi
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -7152,7 +7889,25 @@ fields:
     type: float
   - collection: titik_pulau_template
     field: alias
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: alias
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7166,7 +7921,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: alias
       numeric_precision: null
       numeric_scale: null
@@ -7175,7 +7930,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: artinam
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: artinam
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7189,7 +7962,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: artinam
       numeric_precision: null
       numeric_scale: null
@@ -7198,7 +7971,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: aslbhs
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: aslbhs
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7212,7 +8003,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 50
+      max_length: -5
       name: aslbhs
       numeric_precision: null
       numeric_scale: null
@@ -7220,8 +8011,67 @@ fields:
       table: titik_pulau_template
     type: string
   - collection: titik_pulau_template
+    field: b_box
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: b_box
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: GEOMETRY
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: b_box
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau_template
+    type: geometry
+  - collection: titik_pulau_template
     field: created_by
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: created_by
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: bigint
@@ -7244,7 +8094,25 @@ fields:
     type: bigInteger
   - collection: titik_pulau_template
     field: ejaan
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: ejaan
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7258,7 +8126,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: ejaan
       numeric_precision: null
       numeric_scale: null
@@ -7267,7 +8135,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: elevasi
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: elevasi
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -7290,7 +8176,25 @@ fields:
     type: float
   - collection: titik_pulau_template
     field: fid
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: fid
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7313,7 +8217,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: foto1
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: foto1
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7327,7 +8249,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: foto1
       numeric_precision: null
       numeric_scale: null
@@ -7336,7 +8258,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: foto2
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: foto2
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7350,7 +8290,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: foto2
       numeric_precision: null
       numeric_scale: null
@@ -7359,7 +8299,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: foto3
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: foto3
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7373,7 +8331,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: foto3
       numeric_precision: null
       numeric_scale: null
@@ -7382,7 +8340,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: foto4
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: foto4
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7396,7 +8372,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: foto4
       numeric_precision: null
       numeric_scale: null
@@ -7405,7 +8381,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: ftype
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: ftype
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7419,7 +8413,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 75
+      max_length: -5
       name: ftype
       numeric_precision: null
       numeric_scale: null
@@ -7428,7 +8422,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: geom
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: geom
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: POINT
@@ -7439,7 +8451,7 @@ fields:
       generation_expression: null
       has_auto_increment: false
       is_generated: false
-      is_nullable: false
+      is_nullable: true
       is_primary_key: false
       is_unique: false
       max_length: null
@@ -7450,8 +8462,231 @@ fields:
       table: titik_pulau_template
     type: geometry.Point
   - collection: titik_pulau_template
+    field: id_klstpn
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_klstpn
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_klstpn
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau_template
+    type: integer
+  - collection: titik_pulau_template
+    field: id_lingkup
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_lingkup
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_lingkup
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau_template
+    type: integer
+  - collection: titik_pulau_template
+    field: id_statpem
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_statpem
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_statpem
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau_template
+    type: integer
+  - collection: titik_pulau_template
+    field: id_statpub
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_statpub
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_statpub
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau_template
+    type: integer
+  - collection: titik_pulau_template
+    field: id_status
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_status
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_status
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau_template
+    type: integer
+  - collection: titik_pulau_template
     field: id_toponim
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_toponim
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: bigint
@@ -7473,8 +8708,67 @@ fields:
       table: titik_pulau_template
     type: bigInteger
   - collection: titik_pulau_template
-    field: id_wilayah
-    meta: null
+    field: id_unsur
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_unsur
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_unsur
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau_template
+    type: integer
+  - collection: titik_pulau_template
+    field: id_wadmkc
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wadmkc
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7488,7 +8782,171 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 13
+      max_length: -5
+      name: id_wadmkc
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau_template
+    type: string
+  - collection: titik_pulau_template
+    field: id_wadmkd
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wadmkd
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: id_wadmkd
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau_template
+    type: string
+  - collection: titik_pulau_template
+    field: id_wadmkk
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wadmkk
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: id_wadmkk
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau_template
+    type: string
+  - collection: titik_pulau_template
+    field: id_wadmpr
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wadmpr
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: id_wadmpr
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau_template
+    type: integer
+  - collection: titik_pulau_template
+    field: id_wilayah
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wilayah
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
       name: id_wilayah
       numeric_precision: null
       numeric_scale: null
@@ -7496,8 +8954,26 @@ fields:
       table: titik_pulau_template
     type: string
   - collection: titik_pulau_template
-    field: klstpn
-    meta: null
+    field: id_wilayah_administrasi
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: id_wilayah_administrasi
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7511,7 +8987,89 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 50
+      max_length: -5
+      name: id_wilayah_administrasi
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau_template
+    type: string
+  - collection: titik_pulau_template
+    field: jenis_toponim
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: jenis_toponim
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: jenis_toponim
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau_template
+    type: string
+  - collection: titik_pulau_template
+    field: klstpn
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: klstpn
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
       name: klstpn
       numeric_precision: null
       numeric_scale: null
@@ -7520,7 +9078,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: koordinat1
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: koordinat1
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7534,7 +9110,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 35
+      max_length: -5
       name: koordinat1
       numeric_precision: null
       numeric_scale: null
@@ -7543,7 +9119,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: koordinat2
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: koordinat2
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7557,7 +9151,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 35
+      max_length: -5
       name: koordinat2
       numeric_precision: null
       numeric_scale: null
@@ -7566,7 +9160,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: koordx
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: koordx
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -7589,7 +9201,25 @@ fields:
     type: float
   - collection: titik_pulau_template
     field: koordx2
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: koordx2
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -7612,7 +9242,25 @@ fields:
     type: float
   - collection: titik_pulau_template
     field: koordy
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: koordy
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -7635,7 +9283,25 @@ fields:
     type: float
   - collection: titik_pulau_template
     field: koordy2
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: koordy2
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -7658,7 +9324,25 @@ fields:
     type: float
   - collection: titik_pulau_template
     field: ksurveyor
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: ksurveyor
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: bigint
@@ -7681,7 +9365,25 @@ fields:
     type: bigInteger
   - collection: titik_pulau_template
     field: lcode
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: lcode
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7695,7 +9397,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 10
+      max_length: -5
       name: lcode
       numeric_precision: null
       numeric_scale: null
@@ -7703,8 +9405,67 @@ fields:
       table: titik_pulau_template
     type: string
   - collection: titik_pulau_template
+    field: lingkup
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: lingkup
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: character varying
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: -5
+      name: lingkup
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau_template
+    type: string
+  - collection: titik_pulau_template
     field: luas
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: luas
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -7727,7 +9488,25 @@ fields:
     type: float
   - collection: titik_pulau_template
     field: nambef
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: nambef
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7741,7 +9520,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: nambef
       numeric_precision: null
       numeric_scale: null
@@ -7750,7 +9529,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: namgaz
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: namgaz
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7764,7 +9561,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: namgaz
       numeric_precision: null
       numeric_scale: null
@@ -7773,7 +9570,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: namlok
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: namlok
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7787,7 +9602,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: namlok
       numeric_precision: null
       numeric_scale: null
@@ -7796,7 +9611,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: nammap
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: nammap
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7810,7 +9643,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: nammap
       numeric_precision: null
       numeric_scale: null
@@ -7819,7 +9652,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: namrec
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: namrec
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7833,7 +9684,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: namrec
       numeric_precision: null
       numeric_scale: null
@@ -7842,7 +9693,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: namspe
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: namspe
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7856,7 +9725,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: namspe
       numeric_precision: null
       numeric_scale: null
@@ -7865,7 +9734,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: narsum
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: narsum
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7879,7 +9766,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 50
+      max_length: -5
       name: narsum
       numeric_precision: null
       numeric_scale: null
@@ -7888,7 +9775,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: negara
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: negara
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7902,7 +9807,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 100
+      max_length: -5
       name: negara
       numeric_precision: null
       numeric_scale: null
@@ -7911,7 +9816,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: nlp
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: nlp
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7925,7 +9848,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 15
+      max_length: -5
       name: nlp
       numeric_precision: null
       numeric_scale: null
@@ -7934,7 +9857,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: nsurveyor
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: nsurveyor
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7948,7 +9889,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: nsurveyor
       numeric_precision: null
       numeric_scale: null
@@ -7956,8 +9897,67 @@ fields:
       table: titik_pulau_template
     type: string
   - collection: titik_pulau_template
+    field: pendataan_type_id
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: pendataan_type_id
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: integer
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: pendataan_type_id
+      numeric_precision: 32
+      numeric_scale: 0
+      schema: public
+      table: titik_pulau_template
+    type: integer
+  - collection: titik_pulau_template
     field: pjg_gp
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: pjg_gp
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: double precision
@@ -7980,7 +9980,25 @@ fields:
     type: float
   - collection: titik_pulau_template
     field: rekaman1
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: rekaman1
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -7994,7 +10012,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: rekaman1
       numeric_precision: null
       numeric_scale: null
@@ -8003,7 +10021,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: rekaman2
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: rekaman2
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8017,7 +10053,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: rekaman2
       numeric_precision: null
       numeric_scale: null
@@ -8026,7 +10062,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: remark
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: remark
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8040,7 +10094,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: remark
       numeric_precision: null
       numeric_scale: null
@@ -8049,7 +10103,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: sjhnam
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: sjhnam
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8063,7 +10135,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: sjhnam
       numeric_precision: null
       numeric_scale: null
@@ -8072,7 +10144,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: sketsa
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: sketsa
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8086,7 +10176,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: sketsa
       numeric_precision: null
       numeric_scale: null
@@ -8095,7 +10185,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: statpem
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: statpem
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8109,7 +10217,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: statpem
       numeric_precision: null
       numeric_scale: null
@@ -8118,7 +10226,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: statpub
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: statpub
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8132,7 +10258,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 10
+      max_length: -5
       name: statpub
       numeric_precision: null
       numeric_scale: null
@@ -8141,7 +10267,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: status
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: status
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8155,7 +10299,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 10
+      max_length: -5
       name: status
       numeric_precision: null
       numeric_scale: null
@@ -8164,7 +10308,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: sumber
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: sumber
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8178,7 +10340,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: sumber
       numeric_precision: null
       numeric_scale: null
@@ -8187,7 +10349,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: tglsurvei
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: tglsurvei
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: date
@@ -8210,7 +10390,25 @@ fields:
     type: date
   - collection: titik_pulau_template
     field: ucapan
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: ucapan
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8224,7 +10422,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: ucapan
       numeric_precision: null
       numeric_scale: null
@@ -8232,8 +10430,67 @@ fields:
       table: titik_pulau_template
     type: string
   - collection: titik_pulau_template
+    field: updated_date
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: updated_date
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      comment: null
+      data_type: timestamp with time zone
+      default_value: null
+      foreign_key_column: null
+      foreign_key_schema: null
+      foreign_key_table: null
+      generation_expression: null
+      has_auto_increment: false
+      is_generated: false
+      is_nullable: true
+      is_primary_key: false
+      is_unique: false
+      max_length: null
+      name: updated_date
+      numeric_precision: null
+      numeric_scale: null
+      schema: public
+      table: titik_pulau_template
+    type: timestamp
+  - collection: titik_pulau_template
     field: wadmkc
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: wadmkc
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8247,7 +10504,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: wadmkc
       numeric_precision: null
       numeric_scale: null
@@ -8256,7 +10513,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: wadmkd
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: wadmkd
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8270,7 +10545,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: wadmkd
       numeric_precision: null
       numeric_scale: null
@@ -8279,7 +10554,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: wadmkk
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: wadmkk
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8293,7 +10586,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: wadmkk
       numeric_precision: null
       numeric_scale: null
@@ -8302,7 +10595,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: wadmpr
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: wadmpr
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8316,7 +10627,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 254
+      max_length: -5
       name: wadmpr
       numeric_precision: null
       numeric_scale: null
@@ -8325,7 +10636,25 @@ fields:
     type: string
   - collection: titik_pulau_template
     field: zonautm
-    meta: null
+    meta:
+      collection: titik_pulau_template
+      conditions: null
+      display: null
+      display_options: null
+      field: zonautm
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
     schema:
       comment: null
       data_type: character varying
@@ -8339,7 +10668,7 @@ fields:
       is_nullable: true
       is_primary_key: false
       is_unique: false
-      max_length: 3
+      max_length: -5
       name: zonautm
       numeric_precision: null
       numeric_scale: null
