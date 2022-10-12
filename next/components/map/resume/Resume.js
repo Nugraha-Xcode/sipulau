@@ -1,10 +1,18 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useReactToPrint } from "react-to-print";
 import shallow from "zustand/shallow";
 import { useNav } from "../../../hooks";
 import { AboutContent } from "../sidebar-content";
 import DropdownMenu from "../../core/DropdownMenu";
 import Button from "../../core/Button";
 import AppContext from "../../../context/AppContext";
+import ComponentToPrint from "./ComponentToPrint";
 
 const Resume = () => {
   const { handleSetSnack } = useContext(AppContext);
@@ -66,6 +74,11 @@ const Resume = () => {
     getProvince();
   }, []);
 
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   return (
     <div
       id='side-feature-content'
@@ -91,83 +104,89 @@ const Resume = () => {
           }}
         />
         {resumeProvince && (
-          <div className='flex flex-col gap-2'>
-            <div className='border border-gray-500 p-2 rounded-[8px]'>
-              {/* <div
+          <>
+            <div className='flex flex-col gap-2'>
+              <div className='border border-gray-500 p-2 rounded-[8px]'>
+                {/* <div
                 className={`h-40 w-full bg-no-repeat bg-cover rounded-[8px]`}
                 style={{
                   backgroundImage: `url(${"/images/dummy-popup.jpg"})`,
                 }}
               /> */}
-              <img
-                src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/[${
-                  resumeProvince.xmin +
-                  "," +
-                  resumeProvince.ymin +
-                  "," +
-                  resumeProvince.xmax +
-                  "," +
-                  resumeProvince.ymax
-                }]/1280x1280?access_token=pk.eyJ1IjoiaGFmaXphbmFkbGkiLCJhIjoiY2s0M3pxdmtnMGRmODNkcG11a2RkdGEyNiJ9.zJ_0jcPOGZko34FBrPxDRA`}
-                className='w-full rounded-lg'
+                <img
+                  src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/[${
+                    resumeProvince.xmin +
+                    "," +
+                    resumeProvince.ymin +
+                    "," +
+                    resumeProvince.xmax +
+                    "," +
+                    resumeProvince.ymax
+                  }]/1280x1280?access_token=pk.eyJ1IjoiaGFmaXphbmFkbGkiLCJhIjoiY2s0M3pxdmtnMGRmODNkcG11a2RkdGEyNiJ9.zJ_0jcPOGZko34FBrPxDRA`}
+                  className='w-full rounded-lg'
+                />
+              </div>
+              <div className='flex flex-col gap-1'>
+                {[
+                  {
+                    label: "Number of Islands",
+                    value: resumeProvince.total_island,
+                  },
+                  { label: "Area", value: resumeProvince.total_area },
+                  {
+                    label: "Coastline Length",
+                    value: resumeProvince.total_coastline,
+                  },
+                  {
+                    label: "Largest Island",
+                    value: resumeProvince.largest_island,
+                  },
+                  {
+                    label: "Smallest Island",
+                    value: resumeProvince.smallest_island,
+                  },
+                  {
+                    label: "Inhabited Island",
+                    value: resumeProvince.total_inhabited,
+                  },
+                  {
+                    label: "Uninhabited Island",
+                    value: resumeProvince.total_uninhabited,
+                  },
+                ].map((el) => (
+                  <div
+                    key={el.label}
+                    className='flex items-center text-gray-600 text-sm gap-1'
+                  >
+                    <div className='w-1/2 flex items-center justify-between'>
+                      <p>{el.label}</p>
+                      <p>:</p>
+                    </div>
+                    <div className='w-1/2 overflow-x-scroll whitespace-nowrap hide-scrollbar'>
+                      {el.value || "-"}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className='text-gray-600 text-sm'>
+                {resumeProvince.deskripsi || "-"}
+              </p>
+            </div>
+            <div style={{ display: "none" }}>
+              <ComponentToPrint
+                ref={componentRef}
+                resumeProvince={resumeProvince}
               />
             </div>
-            <div className='flex flex-col gap-1'>
-              {[
-                {
-                  label: "Number of Islands",
-                  value: resumeProvince.total_island,
-                },
-                { label: "Area", value: resumeProvince.total_area },
-                {
-                  label: "Coastline Length",
-                  value: resumeProvince.total_coastline,
-                },
-                {
-                  label: "Largest Island",
-                  value: resumeProvince.largest_island,
-                },
-                {
-                  label: "Smallest Island",
-                  value: resumeProvince.smallest_island,
-                },
-                {
-                  label: "Inhabited Island",
-                  value: resumeProvince.total_inhabited,
-                },
-                {
-                  label: "Uninhabited Island",
-                  value: resumeProvince.total_uninhabited,
-                },
-              ].map((el) => (
-                <div
-                  key={el.label}
-                  className='flex items-center text-gray-600 text-sm gap-1'
-                >
-                  <div className='w-1/2 flex items-center justify-between'>
-                    <p>{el.label}</p>
-                    <p>:</p>
-                  </div>
-                  <div className='w-1/2 overflow-x-scroll whitespace-nowrap hide-scrollbar'>
-                    {el.value || "-"}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className='text-gray-600 text-sm'>
-              {resumeProvince.deskripsi || "-"}
-            </p>
             <Button
-              className='text-sm'
+              className='text-sm mt-2'
               variant='normal'
-              onClick={() => {
-                console.log("test");
-              }}
+              onClick={handlePrint}
               isActive={true}
             >
-              Download as PDF
+              Print
             </Button>
-          </div>
+          </>
         )}
       </div>
 
