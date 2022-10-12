@@ -52,6 +52,7 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
                 [data.sjhnam, "sjhnam"],
                 [data.aslbhs, "aslbhs"],
                 [data.status, "status"],
+                [data.nambef, "nambef"],
             ]
             # id_toponim filter
             if data.id_toponim is not None:

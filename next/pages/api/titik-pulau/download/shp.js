@@ -114,6 +114,7 @@ export default async function downloadShpHandler(req, res) {
     unselected,
     aoi,
     query,
+    nambef,
   } = parsedBody;
 
   // advanced query body first, then classic filter
@@ -147,6 +148,7 @@ export default async function downloadShpHandler(req, res) {
         [aslbhs, "aslbhs"],
         [status, "status"],
         [remark, "remark"],
+        [nambef, "nambef"],
       ];
       // id_toponim filter
       if (Number.isInteger(id_toponim)) {

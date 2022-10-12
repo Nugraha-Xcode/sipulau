@@ -36,3 +36,4 @@ class DownloadRequestDetail(BaseModel):
     unselected: Optional[List[int]] = None
     aoi: Optional[str] = None
     filterOpts: Optional[FilterOptions] = None
+    nambef: Optional[str] = None

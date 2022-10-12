@@ -77,7 +77,7 @@ const MapTable = ({
     { title: "column2", field: "id_wilayah", show: true, sort: true },
     { title: "column3", field: "nammap", show: true, sort: true },
     { title: "column13", field: "alias", show: true, sort: true },
-    { title: "column17", field: "beforename", show: true, sort: true },
+    { title: "column17", field: "nambef", show: true, sort: true },
     { title: "column4", field: "artinam", show: false, sort: true },
     { title: "column5", field: "aslbhs", show: false, sort: true },
     { title: "column6", field: "sjhnam", show: false, sort: true },

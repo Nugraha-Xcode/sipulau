@@ -73,6 +73,7 @@ export default async function tableHandler(req, res) {
       remark,
       bbox,
       point,
+      nambef,
     } = req.query;
     let filters = [];
     let paramVal = [limit, offset];
@@ -100,6 +101,7 @@ export default async function tableHandler(req, res) {
       [sjhnam, "sjhnam"],
       [aslbhs, "aslbhs"],
       [status, "status"],
+      [nambef, "nambef"]
     ];
     for (const filter of likeFilters) {
       if (filter[0] !== undefined) {
@@ -187,7 +189,7 @@ export default async function tableHandler(req, res) {
       SELECT
         fid, id_toponim, nammap, alias, artinam, sjhnam, aslbhs, id_wilayah, wadmkd,
         wadmkc, wadmkk, wadmpr, status, remark, ST_X(geom) lon, ST_Y(geom) lat,
-        pjg_gp, luas
+        pjg_gp, luas, nambef
       FROM ${tableName}
       ${combinedFilters}
       ORDER BY ${ordBy} ${ordDir}
@@ -278,7 +280,7 @@ export default async function tableHandler(req, res) {
         SELECT
           fid, id_toponim, nammap, alias, artinam, sjhnam, aslbhs, id_wilayah, wadmkd,
           wadmkc, wadmkk, wadmpr, status, remark, ST_X(geom) lon, ST_Y(geom) lat,
-          pjg_gp, luas
+          pjg_gp, luas, nambef
         FROM ${tableName}
         ${combinedFilters}
         ORDER BY ${ordBy} ${ordDir}

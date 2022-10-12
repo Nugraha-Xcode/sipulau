@@ -52,7 +52,7 @@ const AdvanceFilter = ({
     { label: t("column2"), value: "id_wilayah" },
     { label: t("column3"), value: "nammap" },
     { label: t("column13"), value: "alias" },
-    { label: t("column17"), value: "beforename" },
+    { label: t("column17"), value: "nambef" },
     { label: t("column4"), value: "artinam" },
     { label: t("column5"), value: "aslbhs" },
     { label: t("column6"), value: "sjhnam" },

@@ -19,6 +19,7 @@ export const validColumns = [
   "remark",
   "pjg_gp",
   "luas",
+  "nambef",
 ];
 
 const sqlQuoteLiteral = (value) => {
