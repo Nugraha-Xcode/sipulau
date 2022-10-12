@@ -1,19 +1,24 @@
 import http from "http";
+import https from "https";
 import httpProxy from "http-proxy";
 
-const proxyServer =
-  process.env.NODE_ENV === "production"
-    ? null
-    : httpProxy.createProxyServer({});
+const proxyServer = process.env.HTTPS_PROXY
+  ? null
+  : httpProxy.createProxyServer({});
+
+const proxyUrl = process.env.HTTPS_PROXY
+  ? new URL(process.env.HTTPS_PROXY)
+  : null;
+
+const httpOrHttps = proxyUrl?.protocol === "http:" ? http : https;
 
 function proxyRequest(url, method, origRes) {
   const host = new URL(url).host;
   return new Promise((resolve, reject) => {
-    const req = http
+    const req = httpOrHttps
       .request(
         {
-          hostname: "192.168.1.28",
-          port: 3128,
+          host: proxyUrl.host,
           path: url,
           method,
           headers: {
@@ -53,7 +58,7 @@ export default async function proxyHandler(req, res) {
     return res.status(400).json({ message: "Proxy query is required" });
   }
   try {
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.HTTPS_PROXY) {
       await proxyRequest(proxy, req.method, res);
     } else {
       await proxyMiddleware(req, res, {

@@ -23,6 +23,8 @@ RUN npm run build
 # runner
 FROM node:14-alpine as runner
 ENV NODE_ENV production
+ENV HTTP_PROXY="http://192.168.1.28:3128"
+ENV HTTPS_PROXY="http://192.168.1.28:3128"
 WORKDIR /app
 # if using prebuilt:
 # COPY next.config.js ./
