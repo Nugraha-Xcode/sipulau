@@ -10,9 +10,14 @@ export default async function provSummaryHandler(req, res) {
   }
 
   const { prov } = req.query;
-  if (!prov) {
-    return res.status(400).json({ message: "Mohon sertakan querystring prov" });
-  }
+
+  const whereWadmpr = prov ? "WHERE wadmpr = $1" : "";
+  const whereNamaProv = prov ? "WHERE nama_provinsi = $1" : "";
+  const selectColumns = prov
+    ? "nama_provinsi, deskripsi, ST_XMin(extent) xmin, ST_YMin(extent) ymin, ST_XMax(extent) xmax, ST_YMax(extent) ymax"
+    : "'Seluruh Indonesia' nama_provinsi, NULL deskripsi, 95 xmin, -11 ymin, 141 xmax, 6 ymax";
+  const fromProvSumm = prov ? "FROM prov_summary" : "";
+  const paramValues = prov ? [prov] : [];
 
   let queryResult;
   try {
@@ -22,48 +27,54 @@ export default async function provSummaryHandler(req, res) {
         SELECT
         COUNT(*) total_island, SUM(luas) total_area, SUM(pjg_gp) total_coastline
         FROM titik_pulau
-        WHERE wadmpr = $1
+        ${whereWadmpr}
       ), largest AS (
         SELECT nammap largest_island
         FROM titik_pulau
-        WHERE wadmpr = $1
-        AND luas = (
+        ${whereWadmpr}
+        ${whereWadmpr ? "AND" : "WHERE"} luas = (
           SELECT MAX(luas)
           FROM titik_pulau
-          WHERE wadmpr = $1
+          ${whereWadmpr}
         )
         LIMIT 1
       ), smallest AS (
         SELECT nammap smallest_island
         FROM titik_pulau
-        WHERE wadmpr = $1
-        AND luas = (
+        ${whereWadmpr}
+        ${whereWadmpr ? "AND" : "WHERE"} luas = (
           SELECT MIN(luas)
           FROM titik_pulau
-          WHERE wadmpr = $1
+          ${whereWadmpr}
         )
         LIMIT 1
       ), inhabited AS (
         SELECT COUNT(*) total_inhabited
         FROM titik_pulau
-        WHERE wadmpr = $1
-        AND SPLIT_PART(remark, ' - ', 2) ILIKE '^Berpenduduk'
+        ${whereWadmpr}
+        ${
+          whereWadmpr ? "AND" : "WHERE"
+        } SPLIT_PART(remark, ' - ', 2) ~* '^Berpenduduk'
       ), uninhabited AS (
         SELECT COUNT(*) total_uninhabited
         FROM titik_pulau
-        WHERE wadmpr = $1
-        AND SPLIT_PART(remark, ' - ', 2) ILIKE '^Tidak Berpenduduk'
+        ${whereWadmpr}
+        ${
+          whereWadmpr ? "AND" : "WHERE"
+        } SPLIT_PART(remark, ' - ', 2) ~* '^Tidak Berpenduduk'
       )
-      SELECT nama_provinsi, deskripsi, ST_XMin(extent) xmin, ST_YMin(extent) ymin, ST_XMax(extent) xmax, ST_YMax(extent) ymax, total_island, total_area, total_coastline, largest_island, smallest_island, total_inhabited, total_uninhabited
-      FROM prov_summary
-      LEFT JOIN total ON TRUE
+      SELECT ${selectColumns}, total_island, total_area, total_coastline, largest_island, smallest_island, total_inhabited, total_uninhabited
+      ${fromProvSumm}
+      ${fromProvSumm ? "LEFT JOIN" : "FROM"} total ${
+        fromProvSumm ? "ON TRUE" : ""
+      }
       LEFT JOIN largest ON TRUE
       LEFT JOIN smallest ON TRUE
       LEFT JOIN inhabited ON TRUE
       LEFT JOIN uninhabited ON TRUE
-      WHERE nama_provinsi = $1
+      ${whereNamaProv}
       `,
-      [prov]
+      paramValues
     );
   } catch (error) {
     console.error(error);
