@@ -13,9 +13,17 @@ interface IAccessToken {
   expires: number;
 }
 
-interface ILoginDetail {
+interface IAbstractLoginDetail {
   username: string;
   password: string;
+}
+
+interface ILoginDetail extends IAbstractLoginDetail {
+  captchaToken: string;
+}
+
+interface IInageoportalLoginDetail extends IAbstractLoginDetail {
+  token: string;
 }
 
 interface IGeoportalResponse {
@@ -38,7 +46,7 @@ declare global {
 const REGISTERED_USER_ROLE_ID = "f451acfb-5dfb-40bf-9ae4-ad6d56f82717";
 
 function postToInageoportal(
-  requestBody: ILoginDetail
+  requestBody: IInageoportalLoginDetail
 ): Promise<IGeoportalResponse> {
   return new Promise((resolve, reject) => {
     let reqBody = JSON.stringify(requestBody);
@@ -59,7 +67,15 @@ function postToInageoportal(
         res.on("end", () => {
           if (res.statusCode !== 200) {
             // api always returns status code 200 even when password error
-            reject("Terjadi masalah menghubungi INAGeoportal");
+            if (
+              res.statusCode !== 500 &&
+              res.headers["content-type"] === "application/json"
+            ) {
+              let parsedRes = JSON.parse(data);
+              reject(parsedRes);
+            } else {
+              reject("Terjadi masalah menghubungi INAGeoportal");
+            }
           } else {
             let parsedRes = JSON.parse(data);
             resolve(parsedRes);
@@ -88,9 +104,11 @@ export default defineEndpoint((router, { exceptions, database }) => {
   router.post(
     "/",
     async (req: Request<{}, IAccessToken, ILoginDetail>, res, next) => {
-      if (!req.body.username || !req.body.password) {
+      if (!req.body.username || !req.body.password || !req.body.captchaToken) {
         return next(
-          new InvalidPayloadException("Username dan password harus terisi")
+          new InvalidPayloadException(
+            "username, password, dan captchaToken harus terisi"
+          )
         );
       }
       let geoportalRes;
@@ -98,9 +116,14 @@ export default defineEndpoint((router, { exceptions, database }) => {
         geoportalRes = await postToInageoportal({
           username: req.body.username,
           password: req.body.password,
+          token: req.body.captchaToken,
         });
-      } catch (error) {
-        return next(new ServiceUnavailableException(error));
+      } catch (error: any) {
+        if (error.message) {
+          return next(new InvalidPayloadException(error.message));
+        } else {
+          return next(new ServiceUnavailableException(error));
+        }
       }
       if (geoportalRes.status === "success") {
         let user;
