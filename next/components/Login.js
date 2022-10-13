@@ -1,8 +1,7 @@
-import React, { useContext, useRef, useState, useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { BiLock } from "react-icons/bi";
 import { FaRegUser } from "react-icons/fa";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 import { changeExpireTime } from "../utils/expireTime";
 import AppContext from "../context/AppContext";
@@ -40,11 +39,43 @@ const Login = ({ toggle }) => {
   const userRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const captchaRef = useRef(null);
-  const [captchaToken, setCaptchaToken] = useState(null);
+  useEffect(() => {
+    if (document.getElementById("grecaptcha-badge-style")) {
+      document.getElementById("grecaptcha-badge-style").remove();
+    }
 
-  const handleLogin = async () => {
-    // e.preventDefault();
+    const loadScriptByURL = (id, url, callback) => {
+      const isScriptExist = document.getElementById(id);
+      if (!isScriptExist) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = url;
+        script.id = id;
+        script.onload = function () {
+          if (callback) callback();
+        };
+        document.body.appendChild(script);
+      }
+      if (isScriptExist && callback) callback();
+    };
+
+    // load the script by passing the URL
+    loadScriptByURL(
+      "recaptcha-key",
+      `https://www.google.com/recaptcha/api.js?render=6LeH8XwhAAAAALw43tTI0iPcLqx8vrlMvkyRwuB6`,
+      function () {
+        console.log("Script loaded!");
+      }
+    );
+    return () => {
+      let style = document.createElement("style");
+      style.id = "grecaptcha-badge-style";
+      style.innerHTML = ".grecaptcha-badge { opacity: 0; }";
+      document.body.appendChild(style);
+    };
+  }, []);
+
+  const handleLogin = async (token) => {
     try {
       if (!passwordRef.current.value.length) {
         throw new Error("Password wajib diisi");
@@ -53,6 +84,8 @@ const Login = ({ toggle }) => {
       let body = {
         username: userRef.current.value,
         password: passwordRef.current.value,
+        captchaToken: token,
+        mode: "cookie",
       };
       const res = await fetch(
         process.env.NEXT_PUBLIC_DIRECTUS_URL + "/inageoportal-login",
@@ -63,7 +96,7 @@ const Login = ({ toggle }) => {
           },
           method: "POST",
           credentials: "include",
-          body: JSON.stringify(body, captchaToken),
+          body: JSON.stringify(body),
         }
       );
       const resJson = await res.json();
@@ -80,13 +113,26 @@ const Login = ({ toggle }) => {
       handleSetSnack(err.message, "error");
     } finally {
       setIsLoading(false);
-      captchaRef.current.resetCaptcha();
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    window.grecaptcha.ready(() => {
+      window.grecaptcha
+        .execute("6LeH8XwhAAAAALw43tTI0iPcLqx8vrlMvkyRwuB6", {
+          action: "submit",
+        })
+        .then((token) => {
+          handleLogin(token);
+        });
+    });
   };
 
   const keyShortcut = React.useCallback((e) => {
     if (e.keyCode === 13) {
-      handleLogin();
+      handleSubmit(e);
     }
   }, []);
 
@@ -97,25 +143,19 @@ const Login = ({ toggle }) => {
     };
   }, [keyShortcut]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const inputArr = [userRef.current.value, passwordRef.current.value];
-      if (inputArr.indexOf("") !== -1) {
-        throw new Error("Masukkan user dan password");
-      } else {
-        captchaRef.current.execute();
-      }
-    } catch (error) {
-      handleSetSnack(error.message, "error");
-    }
-  };
-
-  useEffect(() => {
-    if (captchaToken) {
-      handleLogin();
-    }
-  }, [captchaToken]);
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   try {
+  //     const inputArr = [userRef.current.value, passwordRef.current.value];
+  //     if (inputArr.indexOf("") !== -1) {
+  //       throw new Error("Masukkan user dan password");
+  //     } else {
+  //       handleLogin();
+  //     }
+  //   } catch (error) {
+  //     handleSetSnack(error.message, "error");
+  //   }
+  // };
 
   return (
     <div className='font-map'>
@@ -166,15 +206,7 @@ const Login = ({ toggle }) => {
               </button>
             </div>
           </div>
-          <HCaptcha
-            sitekey='e45cae2e-2906-45bf-abe7-9424392c31c6'
-            size='invisible'
-            onVerify={setCaptchaToken}
-            onError={(err) => {
-              handleSetSnack(`hCaptcha Error: ${err}`, "error");
-            }}
-            ref={captchaRef}
-          />
+
           <div className='flex flex-col w-full gap-4'>
             {!isLoading ? (
               <input
