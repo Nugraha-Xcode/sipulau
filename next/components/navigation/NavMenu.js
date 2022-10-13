@@ -28,6 +28,7 @@ import MemoIcGlobe from "../core/icons/IcGlobe";
 import Summary from "../map/resume/Resume";
 import Resume from "../map/resume/Resume";
 import MemoIcResume from "../core/icons/IcResume";
+import MemoIcFilter from "../core/icons/IcFilter";
 
 const NavMenu = ({
   expand,
@@ -36,6 +37,7 @@ const NavMenu = ({
   handleOpenSideFeature,
   activeSideFeature,
   handleViewTable,
+  toggleMapFilter,
 }) => {
   const router = useRouter();
   const { t } = useTranslation("attributetable");
@@ -83,6 +85,14 @@ const NavMenu = ({
           label: "Search Island",
           content: <SearchIsland />,
         }),
+    },
+    {
+      id: "filter-data",
+      label: "Filter Data",
+      icon: <MemoIcFilter />,
+      onClick: () => {
+        toggleMapFilter();
+      },
     },
     {
       id: "download",
@@ -143,10 +153,10 @@ const NavMenu = ({
 
   return (
     <div className='flex h-full flex-col'>
-      <div className='flex-1 mt-20'>
+      <div className='flex-1 mt-16'>
         <div
           className={clsx([
-            "ml-2 flex flex-col gap-3",
+            "ml-2 flex flex-col gap-1",
             { "w-[13.250rem]": expand, "w-[2.75rem]": !expand },
           ])}
         >

@@ -5,7 +5,7 @@ import Drawer from "../core/Drawer";
 import MapSideDrawer from "../map/MapSideDrawer";
 import NavMenu from "./NavMenu";
 
-const SideNav = ({ handleViewTable }) => {
+const SideNav = ({ handleViewTable, toggleMapFilter }) => {
   const [
     activeSideFeature,
     setActiveSideFeature,
@@ -55,6 +55,7 @@ const SideNav = ({ handleViewTable }) => {
             handleOpenSideFeature={handleOpenSideFeature}
             handleViewTable={handleViewTable}
             activeSideFeature={activeSideFeature}
+            toggleMapFilter={toggleMapFilter}
           />
         </Drawer>
         <Drawer

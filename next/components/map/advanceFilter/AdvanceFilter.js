@@ -2,7 +2,7 @@ import { Popover } from "@headlessui/react";
 import { useTranslation } from "next-i18next";
 import React from "react";
 import shallow from "zustand/shallow";
-import { useAdvanceFilter } from "../../../hooks";
+import { useAdvanceFilter, useTable } from "../../../hooks";
 import Button from "../../core/Button";
 import FilterItem from "./FilterItem";
 import FilterGroupItem from "./FilterGroupItem";
@@ -10,11 +10,15 @@ import { filterGroupList } from "../../../constant";
 
 const AdvanceFilter = ({
   handleClose,
-  setDataTable,
-  setPage,
   setToggledRow,
+  handleViewTable,
+  isOpenBottomDrawer,
 }) => {
   const { t } = useTranslation("attributetable");
+  const [deleteDataTable, setPage] = useTable(
+    (state) => [state.deleteDataTable, state.setPage],
+    shallow
+  );
   const [
     filterObject,
     setFilterObject,
@@ -87,6 +91,7 @@ const AdvanceFilter = ({
                       <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll rounded-[8px] py-2 text-gray-600 border text-xs border-gray-600 bg-white'>
                         {columnsList.map((columnEl) => (
                           <button
+                            key={columnEl.value}
                             className='text-left hover:bg-[#F2F2F2] px-4 py-2'
                             onClick={() => {
                               addFilterItemNested(
@@ -113,6 +118,7 @@ const AdvanceFilter = ({
                       <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll rounded-[8px] py-2 text-gray-600 border text-xs border-gray-600 bg-white'>
                         {filterGroupList.map((el) => (
                           <button
+                            key={el.value}
                             className='text-left hover:bg-[#F2F2F2] px-4 py-2'
                             onClick={() => {
                               addGroupItemNested(el, memberId, memberValue);
@@ -176,6 +182,7 @@ const AdvanceFilter = ({
                       <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll rounded-[8px] py-2 text-gray-600 border text-xs border-gray-600 bg-white'>
                         {columnsList.map((columnEl) => (
                           <button
+                            key={columnEl.value}
                             className='text-left hover:bg-[#F2F2F2] px-4 py-2'
                             onClick={() => {
                               addFilterItem(columnEl, filterItemId);
@@ -199,6 +206,7 @@ const AdvanceFilter = ({
                       <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll rounded-[8px] py-2 text-gray-600 border text-xs border-gray-600 bg-white'>
                         {filterGroupList.map((el) => (
                           <button
+                            key={el.value}
                             className='text-left hover:bg-[#F2F2F2] px-4 py-2'
                             onClick={() => {
                               addGroupItem(el, filterItemId);
@@ -263,6 +271,7 @@ const AdvanceFilter = ({
                 <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll py-2 rounded-[8px] text-gray-600 border text-xs border-gray-600 bg-white'>
                   {filterGroupList.map((el) => (
                     <button
+                      key={el.value}
                       className='text-left hover:bg-[#F2F2F2] px-4 py-2'
                       onClick={() => {
                         addGroupMain(el);
@@ -295,6 +304,7 @@ const AdvanceFilter = ({
                 <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll rounded-[8px] py-2 text-gray-600 border text-xs border-gray-600 bg-white'>
                   {columnsList.map((el) => (
                     <button
+                      key={el.value}
                       className='text-left hover:bg-[#F2F2F2] px-4 py-2'
                       onClick={() => {
                         addFilterMain(el);
@@ -316,8 +326,11 @@ const AdvanceFilter = ({
           onClick={() => {
             setToggledRow([]);
             setPage(1);
-            setDataTable([]);
+            deleteDataTable();
             createQueryFilter();
+            if (!isOpenBottomDrawer) {
+              handleViewTable();
+            }
             handleClose();
           }}
         >
