@@ -13,6 +13,7 @@ const CrsSelectorFeature = () => {
         { name: "EPSG:3857", projection: "EPSG:3857" },
       ].map((el) => (
         <div
+          key={el.projection}
           onClick={() => {
             setCrs(el.projection);
           }}
