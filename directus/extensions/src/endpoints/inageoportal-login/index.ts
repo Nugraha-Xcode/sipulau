@@ -104,7 +104,7 @@ export default defineEndpoint((router, { exceptions, database }) => {
       }
       if (geoportalRes.status === "success") {
         let user;
-        let email = req.body.username + "@inageoportal.id";
+        let email = req.body.username.trim().toLowerCase() + "@inageoportal.id";
         user = await database("directus_users")
           .select<IUserData>("id")
           .where("email", email)
