@@ -74,6 +74,7 @@ export default async function tableHandler(req, res) {
       bbox,
       point,
       nambef,
+      radius,
     } = req.query;
     let filters = [];
     let paramVal = [limit, offset];
@@ -101,7 +102,7 @@ export default async function tableHandler(req, res) {
       [sjhnam, "sjhnam"],
       [aslbhs, "aslbhs"],
       [status, "status"],
-      [nambef, "nambef"]
+      [nambef, "nambef"],
     ];
     for (const filter of likeFilters) {
       if (filter[0] !== undefined) {
@@ -159,6 +160,16 @@ export default async function tableHandler(req, res) {
       if (point.length !== 2) {
         return res.status(400).json({ message: "Format point harus: lon,lat" });
       }
+
+      if (radius) {
+        radius = parseFloat(radius);
+        if (isNaN(radius) || radius <= 0) {
+          return res.status(400).json({ message: "Radius tidak valid" });
+        }
+      } else {
+        radius = 5000;
+      }
+
       point = point.map((el) => parseFloat(el));
       let [lon, lat] = point;
       if (
@@ -171,9 +182,10 @@ export default async function tableHandler(req, res) {
       ) {
         return res.status(400).json({ message: "point tidak valid" });
       }
-      paramVal.push(lon, lat);
+      paramVal.push(lon, lat, radius);
       filters.push(
-        `ST_DWithin(ST_SetSRID(ST_MakePoint($${param++}, $${param++}), 4326), geom, 0.05)`
+        // `ST_DWithin(ST_SetSRID(ST_MakePoint($${param++}, $${param++}), 4326), geom, 0.05)`
+        `ST_Within(geom, ST_Transform(ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint($${param++}, $${param++}), 4326), 3857), $${param++}), 4326))`
       );
     }
 
