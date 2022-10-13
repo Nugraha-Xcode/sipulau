@@ -227,7 +227,7 @@ export default async function tableHandler(req, res) {
     }
 
     // set limit and offset
-    let limit = 20;
+    let limit = 1000;
     let offset = (page - 1) * limit;
 
     // validate order column
