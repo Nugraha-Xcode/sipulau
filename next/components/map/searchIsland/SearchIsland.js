@@ -15,6 +15,7 @@ import AddCommentForm from "../popup/AddCommentForm";
 import { AboutContent, Searchbar } from "../sidebar-content";
 import SearchResult from "./SearchResult";
 import Button from "../../core/Button";
+import useDebounce from "../../../hooks/useDebounce";
 
 const SearchIsland = () => {
   const { map } = useContext(MapContext);
@@ -32,6 +33,8 @@ const SearchIsland = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [suggestList, setSuggestList] = useState([]);
   const [isCommentButton, setCommentButton] = useState(false);
+  const [inputRadius, setInputRadius] = useState(5000);
+  const debounceinputRadius = useDebounce(inputRadius, 1000);
 
   // this is for input value state
   const [value, setValue] = React.useState("");
@@ -69,10 +72,11 @@ const SearchIsland = () => {
     }
   }, [value]);
 
-  const getPulauBuffer = useCallback(async (point) => {
+  const getPulauBuffer = useCallback(async (point, radius) => {
     try {
       const params = new URLSearchParams({
         point: point,
+        radius: radius,
       });
       const response = await fetch("/api/titik-pulau?" + params, {
         method: "GET",
@@ -134,7 +138,7 @@ const SearchIsland = () => {
     setSearchResult([]);
     setCommentButton(true);
     let latLong = value.replace(/\s/g, "").split(",");
-    getPulauBuffer(latLong[1] + "," + latLong[0]);
+    getPulauBuffer(latLong[1] + "," + latLong[0], inputRadius || 0);
     map.flyTo({
       center: [latLong[1], latLong[0]],
       zoom: 12.5,
@@ -143,9 +147,9 @@ const SearchIsland = () => {
       },
     });
 
-    let radius = 0.05;
+    let radius = (inputRadius || 0) / 1000;
     let options = {
-      units: "degrees",
+      units: "kilometers",
     };
     let circle = turf.circle([latLong[1], latLong[0]], radius, options);
 
@@ -219,6 +223,20 @@ const SearchIsland = () => {
   }, []);
 
   useEffect(() => {
+    if (isSearchLocation) {
+      if (debounceinputRadius && debounceinputRadius > 0) {
+        if (debounceinputRadius <= 100000) {
+          handleAddPoint();
+        } else {
+          handleSetSnack("Maksimum radius 100.000 meter", "error");
+        }
+      } else {
+        handleSetSnack("Radius tidak valid", "error");
+      }
+    }
+  }, [isSearchLocation, debounceinputRadius]);
+
+  useEffect(() => {
     //cleanup
     return () => {
       setType(null);
@@ -248,7 +266,6 @@ const SearchIsland = () => {
       }
     }, 500);
   }, [value]);
-
   return (
     <div
       id='side-feature-content'
@@ -299,19 +316,28 @@ const SearchIsland = () => {
           suggestList={suggestList}
         />
         {isCommentButton && Object.keys(coor).length === 0 && (
-          <Button
-            className='text-sm'
-            variant='outline'
-            onClick={() => {
-              let latLong = value.replace(/\s/g, "").split(",");
-              setCoor({
-                lng: parseFloat(latLong[1]),
-                lat: parseFloat(latLong[0]),
-              });
-            }}
-          >
-            Add Comment
-          </Button>
+          <>
+            <input
+              type='number'
+              value={inputRadius}
+              placeholder='Set buffer area (m)'
+              onChange={(e) => setInputRadius(e.target.value)}
+              className='h-[40px] rounded-[8px] px-4 py-2 text-gray-600 border text-xs border-gray-400 focus:ring-0 focus:border-blue-500'
+            />
+            <Button
+              className='text-sm'
+              variant='outline'
+              onClick={() => {
+                let latLong = value.replace(/\s/g, "").split(",");
+                setCoor({
+                  lng: parseFloat(latLong[1]),
+                  lat: parseFloat(latLong[0]),
+                });
+              }}
+            >
+              Add Comment
+            </Button>
+          </>
         )}
         {Object.keys(coor).length !== 0 && (
           <AddCommentForm
@@ -323,7 +349,7 @@ const SearchIsland = () => {
         )}
         {/* loop this component  */}
         {searchResult.length > 0 && !Object.keys(coor).length
-          ? searchResult.map((el) => <SearchResult item={el} />)
+          ? searchResult.map((el) => <SearchResult key={el.fid} item={el} />)
           : null}
       </div>
 
