@@ -13,11 +13,10 @@ import useToggle from "../utils/useToggle";
 import { MapProvider } from "../context/MapContext";
 import MapTable from "../components/map/MapTable";
 import Modal from "../components/modal";
-import Filter from "../components/map/Filter";
 import AppContext from "../context/AppContext";
 import MapLayers from "../components/map/MapLayers";
 import SideNav from "../components/navigation/SideNav";
-import { useBbox, useIndexedDB, useNav, useNetwork } from "../hooks";
+import { useBbox, useIndexedDB, useNav, useNetwork, useTable } from "../hooks";
 import MapToolbox from "../components/map/MapToolbox";
 import MapToolboxCard from "../components/map/MapToolboxCard";
 import BottomDrawer from "../components/core/BottomDrawer";
@@ -41,19 +40,6 @@ const map = () => {
     (state) => [state.activeLayer, state.activeLegend, state.setActiveLayer],
     shallow
   );
-  const columnObj = [
-    { label: t("column1"), value: "fid" },
-    { label: t("column2"), value: "id_wilayah" },
-    { label: t("column3"), value: "nammap" },
-    { label: t("column4"), value: "artinam" },
-    { label: t("column5"), value: "aslbhs" },
-    { label: t("column6"), value: "sjhnam" },
-    { label: t("column14"), value: "id_toponim" },
-    { label: t("column15"), value: "luas" },
-    { label: t("location"), value: "location" },
-    { label: "Remark", value: "remark" },
-    { label: "Status", value: "status" },
-  ];
   const mapRef = useRef(null);
   const drawRef = useRef(null);
   const mapElementRef = useRef(null);
@@ -66,21 +52,20 @@ const map = () => {
   const [filterArr, setFilterArr] = useState([]);
   const [activeFilter, setActiveFilter] = useState([]);
   const [queryFilter, setQueryFilter] = useState("");
-  const [dataTable, setDataTable] = useState([]);
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [toggledRow, setToggledRow] = useState([]);
   const [isOpenBottomDrawer, setOpenBottomDrawer] = useState(false);
   const [isExpandBottomDrawer, setExpandBottomDrawer] = useState(false);
   const [isOpenMapToolbox, setOpenMapToolbox] = useState(false);
   const [isOpenLegend, setOpenLegend] = useState(false);
-
-  const [page, setPage] = useState(1);
-  const [column, setColumn] = useState(columnObj);
   const [refreshLayer, setRefreshLayer] = useState(false);
-  // const [activeLegend, setActiveLegend] = useState([]);
   const [drawPoly, setDrawPoly] = useState(false);
 
   const mercRef = useRef(new SphericalMercator());
+  const [deleteDataTable, setPage] = useTable(
+    (state) => [state.deleteDataTable, state.setPage],
+    shallow
+  );
   const [setDb, db] = useIndexedDB((state) => [state.setDb, state.db], shallow);
   const [bbox, setBbox] = useBbox(
     (state) => [state.bbox, state.setBbox],
@@ -255,7 +240,7 @@ const map = () => {
   }, [toggledRow, isSelectAll, activeFilter]);
 
   const handleZoomExtend = useCallback(() => {
-    setDataTable([]);
+    deleteDataTable();
     setPage(1);
     setBbox({
       xmin: mapRef.current.getBounds().getWest(),
@@ -427,9 +412,6 @@ const map = () => {
             setQueryFilter,
             setFilterArr,
             filterArr,
-            setColumn,
-            column,
-            columnObj,
             refreshLayer,
             setRefreshLayer,
             handleZoomExtend,
@@ -446,7 +428,10 @@ const map = () => {
           )}
 
           <TopNav />
-          <SideNav handleViewTable={handleViewTable} />
+          <SideNav
+            handleViewTable={handleViewTable}
+            toggleMapFilter={toggleMapFilter}
+          />
 
           {/* bottom left map controller */}
           <div
@@ -502,12 +487,8 @@ const map = () => {
               isActiveSideFeature={Boolean(activeSideFeature)}
             >
               <MapTable
-                dataTable={dataTable}
-                setDataTable={setDataTable}
                 toggledRow={toggledRow}
                 setToggledRow={setToggledRow}
-                page={page}
-                setPage={setPage}
                 isSelectAll={isSelectAll}
                 setIsSelectAll={setIsSelectAll}
                 setOpenBottomDrawer={setOpenBottomDrawer}
@@ -520,16 +501,6 @@ const map = () => {
           </div>
           {/* bottom drawer table */}
           {/* <ResizeableDrawer isOpen={isOpenDrawer}>
-              <MapTable
-                dataTable={dataTable}
-                setDataTable={setDataTable}
-                toggledRow={toggledRow}
-                setToggledRow={setToggledRow}
-                page={page}
-                setPage={setPage}
-                isSelectAll={isSelectAll}
-                setIsSelectAll={setIsSelectAll}
-              />
             </ResizeableDrawer> */}
 
           {mapload && activeLayer.length > 0 && (
@@ -546,8 +517,6 @@ const map = () => {
             <Filter
               setToggledRow={setToggledRow}
               toggleMapFilter={toggleMapFilter}
-              setDataTable={setDataTable}
-              setPage={setPage}
             />
           </Modal> */}
 
@@ -558,9 +527,9 @@ const map = () => {
           >
             <AdvanceFilter
               setToggledRow={setToggledRow}
-              setDataTable={setDataTable}
-              setPage={setPage}
               handleClose={toggleMapFilter}
+              isOpenBottomDrawer={isOpenBottomDrawer}
+              handleViewTable={handleViewTable}
             />
           </Modal>
         </MapProvider>

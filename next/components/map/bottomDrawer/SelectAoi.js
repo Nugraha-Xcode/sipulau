@@ -1,11 +1,15 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import shallow from "zustand/shallow";
 import MapContext from "../../../context/MapContext";
-import { useDrawAoi, useNav } from "../../../hooks";
+import { useDrawAoi, useNav, useTable } from "../../../hooks";
 import MemoIcCursor from "../../core/icons/IcCursor";
 
-const SelectAoi = ({ setPage, setDataTable }) => {
+const SelectAoi = () => {
   const { queryFilter, draw, map } = useContext(MapContext);
+  const [deleteDataTable, setPage] = useTable(
+    (state) => [state.deleteDataTable, state.setPage],
+    shallow
+  );
 
   const [setActiveSideFeature, setExpandSideNav] = useNav(
     (state) => [state.setActiveSideFeature, state.setExpandSideNav],
@@ -26,7 +30,7 @@ const SelectAoi = ({ setPage, setDataTable }) => {
       setAoiPoly(e.features[0]);
       setIsDrawAoi(false);
       setPage(1);
-      setDataTable([]);
+      deleteDataTable();
     };
     if (map) {
       map.on("draw.create", handleCreate);

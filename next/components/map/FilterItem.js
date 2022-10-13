@@ -6,10 +6,23 @@ import FilterRegion from "./FilterRegion";
 
 const FilterItem = ({ idItem, initType, initValue }) => {
   const { t } = useTranslation("attributetable");
-  const { setActiveFilter, setFilterArr, setColumn, column } =
-    useContext(MapContext);
+  const { setActiveFilter, setFilterArr } = useContext(MapContext);
   const [type, setType] = useState(initType || {});
   const [inputValue, setInputValue] = useState(initValue || "");
+
+  const [column, setColumn] = useState([
+    { label: t("column1"), value: "fid" },
+    { label: t("column2"), value: "id_wilayah" },
+    { label: t("column3"), value: "nammap" },
+    { label: t("column4"), value: "artinam" },
+    { label: t("column5"), value: "aslbhs" },
+    { label: t("column6"), value: "sjhnam" },
+    { label: t("column14"), value: "id_toponim" },
+    { label: t("column15"), value: "luas" },
+    { label: t("location"), value: "location" },
+    { label: "Remark", value: "remark" },
+    { label: "Status", value: "status" },
+  ]);
 
   return (
     <>

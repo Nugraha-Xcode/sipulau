@@ -1,34 +1,42 @@
-import { useEffect, useRef, useContext } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "next-i18next";
 import SortIcon from "./SortIcon";
 import { titikPulauMvt } from "../../../constant";
+import { useTable } from "../../../hooks";
+import shallow from "zustand/shallow";
 
 const Table = ({
   columns,
-  data,
   order,
   handleOrder,
   setToggledRow,
   toggledRow,
   map,
-  setPage,
-  setDataTable,
   isSelectAll,
   setIsSelectAll,
   activeFilter,
   fetchTable,
 }) => {
   const { t } = useTranslation("attributetable");
+  const [deleteDataTable, dataTable, setPage, setPagePrev] = useTable(
+    (state) => [
+      state.deleteDataTable,
+      state.dataTable,
+      state.setPage,
+      state.setPagePrev,
+    ],
+    shallow
+  );
   const observerRef = useRef(null);
   const rootObserver = useRef(null);
 
   useEffect(() => {
     let observer = null;
-    if (observerRef.current && data.length >= 20 && fetchTable) {
+    if (observerRef.current && dataTable.length >= 20 && fetchTable) {
       observer = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
-            setPage((prev) => prev + 1);
+            setPagePrev();
           }
         },
         {
@@ -43,7 +51,7 @@ const Table = ({
         observer.unobserve(observerRef.current);
       }
     };
-  }, [observerRef.current, data, fetchTable]);
+  }, [observerRef.current, dataTable, fetchTable]);
 
   let tableHeight = 600;
 
@@ -70,7 +78,7 @@ const Table = ({
                   setIsSelectAll((prev) => !prev);
                   if (!isSelectAll && activeFilter.length > 0) {
                     setToggledRow(
-                      data.map((el) => {
+                      dataTable.map((el) => {
                         return {
                           id: el.id_toponim,
                           lon: el.lon,
@@ -86,7 +94,7 @@ const Table = ({
                           ["id"],
                           [
                             "literal",
-                            data.map((el) => parseInt(el.id_toponim)),
+                            dataTable.map((el) => parseInt(el.id_toponim)),
                           ],
                         ],
                         "marker-pulau-highlight",
@@ -129,7 +137,7 @@ const Table = ({
                       el.sort === false
                         ? () => {}
                         : () => {
-                            setDataTable([]);
+                            deleteDataTable();
                             setPage(1);
                             handleOrder(el.field, !order.orderAsc);
                           }
@@ -165,11 +173,11 @@ const Table = ({
         </thead>
         <tbody
           className={`${
-            data.length > 0 ? "divide-solid divide-y-2 divide-gray-6" : ""
+            dataTable.length > 0 ? "divide-solid divide-y-2 divide-gray-6" : ""
           }`}
         >
-          {data.length > 0 ? (
-            data.map((dataItem, dataIdx) => (
+          {dataTable.length > 0 ? (
+            dataTable.map((dataItem, dataIdx) => (
               <tr className='cursor-pointer' key={dataIdx}>
                 <td
                   className={`${

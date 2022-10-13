@@ -2,16 +2,19 @@ import React, { useContext, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import FilterItem from "./FilterItem";
 import MapContext from "../../context/MapContext";
+import { useTable } from "../../hooks";
 
-const Filter = ({ toggleMapFilter, setDataTable, setPage, setToggledRow }) => {
+const Filter = ({ toggleMapFilter, setToggledRow }) => {
   const { t } = useTranslation("attributetable");
   const { activeFilter, setQueryFilter, setFilterArr, filterArr } =
     useContext(MapContext);
+  const deleteDataTable = useTable((state) => state.deleteDataTable);
+  const setPage = useTable((state) => state.setPage);
 
   const handleFilter = useCallback(() => {
     setToggledRow([]);
     setPage(1);
-    setDataTable([]);
+    deleteDataTable();
     if (filterArr.length > 0 && activeFilter.length > 0) {
       let queryStr = "";
       activeFilter.forEach((el) => {

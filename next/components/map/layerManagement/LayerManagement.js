@@ -59,7 +59,13 @@ const LayerManagement = () => {
 
         {activeLayer.length > 0 &&
           activeLayer
-            .map((el, index) => <LayerManagementItem item={el} index={index} />)
+            .map((el, index) => (
+              <LayerManagementItem
+                key={el.nama + el.judul}
+                item={el}
+                index={index}
+              />
+            ))
             .reverse()}
 
         {/* <LayerManagementItem name='Basat Wilayah Desa' subName='Pollyline' />

@@ -10,15 +10,11 @@ import Modal from "../modal";
 import MapTableDownload from "./MapTableDownload";
 import useToggle from "../../utils/useToggle";
 import { useAuth } from "../../hooks/useAuth";
-import { useAdvanceFilter, useBbox, useDrawAoi } from "../../hooks";
+import { useAdvanceFilter, useBbox, useDrawAoi, useTable } from "../../hooks";
 import shallow from "zustand/shallow";
 import SelectAoi from "./bottomDrawer/SelectAoi";
 
 const MapTable = ({
-  dataTable,
-  setDataTable,
-  page,
-  setPage,
   setToggledRow,
   toggledRow,
   isSelectAll,
@@ -28,6 +24,15 @@ const MapTable = ({
 }) => {
   const { handleSetSnack } = useContext(AppContext);
   const authToken = useAuth((state) => state.authToken);
+  const [setDataTable, deleteDataTable, page, setPage] = useTable(
+    (state) => [
+      state.setDataTable,
+      state.deleteDataTable,
+      state.page,
+      state.setPage,
+    ],
+    shallow
+  );
   const { t } = useTranslation("attributetable");
   const {
     map,
@@ -41,8 +46,6 @@ const MapTable = ({
     activeFilter,
     setActiveFilter,
     setFilterArr,
-    setColumn,
-    columnObj,
     handleZoomExtend,
   } = useContext(MapContext);
 
@@ -134,7 +137,7 @@ const MapTable = ({
       const result = await response.json();
       if (response.status === 200) {
         if (result.length > 0) {
-          setDataTable((prev) => [...prev, ...result]);
+          setDataTable(result);
           setFetchTable(true);
         } else {
           setFetchTable(false);
@@ -224,13 +227,13 @@ const MapTable = ({
                 bbox
                   ? () => {
                       setPage(1);
-                      setDataTable([]);
+                      deleteDataTable();
                       setBbox(null);
                       map.off("moveend", handleZoomExtend);
                     }
                   : () => {
                       setPage(1);
-                      setDataTable([]);
+                      deleteDataTable();
                       setBbox({
                         xmin: map.getBounds().getWest(),
                         ymin: map.getBounds().getSouth(),
@@ -308,7 +311,7 @@ const MapTable = ({
                 onClick={() => {
                   setToggledRow([]);
                   setPage(1);
-                  setDataTable([]);
+                  deleteDataTable();
                   setFilterObject({});
                   createQueryFilter();
                   if (aoiPoly) {
@@ -320,7 +323,6 @@ const MapTable = ({
                   // setQueryFilter("");
                   // setDataTable([]);
                   // setFilterArr([{ id: (Math.random() * 10000).toFixed(0) }]);
-                  // setColumn(columnObj);
                   // setToggledRow([]);
                 }}
                 className='flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg'
@@ -329,7 +331,7 @@ const MapTable = ({
                 <p className='text-xs text-gray-900'>{t("resetFilter")}</p>
               </button>
             )}
-            <SelectAoi setPage={setPage} setDataTable={setDataTable} />
+            <SelectAoi />
             <Modal isShowing={isShowing} handleModal={toggle} size='sm'>
               <div className=''>
                 <div className='flex items-center p-2'>
@@ -432,15 +434,12 @@ const MapTable = ({
           <Table
             map={map}
             columns={columns}
-            data={dataTable}
             order={order}
             handleOrder={(orderBy, orderAsc) =>
               setOrder({ orderBy: orderBy, orderAsc: orderAsc })
             }
             setToggledRow={setToggledRow}
             toggledRow={toggledRow}
-            setPage={setPage}
-            setDataTable={setDataTable}
             isSelectAll={isSelectAll}
             setIsSelectAll={setIsSelectAll}
             activeFilter={activeFilter}
