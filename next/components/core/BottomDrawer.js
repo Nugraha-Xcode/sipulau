@@ -14,8 +14,8 @@ const BottomDrawer = ({
       className={clsx([
         "w-full overflow-hidden bg-white pl-64 transition-all duration-100 ease-in-out dark:bg-gray-800",
         {
-          "h-[425px]": isOpen && !isExpandBottomDrawer,
-          "h-[700px]": isOpen && isExpandBottomDrawer,
+          "h-[50vh]": isOpen && !isExpandBottomDrawer,
+          "h-[80vh]": isOpen && isExpandBottomDrawer,
           "h-0": !isOpen,
           "pl-[345px]": isActiveSideFeature && isOpenNav,
           "pl-[25rem]": isActiveSideFeature && !isOpenNav,
