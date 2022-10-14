@@ -211,6 +211,15 @@ const Login = ({ toggle }) => {
                 />
               </div>
             )}
+            <a
+              href='https://tanahair.indonesia.go.id/register'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='border border-main-blue text-main-blue rounded-lg py-2 text-sm text-center flex justify-center items-center gap-3'
+            >
+              <img src='/images/logo-google.svg' />
+              Masuk dengan Google
+            </a>
             <div className='flex items-center'>
               <hr className='flex-1' />
               <p className='mx-3 text-xs text-black-2'>{login[t].or1}</p>
