@@ -23,7 +23,12 @@ const TopNav = () => {
         >
           <img src='/images/ic-burger.svg' alt='button' />
         </button>
-        <img src='/images/big-logo.svg' alt='logo' />
+        <div className='flex items-center gap-3'>
+          <img src='/images/big-logo.svg' alt='logo' />
+          <p className='text-lg text-[#2A63B5] font-semibold'>
+            Sistem Informasi Pulau
+          </p>
+        </div>
       </div>
       <div className='flex items-center justify-between gap-8 mr-2'>
         {authToken.length ? (
