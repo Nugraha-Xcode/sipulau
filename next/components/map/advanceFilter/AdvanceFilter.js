@@ -10,13 +10,12 @@ import { filterGroupList } from "../../../constant";
 
 const AdvanceFilter = ({
   handleClose,
-  setToggledRow,
   handleViewTable,
   isOpenBottomDrawer,
 }) => {
   const { t } = useTranslation("attributetable");
-  const [deleteDataTable, setPage] = useTable(
-    (state) => [state.deleteDataTable, state.setPage],
+  const [deleteDataTable, setPage, clearSelectedRow] = useTable(
+    (state) => [state.deleteDataTable, state.setPage, state.clearSelectedRow],
     shallow
   );
   const [
@@ -324,7 +323,7 @@ const AdvanceFilter = ({
           variant='normal'
           isActive={true}
           onClick={() => {
-            setToggledRow([]);
+            clearSelectedRow();
             setPage(1);
             deleteDataTable();
             createQueryFilter();

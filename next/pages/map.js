@@ -50,10 +50,8 @@ const map = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isOpenFeature, setIsOpenFeature] = useState(false);
   const [filterArr, setFilterArr] = useState([]);
-  const [activeFilter, setActiveFilter] = useState([]);
+  // const [activeFilter, setActiveFilter] = useState([]);
   const [queryFilter, setQueryFilter] = useState("");
-  const [isSelectAll, setIsSelectAll] = useState(false);
-  const [toggledRow, setToggledRow] = useState([]);
   const [isOpenBottomDrawer, setOpenBottomDrawer] = useState(false);
   const [isExpandBottomDrawer, setExpandBottomDrawer] = useState(false);
   const [isOpenMapToolbox, setOpenMapToolbox] = useState(false);
@@ -62,8 +60,13 @@ const map = () => {
   const [drawPoly, setDrawPoly] = useState(false);
 
   const mercRef = useRef(new SphericalMercator());
-  const [deleteDataTable, setPage] = useTable(
-    (state) => [state.deleteDataTable, state.setPage],
+  const [deleteDataTable, setPage, isSelectAll, selectedRow] = useTable(
+    (state) => [
+      state.deleteDataTable,
+      state.setPage,
+      state.isSelectAll,
+      state.selectedRow,
+    ],
     shallow
   );
   const [setDb, db] = useIndexedDB((state) => [state.setDb, state.db], shallow);
@@ -210,26 +213,19 @@ const map = () => {
   }, []);
 
   useEffect(() => {
-    let selectedArr = toggledRow.map((el) => parseInt(el.id));
+    let selectedArr = selectedRow.map((el) => parseInt(el));
     mapRef.current &&
       mapRef.current.getLayer(titikPulauMvt) &&
       mapRef.current.setLayoutProperty(
         titikPulauMvt,
         "icon-image",
         isSelectAll
-          ? activeFilter.length > 0
-            ? [
-                "case",
-                ["in", ["id"], ["literal", selectedArr]],
-                "marker-pulau-highlight",
-                "marker-pulau",
-              ]
-            : [
-                "case",
-                ["in", ["id"], ["literal", selectedArr]],
-                "marker-pulau",
-                "marker-pulau-highlight",
-              ]
+          ? [
+              "case",
+              ["in", ["id"], ["literal", selectedArr]],
+              "marker-pulau",
+              "marker-pulau-highlight",
+            ]
           : [
               "case",
               ["in", ["id"], ["literal", selectedArr]],
@@ -237,7 +233,7 @@ const map = () => {
               "marker-pulau",
             ]
       );
-  }, [toggledRow, isSelectAll, activeFilter]);
+  }, [selectedRow, isSelectAll]);
 
   const handleZoomExtend = useCallback(() => {
     deleteDataTable();
@@ -406,8 +402,8 @@ const map = () => {
             setIsOpenFeature,
             toggleMapFilter,
             fetchRBIStyle,
-            activeFilter,
-            setActiveFilter,
+            // activeFilter,
+            // setActiveFilter,
             queryFilter,
             setQueryFilter,
             setFilterArr,
@@ -487,10 +483,6 @@ const map = () => {
               isActiveSideFeature={Boolean(activeSideFeature)}
             >
               <MapTable
-                toggledRow={toggledRow}
-                setToggledRow={setToggledRow}
-                isSelectAll={isSelectAll}
-                setIsSelectAll={setIsSelectAll}
                 setOpenBottomDrawer={setOpenBottomDrawer}
                 setExpandBottomDrawer={() => {
                   setExpandBottomDrawer((prev) => !prev);
@@ -499,26 +491,12 @@ const map = () => {
               />
             </BottomDrawer>
           </div>
-          {/* bottom drawer table */}
+
           {/* <ResizeableDrawer isOpen={isOpenDrawer}>
             </ResizeableDrawer> */}
 
-          {mapload && activeLayer.length > 0 && (
-            <MapLayers isSelectAll={isSelectAll} />
-          )}
+          {mapload && activeLayer.length > 0 && <MapLayers />}
           <ToponimPopup mapLoad={mapload} />
-
-          {/* {mapload && <MvtLayer isSelectAll={isSelectAll} />} */}
-          {/* <Modal
-            isShowing={isOpenMapFilter}
-            handleModal={toggleMapFilter}
-            size='lg'
-          >
-            <Filter
-              setToggledRow={setToggledRow}
-              toggleMapFilter={toggleMapFilter}
-            />
-          </Modal> */}
 
           <Modal
             isShowing={isOpenMapFilter}
@@ -526,7 +504,6 @@ const map = () => {
             size='xl'
           >
             <AdvanceFilter
-              setToggledRow={setToggledRow}
               handleClose={toggleMapFilter}
               isOpenBottomDrawer={isOpenBottomDrawer}
               handleViewTable={handleViewTable}

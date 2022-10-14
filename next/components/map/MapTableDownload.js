@@ -6,23 +6,21 @@ import Modal from "../modal";
 import AppContext from "../../context/AppContext";
 import MapContext from "../../context/MapContext";
 import { useAuth } from "../../hooks/useAuth";
-import { useAdvanceFilter, useBbox } from "../../hooks";
+import { useAdvanceFilter, useBbox, useTable } from "../../hooks";
 import Button from "../core/Button";
+import shallow from "zustand/shallow";
 
-const MapTableDownload = ({
-  toggledRow,
-  isSelectAll,
-  drawItem,
-  toggle,
-  source,
-}) => {
+const MapTableDownload = ({ drawItem, toggle, source }) => {
   const { t } = useTranslation("sideBarRight");
   const { handleSetSnack } = useContext(AppContext);
   const authToken = useAuth((state) => state.authToken);
-  const { activeFilter } = useContext(MapContext);
   const bbox = useBbox((state) => state.bbox);
   const advanceFilterQuery = useAdvanceFilter(
     (state) => state.advanceFilterQuery
+  );
+  const [isSelectAll, selectedRow] = useTable(
+    (state) => [state.isSelectAll, state.selectedRow],
+    shallow
   );
 
   const [isLoad, setIsLoad] = useState(false);
@@ -48,11 +46,11 @@ const MapTableDownload = ({
         _and: query,
       };
     }
-    if (Array.isArray(toggledRow) && toggledRow.length > 0) {
+    if (Array.isArray(selectedRow) && selectedRow.length > 0) {
       if (isSelectAll) {
-        objBody["unselected"] = toggledRow.map((el) => parseInt(el.id));
+        objBody["unselected"] = selectedRow.map((el) => parseInt(el));
       } else {
-        objBody["selected"] = toggledRow.map((el) => parseInt(el.id));
+        objBody["selected"] = selectedRow.map((el) => parseInt(el));
       }
     }
     // if (Array.isArray(drawItem) && drawItem.length > 0) {
@@ -64,14 +62,7 @@ const MapTableDownload = ({
     //   objBody.aoi = multiPolygon;
     // }
     return objBody;
-  }, [
-    bbox,
-    activeFilter,
-    toggledRow,
-    isSelectAll,
-    drawItem,
-    advanceFilterQuery,
-  ]);
+  }, [bbox, selectedRow, isSelectAll, drawItem, advanceFilterQuery]);
 
   const handleDownloadCsv = useCallback(
     async (e) => {

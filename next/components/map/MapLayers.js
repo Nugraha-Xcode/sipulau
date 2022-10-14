@@ -5,18 +5,12 @@ import MvtLayer from "./MvtLayer";
 import SimpulLayer from "./SimpulLayer";
 import UploadLayer from "./UploadLayer";
 
-const MapLayers = ({ isSelectAll }) => {
+const MapLayers = () => {
   const activeLayer = useNetwork((state) => state.activeLayer);
 
   return activeLayer.map((el) => {
     if (el.source === "toponim") {
-      return (
-        <MvtLayer
-          item={el}
-          isSelectAll={isSelectAll}
-          key={el.judul + el.nama}
-        />
-      );
+      return <MvtLayer item={el} key={el.judul + el.nama} />;
     } else if (el.source === "simpul") {
       return <SimpulLayer item={el} key={el.judul + el.nama} />;
     } else if (el.source === "upload") {

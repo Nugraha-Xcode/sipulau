@@ -1,8 +1,10 @@
 import { useContext, useEffect } from "react";
 import MapContext from "../../context/MapContext";
+import { useTable } from "../../hooks";
 
-const MvtLayer = ({ item, isSelectAll }) => {
+const MvtLayer = ({ item }) => {
   const { map, refreshLayer } = useContext(MapContext);
+  const isSelectAll = useTable((state) => state.isSelectAll);
   useEffect(() => {
     let origin = window.location.origin;
     if (!map.getSource(item.judul + item.nama)) {

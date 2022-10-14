@@ -14,40 +14,34 @@ import { useAdvanceFilter, useBbox, useDrawAoi, useTable } from "../../hooks";
 import shallow from "zustand/shallow";
 import SelectAoi from "./bottomDrawer/SelectAoi";
 
-const MapTable = ({
-  setToggledRow,
-  toggledRow,
-  isSelectAll,
-  setIsSelectAll,
-  setOpenBottomDrawer,
-  setExpandBottomDrawer,
-}) => {
+const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
   const { handleSetSnack } = useContext(AppContext);
   const authToken = useAuth((state) => state.authToken);
-  const [setDataTable, deleteDataTable, page, setPage] = useTable(
+  const [
+    setDataTable,
+    deleteDataTable,
+    page,
+    setPage,
+    setSelectedRow,
+    setSelectedRowPrev,
+    clearSelectedRow,
+    setLoadData,
+  ] = useTable(
     (state) => [
       state.setDataTable,
       state.deleteDataTable,
       state.page,
       state.setPage,
+      state.setSelectedRow,
+      state.setSelectedRowPrev,
+      state.clearSelectedRow,
+      state.setLoadData,
     ],
     shallow
   );
   const { t } = useTranslation("attributetable");
-  const {
-    map,
-    queryFilter,
-    draw,
-    setIsOpenDrawer,
-    setActiveFeature,
-    setIsOpenFeature,
-    toggleMapFilter,
-    setQueryFilter,
-    activeFilter,
-    setActiveFilter,
-    setFilterArr,
-    handleZoomExtend,
-  } = useContext(MapContext);
+  const { map, queryFilter, draw, toggleMapFilter, handleZoomExtend } =
+    useContext(MapContext);
 
   const [bbox, setBbox] = useBbox(
     (state) => [state.bbox, state.setBbox],
@@ -68,8 +62,6 @@ const MapTable = ({
     shallow
   );
 
-  const [activeTab, setActiveTab] = useState("nama");
-  const [isOption, setOption] = useState(false);
   const [isColumnOpt, setColumnOpt] = useState(false);
   const [isShowing, toggle] = useToggle();
   const [fetchTable, setFetchTable] = useState(false);
@@ -99,6 +91,7 @@ const MapTable = ({
   ]);
 
   useEffect(async () => {
+    setLoadData(true);
     let query = [...advanceFilterQuery];
     bbox &&
       query.push({
@@ -137,6 +130,13 @@ const MapTable = ({
       const result = await response.json();
       if (response.status === 200) {
         if (result.length > 0) {
+          if (query.length > 0) {
+            if (page === 1) {
+              setSelectedRow([...result.map((el) => el.id_toponim)]);
+            } else {
+              setSelectedRowPrev([...result.map((el) => el.id_toponim)]);
+            }
+          }
           setDataTable(result);
           setFetchTable(true);
         } else {
@@ -147,6 +147,8 @@ const MapTable = ({
       }
     } catch (error) {
       handleSetSnack(error.message, "error");
+    } finally {
+      setLoadData(false);
     }
   }, [
     order.orderBy,
@@ -200,9 +202,6 @@ const MapTable = ({
   return (
     <>
       <div className='font-map mt-0'>
-        {/* <div className='border-b-2 flex relative px-5'>
-       
-        </div> */}
         <div className='py-2 px-5 flex justify-between'>
           <div className='flex items-center gap-2'>
             {/* <button
@@ -309,7 +308,7 @@ const MapTable = ({
               <button
                 data-cy='map-table-reset-filter-button'
                 onClick={() => {
-                  setToggledRow([]);
+                  clearSelectedRow();
                   setPage(1);
                   deleteDataTable();
                   setFilterObject({});
@@ -318,12 +317,6 @@ const MapTable = ({
                     setAoiPoly(null);
                     draw.delete(aoiPoly.id);
                   }
-                  // setIsSelectAll(false);
-                  // setActiveFilter([]);
-                  // setQueryFilter("");
-                  // setDataTable([]);
-                  // setFilterArr([{ id: (Math.random() * 10000).toFixed(0) }]);
-                  // setToggledRow([]);
                 }}
                 className='flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg'
               >
@@ -352,12 +345,7 @@ const MapTable = ({
                 </div>
                 <hr />
                 <div className='py-2 px-4'>
-                  <MapTableDownload
-                    source='from-table'
-                    toggle={toggle}
-                    toggledRow={toggledRow}
-                    isSelectAll={isSelectAll}
-                  />
+                  <MapTableDownload source='from-table' toggle={toggle} />
                 </div>
               </div>
             </Modal>
@@ -438,11 +426,6 @@ const MapTable = ({
             handleOrder={(orderBy, orderAsc) =>
               setOrder({ orderBy: orderBy, orderAsc: orderAsc })
             }
-            setToggledRow={setToggledRow}
-            toggledRow={toggledRow}
-            isSelectAll={isSelectAll}
-            setIsSelectAll={setIsSelectAll}
-            activeFilter={activeFilter}
             fetchTable={fetchTable}
           />
         </div>

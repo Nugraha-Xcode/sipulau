@@ -5,25 +5,33 @@ import { titikPulauMvt } from "../../../constant";
 import { useTable } from "../../../hooks";
 import shallow from "zustand/shallow";
 
-const Table = ({
-  columns,
-  order,
-  handleOrder,
-  setToggledRow,
-  toggledRow,
-  map,
-  isSelectAll,
-  setIsSelectAll,
-  activeFilter,
-  fetchTable,
-}) => {
+const Table = ({ columns, order, handleOrder, map, fetchTable }) => {
   const { t } = useTranslation("attributetable");
-  const [deleteDataTable, dataTable, setPage, setPagePrev] = useTable(
+  const [
+    deleteDataTable,
+    dataTable,
+    setPage,
+    setPagePrev,
+    isSelectAll,
+    setIsSelectAll,
+    selectedRow,
+    removeSelectedRow,
+    setSelectedRowPrev,
+    clearSelectedRow,
+    isLoadData,
+  ] = useTable(
     (state) => [
       state.deleteDataTable,
       state.dataTable,
       state.setPage,
       state.setPagePrev,
+      state.isSelectAll,
+      state.setIsSelectAll,
+      state.selectedRow,
+      state.removeSelectedRow,
+      state.setSelectedRowPrev,
+      state.clearSelectedRow,
+      state.isLoadData,
     ],
     shallow
   );
@@ -68,42 +76,34 @@ const Table = ({
               <input
                 type='checkbox'
                 className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
-                checked={
-                  isSelectAll
-                  // data.length !== 0 && toggledRow.length === data.length
-                }
+                checked={isSelectAll}
                 id={"select-all"}
                 name={"select-all"}
                 onChange={(e) => {
-                  setIsSelectAll((prev) => !prev);
-                  if (!isSelectAll && activeFilter.length > 0) {
-                    setToggledRow(
-                      dataTable.map((el) => {
-                        return {
-                          id: el.id_toponim,
-                          lon: el.lon,
-                          lat: el.lat,
-                        };
-                      })
-                    );
-                    setTimeout(() => {
-                      map.setLayoutProperty(titikPulauMvt, "icon-image", [
-                        "case",
-                        [
-                          "in",
-                          ["id"],
-                          [
-                            "literal",
-                            dataTable.map((el) => parseInt(el.id_toponim)),
-                          ],
-                        ],
-                        "marker-pulau-highlight",
-                        "marker-pulau",
-                      ]);
-                    }, 1000);
-                  } else {
-                    setToggledRow([]);
-                  }
+                  setIsSelectAll();
+                  clearSelectedRow();
+                  // if (!isSelectAll) {
+                  //   setToggledRow(
+                  //     dataTable.map((el) => parseInt(el.id_toponim))
+                  //   );
+                  // setTimeout(() => {
+                  //   map.setLayoutProperty(titikPulauMvt, "icon-image", [
+                  //     "case",
+                  //     [
+                  //       "in",
+                  //       ["id"],
+                  //       [
+                  //         "literal",
+                  //         dataTable.map((el) => parseInt(el.id_toponim)),
+                  //       ],
+                  //     ],
+                  //     "marker-pulau-highlight",
+                  //     "marker-pulau",
+                  //   ]);
+                  // }, 1000);
+                  // } else {
+                  //   setToggledRow([]);
+                  // }
                   // if (!isSelectAll) {
                   //   setTimeout(() => {
                   //     map.setLayoutProperty(titikPulauMvt, "icon-image", [
@@ -182,13 +182,13 @@ const Table = ({
                 <td
                   className={`${
                     isSelectAll
-                      ? toggledRow.findIndex(
-                          (el) => el.id === dataItem.id_toponim
+                      ? selectedRow.findIndex(
+                          (el) => el === dataItem.id_toponim
                         ) !== -1
                         ? ""
                         : "bg-blue-2"
-                      : toggledRow.findIndex(
-                          (el) => el.id === dataItem.id_toponim
+                      : selectedRow.findIndex(
+                          (el) => el === dataItem.id_toponim
                         ) !== -1
                       ? "bg-blue-2"
                       : ""
@@ -198,21 +198,14 @@ const Table = ({
                     type='checkbox'
                     className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
                     checked={
-                      // toggledRow.indexOf(dataItem.id_toponim) !== -1
                       isSelectAll
-                        ? activeFilter.length > 0
-                          ? toggledRow.findIndex(
-                              (el) => el.id === dataItem.id_toponim
-                            ) !== -1
-                            ? true
-                            : false
-                          : toggledRow.findIndex(
-                              (el) => el.id === dataItem.id_toponim
-                            ) !== -1
+                        ? selectedRow.findIndex(
+                            (el) => el === dataItem.id_toponim
+                          ) !== -1
                           ? false
                           : true
-                        : toggledRow.findIndex(
-                            (el) => el.id === dataItem.id_toponim
+                        : selectedRow.findIndex(
+                            (el) => el === dataItem.id_toponim
                           ) !== -1
                         ? true
                         : false
@@ -220,15 +213,14 @@ const Table = ({
                     id={dataItem.id_toponim}
                     name={dataItem.id_toponim}
                     value={
-                      // toggledRow.indexOf(dataItem.id_toponim) !== -1
                       isSelectAll
-                        ? toggledRow.findIndex(
-                            (el) => el.id === dataItem.id_toponim
+                        ? selectedRow.findIndex(
+                            (el) => el === dataItem.id_toponim
                           ) !== -1
                           ? false
                           : true
-                        : toggledRow.findIndex(
-                            (el) => el.id === dataItem.id_toponim
+                        : selectedRow.findIndex(
+                            (el) => el === dataItem.id_toponim
                           ) !== -1
                         ? true
                         : false
@@ -236,49 +228,15 @@ const Table = ({
                     onChange={(e) => {
                       if (isSelectAll) {
                         if (e.target.value === "false") {
-                          setToggledRow((prev) => {
-                            let arr = [...prev];
-                            arr.splice(
-                              toggledRow.findIndex(
-                                (el) => el.id === dataItem.id_toponim
-                              ),
-                              1
-                            );
-                            return arr;
-                          });
+                          removeSelectedRow(dataItem.id_toponim);
                         } else {
-                          setToggledRow((prev) => {
-                            let arr = [...prev];
-                            arr.push({
-                              id: dataItem.id_toponim,
-                              lon: dataItem.lon,
-                              lat: dataItem.lat,
-                            });
-                            return arr;
-                          });
+                          setSelectedRowPrev([dataItem.id_toponim]);
                         }
                       } else {
                         if (e.target.value === "true") {
-                          setToggledRow((prev) => {
-                            let arr = [...prev];
-                            arr.splice(
-                              toggledRow.findIndex(
-                                (el) => el.id === dataItem.id_toponim
-                              ),
-                              1
-                            );
-                            return arr;
-                          });
+                          removeSelectedRow(dataItem.id_toponim);
                         } else {
-                          setToggledRow((prev) => {
-                            let arr = [...prev];
-                            arr.push({
-                              id: dataItem.id_toponim,
-                              lon: dataItem.lon,
-                              lat: dataItem.lat,
-                            });
-                            return arr;
-                          });
+                          setSelectedRowPrev([dataItem.id_toponim]);
                         }
                       }
                     }}
@@ -297,13 +255,13 @@ const Table = ({
                       test={dataItem[itemValue.field]}
                       className={`${
                         isSelectAll
-                          ? toggledRow.findIndex(
-                              (el) => el.id === dataItem.id_toponim
+                          ? selectedRow.findIndex(
+                              (el) => el === dataItem.id_toponim
                             ) !== -1
                             ? ""
                             : "bg-blue-2"
-                          : toggledRow.findIndex(
-                              (el) => el.id === dataItem.id_toponim
+                          : selectedRow.findIndex(
+                              (el) => el === dataItem.id_toponim
                             ) !== -1
                           ? "bg-blue-2"
                           : ""
@@ -322,6 +280,8 @@ const Table = ({
                 )}
               </tr>
             ))
+          ) : isLoadData ? (
+            <></>
           ) : (
             <tr className=''>
               <td colSpan={columns.length} className=''>
@@ -348,6 +308,11 @@ const Table = ({
           </tr>
         </tbody>
       </table>
+      {dataTable.length === 0 && isLoadData ? (
+        <div className='absolute top-1/3 -translate-y-1/2 left-1/2 -translate-x-1/2'>
+          <img src='/images/loader.svg' alt='loader' className='w-16 h-16' />
+        </div>
+      ) : null}
       <style jsx>
         {`
           .tableStyle {
