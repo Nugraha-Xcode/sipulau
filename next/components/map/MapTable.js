@@ -13,6 +13,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useAdvanceFilter, useBbox, useDrawAoi, useTable } from "../../hooks";
 import shallow from "zustand/shallow";
 import SelectAoi from "./bottomDrawer/SelectAoi";
+import Tippy from "@tippyjs/react";
 
 const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
   const { handleSetSnack } = useContext(AppContext);
@@ -392,30 +393,55 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
             >
               <img src='/images/ic-checkbox.svg' alt='button' className='h-4' />
             </button> */}
-            <button
-              data-cy='map-table-download-button'
-              onClick={toggle}
-              className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
+            <Tippy
+              content='Download'
+              placement='bottom'
+              delay={300}
+              className='text-xs'
             >
-              <img src='/images/ic-download.svg' alt='button' className='h-4' />
-            </button>
-            <button
-              onClick={setExpandBottomDrawer}
-              className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
+              <button
+                data-cy='map-table-download-button'
+                onClick={toggle}
+                className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
+              >
+                <img
+                  src='/images/ic-download.svg'
+                  alt='button'
+                  className='h-4'
+                />
+              </button>
+            </Tippy>
+            <Tippy
+              content='Expand Table'
+              placement='bottom'
+              delay={300}
+              className='text-xs'
             >
-              <img
-                src='/images/ic-expand-bottom-drawer.svg'
-                alt='expand bottom drawer'
-              />
-            </button>
-            <button
-              onClick={() => {
-                setOpenBottomDrawer(false);
-              }}
-              className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
+              <button
+                onClick={setExpandBottomDrawer}
+                className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
+              >
+                <img
+                  src='/images/ic-expand-bottom-drawer.svg'
+                  alt='expand bottom drawer'
+                />
+              </button>
+            </Tippy>
+            <Tippy
+              content='Close'
+              placement='bottom'
+              delay={300}
+              className='text-xs'
             >
-              <img src='/images/ic-close.svg' alt='button' />
-            </button>
+              <button
+                onClick={() => {
+                  setOpenBottomDrawer(false);
+                }}
+                className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
+              >
+                <img src='/images/ic-close.svg' alt='button' />
+              </button>
+            </Tippy>
           </div>
         </div>
         <div className='relative'>
