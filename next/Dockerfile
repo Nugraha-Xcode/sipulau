@@ -6,7 +6,7 @@ WORKDIR /app
 RUN npm update -g
 ENV NODE_ENV development
 COPY ./package*.json ./
-RUN npm install
+RUN npm install -g npm && npm ci
 
 # builder
 FROM node:14-alpine as builder
@@ -27,13 +27,12 @@ ENV HTTP_PROXY="http://192.168.1.28:3128"
 ENV HTTPS_PROXY="http://192.168.1.28:3128"
 WORKDIR /app
 # if using prebuilt:
+# COPY package*.json ./
+# RUN npm install -g npm && npm ci && npm i sharp
 # COPY next.config.js ./
 # COPY next-i18next.config.js ./
 # COPY public ./public
 # COPY .next ./.next
-# COPY package*.json ./
-# RUN npm ci
-# RUN npm i sharp
 # if using builder:
 COPY --from=builder_deps /app/node_modules ./node_modules
 COPY ./package*.json ./
