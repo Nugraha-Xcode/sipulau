@@ -317,13 +317,16 @@ const SearchIsland = () => {
         />
         {isCommentButton && Object.keys(coor).length === 0 && (
           <>
-            <input
-              type='number'
-              value={inputRadius}
-              placeholder='Set buffer area (m)'
-              onChange={(e) => setInputRadius(e.target.value)}
-              className='h-[40px] rounded-[8px] px-4 py-2 text-gray-600 border text-xs border-gray-400 focus:ring-0 focus:border-blue-500'
-            />
+            <div className='w-full flex border-[1px] h-10 items-center px-2 border-gray-400 rounded-[10px] gap-2'>
+              <input
+                type='number'
+                value={inputRadius}
+                placeholder='Set buffer area (m)'
+                onChange={(e) => setInputRadius(e.target.value)}
+                className='w-full h-full text-xs border-0 focus:ring-0'
+              />
+              <p className='text-gray-500 text-xs mr-3'>meter</p>
+            </div>
             <Button
               className='text-sm'
               variant='outline'
