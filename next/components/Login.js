@@ -31,6 +31,8 @@ const login = {
   },
 };
 
+const GRECAPTCHA_SITEKEY = "6LeH8XwhAAAAALw43tTI0iPcLqx8vrlMvkyRwuB6";
+
 const Login = ({ toggle }) => {
   const { t, handleSetSnack } = useContext(AppContext);
   const setAuth = useAuth((state) => state.setAuth);
@@ -40,38 +42,22 @@ const Login = ({ toggle }) => {
   const passwordRef = useRef(null);
 
   useEffect(() => {
-    if (document.getElementById("grecaptcha-badge-style")) {
-      document.getElementById("grecaptcha-badge-style").remove();
-    }
+    const scriptElementId = "grecaptcha-script";
+    const url = `https://www.google.com/recaptcha/api.js?render=${GRECAPTCHA_SITEKEY}`;
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = url;
+    script.id = scriptElementId;
+    document.body.appendChild(script);
 
-    const loadScriptByURL = (id, url, callback) => {
-      const isScriptExist = document.getElementById(id);
-      if (!isScriptExist) {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = url;
-        script.id = id;
-        script.onload = function () {
-          if (callback) callback();
-        };
-        document.body.appendChild(script);
-      }
-      if (isScriptExist && callback) callback();
-    };
-
-    // load the script by passing the URL
-    loadScriptByURL(
-      "recaptcha-key",
-      `https://www.google.com/recaptcha/api.js?render=6LeH8XwhAAAAALw43tTI0iPcLqx8vrlMvkyRwuB6`,
-      function () {
-        console.log("Script loaded!");
-      }
-    );
     return () => {
-      let style = document.createElement("style");
-      style.id = "grecaptcha-badge-style";
-      style.innerHTML = ".grecaptcha-badge { opacity: 0; }";
-      document.body.appendChild(style);
+      // remove created script element
+      document.body.removeChild(script);
+      // remove grecaptcha badge
+      const grecaptchaElement =
+        document.getElementsByClassName("grecaptcha-badge");
+      // grecaptcha-badge contained in div. thus we need to remove the parent
+      document.body.removeChild(grecaptchaElement[0].parentNode);
     };
   }, []);
 
@@ -121,7 +107,7 @@ const Login = ({ toggle }) => {
     setIsLoading(true);
     window.grecaptcha.ready(() => {
       window.grecaptcha
-        .execute("6LeH8XwhAAAAALw43tTI0iPcLqx8vrlMvkyRwuB6", {
+        .execute(GRECAPTCHA_SITEKEY, {
           action: "submit",
         })
         .then((token) => {
