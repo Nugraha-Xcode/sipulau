@@ -190,11 +190,11 @@ const Resume = () => {
         )}
       </div>
 
-      <div className='mt-2 rounded-[4px] bg-gray-50 p-2 dark:bg-gray-700'>
+      {/* <div className='mt-2 rounded-[4px] bg-gray-50 p-2 dark:bg-gray-700'>
         <AboutContent header='About Upload'>
           You may upload datasets in the Shapefile format.
         </AboutContent>
-      </div>
+      </div> */}
     </div>
   );
 };
