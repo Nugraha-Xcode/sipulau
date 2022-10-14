@@ -21,7 +21,7 @@ export const useAuthHandler = () => {
           credentials: "include",
         }
       );
-      if (res.status === 200) {
+      if (res.status >= 200 && res.status <= 299) {
         setAuth("");
       } else if (res.status >= 400 && res.status <= 499) {
         const resJson = await res.json();
