@@ -143,6 +143,7 @@ const Section5 = () => {
               handleSetSnack(`hCaptcha Error: ${err}`, "error");
             }}
             ref={captchaRef}
+            reCaptchaCompat={false}
           />
           <input
             type='submit'
