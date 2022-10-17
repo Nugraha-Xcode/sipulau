@@ -116,16 +116,49 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
     in_layer_defn: ogr.FeatureDefn = in_layer.GetLayerDefn()
     out_layer_defn: ogr.FeatureDefn = out_layer.GetLayerDefn()
 
-    # fetch FID manually because PK column won't be fetched in fields
+    # fetch FID manually because PK column won't be fetched in fields (id_toponim)
     fid_column = in_layer.GetFIDColumn()
     out_layer.CreateField(ogr.FieldDefn(fid_column, ogr.OFTInteger64))
 
     # get the rest of columns
-    fields: List[str] = []
-    for i in range(in_layer_defn.GetFieldCount()):
-        field_defn: ogr.FieldDefn = in_layer_defn.GetFieldDefn(i)
-        field_name: str = field_defn.GetName()
-        fields.append(field_name)
+    # fields: List[str] = []
+    # for i in range(in_layer_defn.GetFieldCount()):
+    #     field_defn: ogr.FieldDefn = in_layer_defn.GetFieldDefn(i)
+    #     field_name: str = field_defn.GetName()
+    #     fields.append(field_name)
+    #     out_layer.CreateField(field_defn)
+
+    # use fields defined in KUGI
+    fields = [
+        # "id_toponim",
+        "status",
+        "klstpn",
+        "ftype",
+        "namlok",
+        "namspe",
+        "nammap",
+        "namgaz",
+        "aslbhs",
+        "artinam",
+        "sjhnam",
+        "nambef",
+        "ucapan",
+        "koordinat1",
+        "koordx",
+        "koordy",
+        "koordinat2",
+        "remark",
+        "foto1",
+        "foto2",
+        "foto3",
+        "foto4",
+        "sketsa",
+        "rekaman1",
+        "rekaman2",
+    ]
+    for field in fields:
+        field_idx: int = in_layer_defn.GetFieldIndex(field)
+        field_defn: ogr.FieldDefn = in_layer_defn.GetFieldDefn(field_idx)
         out_layer.CreateField(field_defn)
 
     for feature in in_layer:
