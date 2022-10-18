@@ -18,7 +18,6 @@ import MapLayers from "../components/map/MapLayers";
 import SideNav from "../components/navigation/SideNav";
 import { useBbox, useIndexedDB, useNav, useNetwork, useTable } from "../hooks";
 import MapToolbox from "../components/map/MapToolbox";
-import MapToolboxCard from "../components/map/MapToolboxCard";
 import BottomDrawer from "../components/core/BottomDrawer";
 import GeolocateController from "../components/map/GeolocateController";
 import ZoomInController from "../components/map/ZoomInController";
@@ -122,23 +121,11 @@ const map = () => {
     return rbiStyle;
   }, []);
 
-  const [
-    activeMenu,
-    activeCardFeature,
-    activeSideFeature,
-    expandSideNav,
-    isOpenSideNav,
-    setOpenSideNav,
-    setActiveCardFeature,
-  ] = useNav(
+  const [activeSideFeature, expandSideNav, isOpenSideNav] = useNav(
     (state) => [
-      state.activeMenu,
-      state.activeCardFeature,
       state.activeSideFeature,
       state.expandSideNav,
       state.isOpenSideNav,
-      state.setOpenSideNav,
-      state.setActiveCardFeature,
     ],
     shallow
   );
@@ -439,19 +426,11 @@ const map = () => {
             <GeolocateController map={mapRef.current} />
             <ZoomInController map={mapRef.current} />
             <ZoomOutController map={mapRef.current} />
-            {Boolean(activeMenu) ? (
-              <MapToolbox
-                isOpen={isOpenMapToolbox}
-                isOpenBottomDrawer={isOpenBottomDrawer}
-                setOpenMapToolbox={() => {
-                  setOpenMapToolbox((prev) => !prev);
-                }}
-              />
-            ) : null}
-            <MapToolboxCard
-              isOpen={Boolean(activeCardFeature)}
-              onClose={() => {
-                setActiveCardFeature(null);
+            <MapToolbox
+              isOpen={isOpenMapToolbox}
+              isOpenBottomDrawer={isOpenBottomDrawer}
+              setOpenMapToolbox={() => {
+                setOpenMapToolbox((prev) => !prev);
               }}
             />
           </div>
