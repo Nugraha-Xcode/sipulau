@@ -226,7 +226,7 @@ export default async function tableHandler(req, res) {
       parsedBody = req.body;
     }
 
-    let { page, ordBy, ordDir, query } = parsedBody;
+    let { page, ordBy, ordDir, query, idOnly } = parsedBody;
 
     // validate page
     if (page) {
@@ -239,7 +239,7 @@ export default async function tableHandler(req, res) {
     }
 
     // set limit and offset
-    let limit = 1000;
+    let limit = 25;
     let offset = (page - 1) * limit;
 
     // validate order column
@@ -256,11 +256,18 @@ export default async function tableHandler(req, res) {
       ordDir = "ASC";
     }
 
+    // validate idOnly
+    if (idOnly !== undefined && typeof idOnly !== "boolean") {
+      return res
+        .status(400)
+        .json({ message: "idOnly harus berbentuk boolean" });
+    }
+
     // parse query
     let filterOpts = {
       filterDirectives: [],
-      filterValues: [limit, offset],
-      filterParam: 3,
+      filterValues: idOnly ? [] : [limit, offset],
+      filterParam: idOnly ? 1 : 3,
       unparameterized: false,
     };
     if (query) {
@@ -278,6 +285,12 @@ export default async function tableHandler(req, res) {
       }
     }
 
+    const queryColumns = idOnly
+      ? "ARRAY_AGG(id_toponim) id_arr"
+      : "fid, id_toponim, nammap, alias, artinam, sjhnam, aslbhs, id_wilayah, wadmkd, wadmkc, wadmkk, wadmpr, status, remark, ST_X(geom) lon, ST_Y(geom) lat, pjg_gp, luas, nambef";
+    const queryOrder = idOnly ? "" : `ORDER BY ${ordBy} ${ordDir}`;
+    const queryLimitOffset = idOnly ? "" : "LIMIT $1 OFFSET $2";
+
     // combine filters
     let combinedFilters =
       filterOpts.filterDirectives.length > 0
@@ -289,14 +302,11 @@ export default async function tableHandler(req, res) {
       let tableName = await getCurrentActiveTable("island");
       queryResult = await sipulauPool.query(
         `
-        SELECT
-          fid, id_toponim, nammap, alias, artinam, sjhnam, aslbhs, id_wilayah, wadmkd,
-          wadmkc, wadmkk, wadmpr, status, remark, ST_X(geom) lon, ST_Y(geom) lat,
-          pjg_gp, luas, nambef
+        SELECT ${queryColumns}
         FROM ${tableName}
         ${combinedFilters}
-        ORDER BY ${ordBy} ${ordDir}
-        LIMIT $1 OFFSET $2
+        ${queryOrder}
+        ${queryLimitOffset}
         `,
         filterOpts.filterValues
       );
@@ -304,6 +314,10 @@ export default async function tableHandler(req, res) {
       console.error(error);
       return res.status(500).json({ message: "Terjadi kesalahan pada server" });
     }
-    return res.json(queryResult.rows);
+    if (idOnly) {
+      return res.json(queryResult.rows[0]?.id_arr ?? []);
+    } else {
+      return res.json(queryResult.rows);
+    }
   }
 }
