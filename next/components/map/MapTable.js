@@ -23,20 +23,18 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
     deleteDataTable,
     page,
     setPage,
-    setSelectedRow,
-    setSelectedRowPrev,
     clearSelectedRow,
     setLoadData,
+    setFilterId,
   ] = useTable(
     (state) => [
       state.setDataTable,
       state.deleteDataTable,
       state.page,
       state.setPage,
-      state.setSelectedRow,
-      state.setSelectedRowPrev,
       state.clearSelectedRow,
       state.setLoadData,
+      state.setFilterId,
     ],
     shallow
   );
@@ -131,13 +129,6 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
       const result = await response.json();
       if (response.status === 200) {
         if (result.length > 0) {
-          if (query.length > 0) {
-            if (page === 1) {
-              setSelectedRow([...result.map((el) => el.id_toponim)]);
-            } else {
-              setSelectedRowPrev([...result.map((el) => el.id_toponim)]);
-            }
-          }
           setDataTable(result);
           setFetchTable(true);
         } else {
@@ -160,6 +151,60 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
     bbox,
     aoiPoly,
   ]);
+
+  useEffect(async () => {
+    setLoadData(true);
+    let query = [...advanceFilterQuery];
+    bbox &&
+      query.push({
+        geom: {
+          _within_bbox: [bbox.xmin, bbox.ymin, bbox.xmax, bbox.ymax],
+        },
+      });
+    aoiPoly &&
+      query.push({
+        geom: {
+          _within: {
+            type: "MultiPolygon",
+            coordinates: [aoiPoly.geometry.coordinates],
+          },
+        },
+      });
+    if (query.length > 0) {
+      try {
+        const response = await fetch("/api/titik-pulau", {
+          method: "POST",
+          body: JSON.stringify({
+            ...(query.length > 0 && {
+              query: {
+                _and: query,
+              },
+            }),
+            idOnly: true,
+          }),
+          headers: {
+            Authorization: "Bearer " + authToken,
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        if (response.status === 200) {
+          if (result.length > 0) {
+            let filterIdArr = result.map((el) => parseInt(el));
+            setFilterId(filterIdArr);
+          } else {
+            setFetchTable(false);
+          }
+        } else {
+          throw new Error(response.message);
+        }
+      } catch (error) {
+        handleSetSnack(error.message, "error");
+      } finally {
+        setLoadData(false);
+      }
+    }
+  }, [queryFilter, advanceFilterQuery, bbox, aoiPoly]);
 
   // const handleZoomTo = useCallback(async () => {
   //   const bboxStr = bbox

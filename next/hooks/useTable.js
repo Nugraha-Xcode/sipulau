@@ -6,6 +6,7 @@ export const useTable = create((set, get) => ({
   page: 1,
   isSelectAll: false,
   selectedRow: [],
+  filterId: [],
   setLoadData: (value) => set({ isLoadData: value }),
   setDataTable: (item) => set({ dataTable: [...get().dataTable, ...item] }),
   deleteDataTable: () => set({ dataTable: [] }),
@@ -24,4 +25,5 @@ export const useTable = create((set, get) => ({
     );
     set({ selectedRow: arr });
   },
+  setFilterId: (value) => set({ filterId: value }),
 }));

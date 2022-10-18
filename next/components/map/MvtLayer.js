@@ -1,10 +1,14 @@
 import { useContext, useEffect } from "react";
+import shallow from "zustand/shallow";
 import MapContext from "../../context/MapContext";
 import { useTable } from "../../hooks";
 
 const MvtLayer = ({ item }) => {
   const { map, refreshLayer } = useContext(MapContext);
-  const isSelectAll = useTable((state) => state.isSelectAll);
+  const [isSelectAll, filterId] = useTable(
+    (state) => [state.isSelectAll, state.filterId],
+    shallow
+  );
   useEffect(() => {
     let origin = window.location.origin;
     if (!map.getSource(item.judul + item.nama)) {
@@ -47,6 +51,14 @@ const MvtLayer = ({ item }) => {
           "icon-size": 0.3,
           "icon-offset": [0, -41],
         },
+        ...(filterId.length > 0 && {
+          filter: ["in", ["id"], ["literal", filterId]],
+        }),
+        // filter: filterId.length > 0 && [("in", ["id"], ["literal", filterId])],
+      });
+
+      map.on("click", `${item.judul + item.nama}`, (e) => {
+        console.log(e.features[0]);
       });
     }
 
@@ -61,7 +73,7 @@ const MvtLayer = ({ item }) => {
           map.removeSource(item.judul + item.nama);
       }
     };
-  }, [refreshLayer, isSelectAll]);
+  }, [refreshLayer, isSelectAll, filterId]);
 
   return <></>;
 };
