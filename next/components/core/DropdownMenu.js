@@ -18,8 +18,8 @@ const DropdownMenu = ({
         <>
           <Popover.Button
             className={clsx([
-              "flex w-full gap-2 h-[40px] rounded-[8px] text-gray-600 border-[1px] border-gray-600 items-center px-4 py-2 justify-between bg-white text-left text-xs",
-              { "rounded-[8px]": !open, "rounded-b-none border-b-0": open },
+              "flex w-full gap-2 h-[40px] rounded-lg text-gray-600 border-[1px] border-gray-600 items-center px-4 py-2 justify-between bg-white text-left text-xs",
+              { "rounded-lg": !open, "rounded-b-none border-b-0": open },
             ])}
           >
             {selected?.label || label}
@@ -35,7 +35,7 @@ const DropdownMenu = ({
             leaveTo='opacity-0 -translate-y-1'
           >
             <Popover.Panel
-              className={`absolute w-full z-10 flex flex-col border-[#777574] border-[1px] overflow-auto hide-scrollbar mb-[-8px] bg-white ${maxH} rounded-b-[8px]`}
+              className={`absolute w-full z-10 flex flex-col border-gray-500 border-[1px] overflow-auto hide-scrollbar mb-[-8px] bg-white ${maxH} rounded-b-[8px]`}
             >
               {({ close }) =>
                 menu.map((el) => (
@@ -47,7 +47,10 @@ const DropdownMenu = ({
                       onSelect(el);
                       close();
                     }}
-                    className='cursor-pointer text-sm hover:bg-[#F2F2F2] py-1 px-2 transition-all text-gray-600 text-left'
+                    className={clsx([
+                      "cursor-pointer text-sm hover:bg-[#F2F2F2] py-1 px-2 transition-all text-gray-600 text-left",
+                      { "bg-[#F2F2F2]": selected.value === el.value },
+                    ])}
                   >
                     {el.label}
                   </button>
