@@ -5,7 +5,7 @@
   "scripts": {
     "build_endpoints": "tsc",
     "build_uploadshp_module": "npm run build --prefix src/modules/upload-shapefile",
-    "build": "tsc && npm run build --prefix src/modules/upload-shapefile"
+    "build": "tsc && npm run build --prefix src/modules/upload-shapefile && npm run build --prefix src/modules/download-metadata"
   },
   "author": "Braga Technologies",
   "license": "ISC",
