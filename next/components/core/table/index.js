@@ -61,17 +61,15 @@ const Table = ({ columns, order, handleOrder, map, fetchTable }) => {
     };
   }, [observerRef.current, dataTable, fetchTable]);
 
-  let tableHeight = 600;
-
   return (
     <div
       data-cy='map-main-table'
-      className='min-w-screen tableStyle overflow-auto overscroll-contain'
+      className='min-w-screen h-full overflow-auto overscroll-contain'
       ref={rootObserver}
     >
       <table className='w-full text-black-2'>
         <thead>
-          <tr className=''>
+          <tr>
             <th className='sticky top-0 text-center px-4 bg-gray-50'>
               <input
                 type='checkbox'
@@ -303,7 +301,7 @@ const Table = ({ columns, order, handleOrder, map, fetchTable }) => {
           )}
           <tr ref={observerRef}>
             <td className='relative'>
-              <div className='absolute w-10 h-10'></div>
+              <div className='absolute w-5 h-5'></div>
             </td>
           </tr>
         </tbody>
@@ -313,13 +311,6 @@ const Table = ({ columns, order, handleOrder, map, fetchTable }) => {
           <img src='/images/loader.svg' alt='loader' className='w-16 h-16' />
         </div>
       ) : null}
-      <style jsx>
-        {`
-          .tableStyle {
-            height: ${tableHeight + "px"};
-          }
-        `}
-      </style>
     </div>
   );
 };

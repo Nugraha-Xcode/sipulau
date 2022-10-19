@@ -246,11 +246,10 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
   // }, [toggledRow, queryFilter, bbox, isSelectAll]);
 
   return (
-    <>
-      <div className='font-map mt-0'>
-        <div className='py-2 px-5 flex justify-between'>
-          <div className='flex items-center gap-2'>
-            {/* <button
+    <div className='font-map flex flex-col h-full'>
+      <div className='py-2 px-5 flex justify-between'>
+        <div className='flex items-center gap-2'>
+          {/* <button
               data-cy='map-table-zoom-to-button'
               onClick={handleZoomTo}
               className='flex items-center gap-2 border-2 border-gray-300 py-2 px-5 rounded-lg h-10'
@@ -258,7 +257,7 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
               <img src='/images/ic-zoom-to.svg' alt='button' className='h-4' />
               <p className='text-xs text-main-gray'>{t("zoom")}</p>
             </button> */}
-            {/* <button
+          {/* <button
               onClick={() => {}}
               className={`flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg`}
             >
@@ -266,144 +265,144 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
               <p className='text-xs text-gray-600'>Toponim Pulau</p>
             </button>
             <div className='border-l-2 border-l-gray-200 h-10' /> */}
+          <button
+            data-cy='map-table-filter-by-map-extend-button'
+            onClick={
+              bbox
+                ? () => {
+                    setPage(1);
+                    deleteDataTable();
+                    setBbox(null);
+                    map.off("moveend", handleZoomExtend);
+                  }
+                : () => {
+                    setPage(1);
+                    deleteDataTable();
+                    setBbox({
+                      xmin: map.getBounds().getWest(),
+                      ymin: map.getBounds().getSouth(),
+                      xmax: map.getBounds().getEast(),
+                      ymax: map.getBounds().getNorth(),
+                    });
+                  }
+            }
+            className={`${
+              bbox
+                ? "bg-blue-50 border-blue-500 text-blue-500"
+                : "border-gray-300 text-gray-900"
+            } flex items-center gap-2 border-2 h-10 py-2 px-5 rounded-lg `}
+          >
+            <MemoIcMapFilter />
+            <p className='text-xs'>Filter by Map Extent</p>
+          </button>
+          <div className='relative'>
             <button
-              data-cy='map-table-filter-by-map-extend-button'
-              onClick={
-                bbox
-                  ? () => {
-                      setPage(1);
-                      deleteDataTable();
-                      setBbox(null);
-                      map.off("moveend", handleZoomExtend);
-                    }
-                  : () => {
-                      setPage(1);
-                      deleteDataTable();
-                      setBbox({
-                        xmin: map.getBounds().getWest(),
-                        ymin: map.getBounds().getSouth(),
-                        xmax: map.getBounds().getEast(),
-                        ymax: map.getBounds().getNorth(),
-                      });
-                    }
-              }
-              className={`${
-                bbox
-                  ? "bg-blue-50 border-blue-500 text-blue-500"
-                  : "border-gray-300 text-gray-900"
-              } flex items-center gap-2 border-2 h-10 py-2 px-5 rounded-lg `}
+              onClick={() => setColumnOpt((prev) => !prev)}
+              className={`flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg`}
             >
-              <MemoIcMapFilter />
-              <p className='text-xs'>Filter by Map Extent</p>
+              <img
+                src='/images/ic-filter-column.svg'
+                alt='button'
+                className='h-4 text-gray-900'
+              />
+              <p className='text-xs text-gray-900'>Show All Fields</p>
             </button>
-            <div className='relative'>
-              <button
-                onClick={() => setColumnOpt((prev) => !prev)}
-                className={`flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg`}
-              >
-                <img
-                  src='/images/ic-filter-column.svg'
-                  alt='button'
-                  className='h-4 text-gray-900'
-                />
-                <p className='text-xs text-gray-900'>Show All Fields</p>
-              </button>
-              <div
-                data-cy='map-table-column-setting-option'
-                className={`${
-                  isColumnOpt ? "max-h-44" : "max-h-0"
-                } absolute z-50 -bottom-2 right-0 shadow-style-1 rounded-lg transform translate-y-full overflow-scroll transition-all duration-200 ease-in-out bg-white hide-scrollbar`}
-              >
-                <div className='py-3 px-2 space-y-2 border border-gray-4 rounded-lg'>
-                  {columns.map((el, index) => (
-                    <div key={el.field} className='flex items-center gap-2'>
-                      <input
-                        type='checkbox'
-                        className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
-                        checked={el.show}
-                        id={el.field}
-                        name={el.field}
-                        value={el.field}
-                        onChange={(e) => {
-                          setColums((prev) => {
-                            let arr = [...prev];
-                            arr[index].show = !arr[index].show;
-                            return arr;
-                          });
-                        }}
-                      />
-                      <p className='text-main-gray text-xs'>{t(el.title)}</p>
-                    </div>
-                  ))}
-                </div>
+            <div
+              data-cy='map-table-column-setting-option'
+              className={`${
+                isColumnOpt ? "max-h-44" : "max-h-0"
+              } absolute z-50 -bottom-2 right-0 shadow-style-1 rounded-lg transform translate-y-full overflow-scroll transition-all duration-200 ease-in-out bg-white hide-scrollbar`}
+            >
+              <div className='py-3 px-2 space-y-2 border border-gray-4 rounded-lg'>
+                {columns.map((el, index) => (
+                  <div key={el.field} className='flex items-center gap-2'>
+                    <input
+                      type='checkbox'
+                      className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
+                      checked={el.show}
+                      id={el.field}
+                      name={el.field}
+                      value={el.field}
+                      onChange={(e) => {
+                        setColums((prev) => {
+                          let arr = [...prev];
+                          arr[index].show = !arr[index].show;
+                          return arr;
+                        });
+                      }}
+                    />
+                    <p className='text-main-gray text-xs'>{t(el.title)}</p>
+                  </div>
+                ))}
               </div>
             </div>
-            <button
-              data-cy='map-table-filter-button'
-              onClick={toggleMapFilter}
-              className={`flex items-center gap-2 border-2 py-2 px-5 rounded-lg h-10 ${
-                queryFilter
-                  ? "bg-blue-50 border-blue-500 text-blue-500"
-                  : "border-gray-300 text-gray-900"
-              }`}
-            >
-              <MemoIcFilter queryFilter={queryFilter} />
-              <p className='text-xs'>{t("filter")}</p>
-            </button>
-            {(advanceFilterQuery.length > 0 || aoiPoly) && (
-              <button
-                data-cy='map-table-reset-filter-button'
-                onClick={() => {
-                  clearSelectedRow();
-                  setPage(1);
-                  deleteDataTable();
-                  setFilterObject({});
-                  createQueryFilter();
-                  if (aoiPoly) {
-                    setAoiPoly(null);
-                    draw.delete(aoiPoly.id);
-                  }
-                }}
-                className='flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg'
-              >
-                <img src='/images/ic-close.svg' alt='button' className='h-4' />
-                <p className='text-xs text-gray-900'>{t("resetFilter")}</p>
-              </button>
-            )}
-            <SelectAoi />
-            <Modal isShowing={isShowing} handleModal={toggle} size='sm'>
-              <div className=''>
-                <div className='flex items-center p-2'>
-                  <p className='flex-1 text-center text-xs font-semibold text-black-2'>
-                    Download Data
-                  </p>
-                  <button
-                    type='button'
-                    className='text-2xl'
-                    data-dismiss='modal'
-                    aria-label='Close'
-                    onClick={toggle}
-                  >
-                    <span aria-hidden='true' className='text-black-2'>
-                      &times;
-                    </span>
-                  </button>
-                </div>
-                <hr />
-                <div className='py-2 px-4'>
-                  <MapTableDownload source='from-table' toggle={toggle} />
-                </div>
-              </div>
-            </Modal>
           </div>
-          <div className='relative flex items-center gap-2'>
-            {/* <button
+          <button
+            data-cy='map-table-filter-button'
+            onClick={toggleMapFilter}
+            className={`flex items-center gap-2 border-2 py-2 px-5 rounded-lg h-10 ${
+              queryFilter
+                ? "bg-blue-50 border-blue-500 text-blue-500"
+                : "border-gray-300 text-gray-900"
+            }`}
+          >
+            <MemoIcFilter queryFilter={queryFilter} />
+            <p className='text-xs'>{t("filter")}</p>
+          </button>
+          {(advanceFilterQuery.length > 0 || aoiPoly) && (
+            <button
+              data-cy='map-table-reset-filter-button'
+              onClick={() => {
+                clearSelectedRow();
+                setPage(1);
+                deleteDataTable();
+                setFilterObject({});
+                createQueryFilter();
+                if (aoiPoly) {
+                  setAoiPoly(null);
+                  draw.delete(aoiPoly.id);
+                }
+              }}
+              className='flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg'
+            >
+              <img src='/images/ic-close.svg' alt='button' className='h-4' />
+              <p className='text-xs text-gray-900'>{t("resetFilter")}</p>
+            </button>
+          )}
+          <SelectAoi />
+          <Modal isShowing={isShowing} handleModal={toggle} size='sm'>
+            <div className=''>
+              <div className='flex items-center p-2'>
+                <p className='flex-1 text-center text-xs font-semibold text-black-2'>
+                  Download Data
+                </p>
+                <button
+                  type='button'
+                  className='text-2xl'
+                  data-dismiss='modal'
+                  aria-label='Close'
+                  onClick={toggle}
+                >
+                  <span aria-hidden='true' className='text-black-2'>
+                    &times;
+                  </span>
+                </button>
+              </div>
+              <hr />
+              <div className='py-2 px-4'>
+                <MapTableDownload source='from-table' toggle={toggle} />
+              </div>
+            </div>
+          </Modal>
+        </div>
+        <div className='relative flex items-center gap-2'>
+          {/* <button
               data-cy='map-table-column-setting-button'
               onClick={() => setColumnOpt((prev) => !prev)}
             >
               <img src='/images/ic-add-circle.svg' />
             </button> */}
-            {/* <div
+          {/* <div
               data-cy='map-table-column-setting-option'
               className={`${
                 isColumnOpt ? "max-h-44" : "max-h-0"
@@ -432,76 +431,71 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
                 ))}
               </div>
             </div> */}
-            {/* <button
+          {/* <button
               onClick={() => {}}
               className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
             >
               <img src='/images/ic-checkbox.svg' alt='button' className='h-4' />
             </button> */}
-            <Tippy
-              content='Download'
-              placement='bottom'
-              delay={300}
-              className='text-xs'
+          <Tippy
+            content='Download'
+            placement='bottom'
+            delay={300}
+            className='text-xs'
+          >
+            <button
+              data-cy='map-table-download-button'
+              onClick={toggle}
+              className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
             >
-              <button
-                data-cy='map-table-download-button'
-                onClick={toggle}
-                className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
-              >
-                <img
-                  src='/images/ic-download.svg'
-                  alt='button'
-                  className='h-4'
-                />
-              </button>
-            </Tippy>
-            <Tippy
-              content='Expand Table'
-              placement='bottom'
-              delay={300}
-              className='text-xs'
+              <img src='/images/ic-download.svg' alt='button' className='h-4' />
+            </button>
+          </Tippy>
+          <Tippy
+            content='Expand Table'
+            placement='bottom'
+            delay={300}
+            className='text-xs'
+          >
+            <button
+              onClick={setExpandBottomDrawer}
+              className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
             >
-              <button
-                onClick={setExpandBottomDrawer}
-                className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
-              >
-                <img
-                  src='/images/ic-expand-bottom-drawer.svg'
-                  alt='expand bottom drawer'
-                />
-              </button>
-            </Tippy>
-            <Tippy
-              content='Close'
-              placement='bottom'
-              delay={300}
-              className='text-xs'
+              <img
+                src='/images/ic-expand-bottom-drawer.svg'
+                alt='expand bottom drawer'
+              />
+            </button>
+          </Tippy>
+          <Tippy
+            content='Close'
+            placement='bottom'
+            delay={300}
+            className='text-xs'
+          >
+            <button
+              onClick={() => {
+                setOpenBottomDrawer(false);
+              }}
+              className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
             >
-              <button
-                onClick={() => {
-                  setOpenBottomDrawer(false);
-                }}
-                className='border-2 border-gray-300 w-10 h-10 rounded-lg flex items-center justify-center'
-              >
-                <img src='/images/ic-close.svg' alt='button' />
-              </button>
-            </Tippy>
-          </div>
-        </div>
-        <div className='relative'>
-          <Table
-            map={map}
-            columns={columns}
-            order={order}
-            handleOrder={(orderBy, orderAsc) =>
-              setOrder({ orderBy: orderBy, orderAsc: orderAsc })
-            }
-            fetchTable={fetchTable}
-          />
+              <img src='/images/ic-close.svg' alt='button' />
+            </button>
+          </Tippy>
         </div>
       </div>
-    </>
+      <div className='relative h-full'>
+        <Table
+          map={map}
+          columns={columns}
+          order={order}
+          handleOrder={(orderBy, orderAsc) =>
+            setOrder({ orderBy: orderBy, orderAsc: orderAsc })
+          }
+          fetchTable={fetchTable}
+        />
+      </div>
+    </div>
   );
 };
 
