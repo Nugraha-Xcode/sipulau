@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
 const ArrowLeft = (props) => {
-  const disabeld = props.disabled ? " arrow--disabled" : "";
+  const disabled = props.disabled ? " arrow--disabled" : "";
   return (
     <div
       data-cy='carousel-left-button'
@@ -13,7 +13,7 @@ const ArrowLeft = (props) => {
     >
       <svg
         onClick={props.onClick}
-        className={"fill-current arrow arrow--left" + disabeld}
+        className={"fill-current arrow arrow--left" + disabled}
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
       >
@@ -24,7 +24,7 @@ const ArrowLeft = (props) => {
 };
 
 const ArrowRight = (props) => {
-  const disabeld = props.disabled ? " arrow--disabled" : "";
+  const disabled = props.disabled ? " arrow--disabled" : "";
   return (
     <div
       data-cy='carousel-right-button'
@@ -32,7 +32,7 @@ const ArrowRight = (props) => {
     >
       <svg
         onClick={props.onClick}
-        className={"fill-current arrow arrow--right" + disabeld}
+        className={"fill-current arrow arrow--right" + disabled}
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
       >
@@ -43,55 +43,57 @@ const ArrowRight = (props) => {
 };
 
 const Section1 = ({ items }) => {
-  const timer = useRef();
-  const carouselRef = useRef(null);
-  const [pause, setPause] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loadedSlide, setLoadedSlide] = useState(false);
-  const [sliderRef, slider] = useKeenSlider({
-    loop: true,
-    duration: 2000,
-    dragStart: () => {
-      setPause(true);
+  const [sliderRef, instanceRef] = useKeenSlider(
+    {
+      loop: true,
+      defaultAnimation: { duration: 3000 },
+      initial: 0,
+      slideChanged(slider) {
+        setCurrentSlide(slider.track.details.rel);
+      },
+      created() {
+        setLoadedSlide(true);
+      },
     },
-    dragEnd: () => {
-      setPause(false);
-    },
-    initial: 0,
-    slideChanged(s) {
-      setCurrentSlide(s.details().relativeSlide);
-    },
-    created() {
-      setLoadedSlide(true);
-    },
-  });
-
-  useEffect(() => {
-    carouselRef.current.addEventListener("mouseover", () => {
-      setPause(true);
-    });
-
-    carouselRef.current.addEventListener("mouseout", () => {
-      setPause(false);
-    });
-  }, [carouselRef]);
-
-  useEffect(() => {
-    timer.current = setInterval(() => {
-      if (!pause && slider) {
-        slider.next();
-      }
-    }, 4000);
-    return () => {
-      clearInterval(timer.current);
-    };
-  }, [pause, slider]);
+    [
+      (slider) => {
+        let timeout;
+        let mouseOver = false;
+        function clearNextTimeout() {
+          clearTimeout(timeout);
+        }
+        function nextTimeout() {
+          clearTimeout(timeout);
+          if (mouseOver) return;
+          timeout = setTimeout(() => {
+            slider.next();
+          }, 3000);
+        }
+        slider.on("created", () => {
+          slider.container.addEventListener("mouseover", () => {
+            mouseOver = true;
+            clearNextTimeout();
+          });
+          slider.container.addEventListener("mouseout", () => {
+            mouseOver = false;
+            nextTimeout();
+          });
+          nextTimeout();
+        });
+        slider.on("dragStarted", clearNextTimeout);
+        slider.on("animationEnded", nextTimeout);
+        slider.on("updated", nextTimeout);
+      },
+    ]
+  );
 
   return (
-    <div className='relative' ref={carouselRef}>
-      {slider && (
+    <div className='relative'>
+      {loadedSlide && instanceRef.current && (
         <ArrowLeft
-          onClick={(e) => e.stopPropagation() || slider.prev()}
+          onClick={(e) => e.stopPropagation() || instanceRef.current?.prev()}
           disabled={currentSlide === 0}
         />
       )}
@@ -152,20 +154,24 @@ const Section1 = ({ items }) => {
       {loadedSlide ? null : (
         <div className='w-full min-h-screen bg-white absolute top-0 z-50'></div>
       )}
-      {slider && (
+      {loadedSlide && instanceRef.current && (
         <ArrowRight
-          onClick={(e) => e.stopPropagation() || slider.next()}
-          disabled={currentSlide === slider.details().size - 1}
+          onClick={(e) => e.stopPropagation() || instanceRef.current?.next()}
+          disabled={
+            currentSlide === instanceRef.current.track.details.slides.length - 1
+          }
         />
       )}
-      {slider && (
+      {loadedSlide && instanceRef.current && (
         <div className='dots absolute bottom-10 left-1/2 transform -translate-x-1/2'>
-          {[...Array(slider.details().size).keys()].map((idx) => {
+          {[
+            ...Array(instanceRef.current.track.details.slides.length).keys(),
+          ].map((idx) => {
             return (
               <button
                 key={idx}
                 onClick={() => {
-                  slider.moveToSlideRelative(idx);
+                  instanceRef.current?.moveToIdx(idx);
                 }}
                 className={"dot" + (currentSlide === idx ? " active" : "")}
               />
