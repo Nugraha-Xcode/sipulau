@@ -47,11 +47,11 @@ const InformasiPulau = ({
   const { isAuth } = useContext(AppContext);
   const { map } = useContext(MapContext);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [sliderRef, slider] = useKeenSlider({
+  const [sliderRef, instanceRef] = useKeenSlider({
     spacing: 5,
     loop: true,
-    slideChanged(s) {
-      setCurrentSlide(s.details().relativeSlide);
+    slideChanged(slider) {
+      setCurrentSlide(slider.track.details.rel);
     },
   });
   const [isShowing, toggleModal] = useToggle();
@@ -90,14 +90,18 @@ const InformasiPulau = ({
               </div>
             )}
           </div>
-          {slider && (
+          {instanceRef.current && (
             <div className='dots absolute bottom-0 left-1/2 transform -translate-x-1/2'>
-              {[...Array(slider.details().size).keys()].map((idx) => {
+              {[
+                ...Array(
+                  instanceRef.current.track.details.slides.length
+                ).keys(),
+              ].map((idx) => {
                 return (
                   <button
                     key={idx}
                     onClick={() => {
-                      slider.moveToSlideRelative(idx);
+                      instanceRef.current?.moveToIdx(idx);
                     }}
                     className={"dot" + (currentSlide === idx ? " active" : "")}
                   />
