@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { BiLock } from "react-icons/bi";
 import { FaRegUser } from "react-icons/fa";
@@ -38,8 +38,6 @@ const Login = ({ toggle }) => {
   const setAuth = useAuth((state) => state.setAuth);
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(false);
-  const userRef = useRef(null);
-  const passwordRef = useRef(null);
 
   useEffect(() => {
     const scriptElementId = "grecaptcha-script";
@@ -61,18 +59,9 @@ const Login = ({ toggle }) => {
     };
   }, []);
 
-  const handleLogin = async (token) => {
+  const handleLogin = async (captchaToken, objData) => {
     try {
-      if (!passwordRef.current.value.length) {
-        throw new Error("Password wajib diisi");
-      }
       setIsLoading(true);
-      let body = {
-        username: userRef.current.value,
-        password: passwordRef.current.value,
-        captchaToken: token,
-        mode: "cookie",
-      };
       const res = await fetch(
         process.env.NEXT_PUBLIC_DIRECTUS_URL + "/inageoportal-login",
         {
@@ -81,8 +70,7 @@ const Login = ({ toggle }) => {
             Accept: "application/json",
           },
           method: "POST",
-          credentials: "include",
-          body: JSON.stringify(body),
+          body: JSON.stringify({ ...objData, captchaToken, mode: "cookie" }),
         }
       );
       const resJson = await res.json();
@@ -105,15 +93,28 @@ const Login = ({ toggle }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    window.grecaptcha.ready(() => {
-      window.grecaptcha
-        .execute(GRECAPTCHA_SITEKEY, {
-          action: "submit",
-        })
-        .then((token) => {
-          handleLogin(token);
-        });
-    });
+
+    try {
+      const formData = new FormData(e.target);
+      const objData = Object.fromEntries(formData.entries());
+      for (const value of formData.values()) {
+        if (!value) {
+          throw new Error("Username dan password wajib diisi");
+        }
+      }
+      window.grecaptcha.ready(() => {
+        window.grecaptcha
+          .execute(GRECAPTCHA_SITEKEY, {
+            action: "submit",
+          })
+          .then((token) => {
+            handleLogin(token, objData);
+          });
+      });
+    } catch (error) {
+      handleSetSnack(error.message, "error");
+      setIsLoading(false);
+    }
   };
 
   const keyShortcut = React.useCallback((e) => {
@@ -128,20 +129,6 @@ const Login = ({ toggle }) => {
       document.removeEventListener("keydown", keyShortcut);
     };
   }, [keyShortcut]);
-
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     const inputArr = [userRef.current.value, passwordRef.current.value];
-  //     if (inputArr.indexOf("") !== -1) {
-  //       throw new Error("Masukkan user dan password");
-  //     } else {
-  //       handleLogin();
-  //     }
-  //   } catch (error) {
-  //     handleSetSnack(error.message, "error");
-  //   }
-  // };
 
   return (
     <div className='font-map'>
@@ -166,7 +153,7 @@ const Login = ({ toggle }) => {
               <FaRegUser className='text-main-gray w-4 h-4' />
               <input
                 data-cy='login-input-username'
-                ref={userRef}
+                name='username'
                 className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm px-3'
                 placeholder={login[t].placeholder1}
               />
@@ -175,7 +162,7 @@ const Login = ({ toggle }) => {
               <BiLock className='text-main-gray w-4 h-4' />
               <input
                 data-cy='login-input-password'
-                ref={passwordRef}
+                name='password'
                 className='flex-1 mx-3 focus:outline-none placeholder-gray-300 text-sm py-0 border-0 focus:ring-0 px-3'
                 placeholder={login[t].placeholder2}
                 type={passwordVisibility ? "text" : "password"}
@@ -199,7 +186,6 @@ const Login = ({ toggle }) => {
                 type='submit'
                 value={login[t].buttonLogin}
                 data-cy='login-submit-button'
-                // onClick={handleLogin}
                 className='bg-main-blue text-white rounded-lg py-2 text-sm cursor-pointer'
               ></input>
             ) : (
@@ -231,13 +217,6 @@ const Login = ({ toggle }) => {
               rel='noopener noreferrer'
               className='border border-main-blue text-main-blue rounded-lg py-2 text-sm text-center'
             >
-              {/* <button
-            href='https://tanahair.indonesia.go.id/register'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='flex space-x-2 bg-main-blue rounded-full text-white text-sm py-3 px-4'
-            alt='registrasi'
-          > */}
               {login[t].buttonRegist}
             </a>
           </div>

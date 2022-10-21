@@ -1,4 +1,4 @@
-import { useRef, useEffect, useContext, useState } from "react";
+import { useRef, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import HCaptcha from "@hcaptcha/react-hcaptcha";
@@ -9,27 +9,14 @@ const Section5 = () => {
   const { t } = useTranslation("homepage");
   const { handleSetSnack } = useContext(AppContext);
   const captchaRef = useRef(null);
-  const namaRef = useRef(null);
-  const emailRef = useRef(null);
-  const isiRef = useRef(null);
-  const [captchaToken, setCaptchaToken] = useState(null);
+  const formRef = useRef(null);
+  const [submitData, setSubmitData] = useState(null);
 
-  const handleReset = () => {
-    namaRef.current.value = "";
-    emailRef.current.value = "";
-    isiRef.current.value = "";
-  };
-
-  const submitForm = async () => {
+  const submitForm = async (captchaToken) => {
     try {
       const res = await fetch("/api/feedback", {
         method: "POST",
-        body: JSON.stringify({
-          nama: namaRef.current.value,
-          email: emailRef.current.value,
-          isi: isiRef.current.value,
-          captchaToken,
-        }),
+        body: JSON.stringify({ ...submitData, captchaToken }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -37,7 +24,7 @@ const Section5 = () => {
       const resData = await res.json();
       if (resData.message) {
         handleSetSnack(resData.message, "success");
-        handleReset();
+        formRef.current.reset();
       }
     } catch (error) {
       handleSetSnack(error.message, "error");
@@ -46,52 +33,24 @@ const Section5 = () => {
     }
   };
 
-  useEffect(() => {
-    if (captchaToken) {
-      submitForm();
-    }
-  }, [captchaToken]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    e.target.reportValidity();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
     try {
-      const inputArr = [
-        namaRef.current.value,
-        emailRef.current.value,
-        isiRef.current.value,
-      ];
-      if (inputArr.indexOf("") !== -1) {
-        throw new Error("Mohon lengkapi form");
-      } else {
-        captchaRef.current.execute();
+      const formData = new FormData(e.target);
+      formData.delete("h-captcha-response");
+      const objData = Object.fromEntries(formData.entries());
+      for (const value of formData.values()) {
+        if (!value) {
+          throw new Error("Mohon lengkapi form");
+        }
       }
-      // if (captchaToken) {
-      //   const res = await fetch("/api/feedback", {
-      //     method: "POST",
-      //     body: JSON.stringify({
-      //       nama: namaRef.current.value,
-      //       email: emailRef.current.value,
-      //       isi: isiRef.current.value,
-      //       captchaToken,
-      //     }),
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
-      //   const resData = await res.json();
-      //   if (resData.message) {
-      //     handleSetSnack(resData.message, "success");
-      //     handleReset();
-      //   }
-      // } else {
-      //   throw new Error("Mohon verifikasi terlebih dahulu");
-      // }
+      setSubmitData(objData);
+      captchaRef.current.execute();
     } catch (error) {
       handleSetSnack(error.message, "error");
     }
-    // finally {
-    //   captchaRef.current.resetCaptcha();
-    // }
   };
 
   return (
@@ -101,6 +60,7 @@ const Section5 = () => {
     >
       <div className='flex flex-col items-center gap-8 lg:gap-10 max-w-screen-xl w-full'>
         <form
+          ref={formRef}
           onSubmit={handleSubmit}
           className='w-full border border-[#A2BCDE] border-opacity-5 max-w-screen-lg bg-[#ffffff] bg-opacity-50 flex flex-col items-center space-y-6 py-8 md:py-12 px-8 md:px-24 rounded-3xl text-main-blue'
         >
@@ -116,13 +76,13 @@ const Section5 = () => {
           <div className='flex flex-col md:flex-row gap-5 w-full'>
             <input
               data-cy='home-section5-name-input'
-              ref={namaRef}
+              name='nama'
               className='border border-main-blue border-opacity-20 flex-1 rounded-full px-6 py-3 focus:outline-none bg-white bg-opacity-0'
               placeholder={t("placeholderNama")}
             />
             <input
               data-cy='home-section5-email-input'
-              ref={emailRef}
+              name='email'
               className='border border-main-blue border-opacity-20 flex-1 rounded-full px-6 py-3 focus:outline-none bg-white bg-opacity-0'
               placeholder={t("placeholderEmail")}
               type='email'
@@ -130,7 +90,7 @@ const Section5 = () => {
           </div>
           <textarea
             data-cy='home-section5-text-input'
-            ref={isiRef}
+            name='isi'
             className='w-full border border-main-blue border-opacity-20 rounded-lg px-6 py-3 focus:outline-none bg-white bg-opacity-0'
             rows='6'
             placeholder={t("placeholderIsi")}
@@ -138,7 +98,7 @@ const Section5 = () => {
           <HCaptcha
             sitekey='e45cae2e-2906-45bf-abe7-9424392c31c6'
             size='invisible'
-            onVerify={setCaptchaToken}
+            onVerify={(token) => submitForm(token)}
             onError={(err) => {
               handleSetSnack(`hCaptcha Error: ${err}`, "error");
             }}
