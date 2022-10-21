@@ -1,7 +1,6 @@
 import { useTranslation } from "next-i18next";
-import React, { useContext } from "react";
+import React from "react";
 import shallow from "zustand/shallow";
-import AppContext from "../../../context/AppContext";
 import { useNetwork } from "../../../hooks";
 import Button from "../../core/Button";
 import Loader from "../../core/Loader";
@@ -9,7 +8,6 @@ import Loader from "../../core/Loader";
 import { Dropdown } from "../sidebar-content/core";
 
 const NetworkNodeCategorySelection = ({
-  onSubmit,
   getOrganizationList,
   getSimpulList,
   isLoad,
@@ -31,39 +29,6 @@ const NetworkNodeCategorySelection = ({
     ],
     shallow
   );
-  const [isActive, setIsActive] = React.useState({
-    ministries: false,
-    province: false,
-    city: false,
-  });
-
-  const [valueSelected, setValueSelected] = React.useState("");
-  const [proceedActive, setProceedActive] = React.useState(false);
-
-  // this useEffect for button proceed
-  React.useEffect(() => {
-    // check if there is a true state in isActive value
-    const someIsActive = Object.values(isActive).some((val) => val === true);
-
-    // check if valueSelected is not empty
-    if (someIsActive && valueSelected !== "") {
-      return setProceedActive(true);
-    } else {
-      return setProceedActive(false);
-    }
-  }, [isActive, valueSelected]);
-
-  // handle button set active
-  const handleButton = (value) => {
-    const stateCopy = { ...isActive };
-
-    const stateValue = !stateCopy[value];
-
-    Object.keys(stateCopy).forEach((key) => (stateCopy[key] = false));
-    stateCopy[value] = stateValue;
-
-    setIsActive(stateCopy);
-  };
 
   return (
     <div className='flex flex-col w-full h-[fit-content] gap-3 relative'>
