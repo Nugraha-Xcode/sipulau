@@ -68,6 +68,7 @@ function MyApp({ Component, pageProps }) {
           },
           method: "POST",
           credentials: "include",
+          body: JSON.stringify({ mode: "cookie" }),
         }
       );
       const resJson = await res.json();
@@ -100,6 +101,7 @@ function MyApp({ Component, pageProps }) {
           },
           method: "POST",
           credentials: "include",
+          body: JSON.stringify({ mode: "cookie" }),
         }
       );
       const resJson = await res.json();
