@@ -49,6 +49,8 @@ const AdvanceFilter = ({
     shallow
   );
 
+  const setFilterId = useTable((state) => state.setFilterId);
+
   const columnsList = [
     { label: t("column1"), value: "fid" },
     { label: t("column14"), value: "id_toponim" },
@@ -323,6 +325,9 @@ const AdvanceFilter = ({
           variant='normal'
           isActive={true}
           onClick={() => {
+            if (!Object.keys(filterObject).length > 0) {
+              setFilterId([]);
+            }
             clearSelectedRow();
             setPage(1);
             deleteDataTable();

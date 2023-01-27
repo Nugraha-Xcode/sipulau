@@ -357,6 +357,7 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
                 setPage(1);
                 deleteDataTable();
                 setFilterObject({});
+                setFilterId([]);
                 createQueryFilter();
                 if (aoiPoly) {
                   setAoiPoly(null);
