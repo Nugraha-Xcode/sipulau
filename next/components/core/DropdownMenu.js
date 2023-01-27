@@ -49,7 +49,7 @@ const DropdownMenu = ({
                     }}
                     className={clsx([
                       "cursor-pointer text-sm hover:bg-[#F2F2F2] py-1 px-2 transition-all text-gray-600 text-left",
-                      { "bg-[#F2F2F2]": selected.value === el.value },
+                      { "bg-[#F2F2F2]": selected?.value === el.value },
                     ])}
                   >
                     {el.label}
