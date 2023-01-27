@@ -23,7 +23,8 @@ const proxyUrl = process.env.HTTPS_PROXY
 
 const reqOptions = proxyUrl
   ? {
-      host: proxyUrl.host,
+      hostname: proxyUrl.hostname,
+      port: proxyUrl.port,
       path: "https://hcaptcha.com/siteverify",
       ...methodHeaders,
     }
