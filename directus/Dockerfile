@@ -3,7 +3,7 @@ FROM node:14-alpine as builder_deps
 ENV HTTP_PROXY="http://192.168.1.28:3128"
 ENV HTTPS_PROXY="http://192.168.1.28:3128"
 WORKDIR /extensions
-RUN npm update -g
+# RUN npm update -g
 ENV NODE_ENV development
 COPY extensions/package*.json ./
 RUN npm ci
