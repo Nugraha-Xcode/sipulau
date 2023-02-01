@@ -34,7 +34,11 @@ import ToponimPopup from "../components/map/popup/ToponimPopup";
 import AdvanceFilter from "../components/map/advanceFilter/AdvanceFilter";
 
 const map = () => {
-  const { t } = useTranslation("attributetable");
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["attributetable", "map"] };
+    return t(key, params);
+  };
   const [activeLayer, activeLegend, setActiveLayer] = useNetwork(
     (state) => [state.activeLayer, state.activeLegend, state.setActiveLayer],
     shallow
@@ -316,7 +320,7 @@ const map = () => {
           obj.source = "additional";
           obj.judul = element.layer_name;
           obj.nama = element.layer_id;
-          obj.simpul = "Default Layer";
+          obj.simpul = translatedText("layerManagement.defaultLayer");
           obj.data = element.layer_defs;
           obj.visibility = "visible";
           additionalLayer.push(obj);
@@ -533,12 +537,14 @@ export async function getStaticProps({ locale }) {
   return {
     props: {
       ...(await serverSideTranslations(locale, [
+        "common",
         "attributetable",
         "komentar",
         "simpulJaringan",
         "sideBarRight",
         "popupPulau",
         "footer",
+        "map",
       ])),
       // Will be passed to the page component as props
     },

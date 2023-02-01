@@ -1,3 +1,4 @@
+import { useTranslation } from "next-i18next";
 import React, {
   useState,
   useCallback,
@@ -16,6 +17,11 @@ import FileFormatDownload from "./FileFormatDownload";
 import LayerListDownload from "./LayerListDownload";
 
 const Download = () => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   const { draw } = useContext(MapContext);
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
@@ -195,7 +201,7 @@ const Download = () => {
     >
       <div>
         <div className='flex items-center justify-between '>
-          <p className='text-gray-800 dark:text-gray-100'>
+          <p className='text-xl text-gray-800 dark:text-gray-100'>
             {activeSideFeature?.label || ""}
           </p>
           <button onClick={() => setActiveSideFeature(null)}>
@@ -210,7 +216,7 @@ const Download = () => {
             {/* pass children props for fill the content of the accordion & pass name for the name of accordion */}
             <Accordion
               id='province'
-              label='Select by Province'
+              label={translatedText("download.selectByProvince")}
               activeId={active}
               isOpen={active === "province"}
               setValue={setActive}
@@ -220,14 +226,14 @@ const Download = () => {
                 value={listProvince}
                 onValueSelected={(item) => setSelectedValue(item)}
                 valueSelected={selectedValue}
-                label='Select Province'
+                label={translatedText("download.selectProvince")}
                 direction='down'
               />
             </Accordion>
 
             <Accordion
               id='aoi'
-              label='Area of Interest'
+              label={translatedText("download.AOI")}
               activeId={active}
               isOpen={active === "aoi"}
               setValue={setActive}
@@ -237,7 +243,7 @@ const Download = () => {
 
             <Accordion
               id='upload'
-              label='Selected Layer'
+              label={translatedText("download.selectedLayer")}
               activeId={active}
               isOpen={active === "upload"}
               setValue={setActive}

@@ -1,0 +1,84 @@
+{
+    "menu": {
+        "homePage": "Homepage",
+        "mapPage": "Map Page",
+        "geo-mapManagement": "Map Management",
+        "layerManagement": "Layer Management",
+        "layerTable": "Attributes Table",
+        "searchIsland": "Search Island",
+        "filterData": "Filter Data",
+        "downloads": "Downloads",
+        "comments": "Comments",
+        "networkNode": "Network Node",
+        "upload": "Upload Data",
+        "resume": "Data summary",
+        "help": "Help",
+        "minimize": "Hide"
+    },
+    "layerManagement": {
+        "defaultLayer": "Default Layer",
+        "aboutTitle": "About Data Layers",
+        "aboutContext": "You mau arrange layer display on map"
+    },
+    "search": {
+        "enterKeyword": "Enter Keyword or Coordinates",
+        "aboutTitle": "About Search",
+        "aboutContext": "You may search by a specific keyword or coordinate.",
+        "addComment": "Add Comment"
+    },
+    "filter": {
+        "tittleFilter": "Filter",
+        "addGroup": "Add Group",
+        "addFilter": "Add Filter",
+        "setFilter": "Set Filter",
+        "resetFilter": "Reset Filter"
+    },
+    "download": {
+        "selectByProvince": "Select By Province",
+        "selectProvince": "Select Province",
+        "AOI": "Selected Area",
+        "aoiList": "Area of Interest List:",
+        "noAoi": "No Area of Interest to Show. Please draw Area of Interest First",
+        "selectedLayer": "Selected Layer",
+        "noLayer": "No Layer from Uploaded Data to Show.",
+        "layerList": "Layer List"
+    },
+    "network": {
+        "selectCategory": "Select Category",
+        "ministriAgency": "Ministries/Agencies",
+        "province": "Province",
+        "districtCity": "District/ City",
+        "proceed": "Process"
+    },
+    "upload": {
+        "inputLayername": "Enter a Layer Name",
+        "clickDrag": "Click or Drag Data",
+        "acceptZip": "Accepts .zip format",
+        "upload": "Upload",
+        "uploadSuccess": "Upload Success",
+        "aboutTitle": "About Upload",
+        "aboutUpload": "You may upload datasets in the Shapefile format (shp)."
+    },
+    "resume": {
+        "selectProvince": "Select Province",
+        "numberIslands": "Number of Islands",
+        "area": "Area",
+        "coastlineLength": "Coastline Length",
+        "largestIsland": "Largest Island",
+        "smallestIsland": "Smallest Island",
+        "inhabitedIsland": "Inhabited Island",
+        "uninhabitedIsland": "Uninhabited Island",
+        "print": "Print"
+    },
+    "geolocate": "Geolocate",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "showToolkit": "Show Tools",
+    "hideToolkit": "Hide Tools",
+    "tools": {
+        "resetExtend": "Restore View",
+        "measurement": "Measurement",
+        "setCrs": "Set CRS",
+        "baseMap": "BaseMap"
+    }
+}

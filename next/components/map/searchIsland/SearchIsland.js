@@ -16,8 +16,14 @@ import { AboutContent, Searchbar } from "../sidebar-content";
 import SearchResult from "./SearchResult";
 import Button from "../../core/Button";
 import useDebounce from "../../../hooks/useDebounce";
+import { useTranslation } from "next-i18next";
 
 const SearchIsland = () => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   const { map } = useContext(MapContext);
   const { handleSetSnack } = useContext(AppContext);
   const timeoutRef = useRef(null);
@@ -273,7 +279,7 @@ const SearchIsland = () => {
     >
       <div>
         <div className='flex items-center justify-between '>
-          <p className='text-gray-800 dark:text-gray-100'>
+          <p className='text-xl text-gray-800 dark:text-gray-100'>
             {activeSideFeature?.label || ""}
           </p>
           <button onClick={() => setActiveSideFeature(null)}>
@@ -338,7 +344,7 @@ const SearchIsland = () => {
                 });
               }}
             >
-              Add Comment
+              {translatedText("search.addComment")}
             </Button>
           </>
         )}
@@ -358,8 +364,8 @@ const SearchIsland = () => {
 
       <div className='mt-2 rounded-[4px] bg-gray-50 p-2 dark:bg-gray-700'>
         {/* pass onClose props for button close  */}
-        <AboutContent header='About Search'>
-          You may search by a specific keyword or coordinate.
+        <AboutContent header={translatedText("search.aboutTitle")}>
+          {translatedText("search.aboutContext")}
         </AboutContent>
       </div>
     </div>

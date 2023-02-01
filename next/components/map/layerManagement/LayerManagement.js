@@ -1,3 +1,4 @@
+import { useTranslation } from "next-i18next";
 import React from "react";
 import shallow from "zustand/shallow";
 import { useNav } from "../../../hooks/useNav";
@@ -6,6 +7,11 @@ import { AboutContent } from "../sidebar-content";
 import LayerManagementItem from "./LayerManagementItem";
 
 const LayerManagement = () => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
     shallow
@@ -84,8 +90,8 @@ const LayerManagement = () => {
 
       <div className='mt-2 rounded-[4px] bg-gray-50 p-2 dark:bg-gray-700'>
         {/* pass onClose props for button close */}
-        <AboutContent header='About Data Layers'>
-          Anda dapat mengatur tampilan layer pada peta lorem ipsum dolor
+        <AboutContent header={translatedText("layerManagement.aboutTitle")}>
+          {translatedText("layerManagement.aboutContext")}
         </AboutContent>
       </div>
     </div>

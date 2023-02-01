@@ -1,6 +1,7 @@
 import { Transition } from "@headlessui/react";
 import Tippy from "@tippyjs/react";
 import clsx from "clsx";
+import { useTranslation } from "next-i18next";
 import React, { useContext } from "react";
 import shallow from "zustand/shallow";
 import MapContext from "../../context/MapContext";
@@ -15,6 +16,11 @@ import CrsSelectorFeature from "./toolbox/CrsSelectorFeature";
 import MeasurementFeature from "./toolbox/MeasurementFeature";
 
 const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   const { map } = useContext(MapContext);
   const [
     activeSideFeature,
@@ -51,7 +57,11 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
           } flex flex-col items-center justify-end gap-2 overflow-hidden transition-all duration-100 ease-in-out`}
         >
           <div className='flex flex-col gap-2'>
-            <Tippy content='Extent' placement='right' delay={300}>
+            <Tippy
+              content={translatedText("tools.resetExtend")}
+              placement='right'
+              delay={300}
+            >
               <button
                 onClick={() =>
                   map.fitBounds(
@@ -72,13 +82,17 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
                 <MemoIcExtent />
               </button>
             </Tippy>
-            <Tippy content='Measurement' placement='right' delay={300}>
+            <Tippy
+              content={translatedText("tools.measurement")}
+              placement='right'
+              delay={300}
+            >
               <button
                 onClick={() =>
                   handleOpenCardFeature({
                     featureId: "ruler",
                     iconId: "map-ruler",
-                    label: "Measurement",
+                    label: translatedText("tools.measurement"),
                     content: <MeasurementFeature />,
                   })
                 }
@@ -87,13 +101,17 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
                 <MemoIcRuler />
               </button>
             </Tippy>
-            <Tippy content='Pointer CRS' placement='right' delay={300}>
+            <Tippy
+              content={translatedText("tools.setCrs")}
+              placement='right'
+              delay={300}
+            >
               <button
                 onClick={() =>
                   handleOpenCardFeature({
                     featureId: "crs",
                     iconId: "map-crs",
-                    label: "Pointer CRS",
+                    label: translatedText("tools.setCrs"),
                     content: <CrsSelectorFeature />,
                   })
                 }
@@ -102,13 +120,17 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
                 <MemoIcCrs />
               </button>
             </Tippy>
-            <Tippy content='Base map' placement='right' delay={300}>
+            <Tippy
+              content={translatedText("tools.baseMap")}
+              placement='right'
+              delay={300}
+            >
               <button
                 onClick={() =>
                   handleOpenCardFeature({
                     featureId: "basemap",
                     iconId: "map-flat",
-                    label: "Base map",
+                    label: translatedText("tools.baseMap"),
                     content: <BasemapFeature />,
                   })
                 }
@@ -125,7 +147,11 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
           } w-full transition-all duration-500 ease-in-out`}
         />
         <Tippy
-          content={isOpen ? "Hide Toolkit" : "Show Toolkit"}
+          content={
+            isOpen
+              ? translatedText("hideToolkit")
+              : translatedText("showToolkit")
+          }
           placement='right'
           delay={300}
         >

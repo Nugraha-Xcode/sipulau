@@ -1,6 +1,6 @@
 import React from "react";
-import { SearchSuggestion } from "./SearchSuggestion";
 import { Transition } from "@headlessui/react";
+import { useTranslation } from "next-i18next";
 
 const Searcbar = ({
   value,
@@ -12,6 +12,7 @@ const Searcbar = ({
   handleClearValue = () => {},
   handleChangesValue = () => {},
 }) => {
+  const { t } = useTranslation("map");
   return (
     <div className='w-full h-auto relative'>
       <div
@@ -21,7 +22,7 @@ const Searcbar = ({
       >
         <input
           className='w-full h-full focus:outline-none text-xs'
-          placeholder='Enter keyword or Coordinate'
+          placeholder={t("search.enterKeyword")}
           onChange={(e) => handleChangesValue(e)}
           value={value}
         />

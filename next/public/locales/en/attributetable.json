@@ -4,12 +4,9 @@
     "buttonOption": "Option",
     "optionButton1": "Show/Hide Column",
     "optionButton2": "Show Selected Data",
-    "filterMapExtent": "Filter by Map Extent",
     "zoom": "Zoom to",
-    "filter": "Filter",
     "resetFilter": "Reset Filter",
     "refresh": "Refresh",
-    "download": "Download",
     "column1": "Island ID",
     "column2": "Island Code",
     "column3": "Island Name",
@@ -36,5 +33,12 @@
     "userGuide": "user-guide-sipulau-en",
     "emptyStateTable1": "Sorry, No data found",
     "emptyStateTable2": "the data you are looking for does not exist, try again.",
-    "location": "Location"
+    "location": "Location",
+    "filterMapExtent": "Filter By Map",
+    "showFields": "Columns View",
+    "filter": "Filter",
+    "selectAoi": "Select AOI",
+    "downloads": "Downloads",
+    "expandTable": "Expand Table",
+    "close": "Close"
 }

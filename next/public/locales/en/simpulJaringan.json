@@ -7,8 +7,14 @@
     "buttonProcess": "Process",
     "simpulTitle2": "Choose Network Data",
     "buttonAddLayer": "Add Layer",
+    "layerAdded": "Layer Added",
     "detail": "Detail",
     "noLayer": "No Layer",
     "noLayerText": "Sorry, no layer available for this category.",
-    "from": "from"
+    "from": "from",
+    "selectCategory": "Select Category",
+    "selectNetworkCategory": "Select Network Category",
+    "selectNetworkData": "Select Network Data",
+    "dataNotFound": "Data Not Found",
+    "networkInstruction": "Please select the Category & Network Data first"
 }

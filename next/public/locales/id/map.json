@@ -1,0 +1,84 @@
+{
+    "menu": {
+        "homePage": "Beranda",
+        "mapPage": "Halaman Peta",
+        "geo-mapManagement": "Pengaturan Peta",
+        "layerManagement": "Pengaturan Layer",
+        "layerTable": "Tabel Attribut",
+        "searchIsland": "Cari Pulau",
+        "filterData": "Data Filter",
+        "downloads": "Unduh",
+        "comments": "Komentar",
+        "networkNode": "Simpul Jaringan",
+        "upload": "Unggah Data",
+        "resume": "Rangkuman Data",
+        "help": "Bantuan",
+        "minimize": "Sembunyikan"
+    },
+    "layerManagement": {
+        "defaultLayer": "Layer Standar",
+        "aboutTitle": "Tentang Layer Data",
+        "aboutContext": "Anda dapat mengatur tampilan layer pada peta"
+    },
+    "search": {
+        "enterKeyword": "Masukan Kata Kunci atau Koordinat",
+        "aboutTitle": "Tentang Pencarian Pulau",
+        "aboutContext": "Anda dapat mencari pulau dengan memasukkan kata kunci atau koordinat.",
+        "addComment": "Tambah Komentar"
+    },
+    "filter": {
+        "tittleFilter": "Saring",
+        "addGroup": "Tambah Kelompok",
+        "addFilter": "Tambah Filter",
+        "setFilter": "Atur Filter",
+        "resetFilter": "Atur Ulang Filter"
+    },
+    "download": {
+        "selectByProvince": "Pilih Berdasarkan Provinsi",
+        "selectProvince": "Pilih Provinsi",
+        "AOI": "Area Pilihan",
+        "aoiList": "Daftar Area Pilihan:",
+        "noAoi": "Tidak ada area untuk ditampilkan. Silahkan gambar area terlebih dahulu",
+        "selectedLayer": "Layer Pilihan",
+        "noLayer": "Tidak ada layer untuk ditampilkan.",
+        "layerList": "Daftar Layer"
+    },
+    "network": {
+        "selectCategory": "Pilih Kategori",
+        "ministriAgency": "Kementerian/ Lembaga",
+        "province": "Provinsi",
+        "districtCity": "Kabupaten/ Kota",
+        "proceed": "Proses"
+    },
+    "upload": {
+        "inputLayername": "Masukan Nama Layer",
+        "clickDrag": "Klik atau Seret Data",
+        "acceptZip": "Menerima bentuk .zip",
+        "upload": "Unggah",
+        "uploadSuccess": "Data berhasil diunggah",
+        "aboutTitle": "Tentang Unggah",
+        "aboutUpload": "Anda dapat mengunggah data dalam format Shapefile (shp)"
+    },
+    "resume": {
+        "selectProvince": "Pilih Provinsi",
+        "numberIslands": "Jumlah Pulau",
+        "area": "Luas",
+        "coastlineLength": "Panjang Garis Pantai",
+        "largestIsland": "Pulau Terbesar",
+        "smallestIsland": "Pulau Terkecil",
+        "inhabitedIsland": "Pulau Berpenghuni",
+        "uninhabitedIsland": "Pulau Tak Berpenghuni",
+        "print": "Cetak"
+    },
+    "geolocate": "Geolokasi",
+    "zoomIn": "Perbesar",
+    "zoomOut": "Perkecil",
+    "showToolkit": "Tampilkan Alat",
+    "hideToolkit": "Sembunyikan Alat",
+    "tools": {
+        "resetExtend": "Kembalikan Tampilan",
+        "measurement": "Pengukur",
+        "setCrs": "Atur CRS",
+        "baseMap": "Peta Dasar"
+    }
+}

@@ -13,7 +13,11 @@ const AdvanceFilter = ({
   handleViewTable,
   isOpenBottomDrawer,
 }) => {
-  const { t } = useTranslation("attributetable");
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["attributetable", "map"] };
+    return t(key, params);
+  };
   const [deleteDataTable, setPage, clearSelectedRow] = useTable(
     (state) => [state.deleteDataTable, state.setPage, state.clearSelectedRow],
     shallow
@@ -52,23 +56,23 @@ const AdvanceFilter = ({
   const setFilterId = useTable((state) => state.setFilterId);
 
   const columnsList = [
-    { label: t("column1"), value: "fid" },
-    { label: t("column14"), value: "id_toponim" },
-    { label: t("column2"), value: "id_wilayah" },
-    { label: t("column3"), value: "nammap" },
-    { label: t("column13"), value: "alias" },
-    { label: t("column17"), value: "nambef" },
-    { label: t("column4"), value: "artinam" },
-    { label: t("column5"), value: "aslbhs" },
-    { label: t("column6"), value: "sjhnam" },
-    { label: t("column8"), value: "wadmkd" },
-    { label: t("column7"), value: "wadmkc" },
-    { label: t("column9"), value: "wadmkk" },
-    { label: t("column10"), value: "wadmpr" },
-    { label: t("column11"), value: "status" },
-    { label: t("column12"), value: "remark" },
-    { label: t("column15"), value: "luas" },
-    { label: t("column16"), value: "pjg_gp" },
+    { label: translatedText("column1"), value: "fid" },
+    { label: translatedText("column14"), value: "id_toponim" },
+    { label: translatedText("column2"), value: "id_wilayah" },
+    { label: translatedText("column3"), value: "nammap" },
+    { label: translatedText("column13"), value: "alias" },
+    { label: translatedText("column17"), value: "nambef" },
+    { label: translatedText("column4"), value: "artinam" },
+    { label: translatedText("column5"), value: "aslbhs" },
+    { label: translatedText("column6"), value: "sjhnam" },
+    { label: translatedText("column8"), value: "wadmkd" },
+    { label: translatedText("column7"), value: "wadmkc" },
+    { label: translatedText("column9"), value: "wadmkk" },
+    { label: translatedText("column10"), value: "wadmpr" },
+    { label: translatedText("column11"), value: "status" },
+    { label: translatedText("column12"), value: "remark" },
+    { label: translatedText("column15"), value: "luas" },
+    { label: translatedText("column16"), value: "pjg_gp" },
   ];
 
   const handleGroupFilter = (members) => (
@@ -85,7 +89,7 @@ const AdvanceFilter = ({
                 </div>
                 <Popover className='relative'>
                   <Popover.Button className='text-blue-500 text-[10px] focus:outline-none flex items-center'>
-                    + Add Filter
+                    + {translatedText("filter.addFilter")}
                   </Popover.Button>
                   <Popover.Panel className='absolute z-10'>
                     {({ close }) => (
@@ -112,7 +116,7 @@ const AdvanceFilter = ({
                 </Popover>
                 <Popover className='relative'>
                   <Popover.Button className='text-blue-500 text-[10px] focus:outline-none flex items-center'>
-                    + Add Group
+                    + {translatedText("filter.addGroup")}
                   </Popover.Button>
                   <Popover.Panel className='absolute z-10'>
                     {({ close }) => (
@@ -176,7 +180,7 @@ const AdvanceFilter = ({
                 </p>
                 <Popover className='relative'>
                   <Popover.Button className='text-blue-500 text-[10px] focus:outline-none flex items-center'>
-                    + Add Filter
+                    + {translatedText("filter.addFilter")}
                   </Popover.Button>
                   <Popover.Panel className='absolute z-10'>
                     {({ close }) => (
@@ -199,7 +203,7 @@ const AdvanceFilter = ({
                 </Popover>
                 <Popover className='relative'>
                   <Popover.Button className='text-blue-500 text-[10px] focus:outline-none flex items-center'>
-                    + Add Group
+                    + {translatedText("filter.addGroup")}
                   </Popover.Button>
 
                   <Popover.Panel className='absolute z-10'>
@@ -251,7 +255,7 @@ const AdvanceFilter = ({
   return (
     <div className='py-5 px-6 min-h-[20rem]'>
       <div className='flex items-center justify-between'>
-        <p>Filter</p>
+        <p>{translatedText("filter.tittleFilter")}</p>
         <button className='focus:outline-none' onClick={handleClose}>
           <img src='/images/ic-close.svg' alt='close' />
         </button>
@@ -264,7 +268,7 @@ const AdvanceFilter = ({
         <div className='flex justify-center'>
           <Popover className='relative'>
             <Popover.Button className='text-blue-500 text-sm focus:outline-none'>
-              + Add Group
+              + {translatedText("filter.addGroup")}
             </Popover.Button>
 
             <Popover.Panel className='absolute z-10'>
@@ -291,7 +295,7 @@ const AdvanceFilter = ({
         <div className='flex justify-center'>
           <Popover className='relative'>
             <Popover.Button className='text-blue-500 text-sm focus:outline-none'>
-              + Add Filter
+              + {translatedText("filter.addFilter")}
             </Popover.Button>
 
             <Popover.Panel
@@ -338,7 +342,7 @@ const AdvanceFilter = ({
             handleClose();
           }}
         >
-          Set Filter
+          {translatedText("filter.setFilter")}
         </Button>
 
         {Object.keys(filterObject).length > 0 && (
@@ -350,7 +354,7 @@ const AdvanceFilter = ({
               createQueryFilter();
             }}
           >
-            Reset Filter
+            {translatedText("filter.resetFilter")}
           </Button>
         )}
         <div className='h-5' />

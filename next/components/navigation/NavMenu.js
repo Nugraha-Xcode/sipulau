@@ -40,19 +40,23 @@ const NavMenu = ({
   toggleMapFilter,
 }) => {
   const router = useRouter();
-  const { t } = useTranslation("attributetable");
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["attributetable", "map"] };
+    return t(key, params);
+  };
   const pageMenuItems = [
     {
       id: "home-page",
       path: "/",
-      label: "Home Page",
+      label: translatedText("menu.homePage"),
       icon: <MemoIcHome />,
       onClick: () => router.push("/"),
     },
     {
       id: "map-page",
       path: "/map",
-      label: "Map Page",
+      label: translatedText("menu.mapPage"),
       icon: <MemoIcBasemap />,
       onClick: () => {},
     },
@@ -60,35 +64,35 @@ const NavMenu = ({
   const featureMenuItems = [
     {
       id: "layer-management",
-      label: "Layer Management",
+      label: translatedText("menu.layerManagement"),
       icon: <MemoIcLayer />,
       onClick: () =>
         handleOpenSideFeature({
           featureId: "layer-management",
-          label: "Layer Management",
+          label: translatedText("menu.layerManagement"),
           content: <LayerManagement />,
         }),
     },
     {
       id: "layer-table",
-      label: "Layer Table",
+      label: translatedText("menu.layerTable"),
       icon: <MemoIcLayerTable />,
       onClick: () => handleViewTable(),
     },
     {
       id: "search-island",
-      label: "Search Island",
+      label: translatedText("menu.searchIsland"),
       icon: <MemoIcSearch />,
       onClick: () =>
         handleOpenSideFeature({
           featureId: "search-island",
-          label: "Search Island",
+          label: translatedText("menu.searchIsland"),
           content: <SearchIsland />,
         }),
     },
     {
       id: "filter-data",
-      label: "Filter Data",
+      label: translatedText("menu.filterData"),
       icon: <MemoIcFilter />,
       onClick: () => {
         toggleMapFilter();
@@ -96,56 +100,56 @@ const NavMenu = ({
     },
     {
       id: "download",
-      label: "Download",
+      label: translatedText("menu.downloads"),
       icon: <MemoIcDownload />,
       onClick: () =>
         handleOpenSideFeature({
           featureId: "download",
-          label: "Download",
+          label: translatedText("menu.downloads"),
           content: <Download />,
         }),
     },
     {
       id: "comments",
-      label: "Comments",
+      label: translatedText("menu.comments"),
       icon: <MemoIcComment />,
       onClick: () =>
         handleOpenSideFeature({
           featureId: "comments",
-          label: "Comments",
+          label: translatedText("menu.comments"),
           content: <SideComment />,
         }),
     },
     {
       id: "network-node",
-      label: "Network Node",
+      label: translatedText("menu.networkNode"),
       icon: <MemoIcNetwork />,
       onClick: () =>
         handleOpenSideFeature({
           featureId: "network-node",
-          label: "Network Node",
+          label: translatedText("menu.networkNode"),
           content: <NetworkNode />,
         }),
     },
     {
       id: "upload-data",
-      label: "Upload Data",
+      label: translatedText("menu.upload"),
       icon: <MemoIcUpload />,
       onClick: () =>
         handleOpenSideFeature({
           featureId: "upload-data",
-          label: "Upload Data",
+          label: translatedText("menu.upload"),
           content: <SideUpload />,
         }),
     },
     {
       id: "resume-island",
-      label: "Resume",
+      label: translatedText("menu.resume"),
       icon: <MemoIcResume />,
       onClick: () =>
         handleOpenSideFeature({
           featureId: "resume-island",
-          label: "Resume Pulau",
+          label: translatedText("menu.resume"),
           content: <Resume />,
         }),
     },
@@ -174,7 +178,7 @@ const NavMenu = ({
           <div className='flex h-[1.375rem] items-center px-3'>
             {expand ? (
               <p className='whitespace-nowrap text-sm text-gray-400'>
-                Geo-Map Management
+                {translatedText("menu.geo-mapManagement")}
               </p>
             ) : (
               <hr className='text-black-500 w-full' />
@@ -238,7 +242,7 @@ const NavMenu = ({
                     },
                   ])}
                 >
-                  {router.locale === "id" ? "EN" : "ID"}
+                  {router.locale === "id" ? "ID" : "EN"}
                 </p>
               </a>
             </Link>
@@ -246,16 +250,16 @@ const NavMenu = ({
         </Tippy>
         <NavItem
           expand={expand}
-          label='Help Center'
+          label={translatedText("menu.help")}
           onClick={() => {
-            window.open(`/files/${t("userGuide")}.pdf`);
+            window.open(`/files/${translatedText("userGuide")}.pdf`);
           }}
           icon={<MemoIcQuestion />}
         />
         <NavItem
           expand={expand}
           disabled={disableExpand}
-          label='Minimize'
+          label={translatedText("menu.minimize")}
           onClick={setExpand}
           icon={<MemoIcMinimize />}
         />

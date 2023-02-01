@@ -49,8 +49,8 @@ const NetworkResults = ({
             {activeLayer.findIndex(
               (el) => el.nama === item.nama && el.judul === item.judul
             ) !== -1
-              ? "Layer Added"
-              : "Add Layer"}
+              ? t("layerAdded")
+              : t("buttonAddLayer")}
           </button>
           <div className='w-1 h-1 rounded-full bg-main-gray' />
           <a

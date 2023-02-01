@@ -1,6 +1,12 @@
+import { useTranslation } from "next-i18next";
 import React from "react";
 
 const ComponentToPrint = React.forwardRef(({ resumeProvince }, ref) => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   return (
     <div ref={ref} className='relative'>
       <div className='w-full min-h-screen backgroundStyle'>
@@ -23,28 +29,31 @@ const ComponentToPrint = React.forwardRef(({ resumeProvince }, ref) => {
           <div className='flex flex-col gap-1 w-1/2'>
             {[
               {
-                label: "Number of Islands",
+                label: translatedText("resume.numberIslands"),
                 value: resumeProvince.total_island,
               },
-              { label: "Area", value: resumeProvince.total_area },
               {
-                label: "Coastline Length",
+                label: translatedText("resume.area"),
+                value: resumeProvince.total_area,
+              },
+              {
+                label: translatedText("resume.coastlineLength"),
                 value: resumeProvince.total_coastline,
               },
               {
-                label: "Largest Island",
+                label: translatedText("resume.largestIsland"),
                 value: resumeProvince.largest_island,
               },
               {
-                label: "Smallest Island",
+                label: translatedText("resume.smallestIsland"),
                 value: resumeProvince.smallest_island,
               },
               {
-                label: "Inhabited Island",
+                label: translatedText("resume.inhabitedIsland"),
                 value: resumeProvince.total_inhabited,
               },
               {
-                label: "Uninhabited Island",
+                label: translatedText("resume.uninhabitedIsland"),
                 value: resumeProvince.total_uninhabited,
               },
             ].map((el) => (

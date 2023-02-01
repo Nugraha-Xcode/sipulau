@@ -12,7 +12,11 @@ const NetworkNodeCategorySelection = ({
   getSimpulList,
   isLoad,
 }) => {
-  const { t } = useTranslation("simpulJaringan");
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["common", "simpulJaringan"] };
+    return t(key, params);
+  };
   const [
     organizationList,
     category,
@@ -34,7 +38,7 @@ const NetworkNodeCategorySelection = ({
     <div className='flex flex-col w-full h-[fit-content] gap-3 relative'>
       <Loader show={isLoad} />
       <div className='font-semibold text-[#4F4C4A] py-2 text-base'>
-        Select Category
+        {translatedText("selectCategory")}
       </div>
       <Button
         className='text-sm'
@@ -51,7 +55,7 @@ const NetworkNodeCategorySelection = ({
           }
         }}
       >
-        {t("button1")}
+        {translatedText("button1")}
       </Button>
       <div className='flex gap-2'>
         <Button
@@ -69,7 +73,7 @@ const NetworkNodeCategorySelection = ({
             }
           }}
         >
-          {t("button2")}
+          {translatedText("button2")}
         </Button>
         <Button
           className='text-sm'
@@ -86,7 +90,7 @@ const NetworkNodeCategorySelection = ({
             }
           }}
         >
-          {t("button3")}
+          {translatedText("button3")}
         </Button>
       </div>
 
@@ -100,7 +104,7 @@ const NetworkNodeCategorySelection = ({
             position: "absolute",
             top: "190px",
           }}
-          label='Select Network Category'
+          label={translatedText("selectNetworkCategory")}
           valueSelected={selectedOrganization}
           onValueSelected={(item) => selectOrganization(item)}
         />
@@ -112,7 +116,7 @@ const NetworkNodeCategorySelection = ({
         isActive={selectedOrganization}
         onClick={() => getSimpulList(1)}
       >
-        Proceed
+        {translatedText("proceed")}
       </Button>
     </div>
   );

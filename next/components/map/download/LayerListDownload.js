@@ -1,8 +1,14 @@
+import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 import shallow from "zustand/shallow";
 import { useDownloadAoi, useNetwork } from "../../../hooks";
 
 const LayerListDownload = () => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   const [activeLayer] = useNetwork((state) => [state.activeLayer], shallow);
   const [list, setList] = useState(null);
   const [selected, setSelected] = useState(null);
@@ -37,7 +43,7 @@ const LayerListDownload = () => {
     <div className=' bg-white w-full h-full p-3 rounded-[8px]'>
       {list ? (
         <div className='flex flex-col gap-2'>
-          <p>Layer List:</p>
+          <p>{translatedText("download.layerList")}</p>
           {list.map((el) => (
             <div className='flex gap-2 items-center text-[#4F4C4A] text-sm'>
               <input
@@ -53,7 +59,7 @@ const LayerListDownload = () => {
         </div>
       ) : (
         <div className='flex justify-center w-full h-full p-5 border-dotted border-[1px] items-center text-center text-sm text-[#B4B2AF]'>
-          No Layer from Uploaded Data to Show.
+          {translatedText("download.noLayer")}
         </div>
       )}
     </div>

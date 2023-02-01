@@ -16,7 +16,7 @@ const SideComment = () => {
     >
       <div>
         <div className='flex items-center justify-between '>
-          <p className='text-gray-800 dark:text-gray-100'>
+          <p className='text-xl text-gray-800 dark:text-gray-100'>
             {activeSideFeature?.label || ""}
           </p>
           <button onClick={() => setActiveSideFeature(null)}>

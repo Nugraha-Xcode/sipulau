@@ -4,12 +4,9 @@
     "buttonOption": "Opsi",
     "optionButton1": "Tampilkan/Sembunyikan Kolom",
     "optionButton2": "Tampilkan Data yang Dipilih",
-    "filterMapExtent": "Filter by Map Extent",
     "zoom": "Zoom to",
-    "filter": "Filter",
     "resetFilter": "Reset Filter",
     "refresh": "Segarkan",
-    "download": "Unduh",
     "column1": "ID Pulau",
     "column2": "Kode Pulau",
     "column3": "Nama Pulau",
@@ -36,5 +33,12 @@
     "userGuide": "user-guide-sipulau-id",
     "emptyStateTable1": "Maaf, Data tidak Ada",
     "emptyStateTable2": "Data yang anda cari tidak ada, silahkan anda coba lagi.",
-    "location": "Lokasi"
+    "location": "Lokasi",
+    "filterMapExtent": "Saring Berdasarkan Peta",
+    "showFields": "Tampilan Kolom",
+    "filter": "Saring",
+    "selectAoi": "Pilih AOI",
+    "download": "Unduh",
+    "expandTable": "Lebarkan Tabel",
+    "close": "Tutup"
 }

@@ -2,8 +2,14 @@ import React from "react";
 // import IcCloseUpload from "../../../../core/icons/icCloseUpload";
 import style from "./InputDropFiles.module.css";
 import shp from "shpjs";
+import { useTranslation } from "next-i18next";
 
 const InputDropFiles = ({ files, setFiles, setShpData }) => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   const inputRef = React.useRef(null);
   // state for dragging files
   const [dragging, setDragging] = React.useState(false);
@@ -95,7 +101,9 @@ const InputDropFiles = ({ files, setFiles, setShpData }) => {
             src='images/addFile.png'
             className={style.upload_image}
           />
-          <p className={style.title_upload}>Click or drag file here</p>
+          <p className={style.title_upload}>
+            {translatedText("upload.clickDrag")}
+          </p>
         </form>
       )}
     </>

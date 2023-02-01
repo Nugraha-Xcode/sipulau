@@ -293,7 +293,7 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
             } flex items-center gap-2 border-2 h-10 py-2 px-5 rounded-lg `}
           >
             <MemoIcMapFilter />
-            <p className='text-xs'>Filter by Map Extent</p>
+            <p className='text-xs'>{t("filterMapExtent")}</p>
           </button>
           <div className='relative'>
             <button
@@ -305,7 +305,7 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
                 alt='button'
                 className='h-4 text-gray-900'
               />
-              <p className='text-xs text-gray-900'>Show All Fields</p>
+              <p className='text-xs text-gray-900'>{t("showFields")}</p>
             </button>
             <div
               data-cy='map-table-column-setting-option'
@@ -439,7 +439,7 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
               <img src='/images/ic-checkbox.svg' alt='button' className='h-4' />
             </button> */}
           <Tippy
-            content='Download'
+            content={t("download")}
             placement='bottom'
             delay={300}
             className='text-xs'
@@ -453,7 +453,7 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
             </button>
           </Tippy>
           <Tippy
-            content='Expand Table'
+            content={t("expandTable")}
             placement='bottom'
             delay={300}
             className='text-xs'
@@ -469,7 +469,7 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
             </button>
           </Tippy>
           <Tippy
-            content='Close'
+            content={t("close")}
             placement='bottom'
             delay={300}
             className='text-xs'

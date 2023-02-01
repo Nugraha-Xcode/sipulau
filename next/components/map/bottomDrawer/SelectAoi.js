@@ -1,3 +1,4 @@
+import { useTranslation } from "next-i18next";
 import React, { useCallback, useContext, useEffect } from "react";
 import shallow from "zustand/shallow";
 import MapContext from "../../../context/MapContext";
@@ -5,6 +6,7 @@ import { useDrawAoi, useNav, useTable } from "../../../hooks";
 import MemoIcCursor from "../../core/icons/IcCursor";
 
 const SelectAoi = () => {
+  const { t } = useTranslation("attributetable");
   const { queryFilter, draw, map } = useContext(MapContext);
   const [deleteDataTable, setPage] = useTable(
     (state) => [state.deleteDataTable, state.setPage],
@@ -68,7 +70,7 @@ const SelectAoi = () => {
       }`}
     >
       <MemoIcCursor />
-      <p className='text-xs'>Select AOI</p>
+      <p className='text-xs'>{t("selectAoi")}</p>
     </button>
   );
 };

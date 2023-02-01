@@ -11,7 +11,11 @@ import MapContext from "../../../context/MapContext";
 import { useDownloadAoi } from "../../../hooks";
 
 const AreaInterest = () => {
-  const { t } = useTranslation("sideBarRight");
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["sideBarRight", "map"] };
+    return t(key, params);
+  };
   const [drawItem, drawSelected, setDrawItem, setDrawSelected] = useDownloadAoi(
     (state) => [
       state.drawItem,
@@ -101,7 +105,7 @@ const AreaInterest = () => {
   return (
     <div className='flex flex-col gap-2' s>
       <div className='flex flex-col bg-white rounded-[8px] p-3 text-[#4F4C4A] gap-2'>
-        <p className='text-sm'>Area of Interest List:</p>
+        <p className='text-sm'>{translatedText("download.aoiList")}</p>
         {drawItem.length > 0 ? (
           drawItem.map((el, index) => (
             <div
@@ -136,7 +140,7 @@ const AreaInterest = () => {
           ))
         ) : (
           <div className='flex justify-center w-full h-full p-5 border-dotted border-[1px] items-center text-center text-sm text-[#B4B2AF]'>
-            No Area of Interest to Show. Please draw Area of Interest First
+            {translatedText("download.noAoi")}
           </div>
         )}
       </div>
@@ -150,7 +154,11 @@ const AreaInterest = () => {
         } w-full  text-sm rounded-lg py-2`}
         ref={polygonRef}
       >
-        <p>{drawPoly ? t("cancelSelector") : t("addSelector")}</p>
+        <p>
+          {drawPoly
+            ? translatedText("cancelSelector")
+            : translatedText("addSelector")}
+        </p>
       </button>
     </div>
   );

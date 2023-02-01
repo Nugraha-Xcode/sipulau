@@ -8,7 +8,11 @@ import { Button, Searchbar } from "../sidebar-content/core";
 import NetworkNodeResultItem from "./NetworkNodeResultItem";
 
 const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
-  const { t } = useTranslation("simpulJaringan");
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["simpulJaringan"] };
+    return t(key, params);
+  };
   const { handleSetSnack } = useContext(AppContext);
   const [
     page,
@@ -216,7 +220,9 @@ const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
 
   return (
     <div className='flex flex-col gap-3 border-t-[1px] my-2 py-2'>
-      <div className='font-semibold text-[#4F4C4A]'>Select Network Data</div>
+      <div className='font-semibold text-[#4F4C4A]'>
+        {translatedText("selectNetworkData")}
+      </div>
       <Searchbar value={value} setValue={setValue} />
 
       <div className='flex flex-col gap-2 relative'>
@@ -227,9 +233,11 @@ const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
               src='images/ic-warning.png'
               className='w-[fit-content] h-[fit-content]'
             />
-            <div className='text-[#4F4C4A] font-semibold'>Data Not Found</div>
+            <div className='text-[#4F4C4A] font-semibold'>
+              {translatedText("dataNotFound")}
+            </div>
             <div className='text-[#B4B2AF] text-xs'>
-              Please select the Category & Network Data first
+              {translatedText("networkInstruction")}
             </div>
           </div>
         ) : (
@@ -267,7 +275,7 @@ const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
                 ? totalData
                 : page * 10) +
               " " +
-              t("from") +
+              translatedText("from") +
               " " +
               (totalData || "-")}
           </p>

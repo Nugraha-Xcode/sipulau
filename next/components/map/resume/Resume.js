@@ -13,8 +13,14 @@ import DropdownMenu from "../../core/DropdownMenu";
 import Button from "../../core/Button";
 import AppContext from "../../../context/AppContext";
 import ComponentToPrint from "./ComponentToPrint";
+import { useTranslation } from "next-i18next";
 
 const Resume = () => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   const { handleSetSnack } = useContext(AppContext);
   const [setActiveSideFeature, activeSideFeature] = useNav(
     (state) => [state.setActiveSideFeature, state.activeSideFeature],
@@ -86,7 +92,7 @@ const Resume = () => {
     >
       <div>
         <div className='flex items-center justify-between '>
-          <p className='text-gray-800 dark:text-gray-100'>
+          <p className='text-xl text-gray-800 dark:text-gray-100'>
             {activeSideFeature?.label || ""}
           </p>
           <button onClick={() => setActiveSideFeature(null)}>
@@ -97,7 +103,7 @@ const Resume = () => {
       </div>
       <div className='flex flex-1 flex-col gap-3 overflow-y-auto hide-scrollbar'>
         <DropdownMenu
-          label='Select Province'
+          label={translatedText("resume.selectProvince")}
           menu={listProvince}
           onSelect={(selectedItem) => {
             getResume(selectedItem.value);
@@ -129,28 +135,31 @@ const Resume = () => {
               <div className='flex flex-col gap-1'>
                 {[
                   {
-                    label: "Number of Islands",
+                    label: translatedText("resume.numberIslands"),
                     value: resumeProvince.total_island,
                   },
-                  { label: "Area", value: resumeProvince.total_area },
                   {
-                    label: "Coastline Length",
+                    label: translatedText("resume.area"),
+                    value: resumeProvince.total_area,
+                  },
+                  {
+                    label: translatedText("resume.coastlineLength"),
                     value: resumeProvince.total_coastline,
                   },
                   {
-                    label: "Largest Island",
+                    label: translatedText("resume.largestIsland"),
                     value: resumeProvince.largest_island,
                   },
                   {
-                    label: "Smallest Island",
+                    label: translatedText("resume.smallestIsland"),
                     value: resumeProvince.smallest_island,
                   },
                   {
-                    label: "Inhabited Island",
+                    label: translatedText("resume.inhabitedIsland"),
                     value: resumeProvince.total_inhabited,
                   },
                   {
-                    label: "Uninhabited Island",
+                    label: translatedText("resume.uninhabitedIsland"),
                     value: resumeProvince.total_uninhabited,
                   },
                 ].map((el) => (
@@ -184,7 +193,7 @@ const Resume = () => {
               onClick={handlePrint}
               isActive={true}
             >
-              Print
+              {translatedText("resume.print")}
             </Button>
           </>
         )}

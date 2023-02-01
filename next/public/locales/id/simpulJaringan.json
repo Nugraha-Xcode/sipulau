@@ -7,8 +7,14 @@
     "buttonProcess": "Proses",
     "simpulTitle2": "Pilih Simpul Jaringan",
     "buttonAddLayer": "Tambah Layer",
+    "layerAdded":"Layer Ditambahkan",
     "detail": "Detail",
     "noLayer": "Tidak Ada Layer",
     "noLayerText": "Maaf, saat ini belum tersedia layer untuk kategori ini.",
-    "from": "dari"
+    "from": "dari",
+    "selectCategory": "Pilih Kategori",
+    "selectNetworkCategory": "Pilih Kategori Simpul",
+    "selectNetworkData": "Pilih Data Simpul",
+    "dataNotFound": "Data Tidak Ditemukan",
+    "networkInstruction": "Silahkan Pilih Kategori dan Data Simpul Terlebih Dahulu"
 }

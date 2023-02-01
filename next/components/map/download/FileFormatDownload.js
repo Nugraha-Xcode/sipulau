@@ -1,9 +1,15 @@
+import { useTranslation } from "next-i18next";
 import React, { useState, useEffect } from "react";
 import Button from "../../core/Button";
 import Modal from "../../modal";
 import { Dropdown } from "../sidebar-content/core";
 
 const FileFormatDownload = ({ type, setType, handleDownload }) => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["common"] };
+    return t(key, params);
+  };
   // dropdown valued
   const value = [
     { label: "CSV", value: "csv" },
@@ -32,7 +38,7 @@ const FileFormatDownload = ({ type, setType, handleDownload }) => {
         }}
         className={`p-1 bg-main-blue text-white w-full text-sm rounded-lg py-2`}
       >
-        <p>Proceed</p>
+        <p>{translatedText("proceed")}</p>
       </button>
 
       <Modal

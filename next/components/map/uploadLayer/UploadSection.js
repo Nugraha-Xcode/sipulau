@@ -1,3 +1,4 @@
+import { useTranslation } from "next-i18next";
 import React, { useContext } from "react";
 import shallow from "zustand/shallow";
 import { UploadLayerStore } from "../../../constant";
@@ -7,6 +8,11 @@ import Button from "../../core/Button";
 import { InputDropFiles } from "../sidebar-content/core";
 
 const UploadSection = () => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   // state for save the files value
   const { handleSetSnack } = useContext(AppContext);
   const [activeLayer, setActiveLayer] = useNetwork(
@@ -40,7 +46,7 @@ const UploadSection = () => {
     <div className='w-full h-[fit-content] flex flex-col gap-2'>
       <input
         className='w-full border-[1px] border-[#B4B2AF] rounded-[8px] placeholder-[#4F4C4A] focus:outline-none p-3'
-        placeholder='Input Layer Name'
+        placeholder={translatedText("upload.inputLayername")}
         value={valueInput}
         onChange={(e) => setValueInput(e.target.value)}
       ></input>
@@ -58,7 +64,7 @@ const UploadSection = () => {
           className='w-[fit-content] h-[fit-content]'
         />
         <p className='text-sm font-semibold text-[#B4B2AF]'>
-          Accepted format .zip
+          {translatedText("upload.acceptZip")}
         </p>
       </div>
 
@@ -86,10 +92,10 @@ const UploadSection = () => {
           setValueInput("");
           setFiles("");
           setShpData([]);
-          handleSetSnack("Layer berhasil ditambahkan", "success");
+          handleSetSnack(translatedText("upload.uploadSuccess"), "success");
         }}
       >
-        Upload
+        {translatedText("upload.upload")}
       </Button>
     </div>
   );
