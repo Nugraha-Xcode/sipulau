@@ -143,7 +143,7 @@ const InformasiPulau = ({
             onClick={() =>
               map.flyTo({
                 center: [infoPulau.long, infoPulau.lat],
-                zoom: 12.5,
+                zoom: 17,
               })
             }
           >

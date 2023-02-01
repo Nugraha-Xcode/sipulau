@@ -247,7 +247,7 @@ const Table = ({ columns, order, handleOrder, map, fetchTable }) => {
                       onClick={() =>
                         map.flyTo({
                           center: [dataItem.lon, dataItem.lat],
-                          zoom: 12.5,
+                          zoom: 17,
                         })
                       }
                       test={dataItem[itemValue.field]}

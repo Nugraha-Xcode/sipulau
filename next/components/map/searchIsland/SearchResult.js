@@ -7,7 +7,7 @@ const SearchResult = ({ item }) => {
       onClick={() => {
         map.flyTo({
           center: [item.lon, item.lat],
-          zoom: 16,
+          zoom: 17,
           padding: {
             left: 400,
           },

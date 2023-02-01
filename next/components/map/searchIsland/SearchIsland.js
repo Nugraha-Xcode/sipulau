@@ -141,7 +141,7 @@ const SearchIsland = () => {
     getPulauBuffer(latLong[1] + "," + latLong[0], inputRadius || 0);
     map.flyTo({
       center: [latLong[1], latLong[0]],
-      zoom: 12.5,
+      zoom: 17,
       padding: {
         left: 400,
       },
