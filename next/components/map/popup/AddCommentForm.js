@@ -337,7 +337,7 @@ const AddCommentForm = ({ onClose }) => {
           <div className='flex gap-4'>
             <input
               className='hidden'
-              accept='.xlsx,.xls,.doc,.docx,.ppt,.pptx,.txt,.pdf,.csv'
+              accept='.pdf'
               type='file'
               id='doc'
               onChange={(e) => {
@@ -355,8 +355,8 @@ const AddCommentForm = ({ onClose }) => {
                   className='h-4'
                 />
               </div>
-              <p className='text-gray-7 text-xs'>
-                {docFile ? docFile.name : t("commentModal4") + ". 1Mb"}
+              <p className='text-gray-7 text-[10px]'>
+                {docFile ? docFile.name : t("commentDoc")}
               </p>
             </label>
           </div>
