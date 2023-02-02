@@ -244,12 +244,31 @@ const Table = ({ columns, order, handleOrder, map, fetchTable }) => {
                   itemValue.show ? (
                     <td
                       key={itemIdx}
-                      onClick={() =>
+                      onClick={() => {
                         map.flyTo({
                           center: [dataItem.lon, dataItem.lat],
                           zoom: 17,
-                        })
-                      }
+                        });
+                        if (isSelectAll) {
+                          if (
+                            document.getElementById(dataItem.id_toponim)
+                              .value === "false"
+                          ) {
+                            removeSelectedRow(dataItem.id_toponim);
+                          } else {
+                            setSelectedRowPrev([dataItem.id_toponim]);
+                          }
+                        } else {
+                          if (
+                            document.getElementById(dataItem.id_toponim)
+                              .value === "true"
+                          ) {
+                            removeSelectedRow(dataItem.id_toponim);
+                          } else {
+                            setSelectedRowPrev([dataItem.id_toponim]);
+                          }
+                        }
+                      }}
                       test={dataItem[itemValue.field]}
                       className={`${
                         isSelectAll
