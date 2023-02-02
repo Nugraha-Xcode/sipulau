@@ -236,7 +236,7 @@ const NetWorkNodeResult = ({ getSimpulList, isFetch }) => {
             <div className='text-[#4F4C4A] font-semibold'>
               {translatedText("dataNotFound")}
             </div>
-            <div className='text-[#B4B2AF] text-xs'>
+            <div className='text-[#B4B2AF] text-xs text-center'>
               {translatedText("networkInstruction")}
             </div>
           </div>

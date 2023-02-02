@@ -171,7 +171,7 @@ const NetworkNode = () => {
           resources[row].format === "" &&
           resources[row].resource_locator_protocol.substring(0, 7) === "OGC:WMS"
         ) {
-          const layanan = new Layanan({
+          const layanan = {
             judul: simpulList[index].title,
             nama: resources[row].name,
             url: resources[row].url + "?",
@@ -179,13 +179,13 @@ const NetworkNode = () => {
             simpul: simpulList[index].organization.title,
             bbox: minX + "," + minY + "," + maxX + "," + maxY,
             srs: "EPSG:" + srs,
-          });
+          };
           daftarLayananArr.push(layanan);
         } else if (
           resources[row].format === "" &&
           resources[row].resource_locator_protocol.substring(0, 7) === "GeoJSON"
         ) {
-          const layanan = new Layanan({
+          const layanan = {
             judul: simpulList[index].title,
             nama: resources[row].name,
             url: resources[row].url,
@@ -193,7 +193,7 @@ const NetworkNode = () => {
             simpul: simpulList[index].organization.title,
             bbox: minX + "," + minY + "," + maxX + "," + maxY,
             srs: srs,
-          });
+          };
           daftarLayananArr.push(layanan);
         }
       }
