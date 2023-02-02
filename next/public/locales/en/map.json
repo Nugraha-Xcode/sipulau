@@ -23,7 +23,7 @@
     "search": {
         "enterKeyword": "Enter Keyword or Coordinates",
         "aboutTitle": "About Search",
-        "aboutContext": "You may search by a specific keyword or coordinate.",
+        "aboutContext": "Make sure the filter is not active. Searching by coordinate use latitude, longitude format. Example: -5.807291, 108.454284",
         "addComment": "Add Comment"
     },
     "filter": {

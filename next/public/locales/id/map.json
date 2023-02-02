@@ -23,7 +23,7 @@
     "search": {
         "enterKeyword": "Masukan Kata Kunci atau Koordinat",
         "aboutTitle": "Tentang Pencarian Pulau",
-        "aboutContext": "Anda dapat mencari pulau dengan memasukkan kata kunci atau koordinat.",
+        "aboutContext": "Pastikan filter tidak aktif. Pencarian menggunakan koordinat menggunakan format latitude, longitude. Contoh: -5.807291, 108.454284",
         "addComment": "Tambah Komentar"
     },
     "filter": {
