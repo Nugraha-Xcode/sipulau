@@ -78,7 +78,9 @@
     "tools": {
         "resetExtend": "Restore View",
         "measurement": "Measurement",
-        "setCrs": "Set CRS",
+        "distance": "Distance",
+        "area": "Area",
+        "setCrs": "Coordinate System",
         "baseMap": "BaseMap"
     }
 }

@@ -1,8 +1,14 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
+import { useTranslation } from "next-i18next";
 import * as turf from "@turf/turf";
 import MapContext from "../../../context/MapContext";
 
 const MeasurementFeature = () => {
+  const { t } = useTranslation();
+  const translatedText = (key) => {
+    const params = { ns: ["map"] };
+    return t(key, params);
+  };
   const { map } = useContext(MapContext);
   const [length, setLength] = useState(0);
   const [area, setArea] = useState(0);
@@ -179,13 +185,13 @@ const MeasurementFeature = () => {
   }, []);
 
   return (
-    <div className='flex flex-col text-gray-600 text-[10px]'>
+    <div className='flex flex-col text-gray-600 text-sm'>
       <div className='flex justify-between items-center'>
-        <p>Distance</p>
+        <p>{translatedText("tools.distance")}</p>
         <p>{length.toFixed(2)} km</p>
       </div>
       <div className='flex justify-between items-center'>
-        <p>Area</p>
+        <p>{translatedText("tools.area")}</p>
         <p>
           {area.toFixed(2)} km<sup>2</sup>
         </p>

@@ -8,9 +8,15 @@ const CrsSelectorFeature = () => {
   return (
     <div className='flex flex-col gap-1  max-h-[400px] overflow-y-scroll hide-scrollbar'>
       {[
-        { name: "EPSG:4326", projection: "EPSG:4326" },
-        { name: "EPSG:4269", projection: "EPSG:4269" },
-        { name: "EPSG:3857", projection: "EPSG:3857" },
+        {
+          name: "EPSG:4326 - WGS 84 / World Geodetic System 1984 (degree)",
+          projection: "EPSG:4326",
+        },
+        { name: "EPSG:4269 - NAD 83 (degree)", projection: "EPSG:4269" },
+        {
+          name: "EPSG: 3857 - WGS 84 / Pseudo-Mercator (meter)",
+          projection: "EPSG:3857",
+        },
       ].map((el) => (
         <div
           key={el.projection}
@@ -22,7 +28,7 @@ const CrsSelectorFeature = () => {
             { "bg-blue-2": crs === el.projection },
           ])}
         >
-          <p className='text-[10px] text-gray-800'>{el.name}</p>
+          <p className='text-xs text-gray-800'>{el.name}</p>
         </div>
       ))}
     </div>

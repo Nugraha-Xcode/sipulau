@@ -78,7 +78,9 @@
     "tools": {
         "resetExtend": "Kembalikan Tampilan",
         "measurement": "Pengukur",
-        "setCrs": "Atur CRS",
+        "distance": "Jarak",
+        "area": "Luas",
+        "setCrs": "Sistem Koordinat",
         "baseMap": "Peta Dasar"
     }
 }

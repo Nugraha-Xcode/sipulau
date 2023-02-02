@@ -48,7 +48,7 @@ const BasemapFeature = () => {
   }, []);
 
   return (
-    <div className='flex flex-col gap-3  max-h-[400px] overflow-y-scroll hide-scrollbar'>
+    <div className='flex flex-col gap-3 max-h-[400px] overflow-y-scroll hide-scrollbar'>
       {load
         ? [1, 2, 3, 4, 5].map((el) => (
             <div
@@ -111,7 +111,7 @@ const BasemapFeature = () => {
                 alt={el.label}
                 className='w-16 h-8 rounded-[4px] text-gray-800'
               />
-              <p className='text-[10px] text-gray-800'>{el.label}</p>
+              <p className='text-xs text-gray-800'>{el.label}</p>
             </div>
           ))}
     </div>

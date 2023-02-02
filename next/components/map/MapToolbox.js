@@ -182,7 +182,7 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
           ])}
         >
           <div className='flex items-center justify-between'>
-            <p className='text-[10px] text-gray-600'>
+            <p className='text-sm text-gray-600'>
               {activeCardFeature && activeCardFeature.label}
             </p>
             <button onClick={() => setActiveCardFeature(null)}>
@@ -194,9 +194,7 @@ const MapToolbox = ({ isOpenBottomDrawer, setOpenMapToolbox, isOpen }) => {
             </button>
           </div>
           <hr />
-          <div className='hide-scrollbar max-h-96 overflow-y-scroll'>
-            {activeCardFeature && activeCardFeature.content}
-          </div>
+          {activeCardFeature && activeCardFeature.content}
         </div>
       </Transition>
     </div>
