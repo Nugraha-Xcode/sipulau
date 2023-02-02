@@ -9,7 +9,10 @@ export const useAdvanceFilter = create((set, get) => ({
   addFilterMain: (el) => {
     let generateId = uuidv4();
     let item = {
-      [generateId]: { column: el, operator: { label: "Equals", value: "_eq" } },
+      [generateId]: {
+        column: el,
+        operator: { label: "Contains", value: "_contains" },
+      },
     };
     set({ filterObject: { ...get().filterObject, ...item } });
   },
@@ -23,7 +26,7 @@ export const useAdvanceFilter = create((set, get) => ({
     let generateId = uuidv4();
     newFilterObj[filterItemId]["members"][generateId] = {
       column: el,
-      operator: { label: "Equals", value: "_eq" },
+      operator: { label: "Contains", value: "_contains" },
       parents: [filterItemId],
     };
     set({ filterObject: { ...newFilterObj } });
@@ -49,7 +52,7 @@ export const useAdvanceFilter = create((set, get) => ({
     );
     deepObjValue[0][memberId]["members"][generateId] = {
       column: el,
-      operator: { label: "Equals", value: "_eq" },
+      operator: { label: "Contains", value: "_contains" },
       parents: [...memberValue["parents"], memberId],
     };
     set({ filterObject: { ...newFilterObj } });
