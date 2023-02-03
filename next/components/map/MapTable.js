@@ -1,5 +1,6 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, Fragment } from "react";
 import { useTranslation } from "next-i18next";
+import { Menu, Transition } from "@headlessui/react";
 
 import Table from "../../components/core/table";
 import AppContext from "../../context/AppContext";
@@ -295,48 +296,60 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
             <MemoIcMapFilter />
             <p className='text-xs'>{t("filterMapExtent")}</p>
           </button>
-          <div className='relative'>
-            <button
-              onClick={() => setColumnOpt((prev) => !prev)}
-              className={`flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg`}
-            >
-              <img
-                src='/images/ic-filter-column.svg'
-                alt='button'
-                className='h-4 text-gray-900'
-              />
-              <p className='text-xs text-gray-900'>{t("showFields")}</p>
-            </button>
-            <div
-              data-cy='map-table-column-setting-option'
-              className={`${
-                isColumnOpt ? "max-h-44" : "max-h-0"
-              } absolute z-50 -bottom-2 right-0 shadow-style-1 rounded-lg transform translate-y-full overflow-scroll transition-all duration-200 ease-in-out bg-white hide-scrollbar`}
-            >
-              <div className='py-3 px-2 space-y-2 border border-gray-4 rounded-lg'>
-                {columns.map((el, index) => (
-                  <div key={el.field} className='flex items-center gap-2'>
-                    <input
-                      type='checkbox'
-                      className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
-                      checked={el.show}
-                      id={el.field}
-                      name={el.field}
-                      value={el.field}
-                      onChange={(e) => {
-                        setColums((prev) => {
-                          let arr = [...prev];
-                          arr[index].show = !arr[index].show;
-                          return arr;
-                        });
-                      }}
-                    />
-                    <p className='text-main-gray text-xs'>{t(el.title)}</p>
-                  </div>
-                ))}
-              </div>
+          <Menu as='div' className='relative inline-block text-left'>
+            <div>
+              <Menu.Button
+                className={`flex items-center gap-2 border-2 border-gray-300 h-10 py-2 px-5 rounded-lg`}
+              >
+                <img
+                  src='/images/ic-filter-column.svg'
+                  alt='button'
+                  className='h-4 text-gray-900'
+                />
+                <p className='text-xs text-gray-900'>{t("showFields")}</p>
+              </Menu.Button>
             </div>
-          </div>
+            <Transition
+              as={Fragment}
+              enter='transition-all ease-out duration-75'
+              enterFrom='transform h-0'
+              enterTo='transform h-44'
+              leave='transition-all ease-in duration-75'
+              leaveFrom='transform h-44'
+              leaveTo='transform h-0'
+            >
+              <Menu.Items className='absolute overflow-scroll hide-scrollbar max-h-44 z-50 border border-gray-4 shadow-style-1 left-0 mt-2 rounded-lg bg-white'>
+                <div className='py-3 px-2 space-y-1'>
+                  {columns.map((el, index) => (
+                    <div key={el.field} className='flex items-center gap-1'>
+                      <input
+                        type='checkbox'
+                        className='focus:ring-0 focus:ring-transparent cursor-pointer text-main-blue rounded-md w-5 h-5'
+                        checked={el.show}
+                        id={el.field}
+                        name={el.field}
+                        value={el.field}
+                        onChange={(e) => {
+                          setColums((prev) => {
+                            let arr = [...prev];
+                            arr[index].show = !arr[index].show;
+                            return arr;
+                          });
+                        }}
+                      />
+                      <label
+                        htmlFor={el.field}
+                        className='text-main-gray text-xs cursor-pointer hover:bg-blue-50 flex-1 rounded-md p-1'
+                      >
+                        {t(el.title)}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
+
           <button
             data-cy='map-table-filter-button'
             onClick={toggleMapFilter}

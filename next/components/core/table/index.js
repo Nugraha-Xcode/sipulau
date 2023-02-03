@@ -73,7 +73,7 @@ const Table = ({ columns, order, handleOrder, map, fetchTable }) => {
             <th className='sticky top-0 text-center px-4 bg-gray-50'>
               <input
                 type='checkbox'
-                className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
+                className='focus:ring-0 focus:ring-transparent cursor-pointer text-main-blue rounded-md w-5 h-5'
                 checked={isSelectAll}
                 id={"select-all"}
                 name={"select-all"}
@@ -194,7 +194,7 @@ const Table = ({ columns, order, handleOrder, map, fetchTable }) => {
                 >
                   <input
                     type='checkbox'
-                    className='focus:ring-main-blue cursor-pointer text-main-blue rounded-md w-5 h-5'
+                    className='focus:ring-0 focus:ring-transparent cursor-pointer text-main-blue rounded-md w-5 h-5'
                     checked={
                       isSelectAll
                         ? selectedRow.findIndex(
