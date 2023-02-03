@@ -31,7 +31,9 @@
         "addGroup": "Add Group",
         "addFilter": "Add Filter",
         "setFilter": "Set Filter",
-        "resetFilter": "Reset Filter"
+        "resetFilter": "Reset Filter",
+        "selectProvince": "Select Province",
+        "selectCity": "Select Reg/City"
     },
     "download": {
         "selectByProvince": "Select By Province",

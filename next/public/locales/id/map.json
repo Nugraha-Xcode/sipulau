@@ -31,7 +31,9 @@
         "addGroup": "Tambah Kelompok",
         "addFilter": "Tambah Filter",
         "setFilter": "Atur Filter",
-        "resetFilter": "Atur Ulang Filter"
+        "resetFilter": "Atur Ulang Filter",
+        "selectProvince": "Pilih Provinsi",
+        "selectCity": "Pilih Kab/Kota"
     },
     "download": {
         "selectByProvince": "Pilih Berdasarkan Provinsi",

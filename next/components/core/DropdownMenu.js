@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import IcAccordion from "./icons/icAccordion";
@@ -9,17 +9,27 @@ const DropdownMenu = ({
   onSelect,
   initialValue = null,
   maxH = "max-h-72",
+  disabled = false,
 }) => {
-  const [selected, setSelected] = useState(initialValue);
+  const [selected, setSelected] = useState({});
+
+  useEffect(() => {
+    setSelected(initialValue);
+  }, [initialValue]);
 
   return (
     <Popover className='relative'>
       {({ open }) => (
         <>
           <Popover.Button
+            disabled={disabled}
             className={clsx([
               "flex w-full gap-2 h-[40px] rounded-lg text-gray-600 border-[1px] border-gray-600 items-center px-4 py-2 justify-between bg-white text-left text-xs",
-              { "rounded-lg": !open, "rounded-b-none border-b-0": open },
+              {
+                "rounded-lg": !open,
+                "rounded-b-none border-b-0": open,
+                "cursor-disable": disabled,
+              },
             ])}
           >
             {selected?.label || label}
