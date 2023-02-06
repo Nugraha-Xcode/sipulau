@@ -7,7 +7,7 @@ import MemoIcCursor from "../../core/icons/IcCursor";
 
 const SelectAoi = () => {
   const { t } = useTranslation("attributetable");
-  const { queryFilter, draw, map } = useContext(MapContext);
+  const { draw, map } = useContext(MapContext);
   const [deleteDataTable, setPage] = useTable(
     (state) => [state.deleteDataTable, state.setPage],
     shallow
@@ -17,33 +17,34 @@ const SelectAoi = () => {
     (state) => [state.setActiveSideFeature, state.setExpandSideNav],
     shallow
   );
-  const [isDrawAoi, setIsDrawAoi, aoiPoly, setAoiPoly] = useDrawAoi(
-    (state) => [
-      state.isDrawAoi,
-      state.setIsDrawAoi,
-      state.aoiPoly,
-      state.setAoiPoly,
-    ],
-    shallow
-  );
+  const [isDrawAoi, setIsDrawAoi, aoiPoly, setAoiPoly, setType, type] =
+    useDrawAoi(
+      (state) => [
+        state.isDrawAoi,
+        state.setIsDrawAoi,
+        state.aoiPoly,
+        state.setAoiPoly,
+        state.setType,
+        state.type,
+      ],
+      shallow
+    );
 
   useEffect(() => {
-    const handleCreate = (e) => {
-      setAoiPoly(e.features[0]);
-      setIsDrawAoi(false);
-      setPage(1);
-      deleteDataTable();
-    };
-    if (map) {
+    if (type === "filter") {
+      const handleCreate = (e) => {
+        setAoiPoly(e.features[0]);
+        setIsDrawAoi(false);
+        setPage(1);
+        deleteDataTable();
+      };
       map.on("draw.create", handleCreate);
-    }
 
-    return () => {
-      if (map) {
+      return () => {
         map.off("draw.create", handleCreate);
-      }
-    };
-  }, [map]);
+      };
+    }
+  }, [type]);
 
   const handleStartDraw = useCallback(() => {
     if (isDrawAoi) {
@@ -58,6 +59,7 @@ const SelectAoi = () => {
       setIsDrawAoi(true);
       draw.changeMode("draw_polygon");
     }
+    setType("filter");
   }, [draw, isDrawAoi, aoiPoly]);
 
   return (

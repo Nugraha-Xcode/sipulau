@@ -8,7 +8,7 @@ import React, {
 import { useTranslation } from "react-i18next";
 import shallow from "zustand/shallow";
 import MapContext from "../../../context/MapContext";
-import { useDownloadAoi } from "../../../hooks";
+import { useDownloadAoi, useDrawAoi } from "../../../hooks";
 
 const AreaInterest = () => {
   const { t } = useTranslation();
@@ -25,6 +25,10 @@ const AreaInterest = () => {
     ],
     shallow
   );
+  const [setType, type] = useDrawAoi(
+    (state) => [state.setType, state.type],
+    shallow
+  );
   const { map, draw, drawPoly, setDrawPoly } = useContext(MapContext);
   const [isSelection, setSelection] = useState([]);
   const polygonRef = useRef(null);
@@ -33,36 +37,37 @@ const AreaInterest = () => {
     // polygonRef.current.addEventListener("click", () => {
     //   draw.changeMode("draw_polygon");
     // });
+    if (type === "download") {
+      const handleCreate = (e) => {
+        setDrawItem([...drawItem, e.features[0]]);
+        setDrawSelected([...drawSelected, e.features[0]]);
+        setDrawPoly(false);
+      };
 
-    const handleCreate = (e) => {
-      setDrawItem([...drawItem, e.features[0]]);
-      setDrawSelected([...drawSelected, e.features[0]]);
-      setDrawPoly(false);
-    };
+      map.on("draw.create", handleCreate);
+      map.on("draw.selectionchange", (e) => {
+        setSelection(e.features);
+      });
 
-    map.on("draw.create", handleCreate);
-    map.on("draw.selectionchange", (e) => {
-      setSelection(e.features);
-    });
+      const handleUpdate = (e) => {
+        if (drawSelected.findIndex((el) => el.id === e.features[0].id) !== -1) {
+          let a = [...drawSelected];
+          a[a.findIndex((el) => el.id === e.features[0].id)] = e.features[0];
+          setDrawSelected(a);
+        }
 
-    const handleUpdate = (e) => {
-      if (drawSelected.findIndex((el) => el.id === e.features[0].id) !== -1) {
-        let a = [...drawSelected];
+        let a = [...drawItem];
         a[a.findIndex((el) => el.id === e.features[0].id)] = e.features[0];
-        setDrawSelected(a);
-      }
+        setDrawItem(a);
+      };
+      map.on("draw.update", handleUpdate);
 
-      let a = [...drawItem];
-      a[a.findIndex((el) => el.id === e.features[0].id)] = e.features[0];
-      setDrawItem(a);
-    };
-    map.on("draw.update", handleUpdate);
-
-    return () => {
-      map.off("draw.create", handleCreate);
-      map.off("draw.update", handleUpdate);
-    };
-  }, [drawSelected, drawItem]);
+      return () => {
+        map.off("draw.create", handleCreate);
+        map.off("draw.update", handleUpdate);
+      };
+    }
+  }, [drawSelected, drawItem, type]);
 
   const handleDelete = useCallback(
     (id) => {
@@ -81,6 +86,7 @@ const AreaInterest = () => {
       setDrawPoly(true);
       draw.changeMode("draw_polygon");
     }
+    setType("download");
   }, [drawPoly]);
 
   const handleCheck = useCallback(

@@ -196,6 +196,11 @@ const map = () => {
         trash: false,
       },
     });
+    const modes = MapboxDraw.modes;
+
+    //remove drag action
+    modes.simple_select.onDrag = function (state, e) {};
+
     mapRef.current.addControl(drawRef.current);
 
     return () => {

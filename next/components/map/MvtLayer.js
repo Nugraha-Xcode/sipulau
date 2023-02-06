@@ -56,10 +56,6 @@ const MvtLayer = ({ item }) => {
         }),
         // filter: filterId.length > 0 && [("in", ["id"], ["literal", filterId])],
       });
-
-      map.on("click", `${item.judul + item.nama}`, (e) => {
-        console.log(e.features[0]);
-      });
     }
 
     return () => {
