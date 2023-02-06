@@ -9,8 +9,16 @@ const ResizeableDrawer = ({
   isActiveSideFeature,
 }) => {
   const [isResizing, setIsResizing] = useState(false);
-  const [currentHeight, setCurrentHeight] = useState(300);
+  const [currentHeight, setCurrentHeight] = useState(0);
   const [mount, setMount] = useState(false);
+
+  useEffect(() => {
+    if (!mount) {
+      setCurrentHeight(0);
+    } else {
+      setCurrentHeight(500);
+    }
+  }, [mount]);
 
   useEffect(() => {
     isOpen && setTimeout(() => setMount(true), 100);
