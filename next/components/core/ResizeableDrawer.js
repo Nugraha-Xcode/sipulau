@@ -1,9 +1,18 @@
+import clsx from "clsx";
 import React, { useCallback, useEffect, useState } from "react";
 
-const ResizeableDrawer = ({ children, isOpen }) => {
+const ResizeableDrawer = ({
+  children,
+  isOpen,
+  isOpenNav,
+  isExpandNav,
+  isActiveSideFeature,
+}) => {
   const [isResizing, setIsResizing] = useState(false);
   const [currentHeight, setCurrentHeight] = useState(300);
   const [mount, setMount] = useState(false);
+
+  console.log(isOpenNav, isExpandNav, isActiveSideFeature);
 
   useEffect(() => {
     isOpen && setTimeout(() => setMount(true), 100);
@@ -42,13 +51,22 @@ const ResizeableDrawer = ({ children, isOpen }) => {
   return (
     <div
       data-cy='resizeable-bottom-drawer'
-      className={`drawer absolute bottom-0 z-50 bg-white w-full rounded-t-2xl transform ${
-        mount ? "translate-y-0" : "translate-y-full"
-      } ${
-        isResizing
-          ? ""
-          : "transition-all duration-200 ease-in-out overscroll-contain overflow-hidden"
-      }`}
+      className={clsx([
+        "drawer absolute bottom-0 right-0 z-20 bg-white w-screen rounded-t-2xl transform",
+        {
+          "translate-y-0": mount,
+          "translate-y-full": !mount,
+          "": isResizing,
+          "transition-all duration-200 ease-in-out overscroll-contain overflow-hidden":
+            !isResizing,
+          "w-[calc(100%-64px)]":
+            isOpenNav && !isExpandNav && !isActiveSideFeature,
+          "w-[calc(100%-228px)]":
+            isOpenNav && isExpandNav && !isActiveSideFeature,
+          "w-[calc(100%-352px)]":
+            isOpenNav && !isExpandNav && isActiveSideFeature,
+        },
+      ])}
     >
       <div
         onMouseDown={handleMousedown}

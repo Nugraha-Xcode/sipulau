@@ -32,6 +32,7 @@ import {
 } from "../constant";
 import ToponimPopup from "../components/map/popup/ToponimPopup";
 import AdvanceFilter from "../components/map/advanceFilter/AdvanceFilter";
+import ResizeableDrawer from "../components/core/ResizeableDrawer";
 
 const map = () => {
   const { t } = useTranslation();
@@ -429,7 +430,7 @@ const map = () => {
           <div
             className={clsx([
               "absolute bottom-10 right-3 z-10 flex flex-col gap-0 transition-all duration-100 ease-in-out",
-              { "bottom-[27.5rem]": isOpenBottomDrawer },
+              // { "bottom-[27.5rem]": isOpenBottomDrawer },
             ])}
           >
             <GeolocateController map={mapRef.current} />
@@ -462,7 +463,21 @@ const map = () => {
           {/* bottom left map feature */}
 
           {/* bottom drawer table */}
-          <div className='absolute bottom-0 z-20 w-screen'>
+          <ResizeableDrawer
+            isOpen={isOpenBottomDrawer}
+            isOpenNav={isOpenSideNav}
+            isExpandNav={expandSideNav}
+            isActiveSideFeature={Boolean(activeSideFeature)}
+          >
+            <MapTable
+              setOpenBottomDrawer={setOpenBottomDrawer}
+              setExpandBottomDrawer={() => {
+                setExpandBottomDrawer((prev) => !prev);
+                !isExpandBottomDrawer && isOpenLegend && setOpenLegend(false);
+              }}
+            />
+          </ResizeableDrawer>
+          {/* <div className='absolute bottom-0 z-20 w-screen'>
             <BottomDrawer
               isOpen={isOpenBottomDrawer}
               isOpenNav={isOpenSideNav}
@@ -478,12 +493,9 @@ const map = () => {
                 }}
               />
             </BottomDrawer>
-          </div>
+          </div> */}
 
-          {/* <ResizeableDrawer isOpen={isOpenDrawer}>
-            </ResizeableDrawer> */}
-
-          {mapload && activeLayer.length > 0 && <MapLayers />}
+          {/* {mapload && activeLayer.length > 0 && <MapLayers />} */}
           <ToponimPopup mapLoad={mapload} />
 
           <Modal

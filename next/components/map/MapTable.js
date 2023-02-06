@@ -498,7 +498,7 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
           </Tippy>
         </div>
       </div>
-      <div className='relative h-full'>
+      <div className='relative h-full pb-20'>
         <Table
           map={map}
           columns={columns}
