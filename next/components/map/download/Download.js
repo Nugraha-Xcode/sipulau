@@ -67,8 +67,12 @@ const Download = () => {
           },
         });
         if (response.status !== 200) {
-          const resJson = await response.json();
-          throw Error(resJson.message);
+          if (response.status === 401) {
+            const resJson = await response.json();
+            throw Error(resJson.message);
+          } else {
+            throw Error(translatedText("tryAgain"));
+          }
         }
 
         const resData = await response.blob();
@@ -80,7 +84,7 @@ const Download = () => {
         window.URL.revokeObjectURL(href);
         anchor.remove();
       } catch (error) {
-        handleSetSnack(translatedText("tryAgain"), "error");
+        handleSetSnack(error.message, "error");
       } finally {
         setIsLoad(false);
       }
@@ -103,7 +107,11 @@ const Download = () => {
         });
         const resData = await response.json();
         if (response.status !== 200) {
-          throw Error(resData.message);
+          if (response.status === 401) {
+            throw Error(resData.message);
+          } else {
+            throw Error(translatedText("tryAgain"));
+          }
         }
 
         let anchor = document.createElement("a");
@@ -111,7 +119,7 @@ const Download = () => {
         anchor.click();
         anchor.remove();
       } catch (error) {
-        handleSetSnack(translatedText("tryAgain"), "error");
+        handleSetSnack(error.message, "error");
       } finally {
         setIsLoad(false);
       }
