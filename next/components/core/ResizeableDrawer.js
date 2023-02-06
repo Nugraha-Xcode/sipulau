@@ -12,8 +12,6 @@ const ResizeableDrawer = ({
   const [currentHeight, setCurrentHeight] = useState(300);
   const [mount, setMount] = useState(false);
 
-  console.log(isOpenNav, isExpandNav, isActiveSideFeature);
-
   useEffect(() => {
     isOpen && setTimeout(() => setMount(true), 100);
     return () => {

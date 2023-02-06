@@ -495,7 +495,7 @@ const map = () => {
             </BottomDrawer>
           </div> */}
 
-          {/* {mapload && activeLayer.length > 0 && <MapLayers />} */}
+          {mapload && activeLayer.length > 0 && <MapLayers />}
           <ToponimPopup mapLoad={mapload} />
 
           <Modal
