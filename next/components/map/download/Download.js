@@ -19,7 +19,7 @@ import LayerListDownload from "./LayerListDownload";
 const Download = () => {
   const { t } = useTranslation();
   const translatedText = (key) => {
-    const params = { ns: ["map"] };
+    const params = { ns: ["common", "map"] };
     return t(key, params);
   };
   const { draw } = useContext(MapContext);
@@ -80,7 +80,7 @@ const Download = () => {
         window.URL.revokeObjectURL(href);
         anchor.remove();
       } catch (error) {
-        handleSetSnack(error.message, "error");
+        handleSetSnack(translatedText("tryAgain"), "error");
       } finally {
         setIsLoad(false);
       }
@@ -111,7 +111,7 @@ const Download = () => {
         anchor.click();
         anchor.remove();
       } catch (error) {
-        handleSetSnack(error.message, "error");
+        handleSetSnack(translatedText("tryAgain"), "error");
       } finally {
         setIsLoad(false);
       }
