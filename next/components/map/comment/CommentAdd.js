@@ -36,7 +36,7 @@ const CommentAdd = () => {
   };
 
   useEffect(() => {
-    if (!map.getSource("comment-point")) {
+    if (map && !map.getSource("comment-point")) {
       map.addSource("comment-point", {
         type: "geojson",
         data: {
@@ -63,13 +63,13 @@ const CommentAdd = () => {
     }
 
     return () => {
-      if (window.location.pathname === "/map") {
+      if (map && window.location.pathname === "/map") {
         map.hasImage("marker-comment") && map.removeImage("marker-comment");
         map.getLayer("comment-point") && map.removeLayer("comment-point");
         map.getSource("comment-point") && map.removeSource("comment-point");
       }
     };
-  }, []);
+  }, [map]);
 
   useEffect(() => {
     const handleTitik = (e) => {
