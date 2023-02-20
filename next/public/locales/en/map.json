@@ -28,12 +28,17 @@
     },
     "filter": {
         "tittleFilter": "Filter",
-        "addGroup": "Add Group",
+        "addGroup": "Advanced Query",
         "addFilter": "Add Filter",
         "setFilter": "Set Filter",
         "resetFilter": "Reset Filter",
         "selectProvince": "Select Province",
-        "selectCity": "Select Reg/City"
+        "selectCity": "Select Reg/City",
+        "howTo": "How to Use",
+        "howTo1": "Use Add Filter to easily filter data",
+        "howTo2": "Use Advanced Search to filter data with “or” and “and” query functions",
+        "howTo3": "The “and“ function provides options to filter data that meets all of several criteria",
+        "howTo4": "The “or“ function to filter data that meets one of several criteria"
     },
     "download": {
         "selectByProvince": "Select By Province",

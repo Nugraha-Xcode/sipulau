@@ -265,34 +265,7 @@ const AdvanceFilter = ({
       {Object.keys(filterObject).length > 0 && renderFilterItem()}
 
       <div className='mt-5 flex flex-col gap-2'>
-        <div className='flex justify-center'>
-          <Popover className='relative'>
-            <Popover.Button className='text-blue-500 text-sm focus:outline-none'>
-              + {translatedText("filter.addGroup")}
-            </Popover.Button>
-
-            <Popover.Panel className='absolute z-10'>
-              {({ close }) => (
-                <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll py-2 rounded-[8px] text-gray-600 border text-xs border-gray-600 bg-white'>
-                  {filterGroupList.map((el) => (
-                    <button
-                      key={el.value}
-                      className='text-left hover:bg-[#F2F2F2] px-4 py-2'
-                      onClick={() => {
-                        addGroupMain(el);
-                        close();
-                      }}
-                    >
-                      {el.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </Popover.Panel>
-          </Popover>
-        </div>
-
-        <div className='flex justify-center'>
+        <div className='flex justify-start'>
           <Popover className='relative'>
             <Popover.Button className='text-blue-500 text-sm focus:outline-none'>
               + {translatedText("filter.addFilter")}
@@ -357,6 +330,46 @@ const AdvanceFilter = ({
             {translatedText("filter.resetFilter")}
           </Button>
         )}
+
+        <div className='flex justify-start'>
+          <Popover className='relative'>
+            <Popover.Button className='text-blue-500 text-sm focus:outline-none'>
+              + {translatedText("filter.addGroup")}
+            </Popover.Button>
+
+            <Popover.Panel className='absolute z-10'>
+              {({ close }) => (
+                <div className='flex flex-col hide-scrollbar max-h-44 overflow-y-scroll py-2 rounded-[8px] text-gray-600 border text-xs border-gray-600 bg-white'>
+                  {filterGroupList.map((el) => (
+                    <button
+                      key={el.value}
+                      className='text-left hover:bg-[#F2F2F2] px-4 py-2'
+                      onClick={() => {
+                        addGroupMain(el);
+                        close();
+                      }}
+                    >
+                      {el.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </Popover.Panel>
+          </Popover>
+        </div>
+
+        <div className='bg-gray-50 rounded-[4px] p-2 text-gray-600 flex flex-col gap-2 mt-4'>
+          <p className='text-sm font-medium'>
+            {translatedText("filter.howTo")}
+          </p>
+          <ul className='list-disc list-inside text-xs'>
+            <li>{translatedText("filter.howTo1")}</li>
+            <li>{translatedText("filter.howTo2")}</li>
+            <li>{translatedText("filter.howTo3")}</li>
+            <li>{translatedText("filter.howTo4")}</li>
+          </ul>
+        </div>
+
         <div className='h-5' />
       </div>
     </div>

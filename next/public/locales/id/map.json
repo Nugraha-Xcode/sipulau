@@ -27,13 +27,18 @@
         "addComment": "Tambah Komentar"
     },
     "filter": {
-        "tittleFilter": "Saring",
-        "addGroup": "Tambah Kelompok",
+        "tittleFilter": "Filter",
+        "addGroup": "Pencarian Lanjutan",
         "addFilter": "Tambah Filter",
-        "setFilter": "Atur Filter",
+        "setFilter": "Terapkan Filter",
         "resetFilter": "Atur Ulang Filter",
         "selectProvince": "Pilih Provinsi",
-        "selectCity": "Pilih Kab/Kota"
+        "selectCity": "Pilih Kab/Kota",
+        "howTo": "Cara Penggunaan",
+        "howTo1": "Gunakan Tambah Filter untuk filter data dengan mudah",
+        "howTo2": "Gunakan Pencarian Lanjutan untuk filter data dengan fungsi query “or” dan “and”",
+        "howTo3": "Fungsi “and” memberikan opsi untuk filter data yang memenuhi semua dari beberapa kriteria",
+        "howTo4": "Fungsi “or” untuk filter data yang memenuhi salah satu dari beberapa kriteria"
     },
     "download": {
         "selectByProvince": "Pilih Berdasarkan Provinsi",
