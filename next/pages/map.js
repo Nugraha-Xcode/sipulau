@@ -93,6 +93,24 @@ const map = () => {
         styleRes.json(),
         esriRestRes.json(),
       ]);
+
+      const reduceArr = rbiStyle.layers.reduce((acc, current) => {
+        if (acc && acc.length === 0) {
+          return [current];
+        } else {
+          const x = acc.find((el) => el.id === current.id);
+          if (x) {
+            return acc;
+          } else {
+            return [...acc, current];
+          }
+        }
+      }, []);
+
+      if (rbiStyle.layers) {
+        rbiStyle.layers = reduceArr;
+      }
+
       let boundsLonLat = mercRef.current.convert([
         esriRestService.fullExtent.xmin,
         esriRestService.fullExtent.ymin,
