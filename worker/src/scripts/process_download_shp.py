@@ -147,6 +147,12 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
         "koordx",
         "koordy",
         "koordinat2",
+        # additional
+        "wadmpr",
+        "wadmkk",
+        "wadmkc",
+        "wadmkd",
+        # end of additional
         "remark",
         "foto1",
         "foto2",
@@ -155,11 +161,6 @@ def process_download_shp(data: DownloadRequestDetail) -> ObjectId:
         "sketsa",
         "rekaman1",
         "rekaman2",
-        # additional
-        "wadmkd",
-        "wadmkc",
-        "wadmkk",
-        "wadmpr",
     ]
     for field in fields:
         field_idx: int = in_layer_defn.GetFieldIndex(field)
