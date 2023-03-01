@@ -4,9 +4,8 @@ import useToggle from "../../utils/useToggle";
 import Select from "../core/select";
 import Modal from "../modal";
 import AppContext from "../../context/AppContext";
-import MapContext from "../../context/MapContext";
 import { useAuth } from "../../hooks/useAuth";
-import { useAdvanceFilter, useBbox, useTable } from "../../hooks";
+import { useAdvanceFilter, useBbox, useDrawAoi, useTable } from "../../hooks";
 import Button from "../core/Button";
 import shallow from "zustand/shallow";
 
@@ -15,6 +14,7 @@ const MapTableDownload = ({ drawItem, toggle, source }) => {
   const { handleSetSnack } = useContext(AppContext);
   const authToken = useAuth((state) => state.authToken);
   const bbox = useBbox((state) => state.bbox);
+  const aoiPoly = useDrawAoi((state) => state.aoiPoly);
   const advanceFilterQuery = useAdvanceFilter(
     (state) => state.advanceFilterQuery
   );
@@ -41,6 +41,13 @@ const MapTableDownload = ({ drawItem, toggle, source }) => {
           _within_bbox: [bbox.xmin, bbox.ymin, bbox.xmax, bbox.ymax],
         },
       });
+
+    aoiPoly &&
+      (objBody.aoi = {
+        type: "MultiPolygon",
+        coordinates: [aoiPoly.geometry.coordinates],
+      });
+
     if (query.length > 0) {
       objBody["query"] = {
         _and: query,
@@ -62,7 +69,7 @@ const MapTableDownload = ({ drawItem, toggle, source }) => {
     //   objBody.aoi = multiPolygon;
     // }
     return objBody;
-  }, [bbox, selectedRow, isSelectAll, drawItem, advanceFilterQuery]);
+  }, [aoiPoly, bbox, selectedRow, isSelectAll, drawItem, advanceFilterQuery]);
 
   const handleDownloadCsv = useCallback(
     async (e) => {
