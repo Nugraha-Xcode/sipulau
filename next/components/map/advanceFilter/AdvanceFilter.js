@@ -1,12 +1,13 @@
 import { Popover } from "@headlessui/react";
 import { useTranslation } from "next-i18next";
-import React from "react";
+import React, { useContext } from "react";
 import shallow from "zustand/shallow";
-import { useAdvanceFilter, useTable } from "../../../hooks";
+import { useAdvanceFilter, useDrawAoi, useTable } from "../../../hooks";
 import Button from "../../core/Button";
 import FilterItem from "./FilterItem";
 import FilterGroupItem from "./FilterGroupItem";
 import { filterGroupList } from "../../../constant";
+import MapContext from "../../../context/MapContext";
 
 const AdvanceFilter = ({
   handleClose,
@@ -18,8 +19,19 @@ const AdvanceFilter = ({
     const params = { ns: ["attributetable", "map"] };
     return t(key, params);
   };
-  const [deleteDataTable, setPage, clearSelectedRow] = useTable(
-    (state) => [state.deleteDataTable, state.setPage, state.clearSelectedRow],
+  const { draw } = useContext(MapContext);
+  const [deleteDataTable, setPage, clearSelectedRow, setFilterId] = useTable(
+    (state) => [
+      state.deleteDataTable,
+      state.setPage,
+      state.clearSelectedRow,
+      state.setFilterId,
+    ],
+    shallow
+  );
+
+  const [aoiPoly, setAoiPoly] = useDrawAoi(
+    (state) => [state.aoiPoly, state.setAoiPoly],
     shallow
   );
   const [
@@ -52,8 +64,6 @@ const AdvanceFilter = ({
     ],
     shallow
   );
-
-  const setFilterId = useTable((state) => state.setFilterId);
 
   const columnsList = [
     { label: translatedText("column1"), value: "fid" },
@@ -323,8 +333,16 @@ const AdvanceFilter = ({
             variant='outline'
             isActive={false}
             onClick={() => {
+              clearSelectedRow();
+              setPage(1);
+              deleteDataTable();
               setFilterObject({});
+              setFilterId([]);
               createQueryFilter();
+              if (aoiPoly) {
+                setAoiPoly(null);
+                draw.delete(aoiPoly.id);
+              }
             }}
           >
             {translatedText("filter.resetFilter")}
@@ -364,9 +382,21 @@ const AdvanceFilter = ({
           </p>
           <ul className='list-disc list-inside text-xs'>
             <li>{translatedText("filter.howTo1")}</li>
-            <li>{translatedText("filter.howTo2")}</li>
-            <li>{translatedText("filter.howTo3")}</li>
-            <li>{translatedText("filter.howTo4")}</li>
+            <li
+              dangerouslySetInnerHTML={{
+                __html: translatedText("filter.howTo2"),
+              }}
+            />
+            <li
+              dangerouslySetInnerHTML={{
+                __html: translatedText("filter.howTo3"),
+              }}
+            />
+            <li
+              dangerouslySetInnerHTML={{
+                __html: translatedText("filter.howTo4"),
+              }}
+            />
           </ul>
         </div>
 

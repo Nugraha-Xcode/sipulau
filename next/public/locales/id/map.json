@@ -35,10 +35,10 @@
         "selectProvince": "Pilih Provinsi",
         "selectCity": "Pilih Kab/Kota",
         "howTo": "Cara Penggunaan",
-        "howTo1": "Gunakan Tambah Filter untuk filter data dengan mudah",
-        "howTo2": "Gunakan Pencarian Lanjutan untuk filter data dengan fungsi query “or” dan “and”",
-        "howTo3": "Fungsi “and” memberikan opsi untuk filter data yang memenuhi semua dari beberapa kriteria",
-        "howTo4": "Fungsi “or” untuk filter data yang memenuhi salah satu dari beberapa kriteria"
+        "howTo1": "Gunakan Tambah Filter untuk filter data dengan sederhana",
+        "howTo2": "Gunakan Pencarian Lanjutan untuk filter data dengan fungsi query <b>“OR“</b> dan <b>“AND”</b>",
+        "howTo3": "Fungsi <b>“AND”</b> memberikan opsi untuk filter data yang memenuhi semua dari beberapa kriteria",
+        "howTo4": "Fungsi <b>“OR”</b> untuk filter data yang memenuhi salah satu dari beberapa kriteria"
     },
     "download": {
         "selectByProvince": "Pilih Berdasarkan Provinsi",

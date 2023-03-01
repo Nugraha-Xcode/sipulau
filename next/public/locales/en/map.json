@@ -36,9 +36,9 @@
         "selectCity": "Select Reg/City",
         "howTo": "How to Use",
         "howTo1": "Use Add Filter to easily filter data",
-        "howTo2": "Use Advanced Search to filter data with “or” and “and” query functions",
-        "howTo3": "The “and“ function provides options to filter data that meets all of several criteria",
-        "howTo4": "The “or“ function to filter data that meets one of several criteria"
+        "howTo2": "Use Advanced Search to filter data with <b>“OR“</b> and <b>“AND”</b> query functions",
+        "howTo3": "The <b>“AND”</b> function provides options to filter data that meets all of several criteria",
+        "howTo4": "The <b>“OR“</b> function to filter data that meets one of several criteria"
     },
     "download": {
         "selectByProvince": "Select By Province",
