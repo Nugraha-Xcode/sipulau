@@ -220,6 +220,18 @@ export const provinceList = [
     value: "Papua Barat",
   },
   {
+    label: "Papua Pegunungan",
+    value: "Papua Pegunungan",
+  },
+  {
+    label: "Papua Selatan",
+    value: "Papua Selatan",
+  },
+  {
+    label: "Papua Tengah",
+    value: "Papua Tengah",
+  },
+  {
     label: "Riau",
     value: "Riau",
   },
