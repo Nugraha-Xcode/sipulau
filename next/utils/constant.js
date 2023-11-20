@@ -220,6 +220,10 @@ export const provinceList = [
     value: "Papua Barat",
   },
   {
+    label: "Papua Barat Daya",
+    value: "Papua Barat Daya",
+  },
+  {
     label: "Papua Pegunungan",
     value: "Papua Pegunungan",
   },
