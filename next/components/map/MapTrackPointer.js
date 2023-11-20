@@ -31,7 +31,7 @@ const MapTrackPointer = ({ map }) => {
       </pre>
       {/* <img src='/images/row.svg' /> */}
       <p className='text-black-2 text-[10px] bg-white bg-opacity-80 p-2 rounded-tl-[4px]'>
-        {`©${dateToday.getFullYear()} Developed by Braga Technologies`}
+        {`©${dateToday.getFullYear()} Developed by Badan Informasi Geospasial`}
       </p>
     </div>
   );

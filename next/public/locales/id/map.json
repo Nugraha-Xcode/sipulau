@@ -4,7 +4,7 @@
         "mapPage": "Halaman Peta",
         "geo-mapManagement": "Pengaturan Peta",
         "layerManagement": "Pengaturan Layer",
-        "layerTable": "Tabel Attribut",
+        "layerTable": "Tabel Atribut",
         "searchIsland": "Cari Pulau",
         "filterData": "Data Filter",
         "downloads": "Unduh",
@@ -18,7 +18,7 @@
     "layerManagement": {
         "defaultLayer": "Layer Standar",
         "aboutTitle": "Tentang Layer Data",
-        "aboutContext": "Anda dapat mengatur tampilan layer pada peta"
+        "aboutContext": "Anda dapat mengatur tampilan layer pada peta yaitu mengatur urutan layer dan mengatur aktif atau tidak aktifnya sebuah layer."
     },
     "search": {
         "enterKeyword": "Masukan Kata Kunci atau Koordinat",
