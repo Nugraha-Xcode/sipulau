@@ -4,7 +4,7 @@
     "tileMap": "tilemap",
     "defaultStyles": "/styles-rupabumi.json",
     "tiles": [
-        "https://geoservices.big.go.id/rbi/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer/tile/{z}/{y}/{x}.pbf"
+        "https://kspservices.big.go.id/satupeta/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer/tile/{z}/{y}/{x}.pbf"
     ],
     "initialExtent": {
         "xmin": 10014626.44144775,

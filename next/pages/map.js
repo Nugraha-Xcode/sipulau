@@ -81,7 +81,7 @@ const map = () => {
 
   const fetchRBIStyle = useCallback(async () => {
     let vts =
-      "https://geoservices.big.go.id/rbi/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer";
+      "https://kspservices.big.go.id/satupeta/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer";
 
     let rbiStyle, esriRestService;
     try {
