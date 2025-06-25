@@ -7,7 +7,7 @@
     "build_uploadshp_module": "npm run build --prefix src/modules/upload-shapefile",
     "build": "tsc && npm run build --prefix src/modules/upload-shapefile && npm run build --prefix src/modules/download-metadata"
   },
-  "author": "Braga Technologies",
+  "author": "Badan Informasi Geospasial",
   "license": "ISC",
   "devDependencies": {
     "@directus/extensions-sdk": "^9.0.1",

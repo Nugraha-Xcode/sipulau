@@ -46,7 +46,7 @@ const NavItem = () => {
       </nav>
       {isAuth ? null : (
         <a
-          href='https://tanahair.indonesia.go.id/register'
+          href='https://tanahair.indonesia.go.id/portal-web/daftar'
           target='_blank'
           rel='noopener noreferrer'
           className='flex space-x-2 bg-main-blue rounded-full text-white text-sm py-3 px-4'

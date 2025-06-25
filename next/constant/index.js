@@ -6,6 +6,8 @@ export const UploadLayerDatabase = "UploadLayerDatabase";
 
 export const UploadLayerStore = "UploadLayerStore";
 
+export const pulauTerluarMvt = "PPKT";
+
 export const filterOperatosList = [
   { label: "Contains", value: "_contains" },
   { label: "Doesn't contain", value: "_ncontains" },

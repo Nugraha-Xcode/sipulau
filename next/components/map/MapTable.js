@@ -84,7 +84,7 @@ const MapTable = ({ setOpenBottomDrawer, setExpandBottomDrawer }) => {
     { title: "column7", field: "wadmkc", show: false, sort: true },
     { title: "column9", field: "wadmkk", show: true, sort: true },
     { title: "column10", field: "wadmpr", show: true, sort: true },
-    { title: "column11", field: "status", show: true, sort: true },
+   // { title: "column11", field: "status", show: true, sort: true },
     { title: "column12", field: "remark", show: false, sort: true },
     { title: "column15", field: "luas", show: false, sort: true },
     { title: "column16", field: "pjg_gp", show: false, sort: true },

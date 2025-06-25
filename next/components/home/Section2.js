@@ -37,7 +37,7 @@ const Section2 = forwardRef((props, ref) => {
           <div className='flex flex-col w-full md:w-5/12 justify-center gap-10'>
             <div className='flex flex-col gap-3 items-center md:items-start text-center md:text-left'>
               <p
-                className='text-main-blue text-xl md:text-[1.375rem] leading-5 lg:leading-8'
+                className='text-white text-xl md:text-[1.375rem] leading-5 lg:leading-8'
                 data-cy='home-section2-subheader1'
               >
                 {t("subJudulSeksiTentang1")}

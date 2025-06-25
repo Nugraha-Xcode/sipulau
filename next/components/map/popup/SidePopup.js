@@ -2,15 +2,25 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import CommentList from "./CommentList";
 import DetailInformasi from "./DetailInformasi";
+import DetailInformasiPulauTerluar from "./DetailInformasiPulauTerluar";
 
-const SidePopup = ({ setIsOpen, feature, detailPulau, infoPulau }) => {
+const SidePopup = ({ setIsOpen, feature, detailPulau, infoPulau, activeLayer }) => {
   const { t } = useTranslation("popupPulau");
   let featureObj = {};
+  
   switch (feature) {
     case "detail":
+      // Kondisi untuk menentukan komponen detail mana yang digunakan
+      let detailComponent;
+      if (activeLayer === "pulau-terluar") {
+        detailComponent = <DetailInformasiPulauTerluar detailPulau={detailPulau} />;
+      } else {
+        detailComponent = <DetailInformasi detailPulau={detailPulau} />;
+      }
+      
       featureObj = {
         label: t("viewDetailInfo"),
-        component: <DetailInformasi detailPulau={detailPulau} />,
+        component: detailComponent,
       };
       break;
     case "comment":
@@ -22,6 +32,7 @@ const SidePopup = ({ setIsOpen, feature, detailPulau, infoPulau }) => {
     default:
       break;
   }
+  
   return (
     <div className='rounded-lg'>
       <div className='p-4 flex'>

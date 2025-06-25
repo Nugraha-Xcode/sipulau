@@ -10,12 +10,15 @@
     "attribute8": "Sejarah Nama",
     "attribute9": "Asal Bahasa",
     "attribute10": "Kecamatan",
-    "attribute11": "Desa/Kelurahan",
+    "attribute11": "Desa / Kelurahan",
     "attribute12": "Status",
     "attribute13": "Remark",
     "attribute14": "Nama Lain Pulau",
     "attribute15": "Luas Area",
     "attribute16": "Panjang Garis Pantai",
+    "attribute17": "Titik Dasar / Titik Referensi",
+    "attribute18": "Berpenduduk / Tidak",
+    "attribute19": "ID TOPONIM",
     "viewDetail": "Lihat Detail Informasi",
     "viewDetailInfo": "Detail Informasi Pulau",
     "commentCount": "Komentar",
@@ -34,4 +37,5 @@
     "commentModal6": "Batal",
     "commentModal7": "Kirim Komentar",
     "commentModal8": "Email yang dapat dihubungi"
+    
 }

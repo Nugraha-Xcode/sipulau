@@ -75,7 +75,8 @@
         "smallestIsland": "Pulau Terkecil",
         "inhabitedIsland": "Pulau Berpenghuni",
         "uninhabitedIsland": "Pulau Tak Berpenghuni",
-        "print": "Cetak"
+        "print": "Cetak",
+        "note": "Silakan pilih provinsi yang ingin ditampilkan."
     },
     "geolocate": "Geolokasi",
     "zoomIn": "Perbesar",

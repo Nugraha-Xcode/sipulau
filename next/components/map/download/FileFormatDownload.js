@@ -64,7 +64,7 @@ const FileFormatDownload = ({ type, setType, handleDownload }) => {
             </button>
           </div>
           <p className='text-xl text-gray-900 font-semibold'>
-            Non-Disclosure Agreement (NDA)
+            Terms and Conditions (TnC)
           </p>
           <p className='text-xs text-gray-900 text-justify'>
             Informasi Geospasial Dasar (IGD) yang terdapat dalam SI Pulau ini
@@ -78,7 +78,7 @@ const FileFormatDownload = ({ type, setType, handleDownload }) => {
           </p>
           <p className='text-xs text-gray-900 text-justify'>Sitasi:</p>
           <p className='text-xs text-gray-900 text-justify'>
-            Badan Informasi Geospasial Republik Indonesia, 2021. Titik Toponim
+            Badan Informasi Geospasial Republik Indonesia, {new Date().getFullYear()}. Titik Toponim
             Pulau Indonesia. Bogor, Jawa Barat. Diakses dari :
             http://sipulau.big.go.id
           </p>

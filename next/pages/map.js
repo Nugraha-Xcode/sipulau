@@ -81,8 +81,8 @@ const map = () => {
 
   const fetchRBIStyle = useCallback(async () => {
     let vts =
-      "https://kspservices.big.go.id/satupeta/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer";
-
+      /* "https://kspservices.big.go.id/satupeta/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer"; */
+      "https://geoservices.big.go.id/rbi/rest/services/Hosted/Rupabumi_Indonesia/VectorTileServer";
     let rbiStyle, esriRestService;
     try {
       let [styleRes, esriRestRes] = await Promise.all([
@@ -218,7 +218,7 @@ const map = () => {
     const modes = MapboxDraw.modes;
 
     //remove drag action
-    modes.simple_select.onDrag = function (state, e) {};
+    modes.simple_select.onDrag = function (state, e) { };
 
     mapRef.current.addControl(drawRef.current);
 
@@ -236,17 +236,17 @@ const map = () => {
         "icon-image",
         isSelectAll
           ? [
-              "case",
-              ["in", ["id"], ["literal", selectedArr]],
-              "marker-pulau",
-              "marker-pulau-highlight",
-            ]
+            "case",
+            ["in", ["id"], ["literal", selectedArr]],
+            "marker-pulau",
+            "marker-pulau-highlight",
+          ]
           : [
-              "case",
-              ["in", ["id"], ["literal", selectedArr]],
-              "marker-pulau-highlight",
-              "marker-pulau",
-            ]
+            "case",
+            ["in", ["id"], ["literal", selectedArr]],
+            "marker-pulau-highlight",
+            "marker-pulau",
+          ]
       );
   }, [selectedRow, isSelectAll]);
 
@@ -344,11 +344,19 @@ const map = () => {
           obj.source = "additional";
           obj.judul = element.layer_name;
           obj.nama = element.layer_id;
-          obj.simpul = translatedText("layerManagement.defaultLayer");
+          obj.simpul = element.label_descID;
           obj.data = element.layer_defs;
-          obj.visibility = "visible";
+          obj.visibility = element.is_visible ? "visible" : "none";
+          obj.is_priority = element.is_priority; // Tambahkan is_priority ke objek layer
           additionalLayer.push(obj);
         }
+
+        // Urutkan layer berdasarkan is_priority (prioritas tinggi = true)
+        additionalLayer.sort((a, b) => {
+          if (a.is_priority === b.is_priority) return 0;
+          return a.is_priority ? 1 : -1;
+        });
+
         setActiveLayer([...additionalLayer, ...activeLayerRef.current]);
       } else {
         throw new Error(response.message);
@@ -366,11 +374,21 @@ const map = () => {
         nama: "",
         url: "",
         format: "mvt",
-        simpul: "POI",
+        simpul: "Gazeter Republik Indonesia Edisi Tahun 2024",
         bbox: "",
         srs: "",
         visibility: "visible",
-      },
+      },{
+        source: "pulau_terluar",
+        judul: "PPKT",
+        nama: "",
+        url: "",
+        format: "mvt",
+        simpul: "PPKT - Keppres No.6 Tahun 2017",
+        bbox: "",
+        srs: "",
+        visibility: "none",
+      }
     ]);
     addDefaultLayer();
     addUploadedLayer();

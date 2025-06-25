@@ -47,6 +47,8 @@ function validateCaptcha(captchaToken: string): Promise<boolean> {
           data += chunk;
         });
         res.on("end", () => {
+          //console.log(data);
+          //resolve(true);
           if (res.statusCode !== 200) {
             reject("HCaptcha error: " + data);
           } else {

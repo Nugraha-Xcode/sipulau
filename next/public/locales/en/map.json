@@ -18,7 +18,7 @@
     "layerManagement": {
         "defaultLayer": "Default Layer",
         "aboutTitle": "About Data Layers",
-        "aboutContext": "You mau arrange layer display on map"
+        "aboutContext": "You may adjust the display of layers on the map by arranging the layer order and toggling the visibility of a layer"
     },
     "search": {
         "enterKeyword": "Enter Keyword or Coordinates",
@@ -75,7 +75,8 @@
         "smallestIsland": "Smallest Island",
         "inhabitedIsland": "Inhabited Island",
         "uninhabitedIsland": "Uninhabited Island",
-        "print": "Print"
+        "print": "Print",
+        "note": "Please select the province you want to display."
     },
     "geolocate": "Geolocate",
     "zoomIn": "Zoom In",

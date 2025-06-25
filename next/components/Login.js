@@ -198,7 +198,7 @@ const Login = ({ toggle }) => {
               </div>
             )}
             <a
-              href='https://tanahair.indonesia.go.id/register'
+              href='https://tanahair.indonesia.go.id/portal-web/daftar'
               target='_blank'
               rel='noopener noreferrer'
               className='border border-main-blue text-main-blue rounded-lg py-2 text-sm text-center flex justify-center items-center gap-3'
@@ -212,7 +212,7 @@ const Login = ({ toggle }) => {
               <hr className='flex-1' />
             </div>
             <a
-              href='https://tanahair.indonesia.go.id/register'
+              href='https://tanahair.indonesia.go.id/portal-web/daftar'
               target='_blank'
               rel='noopener noreferrer'
               className='border border-main-blue text-main-blue rounded-lg py-2 text-sm text-center'

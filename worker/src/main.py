@@ -53,7 +53,7 @@ async def http_exception_handler(_, exc: StarletteHTTPException) -> JSONResponse
 
 @app.get("/", response_model=BasicMessage)
 async def hello() -> BasicMessage:
-    return BasicMessage(message="Hello from Braga Technologies!")
+    return BasicMessage(message="Hello from Badan Informasi Geospasial!")
 
 
 @app.post(

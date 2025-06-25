@@ -549,5 +549,5 @@ components:
       type: oauth2
       flows:
         password:
-          tokenUrl: https://sipulau.braga.co.id/panel/inageoportal-login
+          tokenUrl: https://sipulau.big.go.id/panel/inageoportal-login
           scopes: {}

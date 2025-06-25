@@ -13,7 +13,7 @@ export default async function additionalLayersHandler(req, res) {
   try {
     queryResult = await sipulauPool.query(
       `
-      SELECT al.layer_id, layer_name, json_agg(json_build_object('layer_type', layer_type, 'url', url, 'min_zoom', min_zoom, 'max_zoom', max_zoom)) layer_defs
+      SELECT al.layer_id, layer_name, al."label_descID", is_visible, is_priority, json_agg(json_build_object('layer_type', layer_type, 'url', url, 'min_zoom', min_zoom, 'max_zoom', max_zoom)) layer_defs
       FROM additional_layers al
       INNER JOIN additional_layer_def ald ON ald.layer_id = al.layer_id
       GROUP BY al.layer_id

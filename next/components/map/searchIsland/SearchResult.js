@@ -17,7 +17,8 @@ const SearchResult = ({ item }) => {
     >
       <div className='text-sm font-semibold'>{item.nammap}</div>
       <div className='text-[10px] text-[#777574]'>
-        {item.lat.toFixed(7)}, {item.lon.toFixed(7)}
+        {item.lat.toFixed(7)}, {item.lon.toFixed(7)} <br />
+        {item.wadmkk}, {item.wadmpr}
       </div>
     </div>
   );

@@ -134,6 +134,13 @@ const Section1 = ({ items }) => {
                 >
                   {el.text && el.text}
                 </p>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
                 {el.buttonLabel && (
                   <Link href={el.buttonHref}>
                     <button

@@ -1,7 +1,7 @@
 .env
 /postgis/data
 /minio/data
-
+next/public/images/pulau_terluar/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

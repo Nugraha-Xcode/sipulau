@@ -53,7 +53,7 @@ function postToInageoportal(
     const req = http.request(
       {
         hostname: "10.10.160.40",
-        path: "/api-otentifikasi/akun/login",
+        path: "/api-inageo/auth/signin",
         method: "POST",
         headers: {
           "Content-Type": "application/json",

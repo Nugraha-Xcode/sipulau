@@ -1,5 +1,5 @@
 # builder_deps
-FROM node:14-alpine as builder_deps
+FROM node:18-alpine as builder_deps
 ENV HTTP_PROXY="http://192.168.1.28:3128"
 ENV HTTPS_PROXY="http://192.168.1.28:3128"
 WORKDIR /app
@@ -9,19 +9,24 @@ COPY ./package*.json ./
 RUN npm install -g npm && npm ci
 
 # builder
-FROM node:14-alpine as builder
+FROM node:18-alpine as builder
 ARG NEXT_PUBLIC_UMAMI_URL
 ARG NEXT_PUBLIC_DIRECTUS_URL
 ENV NEXT_PUBLIC_UMAMI_URL=${NEXT_PUBLIC_UMAMI_URL}
 ENV NEXT_PUBLIC_DIRECTUS_URL=${NEXT_PUBLIC_DIRECTUS_URL}
 ENV NEXT_TELEMETRY_DISABLED 1
+
+# Tambahkan variable OpenSSL
+ENV NODE_OPTIONS="--openssl-legacy-provider"
+ENV OPENSSL_CONF="/etc/ssl"
+
 WORKDIR /app
 COPY --from=builder_deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
 # runner
-FROM node:14-alpine as runner
+FROM node:18-alpine as runner
 ENV NODE_ENV production
 ENV HTTP_PROXY="http://192.168.1.28:3128"
 ENV HTTPS_PROXY="http://192.168.1.28:3128"
