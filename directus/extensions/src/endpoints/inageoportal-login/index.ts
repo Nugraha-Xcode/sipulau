@@ -1,4 +1,4 @@
-import http from "http";
+import https from "https";
 import crypto from "crypto";
 
 import { defineEndpoint } from "@directus/extensions-sdk";
@@ -22,17 +22,27 @@ interface ILoginDetail extends IAbstractLoginDetail {
   captchaToken: string;
 }
 
-interface IInageoportalLoginDetail extends IAbstractLoginDetail {
+interface IInageoportalLoginDetail {
+  email: string;
+  password: string;
   token: string;
 }
 
 interface IGeoportalResponse {
-  status: string;
-  message: string;
+  uuid?: string;
+  email?: string;
+  fullname?: string;
+  phone?: string;
+  roles?: string[];
+  accessToken?: string;
+  refreshToken?: string;
+  status?: string;
+  message?: string;
 }
 
 interface IUserData {
   id: string;
+  external_identifier?: string;
 }
 
 declare global {
@@ -49,49 +59,104 @@ function postToInageoportal(
   requestBody: IInageoportalLoginDetail
 ): Promise<IGeoportalResponse> {
   return new Promise((resolve, reject) => {
-    let reqBody = JSON.stringify(requestBody);
-    const req = http.request(
-      {
-        hostname: "10.10.160.40",
-        path: "/api-inageo/auth/signin",
+    try {
+      console.log("🔍 Starting INAGeoportal login request...");
+      console.log("🌐 INA_GEO_API_URL:", process.env.INA_GEO_API_URL);
+      
+      const reqBody = JSON.stringify(requestBody);
+      console.log("📝 Request body:", { 
+        email: requestBody.email,
+        password: "***",
+        token: requestBody.token?.substring(0, 20) + "..." 
+      });
+      
+      const baseUrl = process.env.INA_GEO_API_URL || "https://tanahair.indonesia.go.id/api-inageo";
+      const fullUrl = `${baseUrl}/auth/signin`;
+      console.log("🔗 Full URL:", fullUrl);
+      
+      const apiUrl = new URL(fullUrl);
+      console.log("🏗️ Parsed URL:", {
+        hostname: apiUrl.hostname,
+        port: apiUrl.port || 443,
+        pathname: apiUrl.pathname
+      });
+
+      const requestOptions = {
+        hostname: apiUrl.hostname,
+        port: apiUrl.port || 443,
+        path: apiUrl.pathname,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "User-Agent": "Sipulau-App/1.0",
         },
-      },
-      (res) => {
+        timeout: 30000,
+      };
+
+      console.log("⚙️ Request options:", requestOptions);
+
+      const req = https.request(requestOptions, (res) => {
+        console.log("📡 Response status:", res.statusCode);
+        console.log("📋 Response headers:", res.headers);
+        
         let data = "";
         res.on("data", (chunk) => {
           data += chunk;
         });
+        
         res.on("end", () => {
-          if (res.statusCode !== 200) {
-            // api always returns status code 200 even when password error
-            if (
-              res.statusCode !== 500 &&
-              res.headers["content-type"] === "application/json"
-            ) {
-              let parsedRes = JSON.parse(data);
-              reject(parsedRes);
+          console.log("📦 Response data:", data);
+          
+          try {
+            if (res.statusCode !== 200) {
+              console.log("❌ Non-200 status code:", res.statusCode);
+              if (
+                res.statusCode !== 500 &&
+                res.headers["content-type"]?.includes("application/json")
+              ) {
+                const parsedRes = JSON.parse(data);
+                console.log("🔴 Parsed error response:", parsedRes);
+                reject(parsedRes);
+              } else {
+                console.log("🔴 Generic error response");
+                reject(`HTTP ${res.statusCode}: Terjadi masalah menghubungi INAGeoportal - ${data}`);
+              }
             } else {
-              reject("Terjadi masalah menghubungi INAGeoportal");
+              const parsedRes = JSON.parse(data);
+              console.log("✅ Success response:", parsedRes);
+              resolve(parsedRes);
             }
-          } else {
-            let parsedRes = JSON.parse(data);
-            resolve(parsedRes);
+          } catch (parseError: any) {
+            console.log("🔴 JSON parse error:", parseError);
+            reject(`Response parsing error: ${parseError.message}`);
           }
         });
-        res.on("error", (error) => {
-          reject(error);
+        
+        res.on("error", (error: any) => {
+          console.log("🔴 Response error:", error);
+          reject(`Response error: ${error.message}`);
         });
-      }
-    );
+      });
 
-    req.on("error", (error) => {
-      reject(error);
-    });
-    req.write(reqBody);
-    req.end();
+      req.on("error", (error: any) => {
+        console.log("🔴 Request error:", error);
+        reject(`Request error: ${error.message}`);
+      });
+
+      req.on("timeout", () => {
+        console.log("⏰ Request timeout");
+        req.destroy();
+        reject("Request timeout: INAGeoportal tidak merespons dalam 30 detik");
+      });
+
+      console.log("📤 Sending request...");
+      req.write(reqBody);
+      req.end();
+      
+    } catch (error: any) {
+      console.log("🔴 Unexpected error in postToInageoportal:", error);
+      reject(`Unexpected error: ${error.message}`);
+    }
   });
 }
 
@@ -101,107 +166,213 @@ export default defineEndpoint((router, { exceptions, database }) => {
     InvalidPayloadException,
     ServiceUnavailableException,
   } = exceptions;
+  
   router.post(
     "/",
     async (req: Request<{}, IAccessToken, ILoginDetail>, res, next) => {
-      if (!req.body.username || !req.body.password || !req.body.captchaToken) {
-        return next(
-          new InvalidPayloadException(
-            "username, password, dan captchaToken harus terisi"
-          )
-        );
-      }
-      let geoportalRes;
+      console.log("🚀 INAGeoportal login endpoint called");
+      console.log("📋 Environment check:", {
+        INA_GEO_API_URL: process.env.INA_GEO_API_URL,
+        RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY ? "✅ Set" : "❌ Not set",
+        SECRET: process.env.SECRET ? "✅ Set" : "❌ Not set"
+      });
+      
       try {
-        geoportalRes = await postToInageoportal({
-          username: req.body.username,
-          password: req.body.password,
-          token: req.body.captchaToken,
-        });
-      } catch (error: any) {
-        if (error.message) {
-          return next(new InvalidPayloadException(error.message));
-        } else {
-          return next(new ServiceUnavailableException(error));
-        }
-      }
-      if (geoportalRes.status === "success") {
-        let user;
-        let email = req.body.username.trim().toLowerCase() + "@inageoportal.id";
-        user = await database("directus_users")
-          .select<IUserData>("id")
-          .where("email", email)
-          .first();
-
-        if (!user) {
-          let password = await argon2.hash(crypto.randomBytes(64));
-          user = { id: crypto.randomUUID() };
-          await database("directus_users").insert({
-            ...user,
-            email,
-            password,
-            first_name: req.body.username,
-            role: REGISTERED_USER_ROLE_ID,
+        if (!req.body.username || !req.body.password || !req.body.captchaToken) {
+          console.log("❌ Missing required fields:", {
+            username: !!req.body.username,
+            password: !!req.body.password,
+            captchaToken: !!req.body.captchaToken
           });
+          return next(
+            new InvalidPayloadException(
+              "username, password, dan captchaToken harus terisi"
+            )
+          );
         }
 
-        const tokenPayload = {
-          id: user.id,
-          role: REGISTERED_USER_ROLE_ID,
-          app_access: false,
-          admin_access: false,
-        };
-
-        const accessToken = jwt.sign(
-          tokenPayload,
-          process.env.SECRET as string,
-          {
-            expiresIn: process.env.ACCESS_TOKEN_TTL,
-            issuer: "directus",
+        console.log("📝 Login attempt for user:", req.body.username);
+        
+        let geoportalRes: IGeoportalResponse;
+        try {
+          geoportalRes = await postToInageoportal({
+            email: req.body.username,
+            password: req.body.password,
+            token: req.body.captchaToken,
+          });
+        } catch (error: any) {
+          console.log("🔴 INAGeoportal API error:", error);
+          if (error && typeof error === 'object' && error.message) {
+            return next(new InvalidPayloadException(error.message));
+          } else if (typeof error === 'string') {
+            return next(new ServiceUnavailableException(error));
+          } else {
+            return next(new ServiceUnavailableException("Terjadi kesalahan saat menghubungi INAGeoportal"));
           }
-        );
+        }
 
-        const refreshToken = nanoid(64);
-        const refreshTokenExpiration = new Date(
-          Date.now() + ms(process.env.REFRESH_TOKEN_TTL as string)
-        );
+        console.log("✅ INAGeoportal response received:", geoportalRes);
 
-        await database("directus_sessions").insert({
-          token: refreshToken,
-          user: user.id,
-          expires: refreshTokenExpiration,
-          ip: req.accountability?.ip,
-          user_agent: req.accountability?.userAgent,
-        });
+        if (geoportalRes.uuid && geoportalRes.email) {
+          try {
+            console.log("🎯 Processing successful INAGeoportal login...");
+            
+            // REFACTOR: Gunakan email asli dari INAGeoportal response
+            const realEmail = geoportalRes.email.trim().toLowerCase();
+            const externalId = geoportalRes.uuid;
+            
+            console.log("📧 Using real email from INAGeoportal:", realEmail);
+            console.log("🆔 External identifier (UUID):", externalId);
+            
+            // Cek user berdasarkan email asli ATAU external_identifier
+            let user = await database("directus_users")
+              .select<IUserData>("id", "external_identifier")
+              .where("email", realEmail)
+              .orWhere("external_identifier", externalId)
+              .first();
 
-        await database("directus_sessions")
-          .delete()
-          .where("expires", "<", new Date());
+            if (!user) {
+              console.log("👤 Creating new user with real email:", realEmail);
+              let password = await argon2.hash(crypto.randomBytes(64));
+              user = { id: crypto.randomUUID() };
+              
+              console.log("📝 Inserting user data:", {
+                id: user.id,
+                email: realEmail,
+                first_name: geoportalRes.fullname || "INAGeoportal User",
+                external_identifier: externalId,
+                role: REGISTERED_USER_ROLE_ID
+              });
+              
+              await database("directus_users").insert({
+                ...user,
+                email: realEmail,                              // Email asli dari INAGeoportal
+                password,
+                first_name: geoportalRes.fullname || "INAGeoportal User",
+                external_identifier: externalId,              // UUID dari INAGeoportal
+                role: REGISTERED_USER_ROLE_ID,
+                status: "active",
+                // Optional: tambah metadata
+                title: geoportalRes.roles?.[0] || "ROLE_MASYARAKAT"
+              });
+              
+              console.log("✅ New INAGeoportal user created successfully");
+            } else {
+              console.log("👤 Existing user found:", user.id);
+              
+              // Update external_identifier jika belum ada (untuk existing users)
+              if (!user.external_identifier) {
+                console.log("🔄 Updating external_identifier for existing user");
+                await database("directus_users")
+                  .update({ 
+                    external_identifier: externalId,
+                    last_access: new Date()
+                  })
+                  .where({ id: user.id });
+              } else {
+                // Update last access
+                await database("directus_users")
+                  .update({ last_access: new Date() })
+                  .where({ id: user.id });
+              }
+            }
 
-        await database("directus_users")
-          .update({ last_access: new Date() })
-          .where({ id: user.id });
+            console.log("🔐 Creating JWT token...");
+            const tokenPayload = {
+              id: user.id,
+              role: REGISTERED_USER_ROLE_ID,
+              app_access: false,
+              admin_access: false,
+            };
+            
+            console.log("🎫 Token payload:", tokenPayload);
 
-        res.cookie(
-          process.env.REFRESH_TOKEN_COOKIE_NAME as string,
-          refreshToken,
-          {
-            expires: refreshTokenExpiration,
-            secure:
-              process.env.REFRESH_TOKEN_COOKIE_SECURE === "true" ? true : false,
-            httpOnly: true,
-            sameSite: "lax",
+            const accessToken = jwt.sign(
+              tokenPayload,
+              process.env.SECRET as string,
+              {
+                expiresIn: process.env.ACCESS_TOKEN_TTL,
+                issuer: "directus",
+              }
+            );
+            
+            console.log("✅ JWT token created, length:", accessToken.length);
+
+            const refreshToken = nanoid(64);
+            const refreshTokenExpiration = new Date(
+              Date.now() + ms(process.env.REFRESH_TOKEN_TTL as string)
+            );
+            
+            console.log("💾 Creating session...");
+            await database("directus_sessions").insert({
+              token: refreshToken,
+              user: user.id,
+              expires: refreshTokenExpiration,
+              ip: req.accountability?.ip,
+              user_agent: req.accountability?.userAgent,
+            });
+            
+            console.log("✅ Session created");
+
+            console.log("🧹 Cleaning old sessions...");
+            await database("directus_sessions")
+              .delete()
+              .where("expires", "<", new Date());
+
+            console.log("🍪 Setting cookie...");
+            res.cookie(
+              process.env.REFRESH_TOKEN_COOKIE_NAME as string,
+              refreshToken,
+              {
+                expires: refreshTokenExpiration,
+                secure:
+                  process.env.REFRESH_TOKEN_COOKIE_SECURE === "true" ? true : false,
+                httpOnly: true,
+                sameSite: "lax",
+              }
+            );
+
+            console.log("✅ Login successful for user:", user.id);
+            console.log("🎉 INAGeoportal user data synced:", {
+              uuid: geoportalRes.uuid,
+              email: geoportalRes.email,
+              fullname: geoportalRes.fullname,
+              roles: geoportalRes.roles,
+              syncedToDirectus: {
+                userId: user.id,
+                email: realEmail,
+                externalId: externalId
+              }
+            });
+            
+            const responsePayload = {
+              accessToken,
+              expires: ms(process.env.ACCESS_TOKEN_TTL as string),
+            };
+            
+            console.log("📤 Sending success response:", {
+              accessToken: accessToken.substring(0, 20) + "...",
+              expires: responsePayload.expires
+            });
+            
+            return res.json(responsePayload);
+            
+          } catch (dbError: any) {
+            console.log("🔴 Database error during user processing:", dbError);
+            return next(new ServiceUnavailableException(`Database error: ${dbError.message}`));
           }
-        );
-
-        return res.json({
-          accessToken,
-          expires: ms(process.env.ACCESS_TOKEN_TTL as string),
-        });
-      } else {
-        return next(
-          new InvalidCredentialsException("Username atau password tidak valid")
-        );
+        } else {
+          console.log("❌ INAGeoportal login failed - no uuid/email in response:", geoportalRes);
+          return next(
+            new InvalidCredentialsException("Username atau password tidak valid")
+          );
+        }
+      } catch (error: any) {
+        console.log("🔴 Unexpected error in login endpoint:", error);
+        const errorMessage = error && typeof error === 'object' && error.message 
+          ? error.message 
+          : "Unexpected error occurred";
+        return next(new ServiceUnavailableException(`Unexpected error: ${errorMessage}`));
       }
     }
   );

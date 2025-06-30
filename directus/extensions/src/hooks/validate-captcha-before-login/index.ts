@@ -12,7 +12,7 @@ interface ILoginPayload {
 const methodHeaders = {
   method: "POST",
   headers: {
-    Host: "hcaptcha.com",
+    Host: "www.google.com",
     "Content-Type": "application/x-www-form-urlencoded",
   },
 };
@@ -25,19 +25,19 @@ const reqOptions = proxyUrl
   ? {
       hostname: proxyUrl.hostname,
       port: proxyUrl.port,
-      path: "https://hcaptcha.com/siteverify",
+      path: "https://www.google.com/recaptcha/api/siteverify",
       ...methodHeaders,
     }
-  : { hostname: "hcaptcha.com", path: "/siteverify", ...methodHeaders };
+  : { hostname: "www.google.com", path: "/recaptcha/api/siteverify", ...methodHeaders };
 
 const httpOrHttps = proxyUrl?.protocol === "http:" ? http : https;
 
 function validateCaptcha(captchaToken: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    if (typeof process.env.HCAPTCHA_SECRET_KEY !== "string")
-      return reject("HCaptcha secret key not set");
+    if (typeof process.env.RECAPTCHA_SECRET_KEY !== "string")
+      return reject("reCAPTCHA secret key not set");
     let reqBody = `secret=${encodeURIComponent(
-      process.env.HCAPTCHA_SECRET_KEY
+      process.env.RECAPTCHA_SECRET_KEY
     )}&response=${encodeURIComponent(captchaToken)}`;
 
     const req = httpOrHttps
@@ -47,10 +47,8 @@ function validateCaptcha(captchaToken: string): Promise<boolean> {
           data += chunk;
         });
         res.on("end", () => {
-          //console.log(data);
-          //resolve(true);
           if (res.statusCode !== 200) {
-            reject("HCaptcha error: " + data);
+            reject("reCAPTCHA error: " + data);
           } else {
             let parsedRes = JSON.parse(data);
             resolve(parsedRes.success);
@@ -76,13 +74,13 @@ export default defineHook(({ filter }, { exceptions }) => {
     if (!payload.captchaToken) {
       throw new InvalidPayloadException("captchaToken required");
     }
-    let isCatpchaValid = false;
+    let isCaptchaValid = false;
     try {
-      isCatpchaValid = await validateCaptcha(payload.captchaToken);
+      isCaptchaValid = await validateCaptcha(payload.captchaToken);
     } catch (error) {
       throw new ServiceUnavailableException(error);
     }
-    if (!isCatpchaValid) {
+    if (!isCaptchaValid) {
       throw new InvalidPayloadException("Invalid captcha");
     }
     return payload;

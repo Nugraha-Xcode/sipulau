@@ -52,13 +52,21 @@ services:
       - REFRESH_TOKEN_COOKIE_SECURE=true
       - REFRESH_TOKEN_COOKIE_NAME=sipulau_refresh_token
       - REFRESH_TOKEN_TTL=1d
-      - HCAPTCHA_SECRET_KEY
-      - CONTENT_SECURITY_POLICY_DIRECTIVES__SCRIPT_SRC='self','unsafe-eval',hcaptcha.com,*.hcaptcha.com
-      - CONTENT_SECURITY_POLICY_DIRECTIVES__CHILD_SRC='self',blob:,hcaptcha.com,*.hcaptcha.com
+      # Tambah proxy environment untuk directus (sama seperti worker)
+      - https_proxy=http://192.168.1.28:3128
+      - http_proxy=http://192.168.1.28:3128
+      - HTTPS_PROXY=http://192.168.1.28:3128
+      - HTTP_PROXY=http://192.168.1.28:3128
+      # reCAPTCHA configuration
+      - RECAPTCHA_SECRET_KEY=${INA_GEO_RECAPTCHA_SECRET_KEY}
+      - INA_GEO_API_URL=${INA_GEO_API_URL}
+      - INA_GEO_RECAPTCHA_SITE_KEY=${INA_GEO_RECAPTCHA_SITE_KEY}
+      - INA_GEO_RECAPTCHA_SECRET_KEY=${INA_GEO_RECAPTCHA_SECRET_KEY}
+      # Update CSP untuk reCAPTCHA
+      - CONTENT_SECURITY_POLICY_DIRECTIVES__SCRIPT_SRC='self','unsafe-eval',www.google.com,www.gstatic.com
+      - CONTENT_SECURITY_POLICY_DIRECTIVES__CHILD_SRC='self',blob:,www.google.com
+      - CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC='self',www.google.com
     restart: unless-stopped
-    # networks:
-    #   - default
-    #   - sipulaudev
 
   nextjs:
     build:
@@ -66,6 +74,7 @@ services:
       args:
         - NEXT_PUBLIC_UMAMI_URL=${UMAMI_URL}
         - NEXT_PUBLIC_DIRECTUS_URL=${DIRECTUS_URL}
+        - NEXT_PUBLIC_INA_GEO_RECAPTCHA_SITE_KEY=${INA_GEO_RECAPTCHA_SITE_KEY}
     depends_on:
       - directus
       - worker
@@ -75,12 +84,18 @@ services:
       - PGUSER=${POSTGRES_USER}
       - PGPASSWORD=${POSTGRES_PASSWORD}
       - PGPORT=${POSTGRES_PORT}
-      - HCAPTCHA_SECRET_KEY
+      # Tambah proxy environment untuk nextjs juga
+      - https_proxy=http://192.168.1.28:3128
+      - http_proxy=http://192.168.1.28:3128
+      - HTTPS_PROXY=http://192.168.1.28:3128
+      - HTTP_PROXY=http://192.168.1.28:3128
+      # reCAPTCHA configuration
+      - RECAPTCHA_SECRET_KEY=${INA_GEO_RECAPTCHA_SECRET_KEY}
+      - NEXT_PUBLIC_INA_GEO_RECAPTCHA_SITE_KEY=${INA_GEO_RECAPTCHA_SITE_KEY}
+      - INA_GEO_API_URL=${INA_GEO_API_URL}
+      - INA_GEO_RECAPTCHA_SECRET_KEY=${INA_GEO_RECAPTCHA_SECRET_KEY}
       - REDIS_URL=redis://redis:6379
     restart: unless-stopped
-    # networks:
-    #   - default
-    #   - sipulaudev
 
   umami:
     build:
@@ -97,9 +112,6 @@ services:
     # ports:
     #   - "3000:3000"
     restart: unless-stopped
-    # networks:
-    #   - default
-    #   - sipulaudev
 
   worker:
     build:
@@ -117,9 +129,6 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     restart: unless-stopped
-    # networks:
-    #   - default
-    #   - sipulaudev
 
   nginx:
     build:
@@ -136,7 +145,3 @@ services:
       - SIPULAU_URL
       - UMAMI_URL
     restart: unless-stopped
-
-# networks:
-#   sipulaudev:
-#     name: sipulaudev

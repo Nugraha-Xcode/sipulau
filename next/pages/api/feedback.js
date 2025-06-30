@@ -5,7 +5,7 @@ import https from "https";
 const methodHeaders = {
   method: "POST",
   headers: {
-    Host: "hcaptcha.com",
+    Host: "www.google.com",
     "Content-Type": "application/x-www-form-urlencoded",
   },
 };
@@ -16,21 +16,21 @@ const proxyUrl = process.env.HTTPS_PROXY
 
 const reqOptions = proxyUrl
   ? {
-      hostname: proxyUrl.hostname,
-      port: proxyUrl.port,
-      path: "https://hcaptcha.com/siteverify",
-      ...methodHeaders,
-    }
-  : { hostname: "hcaptcha.com", path: "/siteverify", ...methodHeaders };
+    hostname: proxyUrl.hostname,
+    port: proxyUrl.port,
+    path: "https://www.google.com/recaptcha/api/siteverify",
+    ...methodHeaders,
+  }
+  : { hostname: "www.google.com", path: "/recaptcha/api/siteverify", ...methodHeaders };
 
 const httpOrHttps = proxyUrl?.protocol === "http:" ? http : https;
 
 function validateCaptcha(captchaToken) {
   return new Promise((resolve, reject) => {
-    if (typeof process.env.HCAPTCHA_SECRET_KEY !== "string")
-      return reject("HCaptcha secret key not set");
+    if (typeof process.env.RECAPTCHA_SECRET_KEY !== "string")
+      return reject("reCAPTCHA secret key not set");
     let reqBody = `secret=${encodeURIComponent(
-      process.env.HCAPTCHA_SECRET_KEY
+      process.env.RECAPTCHA_SECRET_KEY
     )}&response=${encodeURIComponent(captchaToken)}`;
 
     const req = httpOrHttps
@@ -41,7 +41,7 @@ function validateCaptcha(captchaToken) {
         });
         res.on("end", () => {
           if (res.statusCode !== 200) {
-            reject("HCaptcha error: " + data);
+            reject("reCAPTCHA error: " + data);
           } else {
             let parsedRes = JSON.parse(data);
             resolve(parsedRes.success);

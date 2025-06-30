@@ -1,19 +1,37 @@
-import { useRef, useContext, useState } from "react";
+import { useRef, useContext, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-
 import AppContext from "../../context/AppContext";
-
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_INA_GEO_RECAPTCHA_SITE_KEY || "6LeH8XwhAAAAALw43tTI0iPcLqx8vrlMvkyRwuB6";
 const Section5 = () => {
   const { t } = useTranslation("homepage");
   const { handleSetSnack } = useContext(AppContext);
-  const captchaRef = useRef(null);
   const formRef = useRef(null);
   const [submitData, setSubmitData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Tambahkan useEffect untuk load reCAPTCHA script
+  useEffect(() => {
+    const scriptElementId = "grecaptcha-script";
+    const url = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = url;
+    script.id = scriptElementId;
+    document.body.appendChild(script);
+
+    return () => {
+      // cleanup
+      const existingScript = document.getElementById(scriptElementId);
+      if (existingScript) {
+        document.body.removeChild(existingScript);
+      }
+    };
+  }, []);
 
   const submitForm = async (captchaToken) => {
     try {
+      setIsLoading(true);
       const res = await fetch("/api/feedback", {
         method: "POST",
         body: JSON.stringify({ ...submitData, captchaToken }),
@@ -29,7 +47,7 @@ const Section5 = () => {
     } catch (error) {
       handleSetSnack(error.message, "error");
     } finally {
-      captchaRef.current.resetCaptcha();
+      setIsLoading(false);
     }
   };
 
@@ -39,7 +57,6 @@ const Section5 = () => {
 
     try {
       const formData = new FormData(e.target);
-      formData.delete("h-captcha-response");
       const objData = Object.fromEntries(formData.entries());
       for (const value of formData.values()) {
         if (!value) {
@@ -47,7 +64,17 @@ const Section5 = () => {
         }
       }
       setSubmitData(objData);
-      captchaRef.current.execute();
+
+      // Gunakan reCAPTCHA
+      window.grecaptcha.ready(() => {
+        window.grecaptcha
+          .execute(RECAPTCHA_SITE_KEY, {
+            action: "submit_feedback",
+          })
+          .then((token) => {
+            submitForm(token);
+          });
+      });
     } catch (error) {
       handleSetSnack(error.message, "error");
     }
@@ -64,6 +91,7 @@ const Section5 = () => {
           onSubmit={handleSubmit}
           className='w-full border border-[#A2BCDE] border-opacity-5 max-w-screen-lg bg-[#ffffff] bg-opacity-50 flex flex-col items-center space-y-6 py-8 md:py-12 px-8 md:px-24 rounded-3xl text-main-blue'
         >
+          {/* Form fields tetap sama */}
           <h2 data-cy='home-section5-header' className='text-dark-blue'>
             {t("judulSeksiFeedback")}
           </h2>
@@ -95,20 +123,14 @@ const Section5 = () => {
             rows='6'
             placeholder={t("placeholderIsi")}
           ></textarea>
-          <HCaptcha
-            sitekey='e45cae2e-2906-45bf-abe7-9424392c31c6'
-            size='invisible'
-            onVerify={(token) => submitForm(token)}
-            onError={(err) => {
-              handleSetSnack(`hCaptcha Error: ${err}`, "error");
-            }}
-            ref={captchaRef}
-            reCaptchaCompat={false}
-          />
+
+          {/* Hapus HCaptcha component */}
+
           <input
             type='submit'
-            value={t("tombolFeedback")}
-            className={`cursor-pointer flex lg:text-lg space-x-2 bg-main-blue rounded-full text-white text-sm py-3 lg:py-5 px-5 lg:px-8 hover:opacity-80`}
+            value={isLoading ? "Mengirim..." : t("tombolFeedback")}
+            disabled={isLoading}
+            className={`cursor-pointer flex lg:text-lg space-x-2 bg-main-blue rounded-full text-white text-sm py-3 lg:py-5 px-5 lg:px-8 hover:opacity-80 disabled:opacity-50`}
           ></input>
         </form>
       </div>

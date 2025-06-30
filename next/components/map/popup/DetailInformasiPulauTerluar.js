@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 const DetailInformasiPulauTerluar = ({ detailPulau }) => {
   const { t } = useTranslation("popupPulau");
 
+  // Function untuk mengkonversi BP_TBP value
   const formatBpTbp = (value) => {
     if (!value) return "-";
     switch (value.toUpperCase()) {
@@ -31,23 +32,27 @@ const DetailInformasiPulauTerluar = ({ detailPulau }) => {
     {
       label: t("attribute18"),
       value: "BP_TBP",
-      isSpecial: true, 
+      isSpecial: true, // Flag untuk BP_TBP yang perlu formatting khusus
     },
   ];
 
   return (
-    <div className='p-4 space-y-2'>
+    <div className='p-4 space-y-3'>
       {detailItems.map((el, index) => (
-        <div className='flex gap-2 text-black-2 text-xs' key={index}>
-          <div className='flex justify-between w-1/2'>
-            <p>{el.label || "-"}</p>
-            <p>:</p>
+        <div className='flex flex-col gap-1 text-black-2 text-xs' key={index}>
+          {/* Label */}
+          <div className='font-medium text-gray-600'>
+            {el.label || "-"}
           </div>
-          <p className='w-1/2'>
-            {detailPulau[el.value]
-              ? detailPulau[el.value] + " " + (el.unit ? el.unit : "")
-              : "-"}
-          </p>
+          {/* Value */}
+          <div className='text-black-2 break-words'>
+            {el.isSpecial
+              ? formatBpTbp(detailPulau[el.value])
+              : detailPulau[el.value]
+                ? detailPulau[el.value] + " " + (el.unit ? el.unit : "")
+                : "-"
+            }
+          </div>
         </div>
       ))}
     </div>
